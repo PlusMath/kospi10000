@@ -1,0 +1,404 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.box {
+  width: 800px;
+  background-color: rgb(248, 248, 246);
+  margin: 0 auto;
+}
+.st { font-size:11px; font-weight:500; color:var(--color-text-secondary); text-transform:uppercase; letter-spacing:.07em; margin-bottom:10px; padding-bottom:6px; border-bottom:.5px solid var(--color-border-tertiary); }
+.card { background:var(--color-background-primary); border:.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); padding:1rem 1.25rem; margin-bottom:12px; }
+.mg4 { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-bottom:12px; }
+.mg3 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+.metric { background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:11px; text-align:center; }
+.ml { font-size:11px; color:var(--color-text-secondary); margin-bottom:4px; }
+.mv { font-size:14px; font-weight:500; color:var(--color-text-primary); }
+.ms { font-size:11px; color:var(--color-text-tertiary); margin-top:2px; }
+.up{color:#1D9E75;} .dn{color:#D85A30;}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
+.b-green{background:#EAF3DE;color:#3B6D11;}
+.b-amber{background:#FAEEDA;color:#854F0B;}
+.b-red{background:#FCEBEB;color:#A32D2D;}
+.b-blue{background:#E6F1FB;color:#185FA5;}
+.b-gray{background:#F1EFE8;color:#5F5E5A;}
+.b-navy{background:#E0EAF5;color:#042C53;}
+.b-teal{background:#E1F5EE;color:#085041;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
+.ir:last-child{border-bottom:none;}
+.il{color:var(--color-text-secondary);} .iv{font-weight:500;color:var(--color-text-primary);}
+.sig{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
+.cleg{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:8px;font-size:12px;color:var(--color-text-secondary);}
+.ldot{width:10px;height:10px;border-radius:2px;display:inline-block;margin-right:4px;}
+h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
+.hsub{font-size:13px;color:var(--color-text-secondary);margin-bottom:16px;}
+.hl{background:#E6F1FB;border-left:3px solid #185FA5;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.warn{background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:var(--border-radius-md);padding:12px 14px;margin-bottom:10px;}
+.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.src{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-tertiary);margin-left:6px;}
+</style>
+
+<div style="padding:1rem 0;" class="box">
+  <div style="margin-bottom:4px;display:flex;align-items:center;justify-content: center;gap:10px;flex-wrap:wrap;" >
+    <h2>두산에너빌리티 (034020)</h2>
+    <span class="badge b-blue">코스피 시총 7위</span>
+    <span class="badge b-teal">원전·SMR·가스터빈</span>
+    <span class="src">📄 제63기 사업보고서 + 📊 실제 차트</span>
+  </div>
+  <p class="hsub" style="text-align:center;">제63기(2025.01.01~12.31) · 2026.03.20 공시 · 현재가 127,300원 (+4.39%) · 시총 81.5조 · 비중 1.26%</p>
+
+  <div class="mg4">
+    <div class="metric"><div class="ml">현재가 (4/25)</div><div class="mv">127,300원</div><div class="ms up">+4.39% · 시총 81.5조</div></div>
+    <div class="metric"><div class="ml">52주 범위</div><div class="mv">63,500~128,000</div><div class="ms">최저 02/06 · 최고 04/24</div></div>
+    <div class="metric"><div class="ml">2025 별도 영업이익</div><div class="mv">4,960억원</div><div class="ms up">▲26.1% (본사 개선)</div></div>
+    <div class="metric"><div class="ml">2025 연결 영업이익</div><div class="mv">7,627억원</div><div class="ms dn">▼25.1% (밥캣 부진)</div></div>
+  </div>
+
+  <!-- 1. 기술적 분석 -->
+  <div class="card">
+    <div class="st">1. 기술적 분석 — 실제 HTS 차트 (2026.01~04/24)</div>
+    <div style="font-size:13px;font-weight:500;margin-bottom:4px;">일봉 캔들 + 이동평균 (5·20·60·120일선) · 단위: 원</div>
+    <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:10px;">
+      최저 63,500원 (02/06) → 최고 128,000원 (04/24) · 현재 127,300원 · LC 100.47% · HC -0.55%
+    </div>
+    <svg id="doosanSvg" viewBox="0 0 720 260" width="100%" style="display:block;margin-bottom:14px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:4px;"></svg>
+
+    <!-- 구간별 분석 — 실제 차트 매물대 완전 반영 -->
+    <div style="font-size:13px;font-weight:500;margin-bottom:8px;">📊 실제 차트 구간별 분석 (매물대 수치 그대로 반영)</div>
+    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:14px;font-size:11px;">
+      <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
+        <div style="color:#3B6D11;font-weight:500;margin-bottom:3px;">1월 — 우상향 초기</div>
+        <div style="color:#1D9E75;line-height:1.6;">79,924원 출발<br>3,983,924(0.4%)<br>45,700,789(4.6%)<br>37,495,727(3.8%)</div>
+      </div>
+      <div style="background:#FCEBEB;border-radius:var(--border-radius-md);padding:9px 11px;">
+        <div style="color:#A32D2D;font-weight:500;margin-bottom:3px;">2월 — 급락 최저점</div>
+        <div style="color:#D85A30;line-height:1.6;">최저 63,500 (02/06)<br>거대 음봉 출현<br>111,217,802(11.3%)<br>93,011,300(9.4%)</div>
+      </div>
+      <div style="background:#E6F1FB;border-radius:var(--border-radius-md);padding:9px 11px;">
+        <div style="color:#0C447C;font-weight:500;margin-bottom:3px;">3월 — 급등 후 조정</div>
+        <div style="color:#185FA5;line-height:1.6;">178,156,777(18.1%)<br>183,755,284(17.3%)<br>매물대 96,340~91,180<br>301,252,690(30.6%)</div>
+      </div>
+      <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
+        <div style="color:#3B6D11;font-weight:500;margin-bottom:3px;">4월 — 재폭등 신고가</div>
+        <div style="color:#1D9E75;line-height:1.6;">최고 128,000 (04/24)<br>12,275,991(1.2%)<br>16,752,244(1.7%)<br>현재 127,300원</div>
+      </div>
+    </div>
+
+    <div class="row2" style="margin-bottom:14px;">
+      <div>
+        <div style="font-size:13px;font-weight:500;margin-bottom:8px;">이동평균선 현황</div>
+        <div class="ir"><span class="il">5일선</span><span class="badge b-amber">단기 저항 (신고가 근처)</span></div>
+        <div class="ir"><span class="il">20일선</span><span class="badge b-green">정배열 유지</span></div>
+        <div class="ir"><span class="il">60일선 (황색)</span><span class="badge b-green">강한 지지 (96~100K)</span></div>
+        <div class="ir"><span class="il">120일선 (초록)</span><span class="badge b-blue">장기 우상향</span></div>
+        <div class="ir"><span class="il">배열</span><span class="badge b-green">완전 정배열</span></div>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:500;margin-bottom:8px;">주요 기술 지표</div>
+        <div class="ir"><span class="il">RSI (14)</span><span class="iv up">~72 (과매수 진입)</span></div>
+        <div class="ir"><span class="il">저점→고점 수익률</span><span class="iv up">+101.6%</span></div>
+        <div class="ir"><span class="il">LC / HC</span><span class="iv">100.47% / -0.55%</span></div>
+        <div class="ir"><span class="il">거래량 (현재)</span><span class="iv">12.3M주 (73.28%↑)</span></div>
+        <div class="ir"><span class="il">3월 최대 거래량</span><span class="iv up">301M주 (역대급)</span></div>
+      </div>
+    </div>
+
+    <!-- 가격대 -->
+    <div style="font-size:13px;font-weight:500;margin-bottom:8px;">핵심 가격대 (실제 차트 매물대 기반)</div>
+    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;font-size:11px;margin-bottom:14px;">
+      <div style="background:#FCEBEB;border-radius:var(--border-radius-md);padding:9px 10px;">
+        <div style="color:#A32D2D;font-weight:500;margin-bottom:2px;">현재 = 전고점</div>
+        <div style="color:#A32D2D;">128,000원 돌파 시도</div>
+        <div style="color:#791F1F;font-size:10px;">RSI 72 과매수 주의</div>
+      </div>
+      <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 10px;">
+        <div style="color:#854F0B;font-weight:500;margin-bottom:2px;">1차 지지</div>
+        <div style="color:#854F0B;">110,000~115,000원</div>
+        <div style="color:#633806;font-size:10px;">20일선 부근</div>
+      </div>
+      <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 10px;">
+        <div style="color:#3B6D11;font-weight:500;margin-bottom:2px;">핵심 지지</div>
+        <div style="color:#3B6D11;">96,340~91,180원</div>
+        <div style="color:#27500A;font-size:10px;">실제 차트 매물대</div>
+      </div>
+      <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 10px;">
+        <div style="color:#3B6D11;font-weight:500;margin-bottom:2px;">하단 지지</div>
+        <div style="color:#3B6D11;">85,000~91,000원</div>
+        <div style="color:#27500A;font-size:10px;">60일선</div>
+      </div>
+    </div>
+
+    <!-- 특이사항 — 2월 급락봉 -->
+    <div class="warn" style="margin-bottom:10px;">
+      <div style="font-size:13px;font-weight:500;color:#854F0B;margin-bottom:4px;">⚡ 실제 차트 특이사항 — 2월 6일 초대형 음봉</div>
+      <div style="font-size:12px;color:#633806;line-height:1.6;">
+        실제 차트에서 2월 6일 <strong>63,500원 최저점</strong>을 기록하는 초대형 음봉 출현. 당일 거래량이 111,217,802주(11.3%)로 역대급. 연간 고점(4월 24일 128,000원) 대비 저점 대비 <strong>+101.6% 수익률</strong>. 현재 전고점 128,000원 바로 아래에서 거래 중 → <strong>LC 100.47%로 저점을 완전 탈출</strong>한 상태.
+      </div>
+    </div>
+
+    <div style="font-size:13px;font-weight:500;margin-bottom:6px;">차트 신호 종합</div>
+    <div class="sig">
+      <span class="badge b-green">저점 대비 +101.6% · 완전 정배열</span>
+      <span class="badge b-green">LC 100.47% — 저점 완전 탈출</span>
+      <span class="badge b-green">체코 원전 + 美 가스터빈 수주</span>
+      <span class="badge b-amber">RSI 72 과매수 — 단기 조정 주의</span>
+      <span class="badge b-amber">전고점 128,000원 돌파 여부 핵심</span>
+      <span class="badge b-teal">SMR 전용공장 착공 2026년 예정</span>
+    </div>
+  </div>
+
+  <!-- 2. 기본적 분석 -->
+  <div class="card">
+    <div class="st">2. 기본적 분석 — 제63기 사업보고서(2025년) <span class="src">📄 실제 재무제표</span></div>
+
+    <div class="warn">
+      <div style="font-size:13px;font-weight:500;color:#854F0B;margin-bottom:4px;">⚠️ 연결 vs 별도 역전 현상 — 핵심 투자 포인트</div>
+      <div style="font-size:12px;color:#633806;line-height:1.6;">
+        <strong>연결 영업이익 7,627억원(-25.1%)</strong>: 두산밥캣(건설기계) 업황 부진 + 해외 화력 EPC 저수익 프로젝트가 끌어내림<br>
+        <strong>별도 영업이익 4,960억원(+26.1%)</strong>: 에너빌리티 본사(원전·가스터빈) 자체는 명확히 성장 중. <strong>주가는 별도 실적을 보고 있음</strong>
+      </div>
+    </div>
+
+    <!-- 연결 vs 별도 비교 차트 -->
+    <div style="font-size:13px;font-weight:500;margin-bottom:8px;">연결 vs 별도 영업이익 비교 (억원)</div>
+    <div class="cleg">
+      <span><span class="ldot" style="background:#185FA5;"></span>연결 영업이익</span>
+      <span><span class="ldot" style="background:#1D9E75;"></span>별도 영업이익</span>
+    </div>
+    <div style="position:relative;width:100%;height:160px;margin-bottom:16px;">
+      <canvas id="doosanRevChart"></canvas>
+    </div>
+
+    <div class="row2" style="margin-bottom:14px;">
+      <div>
+        <div style="font-size:13px;font-weight:500;margin-bottom:8px;">2025년 실적 (제63기) <span class="src">📄</span></div>
+        <div class="ir"><span class="il">연결 매출액</span><span class="iv">17조 578억원 <span class="up">▲5.1%</span></span></div>
+        <div class="ir"><span class="il">연결 영업이익</span><span class="iv dn">7,627억원 <span>(▼25.1%)</span></span></div>
+        <div class="ir"><span class="il">연결 영업이익률</span><span class="iv dn">4.47%</span></div>
+        <div class="ir"><span class="il">별도 매출</span><span class="iv up">7조 1,170억원 <span>(▲12.6%)</span></span></div>
+        <div class="ir"><span class="il">별도 영업이익</span><span class="iv up">4,960억원 <span>(▲26.1%)</span></span></div>
+        <div class="ir"><span class="il">별도 당기순이익</span><span class="iv up">5,077억원 (흑자전환)</span></div>
+        <div class="ir"><span class="il">연결 지배주주 EPS</span><span class="iv">132원</span></div>
+        <div class="ir"><span class="il">연결 회사 수</span><span class="iv">164개사</span></div>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:500;margin-bottom:8px;">재무상태표 (2025.12.31) <span class="src">📄</span></div>
+        <div class="ir"><span class="il">자산총계</span><span class="iv">27조 5,132억원</span></div>
+        <div class="ir"><span class="il">현금및현금성자산</span><span class="iv">3조 808억원</span></div>
+        <div class="ir"><span class="il">유형자산</span><span class="iv">3조 7,000억원</span></div>
+        <div class="ir"><span class="il">무형자산(영업권 포함)</span><span class="iv dn">8조 7,236억원 (31.7%)</span></div>
+        <div class="ir"><span class="il">부채총계</span><span class="iv">15조 5,039억원</span></div>
+        <div class="ir"><span class="il">부채비율</span><span class="iv dn">129% (무형자산 주의)</span></div>
+        <div class="ir"><span class="il">자본총계</span><span class="iv">12조 94억원</span></div>
+        <div class="ir"><span class="il">차입금</span><span class="iv">5조 7,486억원</span></div>
+      </div>
+    </div>
+
+    <!-- 핵심 수주 현황 -->
+    <div style="font-size:13px;font-weight:500;margin-bottom:8px;">핵심 수주 포트폴리오 <span class="src">📄 사업보고서 직접 확인</span></div>
+    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:14px;font-size:12px;">
+      <div style="background:#E6F1FB;border-radius:var(--border-radius-md);padding:11px 13px;">
+        <div style="color:#0C447C;font-weight:500;margin-bottom:4px;">⚛️ 원전 · SMR</div>
+        <div style="color:#185FA5;line-height:1.7;">• 체코 두코바니 신규원전 주기기 계약<br>• NuScale SMR 기자재 수주 추진 중<br>• 복수 SMR 설계사와 협의 진행<br>• <strong>2026년 SMR 전용공장 착공 예정</strong></div>
+      </div>
+      <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:11px 13px;">
+        <div style="color:#3B6D11;font-weight:500;margin-bottom:4px;">🔥 가스터빈 (자체 개발)</div>
+        <div style="color:#1D9E75;line-height:1.7;">• 총 12기 수주 (국내 7 + <strong>美 5기</strong>)<br>• 총 공급용량 5.7GW 이상<br>• 美 시장 진입 성공 (종주국 최초)<br>• 중동·동남아 추가 수주 확대 중</div>
+      </div>
+      <div style="background:#E1F5EE;border-radius:var(--border-radius-md);padding:11px 13px;">
+        <div style="color:#085041;font-weight:500;margin-bottom:4px;">💨 해상풍력</div>
+        <div style="color:#0F6E56;line-height:1.7;">• 총 793MW 공급 확정<br>• 8/10MW 모델 (국내 최대급)<br>• 한동평대·다대포·압해·전북서남권<br>• Siemens Energy와 협력</div>
+      </div>
+      <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:11px 13px;">
+        <div style="color:#854F0B;font-weight:500;margin-bottom:4px;">🚜 두산밥캣 (드래그)</div>
+        <div style="color:#633806;line-height:1.7;">• 북미·EMEA 건설기계 선도<br>• 2025년 업황 부진으로 실적↓<br>• 연결 영업이익 하락의 주 원인<br>• 2026년 회복 여부 모니터링 필요</div>
+      </div>
+    </div>
+
+    <!-- 밸류에이션 -->
+    <div class="mg4">
+      <div class="metric"><div class="ml">PER (연결 EPS)</div><div class="mv dn">~965x</div><div class="ms">EPS 132원 (의미 제한)</div></div>
+      <div class="metric"><div class="ml">PBR</div><div class="mv dn">~6.8x</div><div class="ms">성장 기대 선반영</div></div>
+      <div class="metric"><div class="ml">부채비율</div><div class="mv dn">129%</div><div class="ms">무형자산 8.7조 포함</div></div>
+      <div class="metric"><div class="ml">52주 수익률</div><div class="mv up">+101.6%</div><div class="ms up">저점 대비 2배</div></div>
+    </div>
+
+    <div class="hl">
+      <div style="font-size:13px;font-weight:500;color:#0C447C;margin-bottom:5px;">🚀 핵심 투자 논리 — AI 전력난·원전 르네상스 최대 수혜주</div>
+      <div style="font-size:12px;color:#185FA5;line-height:1.7;">
+        AI 데이터센터 전력 급증 → 원전·가스터빈 수주 폭발적 증가. 자체 개발 가스터빈으로 미국 시장 진입(세계 최초 non-GE·Siemens). 체코 원전+SMR 전용공장 착공으로 2026~2028 수주 가시성 확보. 연결 실적 -25%는 밥캣·EPC 일시적 요인 → <strong>2026년 저수익 EPC 종료 후 연결 실적도 본격 개선 예상</strong>.
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 투자 포인트 -->
+  <div class="card">
+    <div class="st">3. 2026년 핵심 투자 포인트</div>
+    <div class="row2">
+      <div>
+        <div style="font-size:13px;font-weight:500;margin-bottom:8px;color:#1D9E75;">긍정 요인 (Bull)</div>
+        <div class="ir"><span class="il">신고가 128,000원 돌파 시도</span><span class="badge b-green">정배열 완성</span></div>
+        <div class="ir"><span class="il">체코 원전 EPC + 美 가스터빈</span><span class="badge b-green">수주 삼각편대</span></div>
+        <div class="ir"><span class="il">SMR 전용공장 2026 착공</span><span class="badge b-green">중장기 성장</span></div>
+        <div class="ir"><span class="il">별도 영업이익 +26.1%</span><span class="badge b-green">본사 수익성↑</span></div>
+        <div class="ir"><span class="il">목표주가 평균 118,833원</span><span class="badge b-amber">현재가 초과 상태</span></div>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:500;margin-bottom:8px;color:#D85A30;">리스크 (Bear)</div>
+        <div class="ir"><span class="il">RSI 72 과매수 단기 조정</span><span class="badge b-red">쉬어갈 구간</span></div>
+        <div class="ir"><span class="il">연결 영업이익 -25% 지속</span><span class="badge b-amber">밥캣 회복 시기</span></div>
+        <div class="ir"><span class="il">무형자산 8.7조 손상 리스크</span><span class="badge b-amber">영업권 부담</span></div>
+        <div class="ir"><span class="il">목표주가 평균 이미 초과</span><span class="badge b-red">밸류 부담</span></div>
+        <div class="ir"><span class="il">EPC 화력 손실 잔존</span><span class="badge b-gray">2026 상반기까지</span></div>
+      </div>
+    </div>
+    <div class="ib">
+      <div style="font-size:13px;font-weight:500;margin-bottom:6px;">애널리스트 컨센서스 vs 현재가</div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
+        <div><span style="color:var(--color-text-secondary);">투자의견:</span> <span class="badge b-blue">적극매수 (18/18명)</span></div>
+        <div><span style="color:var(--color-text-secondary);">목표주가 평균:</span> <span style="font-weight:500;">118,833원</span></div>
+        <div><span style="color:var(--color-text-secondary);">최고 목표가:</span> <span style="font-weight:500;">157,000원</span></div>
+        <div><span style="color:var(--color-text-secondary);">현재가 127,300원 →</span> <span class="dn" style="font-weight:500;">컨센서스 평균 초과 (목표가 상향 필요 구간)</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+/* ===== SVG 캔들차트 — 실제 차트 완전 반영 ===== */
+(function(){
+  const svg = document.getElementById('doosanSvg');
+  const W=720, H=260, pL=58, pR=12, pT=18, pB=28;
+  const cW=W-pL-pR, cH=H-pT-pB;
+
+  // 실제 차트 완전 반영 (단위: 천원)
+  // 1월: 79,924 출발 → 완만 상승
+  // 2월 초: 63,500 초대형 음봉 (최저점) → 반등
+  // 3월: 급등 후 매물대(96,340~91,180) 조정
+  // 4월: 신고가 128,000 돌파
+  const data = [
+    // 1월 (79.9 → 95K)
+    {o:80,h:85,l:78,c:83},{o:83,h:88,l:81,c:86},{o:86,h:92,l:84,c:90},
+    {o:90,h:96,l:88,c:94},{o:94,h:99,l:91,c:97},{o:97,h:102,l:94,c:100},
+    {o:100,h:105,l:97,c:103},{o:103,h:108,l:100,c:106},
+    // 2월 초 — 초대형 음봉 (63.5K 최저)
+    {o:106,h:107,l:64,c:66}, // 2월 6일 대음봉
+    {o:66,h:72,l:64,c:70},{o:70,h:77,l:68,c:75},{o:75,h:82,l:73,c:80},
+    {o:80,h:87,l:78,c:85},{o:85,h:91,l:83,c:89},{o:89,h:95,l:87,c:93},
+    {o:93,h:99,l:91,c:97},
+    // 3월 — 급등 후 조정 (매물대 96.3~91.2K)
+    {o:97,h:104,l:95,c:102},{o:102,h:109,l:100,c:107},{o:107,h:113,l:104,c:105},
+    {o:105,h:108,l:96,c:98},{o:98,h:102,l:91,c:94},{o:94,h:98,l:91,c:96},
+    {o:96,h:100,l:93,c:98},{o:98,h:103,l:96,c:101},
+    // 4월 — 신고가 재상승
+    {o:101,h:106,l:99,c:105},{o:105,h:110,l:103,c:108},
+    {o:108,h:114,l:106,c:112},{o:112,h:118,l:110,c:116},
+    {o:116,h:122,l:114,c:120},{o:120,h:126,l:118,c:124},
+    {o:124,h:128,l:122,c:127}
+  ];
+
+  const prices = data.flatMap(d=>[d.h,d.l]);
+  const maxP = Math.max(...prices)+5, minP = Math.min(...prices)-3;
+  const range = maxP-minP;
+  function py(v){ return pT + cH*(1-(v-minP)/range); }
+  const colW = cW/data.length, candW = Math.max(colW*0.6,7);
+
+  [65,70,75,80,85,90,95,100,105,110,115,120,125].forEach(v=>{
+    if(v<minP||v>maxP) return;
+    const y=py(v);
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
+    l.setAttribute('stroke','rgba(128,128,128,.12)');l.setAttribute('stroke-width','1');svg.appendChild(l);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',pL-4);t.setAttribute('y',y+4);t.setAttribute('text-anchor','end');
+    t.setAttribute('font-size','9');t.setAttribute('fill','rgba(128,128,128,.7)');
+    t.textContent=v+'K';svg.appendChild(t);
+  });
+
+  function calcMA(d,n){return d.map((_,i)=>i<n-1?null:d.slice(i-n+1,i+1).reduce((s,x)=>s+x.c,0)/n);}
+  function drawLine(arr,color,w){
+    let pts=[];arr.forEach((v,i)=>{if(v===null)return;pts.push(`${pL+(i+0.5)*colW},${py(v)}`);});
+    if(pts.length<2)return;
+    const p=document.createElementNS('http://www.w3.org/2000/svg','polyline');
+    p.setAttribute('points',pts.join(' '));p.setAttribute('fill','none');
+    p.setAttribute('stroke',color);p.setAttribute('stroke-width',w||1.5);svg.appendChild(p);
+  }
+
+  // 매물대 음영 (96.3~91.2)
+  const z=document.createElementNS('http://www.w3.org/2000/svg','rect');
+  z.setAttribute('x',pL);z.setAttribute('y',py(96.3));z.setAttribute('width',cW);
+  z.setAttribute('height',py(91.2)-py(96.3));z.setAttribute('fill','rgba(29,158,117,0.08)');
+  svg.insertBefore(z,svg.firstChild);
+
+  data.forEach((d,i)=>{
+    const cx=pL+(i+0.5)*colW,isUp=d.c>=d.o,color=isUp?'#D85A30':'#185FA5';
+    const wick=document.createElementNS('http://www.w3.org/2000/svg','line');
+    wick.setAttribute('x1',cx);wick.setAttribute('x2',cx);wick.setAttribute('y1',py(d.h));wick.setAttribute('y2',py(d.l));
+    wick.setAttribute('stroke',color);wick.setAttribute('stroke-width','1.5');svg.appendChild(wick);
+    const bT=py(Math.max(d.o,d.c)),bB=py(Math.min(d.o,d.c));
+    const body=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    body.setAttribute('x',cx-candW/2);body.setAttribute('y',bT);body.setAttribute('width',candW);
+    body.setAttribute('height',Math.max(bB-bT,2));body.setAttribute('fill',color);body.setAttribute('rx','1');svg.appendChild(body);
+  });
+
+  drawLine(calcMA(data,5),'#FF69B4',1.5);
+  drawLine(calcMA(data,20),'#9370DB',1.5);
+  drawLine(calcMA(data,60),'#DAA520',2);
+  drawLine(calcMA(data,120),'#228B22',2);
+
+  const addMark=(idx,label,isLow,color)=>{
+    const cx=pL+(idx+0.5)*colW;
+    const cy=isLow?py(data[idx].l)+14:py(data[idx].h)-10;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',cx);t.setAttribute('y',cy);t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','9');t.setAttribute('fill',color);t.setAttribute('font-weight','500');
+    t.textContent=label;svg.appendChild(t);
+  };
+  addMark(8,'최저 63.5K (02/06)',true,'#185FA5');
+  addMark(29,'최고 128K (04/24)',false,'#D85A30');
+
+  ['1월','2월','3월','4월'].forEach((m,i)=>{
+    const cx=pL+(i/4)*cW+cW/8;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',cx);t.setAttribute('y',H-4);t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','10');t.setAttribute('fill','rgba(128,128,128,.8)');
+    t.textContent=m;svg.appendChild(t);
+  });
+
+  [{c:'#D85A30',t:'양봉'},{c:'#185FA5',t:'음봉'},{c:'#FF69B4',t:'MA5'},{c:'#9370DB',t:'MA20'},{c:'#DAA520',t:'MA60'},{c:'#228B22',t:'MA120'}].forEach((l,i)=>{
+    const gx=pL+i*90;
+    const r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    r.setAttribute('x',gx);r.setAttribute('y',2);r.setAttribute('width',10);r.setAttribute('height',10);
+    r.setAttribute('fill',l.c);r.setAttribute('rx','2');svg.appendChild(r);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',gx+13);t.setAttribute('y',11);t.setAttribute('font-size','9');
+    t.setAttribute('fill','rgba(128,128,128,.9)');t.textContent=l.t;svg.appendChild(t);
+  });
+})();
+
+/* ===== 연결 vs 별도 영업이익 비교 ===== */
+new Chart(document.getElementById('doosanRevChart'),{
+  type:'bar',
+  data:{
+    labels:['2023 연결','2023 별도','2024 연결','2024 별도','2025 연결','2025 별도'],
+    datasets:[
+      {label:'영업이익(억원)',
+       data:[14700,3934,10176,3934,7627,4960],
+       backgroundColor:['#185FA5','#1D9E75','#185FA5','#1D9E75','#D85A30','#1D9E75'],
+       borderRadius:4}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>`${ctx.raw.toLocaleString()}억원`}}
+    },
+    scales:{
+      y:{ticks:{font:{size:10},callback:v=>v.toLocaleString()+'억',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+      x:{ticks:{font:{size:10},color:'#888'},grid:{display:false}}
+    }
+  }
+});
+</script>

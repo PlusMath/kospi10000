@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>주식을말하다의 KOSPI 분석</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, 'Noto Sans KR', sans-serif;
+      background-color: #f4f6f8;
+      color: #222;
+    }
+
+    header {
+      padding: 32px 20px;
+      background-color: #111827;
+      color: white;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 32px;
+    }
+
+    header p {
+      margin: 10px 0 0;
+      color: #d1d5db;
+      font-size: 16px;
+    }
+
+    .page-wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 28px 20px 60px;
+    }
+
+    .section-title {
+      margin: 0 0 20px;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .stock-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 22px;
+    }
+
+    .stock-card {
+      background-color: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .stock-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+    }
+
+    .stock-card a {
+      display: block;
+      width: 100%;
+      height: 100%;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .stock-card img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      display: block;
+      background-color: #e5e7eb;
+    }
+
+    .stock-info {
+      padding: 14px 16px 18px;
+    }
+
+    .stock-rank {
+      display: inline-block;
+      padding: 4px 8px;
+      margin-bottom: 10px;
+      border-radius: 999px;
+      background-color: #eef2ff;
+      color: #3730a3;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .stock-name {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .stock-code {
+      margin-top: 6px;
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    footer {
+      padding: 24px 20px;
+      text-align: center;
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 24px;
+      }
+
+      .page-wrap {
+        padding: 22px 14px 44px;
+      }
+
+      .stock-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>주식을말하다의 KOSPI 분석 홈페이지</h1>
+    <p>KOSPI 1위부터 100위까지 기업을 정리한 포트폴리오 페이지</p>
+  </header>
+
+  <main class="page-wrap">
+    <h2 class="section-title">KOSPI Top 100</h2>
+
+    <section class="stock-grid" id="stockGrid"></section>
+  </main>
+
+  <footer>
+    © 2026 talking about stock. All rights reserved.
+  </footer>
+
+  <script>
+const stocks = [
+  {
+    rank: 1,
+    name: '삼성전자',
+    code: '005930',
+    image: 'images/001_samsung-electronics.png',
+    page: 'stocks/1_005930.html'
+  },
+  {
+    rank: 2,
+    name: 'SK하이닉스',
+    code: '000660',
+    image: 'images/002_sk-hynix.png',
+    page: 'stocks/2_000660.html'
+  },
+  {
+    rank: 3,
+    name: '삼성전자우',
+    code: '005935',
+    image: 'images/003_samsung-electronics-preferred.png',
+    page: 'stocks/3_005935.html'
+  },
+  {
+    rank: 4,
+    name: 'LG에너지솔루션',
+    code: '373220',
+    image: 'images/004_lg-energy-solution.png',
+    page: 'stocks/4_373220.html'
+  },
+  {
+    rank: 5,
+    name: '현대차',
+    code: '005380',
+    image: 'images/005_hyundai-motor.png',
+    page: 'stocks/5_005380.html'
+  },
+  {
+    rank: 6,
+    name: 'SK스퀘어',
+    code: '402340',
+    image: 'images/006_sk-square.png',
+    page: 'stocks/6_402340.html'
+  },
+  {
+    rank: 7,
+    name: '두산에너빌리티',
+    code: '034020',
+    image: 'images/007_doosan-enerbility.png',
+    page: 'stocks/7_034020.html'
+  },
+  {
+    rank: 8,
+    name: '한화에어로스페이스',
+    code: '012450',
+    image: 'images/008_hanwha-aerospace.png',
+    page: 'stocks/8_012450.html'
+  },
+  {
+    rank: 9,
+    name: '삼성바이오로직스',
+    code: '207940',
+    image: 'images/009_samsung-biologics.png',
+    page: 'stocks/9_207940.html'
+  },
+  {
+    rank: 10,
+    name: 'HD현대중공업',
+    code: '329180',
+    image: 'images/010_hd-hyundai-heavy-industries.png',
+    page: 'stocks/10_329180.html'
+  },
+  {
+    rank: 11,
+    name: '기아',
+    code: '000270',
+    image: 'images/011_kia.png',
+    page: 'stocks/11_000270.html'
+  },
+  {
+    rank: 12,
+    name: '삼성전기',
+    code: '009150',
+    image: 'images/012_samsung-electro-mechanics.png',
+    page: 'stocks/12_009150.html'
+  },
+  {
+    rank: 13,
+    name: 'KB금융',
+    code: '105560',
+    image: 'images/013_kb-financial.png',
+    page: 'stocks/13_105560.html'
+  },
+  {
+    rank: 14,
+    name: '삼성SDI',
+    code: '006400',
+    image: 'images/014_samsung-sdi.png',
+    page: 'stocks/14_006400.html'
+  },
+  {
+    rank: 15,
+    name: '삼성물산',
+    code: '028260',
+    image: 'images/015_samsung-ct.png',
+    page: 'stocks/15_028260.html'
+  },
+  {
+    rank: 16,
+    name: '삼성생명',
+    code: '032830',
+    image: 'images/016_samsung-life.png',
+    page: 'stocks/16_032830.html'
+  },
+  {
+    rank: 17,
+    name: '신한지주',
+    code: '055550',
+    image: 'images/017_shinhan-financial.png',
+    page: 'stocks/17_055550.html'
+  },
+  {
+    rank: 18,
+    name: '셀트리온',
+    code: '068270',
+    image: 'images/018_celltrion.png',
+    page: 'stocks/18_068270.html'
+  },
+  {
+    rank: 19,
+    name: 'HD현대일렉트릭',
+    code: '267260',
+    image: 'images/019_hd-hyundai-electric.png',
+    page: 'stocks/19_267260.html'
+  },
+  {
+    rank: 20,
+    name: '한화오션',
+    code: '042660',
+    image: 'images/020_hanwha-ocean.png',
+    page: 'stocks/20_042660.html'
+  },
+  {
+    rank: 21,
+    name: '현대모비스',
+    code: '012330',
+    image: 'images/021_hyundai-mobis.png',
+    page: 'stocks/21_012330.html'
+  },
+  {
+    rank: 22,
+    name: '미래에셋증권',
+    code: '006800',
+    image: 'images/022_mirae-asset-securities.png',
+    page: 'stocks/22_006800.html'
+  },
+  {
+    rank: 23,
+    name: 'LS ELECTRIC',
+    code: '010120',
+    image: 'images/023_ls-electric.png',
+    page: 'stocks/23_010120.html'
+  },
+  {
+    rank: 24,
+    name: '고려아연',
+    code: '010130',
+    image: 'images/024_korea-zinc.png',
+    page: 'stocks/24_010130.html'
+  },
+  {
+    rank: 25,
+    name: '효성중공업',
+    code: '298040',
+    image: 'images/025_hyosung-heavy-industries.png',
+    page: 'stocks/25_298040.html'
+  },
+  {
+    rank: 26,
+    name: 'NAVER',
+    code: '035420',
+    image: 'images/026_naver.png',
+    page: 'stocks/26_035420.html'
+  },
+  {
+    rank: 27,
+    name: '하나금융지주',
+    code: '086790',
+    image: 'images/027_hana-financial.png',
+    page: 'stocks/27_086790.html'
+  },
+  {
+    rank: 28,
+    name: 'HD한국조선해양',
+    code: '009540',
+    image: 'images/028_hd-kso.png',
+    page: 'stocks/28_009540.html'
+  },
+  {
+    rank: 29,
+    name: 'POSCO홀딩스',
+    code: '005490',
+    image: 'images/029_posco-holdings.png',
+    page: 'stocks/29_005490.html'
+  },
+  {
+    rank: 30,
+    name: '삼성중공업',
+    code: '010140',
+    image: 'images/030_samsung-heavy-industries.png',
+    page: 'stocks/30_010140.html'
+  }
+];
+    const stockGrid = document.getElementById('stockGrid');
+
+    stocks.forEach((stock) => {
+      const card = document.createElement('article');
+      card.className = 'stock-card';
+
+      card.innerHTML = `
+        <a href="${stock.page}">
+          <img src="${stock.image}" alt="${stock.name} 대표 이미지" loading="lazy">
+          <div class="stock-info">
+            <div class="stock-rank">KOSPI ${stock.rank}위</div>
+            <h3 class="stock-name">${stock.name}</h3>
+            <div class="stock-code">종목코드: ${stock.code}</div>
+          </div>
+        </a>
+      `;
+
+      stockGrid.appendChild(card);
+    });
+  </script>
+</body>
+</html>

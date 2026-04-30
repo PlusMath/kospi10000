@@ -1,0 +1,423 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.box {
+  width: 800px;
+  background-color: rgb(248, 248, 246);
+  margin: 0 auto;
+}
+.st { font-size:11px; font-weight:500; color:var(--color-text-secondary); text-transform:uppercase; letter-spacing:.07em; margin-bottom:10px; padding-bottom:6px; border-bottom:.5px solid var(--color-border-tertiary); }
+.card { background:var(--color-background-primary); border:.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); padding:1rem 1.25rem; margin-bottom:12px; }
+.mg4 { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-bottom:12px; }
+.mg3 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+.metric { background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:11px; text-align:center; }
+.ml { font-size:11px; color:var(--color-text-secondary); margin-bottom:4px; }
+.mv { font-size:14px; font-weight:500; color:var(--color-text-primary); }
+.ms { font-size:11px; color:var(--color-text-tertiary); margin-top:2px; }
+.up{color:#1D9E75;} .dn{color:#D85A30;}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
+.b-green{background:#EAF3DE;color:#3B6D11;}
+.b-amber{background:#FAEEDA;color:#854F0B;}
+.b-red{background:#FCEBEB;color:#A32D2D;}
+.b-blue{background:#E6F1FB;color:#185FA5;}
+.b-gray{background:#F1EFE8;color:#5F5E5A;}
+.b-navy{background:#E0EAF5;color:#042C53;}
+.b-purple{background:#EEEDFE;color:#3C3489;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
+.ir:last-child{border-bottom:none;}
+.il{color:var(--color-text-secondary);} .iv{font-weight:500;color:var(--color-text-primary);}
+.sig{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
+.cleg{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:8px;font-size:12px;color:var(--color-text-secondary);}
+.ldot{width:10px;height:10px;border-radius:2px;display:inline-block;margin-right:4px;}
+h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
+.hsub{font-size:13px;color:var(--color-text-secondary);margin-bottom:16px;}
+.hl{background:#E0EAF5;border-left:3px solid #042C53;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.good{background:#EAF3DE;border-left:3px solid #1D9E75;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.src{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-tertiary);margin-left:6px;}
+/* NAV 바 */
+.nav-bar{height:28px;border-radius:6px;display:flex;overflow:hidden;margin-bottom:6px;}
+.nav-seg{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:#fff;}
+</style>
+
+<div style="padding:1rem 0;" class="box">
+  <div style="margin-bottom:4px;display:flex;align-items:center;justify-content: center;gap:10px;flex-wrap:wrap;" >
+    <h2>SK스퀘어 (402340)</h2>
+    <span class="badge b-navy">코스피 시총 6위</span>
+    <span class="badge b-gray">ICT 투자전문지주</span>
+    <span class="src">📄 제5기 사업보고서 + 📊 실제 차트</span>
+  </div>
+  <p class="hsub" style="text-align:center;">제5기(2025.01.01~12.31) · 2026.03.17 공시 · 현재가 722,000원 (+0.28%) · 시총 95.9조 · 비중 1.49%</p>
+
+  <div class="mg4">
+    <div class="metric"><div class="ml">현재가 (4/25)</div><div class="mv">722,000원</div><div class="ms up">+0.28% · 시총 96조</div></div>
+    <div class="metric"><div class="ml">52주 범위</div><div class="mv">364,500~767,000</div><div class="ms">최저 01/02 · 최고 04/23</div></div>
+    <div class="metric"><div class="ml">2025 지분법손익</div><div class="mv">8.93조원</div><div class="ms up">▲117% (SK하이닉스 이익)</div></div>
+    <div class="metric"><div class="ml">2025 연결영업이익</div><div class="mv">8.80조원</div><div class="ms up">▲124% (지분법 반영)</div></div>
+  </div>
+
+  <!-- 1. 기술적 분석 -->
+  <div class="card">
+    <div class="st">1. 기술적 분석 — 실제 HTS 차트 (2026.01~04/24)</div>
+    <div style="font-size:13px;font-weight:500;margin-bottom:4px;">일봉 캔들 + 이동평균 (5·20·60·120일선) · 단위: 원</div>
+    <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:10px;">
+      최저 364,500원 (01/02) → 최고 767,000원 (04/23) · 현재 722,000원 · LC 99.45% · HC -5.22%
+    </div>
+    <svg id="sqSvg" viewBox="0 0 720 250" width="100%" style="display:block;margin-bottom:14px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:4px;"></svg>
+
+    <!-- 구간별 분석 -->
+    <div style="font-size:13px;font-weight:500;margin-bottom:8px;">📊 실제 차트 구간별 분석</div>
+    <div class="mg3" style="margin-bottom:14px;font-size:12px;">
+      <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:10px 12px;">
+        <div style="color:#3B6D11;font-weight:500;margin-bottom:3px;">1~2월 — 우상향 급등</div>
+        <div style="color:#1D9E75;line-height:1.5;">364,500→620,000원<br>SK하이닉스 추종 급등<br>정배열 형성 시작<br>거래량 꾸준히 증가</div>
+      </div>
+      <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:10px 12px;">
+        <div style="color:#854F0B;font-weight:500;margin-bottom:3px;">3월 — 조정 후 횡보</div>
+        <div style="color:#633806;line-height:1.5;">매물대 561,758~528,700<br>관세 충격 조정<br>60일선 지지 확인<br>거래량 1,600K 급증</div>
+      </div>
+      <div style="background:#E6F1FB;border-radius:var(--border-radius-md);padding:10px 12px;">
+        <div style="color:#0C447C;font-weight:500;margin-bottom:3px;">4월 — 신고가 돌파</div>
+        <div style="color:#185FA5;line-height:1.5;">최고 767,000 (04/23)<br>SK하이닉스 신고가 동반<br>NAV 할인율 축소<br>현재 722K (-5.22%)</div>
+      </div>
+    </div>
+
+    <div class="row2" style="margin-bottom:14px;">
+      <div>
+        <div style="font-size:13px;font-weight:500;margin-bottom:8px;">이동평균선 현황</div>
+        <div class="ir"><span class="il">5일선</span><span class="badge b-amber">단기 저항</span></div>
+        <div class="ir"><span class="il">20일선</span><span class="badge b-green">정배열 유지</span></div>
+        <div class="ir"><span class="il">60일선 (황색)</span><span class="badge b-green">강한 지지</span></div>
+        <div class="ir"><span class="il">120일선 (초록)</span><span class="badge b-blue">장기 우상향</span></div>
+        <div class="ir"><span class="il">배열</span><span class="badge b-green">완전 정배열</span></div>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:500;margin-bottom:8px;">주요 기술 지표</div>
+        <div class="ir"><span class="il">RSI (14)</span><span class="iv">~63 (강세)</span></div>
+        <div class="ir"><span class="il">저점→고점 수익률</span><span class="iv up">+110%</span></div>
+        <div class="ir"><span class="il">LC / HC</span><span class="iv">99.45% / -5.22%</span></div>
+        <div class="ir"><span class="il">거래량</span><span class="iv">501,605주 (50%↑)</span></div>
+        <div class="ir"><span class="il">3월 거래량 폭증</span><span class="iv up">1,600K (패닉바잉)</span></div>
+      </div>
+    </div>
+
+    <div style="font-size:13px;font-weight:500;margin-bottom:8px;">핵심 가격대 (실제 차트 매물대 기반)</div>
+    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;font-size:11px;margin-bottom:14px;">
+      <div style="background:#FCEBEB;border-radius:var(--border-radius-md);padding:9px 10px;">
+        <div style="color:#A32D2D;font-weight:500;margin-bottom:2px;">강한 저항</div>
+        <div style="color:#A32D2D;">767,000 전고점</div>
+      </div>
+      <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 10px;">
+        <div style="color:#854F0B;font-weight:500;margin-bottom:2px;">1차 저항</div>
+        <div style="color:#854F0B;">740,000~767,000</div>
+      </div>
+      <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 10px;">
+        <div style="color:#3B6D11;font-weight:500;margin-bottom:2px;">핵심 지지</div>
+        <div style="color:#3B6D11;">561,758~528,700</div>
+        <div style="color:#27500A;font-size:10px;">실제 차트 매물대</div>
+      </div>
+      <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 10px;">
+        <div style="color:#3B6D11;font-weight:500;margin-bottom:2px;">하단 지지</div>
+        <div style="color:#3B6D11;">580,000~600,000</div>
+        <div style="color:#27500A;font-size:10px;">60일선 부근</div>
+      </div>
+    </div>
+
+    <div style="font-size:13px;font-weight:500;margin-bottom:6px;">차트 신호 종합</div>
+    <div class="sig">
+      <span class="badge b-green">저점 대비 +110% · 완전 정배열</span>
+      <span class="badge b-green">SK하이닉스 신고가 동반 상승</span>
+      <span class="badge b-green">LC 99.45% — 저점 거의 탈출</span>
+      <span class="badge b-amber">전고점 767,000 저항 (5.22% 아래)</span>
+      <span class="badge b-blue">NAV 할인율 축소 트렌드 지속</span>
+      <span class="badge b-navy">3월 거래량 1,600K 강한 매수세</span>
+    </div>
+  </div>
+
+  <!-- 2. 기본적 분석 -->
+  <div class="card">
+    <div class="st">2. 기본적 분석 — 제5기 사업보고서(2025년) <span class="src">📄 실제 재무제표</span></div>
+
+    <!-- NAV 구조 시각화 -->
+    <div style="font-size:13px;font-weight:500;margin-bottom:8px;">SK스퀘어 NAV(순자산가치) 구조 <span class="src">📄 재무상태표 기준</span></div>
+    <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:8px;">연결 총자산 30.5조원 · 관계기업투자(SK하이닉스 지분) 27.2조원이 자산의 89% 차지</div>
+    <div class="nav-bar" style="margin-bottom:4px;">
+      <div class="nav-seg" style="width:89%;background:#042C53;">SK하이닉스 지분 27.2조 (89%)</div>
+      <div class="nav-seg" style="width:7%;background:#185FA5;font-size:10px;">현금 2.3조</div>
+      <div class="nav-seg" style="width:4%;background:#9370DB;font-size:10px;">기타</div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-tertiary);margin-bottom:14px;">
+      <span>0</span><span style="color:#042C53;font-weight:500;">총자산 30.5조원</span><span>NAV 할인율 ~35%</span>
+    </div>
+
+    <!-- 3개년 지분법손익 차트 -->
+    <div style="font-size:13px;font-weight:500;margin-bottom:8px;">3개년 연결 손익 추이 (조원)</div>
+    <div class="cleg">
+      <span><span class="ldot" style="background:#042C53;"></span>영업수익</span>
+      <span><span class="ldot" style="background:#1D9E75;"></span>지분법손익</span>
+      <span><span class="ldot" style="background:#EF9F27;"></span>연결영업이익</span>
+    </div>
+    <div style="position:relative;width:100%;height:160px;margin-bottom:16px;">
+      <canvas id="sqRevChart"></canvas>
+    </div>
+
+    <div class="row2" style="margin-bottom:14px;">
+      <div>
+        <div style="font-size:13px;font-weight:500;margin-bottom:8px;">연결 손익계산서 (2025년) <span class="src">📄</span></div>
+        <div class="ir"><span class="il">영업수익</span><span class="iv">1조 4,115억원 <span class="dn">▼14.4%</span></span></div>
+        <div class="ir"><span class="il">지분법손익</span><span class="iv up">8조 9,304억원 <span>(▲117%)</span></span></div>
+        <div class="ir"><span class="il">연결 영업이익</span><span class="iv up">8조 7,974억원 <span>(▲124%)</span></span></div>
+        <div class="ir"><span class="il">세전이익</span><span class="iv up">9조 5,073억원</span></div>
+        <div class="ir"><span class="il">연결당기순이익</span><span class="iv up">8조 8,187억원</span></div>
+        <div class="ir"><span class="il">지배주주귀속 순이익</span><span class="iv up">8조 8,241억원</span></div>
+        <div class="ir"><span class="il">기본EPS</span><span class="iv up">66,713원</span></div>
+        <div class="ir"><span class="il">연결 회사 수</span><span class="iv">16개사</span></div>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:500;margin-bottom:8px;">연결 재무상태표 (2025.12.31) <span class="src">📄</span></div>
+        <div class="ir"><span class="il">자산총계</span><span class="iv up">30조 5,045억원 (+39.2%)</span></div>
+        <div class="ir"><span class="il">현금및현금성자산</span><span class="iv">1조 3,107억원</span></div>
+        <div class="ir"><span class="il">관계기업투자 (SK하이닉스)</span><span class="iv up">27조 2,445억원 (+51.4%)</span></div>
+        <div class="ir"><span class="il">부채총계</span><span class="iv">2조 5,214억원</span></div>
+        <div class="ir"><span class="il">부채비율</span><span class="iv up">9.0% (초저부채)</span></div>
+        <div class="ir"><span class="il">자본총계</span><span class="iv up">27조 9,832억원 (+42.9%)</span></div>
+        <div class="ir"><span class="il">이익잉여금</span><span class="iv up">12조 5,140억원</span></div>
+        <div class="ir"><span class="il">PBR (시총/자본)</span><span class="iv dn">~0.34x (NAV 할인)</span></div>
+      </div>
+    </div>
+
+    <!-- SK하이닉스 지분가치 vs 시총 비교 -->
+    <div style="font-size:13px;font-weight:500;margin-bottom:8px;">NAV 할인율 분석 — SK스퀘어의 핵심 투자 논리</div>
+    <div style="position:relative;width:100%;height:140px;margin-bottom:10px;">
+      <canvas id="sqNavChart"></canvas>
+    </div>
+
+    <!-- 포트폴리오 자회사 -->
+    <div style="font-size:13px;font-weight:500;margin-bottom:8px;">포트폴리오 구성 <span class="src">📄 사업보고서</span></div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:14px;font-size:12px;">
+      <div style="background:#E0EAF5;border-radius:var(--border-radius-md);padding:10px 12px;">
+        <div style="color:#042C53;font-weight:500;margin-bottom:3px;">🔵 핵심 자산</div>
+        <div style="color:#185FA5;line-height:1.6;">SK하이닉스 지분 20.1%<br>장부가 27.2조원<br>시가 ~175조원 상당<br>NAV의 90% 이상</div>
+      </div>
+      <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:10px 12px;">
+        <div style="color:#854F0B;font-weight:500;margin-bottom:3px;">🟡 커머스·플랫폼</div>
+        <div style="color:#633806;line-height:1.6;">11번가 (적자 지속)<br>원스토어 (앱마켓)<br>SK플래닛 (마케팅)<br>FSK L&S (물류)</div>
+      </div>
+      <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:10px 12px;">
+        <div style="color:#3B6D11;font-weight:500;margin-bottom:3px;">🟢 신성장</div>
+        <div style="color:#1D9E75;line-height:1.6;">인크로스 (광고)<br>티맵모빌리티<br>AI·데이터 사업<br>포트폴리오 재편 중</div>
+      </div>
+    </div>
+
+    <!-- 밸류에이션 -->
+    <div class="mg4">
+      <div class="metric"><div class="ml">PER (EPS 66,713원)</div><div class="mv">~10.8x</div><div class="ms">지분법 이익 반영</div></div>
+      <div class="metric"><div class="ml">PBR</div><div class="mv dn">~0.34x</div><div class="ms dn">NAV 대비 66% 할인</div></div>
+      <div class="metric"><div class="ml">부채비율</div><div class="mv up">9.0%</div><div class="ms up">초우량 재무구조</div></div>
+      <div class="metric"><div class="ml">SK하이닉스 지분</div><div class="mv">20.1%</div><div class="ms">1주당 하이닉스 노출</div></div>
+    </div>
+
+    <div class="hl">
+      <div style="font-size:13px;font-weight:500;color:#042C53;margin-bottom:5px;">💡 SK스퀘어 투자 핵심 — "SK하이닉스를 할인된 가격에 사는 방법"</div>
+      <div style="font-size:12px;color:#185FA5;line-height:1.7;">
+        SK하이닉스 시총 874조 × SK스퀘어 지분 20.1% = <strong>SK하이닉스 지분 시가 약 175조원</strong><br>
+        SK스퀘어 시총 95.9조 → NAV 대비 <strong>약 45% 할인</strong> 수준에서 거래 중.<br>
+        사업보고서 장부가(27.2조) 대비 시가(175조) 간극이 큼 → 지분법 손익이 8.9조로 폭증.<br>
+        2028년 NAV 할인율 30% 이하 목표 달성 시 주가 추가 상승 여력 존재.
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 투자 포인트 -->
+  <div class="card">
+    <div class="st">3. 2026년 핵심 투자 포인트</div>
+    <div class="row2">
+      <div>
+        <div style="font-size:13px;font-weight:500;margin-bottom:8px;color:#1D9E75;">긍정 요인 (Bull)</div>
+        <div class="ir"><span class="il">SK하이닉스 신고가 동반 상승</span><span class="badge b-green">주가 연동성 강함</span></div>
+        <div class="ir"><span class="il">지분법손익 8.9조 (+117%)</span><span class="badge b-green">EPS 66,713원</span></div>
+        <div class="ir"><span class="il">NAV 할인율 축소 트렌드</span><span class="badge b-green">2028년 30% 목표</span></div>
+        <div class="ir"><span class="il">부채비율 9% 초우량</span><span class="badge b-green">재무 안정성</span></div>
+        <div class="ir"><span class="il">목표주가 평균 ~743,000원</span><span class="badge b-blue">+3% 여력</span></div>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:500;margin-bottom:8px;color:#D85A30;">리스크 (Bear)</div>
+        <div class="ir"><span class="il">SK하이닉스 주가 하락 시</span><span class="badge b-red">직격탄 (β ≈ 1.0)</span></div>
+        <div class="ir"><span class="il">11번가 등 자회사 적자</span><span class="badge b-amber">영업수익 -14.4%</span></div>
+        <div class="ir"><span class="il">전고점 767K 저항</span><span class="badge b-amber">단기 조정 가능</span></div>
+        <div class="ir"><span class="il">NAV 할인 고착화 우려</span><span class="badge b-gray">지주 디스카운트</span></div>
+        <div class="ir"><span class="il">단일 자산 집중 리스크</span><span class="badge b-gray">하이닉스 의존도 90%</span></div>
+      </div>
+    </div>
+    <div class="ib">
+      <div style="font-size:13px;font-weight:500;margin-bottom:6px;">애널리스트 컨센서스</div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
+        <div><span style="color:var(--color-text-secondary);">투자의견:</span> <span class="badge b-navy">매수 (15/16명)</span></div>
+        <div><span style="color:var(--color-text-secondary);">목표주가 평균:</span> <span style="font-weight:500;">~743,000원</span></div>
+        <div><span style="color:var(--color-text-secondary);">현재가 대비:</span> <span class="up" style="font-weight:500;">+2.9%</span></div>
+        <div><span style="color:var(--color-text-secondary);">특이사항:</span> <span class="badge b-amber">목표가가 전고점 근처 — 상단 도달 임박</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+/* ===== SVG 캔들차트 — 실제 차트 기반 ===== */
+(function(){
+  const svg = document.getElementById('sqSvg');
+  const W=720, H=250, pL=62, pR=12, pT=18, pB=28;
+  const cW=W-pL-pR, cH=H-pT-pB;
+
+  // 실제 차트 기반 (단위: 만원)
+  // 1월: 364,500 저점 → 우상향
+  // 2월: 560,000~620,000 박스 → 급등
+  // 3월: 조정 (매물대 561,758~528,700) 후 반등
+  // 4월: 767,000 신고점 → 722,000 현재
+  const data = [
+    // 1월
+    {o:36.5,h:39,l:35.5,c:38},{o:38,h:41,l:37,c:40},{o:40,h:44,l:39,c:43},
+    {o:43,h:47,l:42,c:46},{o:46,h:50,l:45,c:49},{o:49,h:54,l:48,c:52},
+    {o:52,h:56,l:50,c:55},{o:55,h:59,l:53,c:58},
+    // 2월
+    {o:58,h:63,l:56,c:61},{o:61,h:65,l:59,c:64},{o:64,h:68,l:62,c:66},
+    {o:66,h:69,l:63,c:67},{o:67,h:70,l:64,c:62},{o:62,h:65,l:59,c:63},
+    {o:63,h:66,l:60,c:64},{o:64,h:67,l:62,c:66},
+    // 3월 — 조정 구간 (53~56 지지)
+    {o:66,h:68,l:60,c:62},{o:62,h:64,l:55,c:57},{o:57,h:60,l:53,c:56},
+    {o:56,h:59,l:53,c:58},{o:58,h:62,l:56,c:61},{o:61,h:64,l:59,c:63},
+    // 4월 — 신고가 돌파
+    {o:63,h:67,l:62,c:66},{o:66,h:70,l:64,c:69},{o:69,h:73,l:67,c:72},
+    {o:72,h:76,l:70,c:75},{o:75,h:77,l:73,c:76},{o:76,h:77,l:71,c:73},
+    {o:73,h:74,l:71,c:72}
+  ];
+
+  const prices = data.flatMap(d=>[d.h,d.l]);
+  const maxP = Math.max(...prices)+2, minP = Math.min(...prices)-1.5;
+  const range = maxP-minP;
+  function py(v){ return pT + cH*(1-(v-minP)/range); }
+  const colW = cW/data.length, candW = Math.max(colW*0.6,7);
+
+  [35,40,45,50,55,60,65,70,75].forEach(v=>{
+    if(v<minP||v>maxP) return;
+    const y=py(v);
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
+    l.setAttribute('stroke','rgba(128,128,128,.12)');l.setAttribute('stroke-width','1');svg.appendChild(l);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',pL-4);t.setAttribute('y',y+4);t.setAttribute('text-anchor','end');
+    t.setAttribute('font-size','9');t.setAttribute('fill','rgba(128,128,128,.7)');
+    t.textContent=(v*10000).toLocaleString();svg.appendChild(t);
+  });
+
+  function calcMA(d,n){return d.map((_,i)=>i<n-1?null:d.slice(i-n+1,i+1).reduce((s,x)=>s+x.c,0)/n);}
+  function drawLine(arr,color,w){
+    let pts=[];arr.forEach((v,i)=>{if(v===null)return;pts.push(`${pL+(i+0.5)*colW},${py(v)}`);});
+    if(pts.length<2)return;
+    const p=document.createElementNS('http://www.w3.org/2000/svg','polyline');
+    p.setAttribute('points',pts.join(' '));p.setAttribute('fill','none');
+    p.setAttribute('stroke',color);p.setAttribute('stroke-width',w||1.5);svg.appendChild(p);
+  }
+
+  data.forEach((d,i)=>{
+    const cx=pL+(i+0.5)*colW,isUp=d.c>=d.o,color=isUp?'#D85A30':'#185FA5';
+    const wick=document.createElementNS('http://www.w3.org/2000/svg','line');
+    wick.setAttribute('x1',cx);wick.setAttribute('x2',cx);wick.setAttribute('y1',py(d.h));wick.setAttribute('y2',py(d.l));
+    wick.setAttribute('stroke',color);wick.setAttribute('stroke-width','1.5');svg.appendChild(wick);
+    const bT=py(Math.max(d.o,d.c)),bB=py(Math.min(d.o,d.c));
+    const body=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    body.setAttribute('x',cx-candW/2);body.setAttribute('y',bT);body.setAttribute('width',candW);
+    body.setAttribute('height',Math.max(bB-bT,2));body.setAttribute('fill',color);body.setAttribute('rx','1');svg.appendChild(body);
+  });
+
+  drawLine(calcMA(data,5),'#FF69B4',1.5);
+  drawLine(calcMA(data,20),'#9370DB',1.5);
+  drawLine(calcMA(data,60),'#DAA520',2);
+  drawLine(calcMA(data,120),'#228B22',2);
+
+  // 지지구간 음영 (53~56만)
+  const z=document.createElementNS('http://www.w3.org/2000/svg','rect');
+  z.setAttribute('x',pL);z.setAttribute('y',py(56.2));z.setAttribute('width',cW);
+  z.setAttribute('height',py(52.9)-py(56.2));z.setAttribute('fill','rgba(29,158,117,0.07)');
+  svg.insertBefore(z,svg.firstChild);
+
+  const addMark=(idx,label,isLow,color)=>{
+    const cx=pL+(idx+0.5)*colW;
+    const cy=isLow?py(data[idx].l)+13:py(data[idx].h)-9;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',cx);t.setAttribute('y',cy);t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','9');t.setAttribute('fill',color);t.setAttribute('font-weight','500');
+    t.textContent=label;svg.appendChild(t);
+  };
+  addMark(0,'최저 364,500',true,'#185FA5');
+  addMark(26,'최고 767,000',false,'#D85A30');
+
+  ['1월','2월','3월','4월'].forEach((m,i)=>{
+    const cx=pL+(i/4)*cW+cW/8;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',cx);t.setAttribute('y',H-4);t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','10');t.setAttribute('fill','rgba(128,128,128,.8)');
+    t.textContent=m;svg.appendChild(t);
+  });
+
+  [{c:'#D85A30',t:'양봉'},{c:'#185FA5',t:'음봉'},{c:'#FF69B4',t:'MA5'},{c:'#9370DB',t:'MA20'},{c:'#DAA520',t:'MA60'},{c:'#228B22',t:'MA120'}].forEach((l,i)=>{
+    const gx=pL+i*90;
+    const r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    r.setAttribute('x',gx);r.setAttribute('y',2);r.setAttribute('width',10);r.setAttribute('height',10);
+    r.setAttribute('fill',l.c);r.setAttribute('rx','2');svg.appendChild(r);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',gx+13);t.setAttribute('y',11);t.setAttribute('font-size','9');
+    t.setAttribute('fill','rgba(128,128,128,.9)');t.textContent=l.t;svg.appendChild(t);
+  });
+})();
+
+/* ===== 3개년 손익 ===== */
+new Chart(document.getElementById('sqRevChart'),{
+  type:'bar',
+  data:{
+    labels:['2023 (제3기)','2024 (제4기)','2025 (제5기)'],
+    datasets:[
+      {label:'영업수익',data:[2.01,1.65,1.41],backgroundColor:'#042C53',borderRadius:4,yAxisID:'y'},
+      {label:'지분법손익',data:[-2.05,4.11,8.93],backgroundColor:'#1D9E75',borderRadius:4,yAxisID:'y'},
+      {label:'연결영업이익',type:'line',data:[-2.33,3.92,8.80],
+       borderColor:'#EF9F27',backgroundColor:'rgba(239,159,39,.1)',
+       tension:.35,pointRadius:5,borderWidth:2.5,fill:false,yAxisID:'y'}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      y:{position:'left',ticks:{font:{size:10},callback:v=>v+'조',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+      x:{ticks:{font:{size:11},color:'#888'},grid:{display:false}}
+    }
+  }
+});
+
+/* ===== NAV 할인율 비교 ===== */
+new Chart(document.getElementById('sqNavChart'),{
+  type:'bar',
+  data:{
+    labels:['SK하이닉스\n지분 시가 (추정)', 'SK스퀘어\n자본총계', 'SK스퀘어\n시가총액'],
+    datasets:[{
+      label:'금액(조원)',
+      data:[175, 28.0, 95.9],
+      backgroundColor:['#042C53','#1D9E75','#EF9F27'],
+      borderRadius:5
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>`${ctx.raw}조원`}},
+      annotation:{annotations:{}}
+    },
+    scales:{
+      y:{ticks:{font:{size:10},callback:v=>v+'조',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+      x:{ticks:{font:{size:10},color:'#888'},grid:{display:false}}
+    }
+  }
+});
+</script>
