@@ -1,355 +1,456 @@
-
+<link rel="stylesheet" href="../css/global.css">
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-.box {
-  width: 800px;
-  background-color: rgb(248, 248, 246);
-  margin: 0 auto;
-}
-.st { font-size:11px; font-weight:500; color:var(--color-text-secondary); text-transform:uppercase; letter-spacing:.07em; margin-bottom:10px; padding-bottom:6px; border-bottom:.5px solid var(--color-border-tertiary); }
-.card { background:var(--color-background-primary); border:.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); padding:1rem 1.25rem; margin-bottom:12px; }
-.mg4 { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-bottom:12px; }
-.mg3 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin-bottom:12px; }
-.metric { background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:11px; text-align:center; }
-.ml { font-size:11px; color:var(--color-text-secondary); margin-bottom:4px; }
-.mv { font-size:14px; font-weight:500; color:var(--color-text-primary); }
-.ms { font-size:11px; color:var(--color-text-tertiary); margin-top:2px; }
-.up{color:#1D9E75;} .dn{color:#D85A30;}
+*{box-sizing:border-box;margin:0;padding:0;}
+h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
+.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:18px;}
+.sec{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:12px;}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:14px;}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px;text-align:center;}
+.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
+.mv{font-size:14px;font-weight:500;color:var(--color-text-primary);}
+.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
+.up{color:#1D9E75;}.dn{color:#D85A30;}
 .badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
-.b-blue{background:#E6F1FB;color:#185FA5;}
 .b-green{background:#EAF3DE;color:#3B6D11;}
 .b-amber{background:#FAEEDA;color:#854F0B;}
 .b-red{background:#FCEBEB;color:#A32D2D;}
+.b-blue{background:#E6F1FB;color:#185FA5;}
 .b-gray{background:#F1EFE8;color:#5F5E5A;}
 .b-navy{background:#E0EAF5;color:#042C53;}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
-.ir:last-child{border-bottom:none;}
-.il{color:var(--color-text-secondary);}
-.iv{font-weight:500;color:var(--color-text-primary);}
 .sig{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
 .cleg{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:8px;font-size:12px;color:var(--color-text-secondary);}
 .ldot{width:10px;height:10px;border-radius:2px;display:inline-block;margin-right:4px;}
-h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
-.hsub{font-size:13px;color:var(--color-text-secondary);margin-bottom:16px;}
-.hl{background:#E0EAF5;border-left:3px solid #042C53;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
-.warn{background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:var(--border-radius-md);padding:12px 14px;margin-bottom:10px;}
-.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
+.ir:last-child{border-bottom:none;}
+.il{color:var(--color-text-secondary);}.iv{font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:6px;}
 .src{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-tertiary);margin-left:6px;}
+.hl{background:#E0EAF5;border-left:3px solid #042C53;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.warn{background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ev-1{background:#E6F1FB;color:#0C447C;}.ev-2{background:#EAF3DE;color:#27500A;}
+.ev-3{background:#F1EFE8;color:#444441;}.ev-4{background:#FAEEDA;color:#633806;}
+.ev-5{background:#FCEBEB;color:#791F1F;}
+.ev{font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;}
+.ind-row{display:flex;align-items:center;padding:8px 0;border-bottom:.5px solid var(--color-border-tertiary);gap:10px;}
+.ind-row:last-child{border-bottom:none;}
+.ind-nm{font-size:13px;font-weight:500;color:var(--color-text-primary);min-width:90px;}
+.ind-val{font-size:14px;font-weight:500;color:var(--color-text-primary);min-width:80px;text-align:right;}
+.bar-bg{background:var(--color-border-tertiary);border-radius:4px;height:7px;}
+.bar-f{border-radius:4px;height:7px;}
+.stage-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:14px;}
+.stage{text-align:center;padding:12px 6px;border-radius:var(--border-radius-md);}
+/* 뉴스 타임라인 */
+.tl{position:relative;padding-left:28px;}
+.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--color-border-tertiary);border-radius:2px;}
+.tl-item{position:relative;margin-bottom:18px;}
+.tl-item:last-child{margin-bottom:0;}
+.tl-dot{position:absolute;left:-24px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid white;}
+.dot-big{background:#042C53;}.dot-pos{background:#1D9E75;}
+.dot-neg{background:#D85A30;}.dot-neu{background:#888780;}
+.tl-date{font-size:11px;font-weight:500;color:var(--color-text-tertiary);margin-bottom:3px;}
+.tl-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px;line-height:1.4;}
+.tl-body{font-size:12px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:5px;}
+.tl-link{font-size:11px;color:#185FA5;text-decoration:none;display:inline-flex;align-items:center;gap:3px;margin-right:8px;}
+.tl-link:hover{text-decoration:underline;}
+.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;margin-right:4px;}
+.tag-big{background:#E0EAF5;color:#042C53;}.tag-pos{background:#EAF3DE;color:#3B6D11;}
+.tag-neg{background:#FCEBEB;color:#791F1F;}.tag-neu{background:#F1EFE8;color:#444441;}
 </style>
 
 <div style="padding:1rem 0;" class="box">
-  <div style="margin-bottom:4px;display:flex;align-items:center;justify-content: center;gap:10px;flex-wrap:wrap;" >
-    <h2>SK하이닉스 (000660)</h2>
-    <span class="badge b-navy">코스피 시총 2위</span>
-    <span class="badge b-gray">HBM 글로벌 1위</span>
-    <span class="src">📄 제78기 사업보고서 + 📊 실제 차트</span>
+
+<!-- 헤더 -->
+<div style="margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+  <h2>SK하이닉스 (000660)</h2>
+  <span class="badge b-navy">코스피 시총 2위</span>
+  <span class="badge b-gray">HBM 글로벌 1위 · 메모리 반도체</span>
+  <span class="src">📄 제78기 사업보고서 + 📊 실제 차트 + 📰 뉴스</span>
+</div>
+<p class="sub">제78기(2025.01.01~12.31) · 현재가 1,455,000원 · 신고가 1,450,000원 (05/04) · 시총 1,060조 · 코스피 비중 ~16%</p>
+
+<div class="g4">
+  <div class="met"><div class="ml">현재가 (05/04)</div><div class="mv">1,455,000원</div><div class="ms up">신고가 1,450,000 갱신중</div></div>
+  <div class="met"><div class="ml">52주 범위</div><div class="mv">647,000~1,450,000</div><div class="ms">최저 01/02 · 신고가 05/04</div></div>
+  <div class="met"><div class="ml">2025 연결영업이익</div><div class="mv">47.2조원</div><div class="ms up">▲101.2% · 삼성전자 DS 추월</div></div>
+  <div class="met"><div class="ml">1Q26 영업이익</div><div class="mv">37.6조원</div><div class="ms up">▲405% · 창사 이래 최대</div></div>
+</div>
+
+<!-- 1. 기술적 분석 -->
+<div class="card">
+  <div class="sec">1. 기술적 분석 — 실제 HTS 차트 (2026.01~05/04)</div>
+  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;">
+    최저 647,000원 (01/02) → 신고가 1,450,000원 (05/04) · LC 121.79% · HC -1.32% · 현재 신고가 행진 중
   </div>
-  <p class="hsub" style="text-align:center;">제78기(2025.01.01~12.31) · 2026.03.17 공시 · 현재가 1,227,000원 (+0.16%) · 시총 874.5조 · 코스피 비중 13.61%</p>
+  <svg id="hxSvg" viewBox="0 0 720 240" width="100%" style="display:block;margin-bottom:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:4px;"></svg>
 
-  <div class="mg4">
-    <div class="metric"><div class="ml">현재가 (4/25)</div><div class="mv">1,227,000원</div><div class="ms up">+0.16% · 시총 874조</div></div>
-    <div class="metric"><div class="ml">52주 범위</div><div class="mv">647,000~1,278,000</div><div class="ms">저점 01/02 · 고점 04/23</div></div>
-    <div class="metric"><div class="ml">2025 연결매출</div><div class="mv">97.1조원</div><div class="ms up">▲46.8% YoY</div></div>
-    <div class="metric"><div class="ml">2025 영업이익</div><div class="mv">47.2조원</div><div class="ms up">▲101% YoY (삼성전자 추월)</div></div>
-  </div>
-
-  <!-- 1. 기술적 분석 -->
-  <div class="card">
-    <div class="st">1. 기술적 분석 — 실제 HTS 차트 (2026.01~04/24)</div>
-
-    <div style="font-size:13px;font-weight:500;margin-bottom:4px;">일봉 캔들 + 이동평균 (5·20·60·120일선) · 단위: 원</div>
-    <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:10px;">
-      최저 647,000원 (01/02) → 최고 1,278,000원 (04/23) · 현재 1,227,000원 · LC 89.64% · HC -3.99%
+  <!-- 구간별 분석 — 실제 차트 매물대 -->
+  <div style="font-size:13px;font-weight:500;margin-bottom:8px;">📊 실제 차트 구간별 분석</div>
+  <div class="g4" style="font-size:11px;margin-bottom:12px;">
+    <div style="background:#E6F1FB;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#0C447C;font-weight:500;margin-bottom:3px;">1~2월 — 완만 상승</div>
+      <div style="color:#185FA5;line-height:1.6;">최저 647,000 (01/02)<br>10,005,434(1.7%)<br>25,009,733(4.2%)<br>27,932,937(4.7%)</div>
     </div>
-
-    <svg id="hynixSvg" viewBox="0 0 720 250" width="100%" style="display:block;margin-bottom:14px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:4px;"></svg>
-
-    <!-- 구간별 분석 -->
-    <div style="font-size:13px;font-weight:500;margin-bottom:8px;">📊 실제 차트 구간별 분석</div>
-    <div class="mg3" style="margin-bottom:14px;font-size:12px;">
-      <div style="background:#E6F1FB;border-radius:var(--border-radius-md);padding:10px 12px;">
-        <div style="color:#0C447C;font-weight:500;margin-bottom:3px;">1월 — 박스 횡보</div>
-        <div style="color:#185FA5;line-height:1.5;">647,000~750,000원<br>최저점 01/02 이후<br>이평선 수렴 모색<br>매물대 형성</div>
-      </div>
-      <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:10px 12px;">
-        <div style="color:#3B6D11;font-weight:500;margin-bottom:3px;">2~3월 초 — 급등</div>
-        <div style="color:#1D9E75;line-height:1.5;">1,000,000원 돌파<br>배당락(0.00%) 후 조정<br>거래량 폭증 (15K 최대)<br>HBM4 수주 모멘텀</div>
-      </div>
-      <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:10px 12px;">
-        <div style="color:#854F0B;font-weight:500;margin-bottom:3px;">4월 — 재상승·전고점</div>
-        <div style="color:#633806;line-height:1.5;">최고 1,278,000 (04/23)<br>1Q26 영업익 37.6조<br>905,600~848,700 지지대<br>현재 1,227,000 조정 중</div>
-      </div>
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#3B6D11;font-weight:500;margin-bottom:3px;">2~3월 초 — 급등</div>
+      <div style="color:#1D9E75;line-height:1.6;">24,599,579(4.1%)<br>33,796,932(5.7%)<br>69,514,456(11.6%)<br>배당락(0.00%)</div>
     </div>
-
-    <div class="row2" style="margin-bottom:14px;">
-      <div>
-        <div style="font-size:13px;font-weight:500;margin-bottom:8px;">이동평균선 현황</div>
-        <div class="ir"><span class="il">5일선 (핑크)</span><span class="badge b-amber">단기 저항 구간</span></div>
-        <div class="ir"><span class="il">20일선</span><span class="badge b-green">정배열 유지</span></div>
-        <div class="ir"><span class="il">60일선 (황색)</span><span class="badge b-green">강한 지지</span></div>
-        <div class="ir"><span class="il">120일선 (초록)</span><span class="badge b-blue">장기 우상향</span></div>
-        <div class="ir"><span class="il">배열</span><span class="badge b-green">완전 정배열</span></div>
-      </div>
-      <div>
-        <div style="font-size:13px;font-weight:500;margin-bottom:8px;">주요 기술 지표</div>
-        <div class="ir"><span class="il">RSI (14)</span><span class="iv">~66 (강세 진입)</span></div>
-        <div class="ir"><span class="il">저점→고점 수익률</span><span class="iv up">+97.5%</span></div>
-        <div class="ir"><span class="il">LC / HC</span><span class="iv">89.64% / -3.99%</span></div>
-        <div class="ir"><span class="il">거래량 비율</span><span class="iv">5.39M주 (54.68%↑)</span></div>
-        <div class="ir"><span class="il">1Q26 영업이익</span><span class="iv up">37.6조 (역대 최대)</span></div>
-      </div>
+    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#854F0B;font-weight:500;margin-bottom:3px;">3~4월 — 조정·횡보</div>
+      <div style="color:#633806;line-height:1.6;">63,974,517(10.7%)<br>66,125,027(11.1%)<br>690,667(17.0%)<br>지지 905,400~829,600</div>
     </div>
-
-    <!-- 핵심 가격대 -->
-    <div style="font-size:13px;font-weight:500;margin-bottom:8px;">핵심 가격대 (실제 차트 매물대 기반)</div>
-    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;font-size:11px;margin-bottom:14px;">
-      <div style="background:#FCEBEB;border-radius:var(--border-radius-md);padding:9px 10px;">
-        <div style="color:#A32D2D;font-weight:500;margin-bottom:2px;">강한 저항</div>
-        <div style="color:#A32D2D;">1,278,000원 전고점</div>
-      </div>
-      <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 10px;">
-        <div style="color:#854F0B;font-weight:500;margin-bottom:2px;">1차 저항</div>
-        <div style="color:#854F0B;">1,240,000~1,270,000</div>
-      </div>
-      <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 10px;">
-        <div style="color:#3B6D11;font-weight:500;margin-bottom:2px;">핵심 지지</div>
-        <div style="color:#3B6D11;">905,600~848,700</div>
-        <div style="color:#27500A;font-size:10px;">실제 차트 표기 구간</div>
-      </div>
-      <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 10px;">
-        <div style="color:#3B6D11;font-weight:500;margin-bottom:2px;">하단 지지</div>
-        <div style="color:#3B6D11;">800,000~848,700</div>
-        <div style="color:#27500A;font-size:10px;">60·120일선</div>
-      </div>
-    </div>
-
-    <div style="font-size:13px;font-weight:500;margin-bottom:6px;">차트 신호 종합</div>
-    <div class="sig">
-      <span class="badge b-green">1Q26 영업익 37.6조 역대최대</span>
-      <span class="badge b-green">저점 대비 +97.5% 상승</span>
-      <span class="badge b-green">완전 정배열 · HBM 독주</span>
-      <span class="badge b-amber">전고점 1,278,000 직전 조정</span>
-      <span class="badge b-amber">배당락 이후 -3.99% 변동</span>
-      <span class="badge b-blue">삼성전자 영업이익 추월 달성</span>
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#3B6D11;font-weight:500;margin-bottom:3px;">4월말~5월 — 신고가</div>
+      <div style="color:#1D9E75;line-height:1.6;">174,664,179(29.2%)<br>신고가 1,450,000 (05/04)<br>LC 121.79%<br>거래량 10,005K↑</div>
     </div>
   </div>
 
-  <!-- 2. 기본적 분석 -->
-  <div class="card">
-    <div class="st">2. 기본적 분석 — 제78기 사업보고서(2025년) <span class="src">📄 실제 재무제표</span></div>
-
-    <div style="font-size:13px;font-weight:500;margin-bottom:8px;">3개년 연결 손익 추이 (조원)</div>
-    <div class="cleg">
-      <span><span class="ldot" style="background:#042C53;"></span>매출액</span>
-      <span><span class="ldot" style="background:#1D9E75;"></span>영업이익</span>
-      <span><span class="ldot" style="background:#EF9F27;"></span>영업이익률(%)</span>
+  <div class="g2" style="margin-bottom:12px;">
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;">이동평균선 현황</div>
+      <div class="ir"><span class="il">5일선</span><span class="badge b-green">신고가 지지</span></div>
+      <div class="ir"><span class="il">20일선</span><span class="badge b-green">정배열 유지</span></div>
+      <div class="ir"><span class="il">60일선 (황색)</span><span class="badge b-green">빠르게 우상향</span></div>
+      <div class="ir"><span class="il">120일선 (초록)</span><span class="badge b-blue">장기 우상향</span></div>
+      <div class="ir"><span class="il">배열</span><span class="badge b-green">완전 정배열</span></div>
     </div>
-    <div style="position:relative;width:100%;height:170px;margin-bottom:16px;">
-      <canvas id="hynixRevChart"></canvas>
-    </div>
-
-    <div class="row2" style="margin-bottom:14px;">
-      <div>
-        <div style="font-size:13px;font-weight:500;margin-bottom:8px;">연결 손익계산서 (2025년)</div>
-        <div class="ir"><span class="il">매출액</span><span class="iv">97조 1,467억원 <span class="up">▲46.8%</span></span></div>
-        <div class="ir"><span class="il">영업이익</span><span class="iv">47조 2,063억원 <span class="up">▲101.2%</span></span></div>
-        <div class="ir"><span class="il">영업이익률</span><span class="iv up">48.6% (역대 최고)</span></div>
-        <div class="ir"><span class="il">당기순이익(연결)</span><span class="iv up">42조 9,479억원</span></div>
-        <div class="ir"><span class="il">지배주주귀속 순이익</span><span class="iv">42조 9,193억원</span></div>
-        <div class="ir"><span class="il">기본EPS (연결)</span><span class="iv up">62,044원</span></div>
-        <div class="ir"><span class="il">별도 매출</span><span class="iv up">86조 8,521억원 (+55.8%)</span></div>
-        <div class="ir"><span class="il">별도 영업이익</span><span class="iv up">44조 74억원 (+106.3%)</span></div>
-      </div>
-      <div>
-        <div style="font-size:13px;font-weight:500;margin-bottom:8px;">연결 재무상태표 (2025.12.31)</div>
-        <div class="ir"><span class="il">자산총계</span><span class="iv up">176조 1,077억원 (+46.9%)</span></div>
-        <div class="ir"><span class="il">현금+단기금융+투자</span><span class="iv up">34조 9,417억원</span></div>
-        <div class="ir"><span class="il">재고자산</span><span class="iv">14조 2,894억원</span></div>
-        <div class="ir"><span class="il">유형자산</span><span class="iv up">77조 5,027억원 (+28.8%)</span></div>
-        <div class="ir"><span class="il">부채총계</span><span class="iv">55조 4,409억원</span></div>
-        <div class="ir"><span class="il">부채비율</span><span class="iv up">45.9% (우량)</span></div>
-        <div class="ir"><span class="il">자본총계</span><span class="iv up">120조 6,668억원 (+63.3%)</span></div>
-        <div class="ir"><span class="il">이익잉여금</span><span class="iv up">106조 5,765억원</span></div>
-      </div>
-    </div>
-
-    <!-- HBM 경쟁력 -->
-    <div style="font-size:13px;font-weight:500;margin-bottom:8px;">HBM·AI 핵심 경쟁력 <span class="src">📄 사업보고서 기반</span></div>
-    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:14px;font-size:12px;">
-      <div style="background:#E0EAF5;border-radius:var(--border-radius-md);padding:10px 12px;">
-        <div style="color:#042C53;font-weight:500;margin-bottom:3px;">HBM 점유율</div>
-        <div style="color:#185FA5;line-height:1.6;">글로벌 1위 (57%)<br>HBM3E·HBM4 양산<br>엔비디아 독점 공급</div>
-      </div>
-      <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:10px 12px;">
-        <div style="color:#3B6D11;font-weight:500;margin-bottom:3px;">생산 규모</div>
-        <div style="color:#1D9E75;line-height:1.6;">생산능력 41.2조원<br>평균 가동률 <strong>100%</strong><br>유형자산 77.5조원</div>
-      </div>
-      <div style="background:#EEEDFE;border-radius:var(--border-radius-md);padding:10px 12px;">
-        <div style="color:#3C3489;font-weight:500;margin-bottom:3px;">1Q26 실적</div>
-        <div style="color:#534AB7;line-height:1.6;">영업이익 37.6조<br>(역대 최대)<br>영업이익률 ~58%</div>
-      </div>
-    </div>
-
-    <!-- 밸류에이션 -->
-    <div class="mg4">
-      <div class="metric"><div class="ml">PER (연결 EPS 기준)</div><div class="mv">~20x</div><div class="ms">EPS 62,044원</div></div>
-      <div class="metric"><div class="ml">PBR</div><div class="mv">~7.2x</div><div class="ms">성장 프리미엄</div></div>
-      <div class="metric"><div class="ml">ROE</div><div class="mv">~43%</div><div class="ms up">업계 최고 수준</div></div>
-      <div class="metric"><div class="ml">부채비율</div><div class="mv up">45.9%</div><div class="ms up">우량 재무구조</div></div>
-    </div>
-
-    <!-- 삼성전자 추월 하이라이트 -->
-    <div class="hl" style="margin-top:12px;">
-      <div style="font-size:13px;font-weight:500;color:#042C53;margin-bottom:5px;">🏆 2025년 — 삼성전자 영업이익 추월 · 역사적 전환점</div>
-      <div style="font-size:12px;color:#185FA5;line-height:1.7;">
-        SK하이닉스 영업이익 <strong>47.2조원</strong> vs 삼성전자 DS부문 <strong>24.9조원</strong> — 반도체 부문 역전 달성.<br>
-        HBM이 AI 데이터센터 핵심 부품으로 부상하며 <strong>엔비디아 향 HBM3E 독점 공급</strong>. 2025년 생산능력 가동률 100%. 2026년 1Q 영업이익 37.6조(역대 최대)로 연간 영업이익 100조 시대 진입 전망.
-      </div>
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;">핵심 가격대</div>
+      <div class="ir"><span class="il">신고가 / 저항</span><span style="font-weight:500;color:#D85A30;">1,450,000원 (갱신중)</span></div>
+      <div class="ir"><span class="il">핵심 지지</span><span style="font-weight:500;color:#1D9E75;">905,400~829,600원</span></div>
+      <div class="ir"><span class="il">LC / HC</span><span style="font-weight:500;">121.79% / -1.32%</span></div>
+      <div class="ir"><span class="il">거래량</span><span style="font-weight:500;">10,005K (186.72%↑)</span></div>
+      <div class="ir"><span class="il">목표주가</span><span style="font-weight:500;color:#1D9E75;">~1,800,000원</span></div>
     </div>
   </div>
 
-  <!-- 3. 투자 포인트 -->
-  <div class="card">
-    <div class="st">3. 2026년 핵심 투자 포인트</div>
-    <div class="row2">
-      <div>
-        <div style="font-size:13px;font-weight:500;margin-bottom:8px;color:#1D9E75;">긍정 요인 (Bull)</div>
-        <div class="ir"><span class="il">1Q26 영업익 37.6조 역대최대</span><span class="badge b-green">연간 100조 전망</span></div>
-        <div class="ir"><span class="il">HBM 글로벌 점유율 57%</span><span class="badge b-green">독주 체제</span></div>
-        <div class="ir"><span class="il">엔비디아 AI칩 독점 공급</span><span class="badge b-green">수요 확실성</span></div>
-        <div class="ir"><span class="il">영업이익률 48.6% 역대 최고</span><span class="badge b-green">수익성 최강</span></div>
-        <div class="ir"><span class="il">목표주가 평균 ~1,440,000원</span><span class="badge b-blue">+17% 여력</span></div>
-      </div>
-      <div>
-        <div style="font-size:13px;font-weight:500;margin-bottom:8px;color:#D85A30;">리스크 (Bear)</div>
-        <div class="ir"><span class="il">전고점 1,278,000 저항</span><span class="badge b-amber">단기 조정 가능</span></div>
-        <div class="ir"><span class="il">삼성전자 HBM 추격</span><span class="badge b-amber">점유율 경쟁</span></div>
-        <div class="ir"><span class="il">메모리 사이클 하강 리스크</span><span class="badge b-amber">고점 논란</span></div>
-        <div class="ir"><span class="il">미-중 무역분쟁 공급망</span><span class="badge b-gray">불확실성</span></div>
-        <div class="ir"><span class="il">베타 1.6 (고변동성)</span><span class="badge b-gray">급등락 주의</span></div>
-      </div>
+  <div class="sig">
+    <span class="badge b-green">LC 121.79% — 신고가 행진 중</span>
+    <span class="badge b-green">1Q26 영업이익 37.6조 창사 최대</span>
+    <span class="badge b-green">영업이익률 72% — 엔비디아 압도</span>
+    <span class="badge b-green">완전 정배열 · 거래량 폭증</span>
+    <span class="badge b-amber">RSI 과매수 구간 — 단기 조정 주의</span>
+    <span class="badge b-navy">순현금 35조 · 재무 최우량</span>
+  </div>
+</div>
+
+<!-- 2. 기본적 분석 -->
+<div class="card">
+  <div class="sec">2. 기본적 분석 — 제78기 사업보고서(2025년) <span class="src">📄 실제 재무제표</span></div>
+  <div style="position:relative;width:100%;height:155px;margin-bottom:12px;">
+    <canvas id="hxRevChart"></canvas>
+  </div>
+  <div class="g2" style="margin-bottom:10px;">
+    <div>
+      <div class="ir"><span class="il">매출액</span><span class="iv">97.1조 (▲46.8%) <span class="ev ev-4">높음</span></span></div>
+      <div class="ir"><span class="il">영업이익</span><span class="iv">47.2조 (▲101.2%) <span class="ev ev-4">높음</span></span></div>
+      <div class="ir"><span class="il">영업이익률</span><span class="iv">48.6% (역대최고) <span class="ev ev-5">매우높음</span></span></div>
+      <div class="ir"><span class="il">기본 EPS</span><span class="iv">62,044원 <span class="ev ev-4">높음</span></span></div>
+      <div class="ir"><span class="il">HBM 글로벌 점유율</span><span class="iv">57% (1위) <span class="ev ev-5">매우높음</span></span></div>
     </div>
-    <div class="ib">
-      <div style="font-size:13px;font-weight:500;margin-bottom:6px;">애널리스트 컨센서스</div>
-      <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
-        <div><span style="color:var(--color-text-secondary);">투자의견:</span> <span class="badge b-navy">적극매수 (36/37명)</span></div>
-        <div><span style="color:var(--color-text-secondary);">목표주가 평균:</span> <span style="font-weight:500;">~1,440,000원</span></div>
-        <div><span style="color:var(--color-text-secondary);">2026 연간 영업이익 전망:</span> <span class="up" style="font-weight:500;">100~130조원</span></div>
-        <div><span style="color:var(--color-text-secondary);">상승여력:</span> <span class="up" style="font-weight:500;">+17%</span></div>
-      </div>
+    <div>
+      <div class="ir"><span class="il">자산총계</span><span class="iv">176.1조 (▲46.9%) <span class="ev ev-4">높음</span></span></div>
+      <div class="ir"><span class="il">현금성자산</span><span class="iv">34.9조 <span class="ev ev-3">적정</span></span></div>
+      <div class="ir"><span class="il">부채비율</span><span class="iv">45.9% <span class="ev ev-2">낮음</span></span></div>
+      <div class="ir"><span class="il">ROE</span><span class="iv">~43% <span class="ev ev-5">매우높음</span></span></div>
+      <div class="ir"><span class="il">연중 가동률</span><span class="iv">100% <span class="ev ev-5">매우높음</span></span></div>
+    </div>
+  </div>
+  <div class="hl">
+    <div style="font-size:13px;font-weight:500;color:#042C53;margin-bottom:4px;">🏆 2025년 역사적 전환점 — 삼성전자 DS 영업이익 추월</div>
+    <div style="font-size:12px;color:#185FA5;line-height:1.7;">SK하이닉스 영업이익 47.2조 vs 삼성전자 DS부문 24.9조 — 반도체 업계 역전. HBM이 AI 데이터센터 핵심 부품으로 자리잡으며 엔비디아 향 HBM3E 독점 공급. 2025년 내내 가동률 100% 유지. 1Q26 영업이익 37.6조 달성으로 <strong>연간 영업이익 100조 시대 진입 확실시</strong>.</div>
+  </div>
+</div>
+
+<!-- 3. 기본 투자지표 -->
+<div class="card">
+  <div class="sec">3. 기본 투자지표 (Per-Share) <span class="src">📄 보통주 728,002,365주 기준 직접 산출</span></div>
+  <div class="g4">
+    <div class="met"><div class="ml">EPS · 주당순이익</div><div class="mv">62,044원</div><div class="ms">기본주당순이익 (직접제공)</div><div style="margin-top:5px;"><span class="ev ev-5">매우높음 ▲+흑전</span></div></div>
+    <div class="met"><div class="ml">BPS · 주당순자산</div><div class="mv">165,751원</div><div class="ms">지배주주자본 120.7조</div><div style="margin-top:5px;"><span class="ev ev-4">높음 (이익 급증)</span></div></div>
+    <div class="met"><div class="ml">SPS · 주당매출액</div><div class="mv">133,443원</div><div class="ms">매출 97.1조 ÷ 주식수</div><div style="margin-top:5px;"><span class="ev ev-4">높음 (+46.8%)</span></div></div>
+    <div class="met"><div class="ml">CPS · 주당현금흐름</div><div class="mv">75,549원</div><div class="ms">영업CF ~55조 ÷ 주식수</div><div style="margin-top:5px;"><span class="ev ev-4">높음 (현금창출↑)</span></div></div>
+  </div>
+</div>
+
+<!-- 4. 상대 투자지표 -->
+<div class="card">
+  <div class="sec">4. 상대 투자지표 (Valuation Multiples) · 현재가 1,455,000원 · 반도체 섹터 비교</div>
+
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;font-size:11px;">
+    <span style="padding:2px 8px;border-radius:999px;background:#E6F1FB;color:#0C447C;font-weight:500;">1단계 매우낮음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#EAF3DE;color:#27500A;font-weight:500;">2단계 낮음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#F1EFE8;color:#444441;font-weight:500;">3단계 적정</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#FAEEDA;color:#633806;font-weight:500;">4단계 높음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#FCEBEB;color:#791F1F;font-weight:500;">5단계 매우높음</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PER</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">주가÷EPS · 1,455,000÷62,044 · 섹터평균~22x</div>
+    <div class="ind-val">23.37x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(10x)</span><span>적정(20x)</span><span>고(60x)</span></div><div class="bar-bg"><div class="bar-f" style="width:27%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PBR</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">주가÷BPS · 1,455,000÷165,751 · 섹터평균~3.5x</div>
+    <div class="ind-val">8.75x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(1x)</span><span>적정(3x)</span><span>고(8x)</span></div><div class="bar-bg"><div class="bar-f" style="width:95%;background:#FCEBEB;"></div></div></div>
+    <span class="ev ev-5" style="min-width:58px;text-align:center;">5단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PSR</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">주가÷SPS · 1,455,000÷133,443 · 섹터평균~3x</div>
+    <div class="ind-val">10.87x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(1x)</span><span>적정(3x)</span><span>고(8x)</span></div><div class="bar-bg"><div class="bar-f" style="width:98%;background:#FCEBEB;"></div></div></div>
+    <span class="ev ev-5" style="min-width:58px;text-align:center;">5단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PCR</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">주가÷CPS · 1,455,000÷75,549 · 섹터평균~12x</div>
+    <div class="ind-val">19.19x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(5x)</span><span>적정(10x)</span><span>고(25x)</span></div><div class="bar-bg"><div class="bar-f" style="width:70%;background:#FAEEDA;"></div></div></div>
+    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">EV/EBITDA</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">EV 1,076조÷EBITDA 63.2조 · 섹터평균~12x</div>
+    <div class="ind-val">17.03x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(5x)</span><span>적정(10x)</span><span>고(30x)</span></div><div class="bar-bg"><div class="bar-f" style="width:48%;background:#FAEEDA;"></div></div></div>
+    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
+  </div>
+
+  <!-- 피어 비교 -->
+  <div style="margin-top:12px;font-size:13px;font-weight:500;margin-bottom:8px;">글로벌 반도체 피어 PER 비교</div>
+  <div style="position:relative;width:100%;height:160px;margin-bottom:10px;">
+    <canvas id="peerChart"></canvas>
+  </div>
+
+  <!-- 5단계 매트릭스 -->
+  <div class="stage-grid">
+    <div class="stage" style="background:#E6F1FB;"><div style="font-size:16px;font-weight:500;color:#0C447C;">1단계</div><div style="font-size:10px;color:#185FA5;margin-top:2px;">매우 저평가<br>PER&lt;15x</div></div>
+    <div class="stage" style="background:#EAF3DE;border:2px solid #3B6D11;"><div style="font-size:16px;font-weight:500;color:#27500A;">2단계</div><div style="font-size:10px;color:#3B6D11;margin-top:2px;">저평가<br>PER 15~20x</div><div style="font-size:9px;color:#3B6D11;background:#C8E6C9;border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">← PER</div></div>
+    <div class="stage" style="background:#F1EFE8;"><div style="font-size:16px;font-weight:500;color:#444441;">3단계</div><div style="font-size:10px;color:#5F5E5A;margin-top:2px;">적정<br>PER 20~30x</div></div>
+    <div class="stage" style="background:#FAEEDA;border:1.5px solid #EF9F27;"><div style="font-size:16px;font-weight:500;color:#633806;">4단계</div><div style="font-size:10px;color:#854F0B;margin-top:2px;">고평가<br>PER 30~50x</div><div style="font-size:9px;font-weight:500;color:#412402;background:#FAC775;border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PCR·EV/EBITDA</div></div>
+    <div class="stage" style="background:#FCEBEB;border:2px solid #D85A30;"><div style="font-size:16px;font-weight:500;color:#791F1F;">5단계</div><div style="font-size:10px;color:#A32D2D;margin-top:2px;">매우 고평가<br>PBR&gt;7x</div><div style="font-size:9px;font-weight:500;color:#791F1F;background:#FCBCBC;border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">← PBR·PSR</div></div>
+  </div>
+
+  <div class="warn">
+    <div style="font-size:13px;font-weight:500;color:#633806;margin-bottom:4px;">종합 밸류에이션 — 3.8단계 (PER은 저평가, PBR·PSR은 5단계 고평가)</div>
+    <div style="font-size:12px;color:#854F0B;line-height:1.6;"><strong>PER 23x → 2단계(저평가)</strong>: EPS 62,044원 대비 주가가 싼 편. 1Q26 영업이익 37.6조 기준 롤링 PER은 ~7x로 매우 저평가. <strong>PBR 8.75x → 5단계(고평가)</strong>: 순자산 대비 고프리미엄. <strong>결론: 이익 기준으론 싸고, 자산·매출 기준으론 비쌈. AI 메모리 슈퍼사이클 지속 시 추가 상승 여력 존재.</strong></div>
+  </div>
+</div>
+
+<!-- 5. 시계열 뉴스 -->
+<div class="card">
+  <div class="sec">5. 시계열 주요 뉴스 <span class="src">📰 실제 출처 링크 포함</span></div>
+
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;font-size:11px;">
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#042C53;display:inline-block;"></span>초대형 이벤트</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#1D9E75;display:inline-block;"></span>긍정적 뉴스</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#D85A30;display:inline-block;"></span>부정적 뉴스</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#888780;display:inline-block;"></span>중립</span>
+  </div>
+
+  <div class="tl">
+    <div style="font-size:12px;font-weight:500;color:var(--color-text-tertiary);margin-bottom:12px;margin-left:-28px;">── 2025년 ──────────────────────────</div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-neu"></div>
+      <div class="tl-date">2025년 연간</div>
+      <div class="tl-title">제78기 연간 실적 — 매출 97.1조·영업이익 47.2조 (역대 최대·삼성전자 DS 추월)</div>
+      <div class="tl-body">매출 97.1조(+46.8%), 영업이익 47.2조(+101.2%), 영업이익률 48.6%(역대 최고). HBM이 실적 폭증의 핵심 엔진. 삼성전자 DS부문(24.9조)을 역대 최초로 추월하며 반도체 업계 이익 1위 등극. 생산가동률 연중 100% 유지.</div>
+      <span class="tag tag-big">연간 역대최대</span>
+      <span class="tag tag-pos">업계 이익 1위</span>
+      <a class="tl-link" href="https://dart.fss.or.kr" target="_blank">📎 DART 사업보고서 2026.03.17 →</a>
+    </div>
+
+    <div style="font-size:12px;font-weight:500;color:var(--color-text-tertiary);margin:14px 0 12px;margin-left:-28px;">── 2026년 ──────────────────────────</div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-pos"></div>
+      <div class="tl-date">2026년 01월 02일</div>
+      <div class="tl-title">주가 647,000원 — 52주 최저점 기록 후 본격 상승 시작</div>
+      <div class="tl-body">연초 글로벌 증시 조정과 맞물려 647,000원 52주 최저를 기록. 그러나 AI 메모리 수요 강세와 DRAM 가격 급등 전망이 부각되며 저점 매수세 유입. 이후 4개월 만에 +124% 급등하는 대세 상승의 출발점이 됨.</div>
+      <span class="tag tag-neg">52주 최저</span>
+      <span class="tag tag-pos">대세 상승 출발</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-pos"></div>
+      <div class="tl-date">2026년 03월 (배당락 이후)</div>
+      <div class="tl-title">배당락 후 905,400~829,600원 지지 확인 — 핵심 매물대 형성</div>
+      <div class="tl-body">실제 차트에서 확인되는 핵심 매물대 905,400~829,600원(174,664,179주 29.2% 거래)이 강한 지지선으로 확인됨. 배당락 이후 조정이 이 구간에서 지지되며 다음 상승을 위한 베이스 형성.</div>
+      <span class="tag tag-neu">배당락 조정</span>
+      <span class="tag tag-pos">지지 확인</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2026년 04월 23일</div>
+      <div class="tl-title">1Q26 실적 발표 — 매출 52.6조·영업이익 37.6조 창사 이래 최대 · 영업이익률 72%</div>
+      <div class="tl-body">분기 매출 사상 최초 50조 돌파(52.6조, +198% YoY). 영업이익 37.6조(+405% YoY), 영업이익률 72%로 창사 이래 최고. TSMC의 동기 영업이익률 58.1%를 압도. D램 ASP 60% 중반 상승, 낸드 ASP 70% 중반 상승. 1분기 말 순현금 35조원 달성. CFO "메모리 가격 상승은 구조적 변화, 하반기도 견조 상승세 이어갈 것".</div>
+      <span class="tag tag-big">창사 최대 실적</span>
+      <span class="tag tag-big">영업이익률 72%</span>
+      <a class="tl-link" href="https://news.skhynix.co.kr/q1-2026-business-results/" target="_blank">📎 SK하이닉스 공식 뉴스룸 →</a>
+      <a class="tl-link" href="https://www.thelec.kr/news/articleView.html?idxno=55559" target="_blank">📎 디일렉 컨퍼런스콜 전문 →</a>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2026년 04월 27~28일</div>
+      <div class="tl-title">BNK투자증권, 투자의견 '매수→보유' 하향 — "어닝 서프라이즈 미달·하반기 둔화 우려"</div>
+      <div class="tl-body">증권가에서 이례적인 투자의견 하향이 나와 이목이 쏠렸다. BNK투자증권은 37.6조원 실적이 역대 최대지만 시장이 기대하던 서프라이즈 수준에 미달했다고 분석. D램·낸드 단위 생산비용 상승과 낸드 출하 감소도 부담 요인으로 지목. 이민희 애널리스트는 "AI 사이클이 후반부에 진입, 2Q 60.2조 이후 하반기 성장세 둔화 가능성"을 경고.</div>
+      <span class="tag tag-neg">투자의견 하향</span>
+      <span class="tag tag-neg">하반기 둔화 우려</span>
+      <a class="tl-link" href="https://v.daum.net/v/20260428105332920" target="_blank">📎 다음뉴스 →</a>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2026년 05월 04일</div>
+      <div class="tl-title">주가 1,450,000원 신고가 갱신 — 연초 대비 +124%, 시총 1,060조 돌파</div>
+      <div class="tl-body">실적 발표 후 외국인·기관 동반 매수세가 지속되며 1,450,000원 신고가를 기록. 거래량 10,005,434주(186.72%↑)로 역대급 거래량 동반. 연초(647,000원) 대비 +124% 상승. 실적 발표 이후 BNK의 하향에도 불구하고 나머지 36명의 애널리스트 매수 의견이 지배적.</div>
+      <span class="tag tag-big">신고가 1,450,000</span>
+      <span class="tag tag-big">+124% 연초 대비</span>
     </div>
   </div>
 </div>
 
+<!-- 6. 투자 포인트 -->
+<div class="card">
+  <div class="sec">6. 2026년 핵심 투자 포인트</div>
+  <div class="g2">
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#1D9E75;">긍정 요인 (Bull)</div>
+      <div class="ir"><span class="il">1Q26 영업이익 37.6조 (+405%)</span><span class="badge b-green">창사 최대</span></div>
+      <div class="ir"><span class="il">영업이익률 72% — 엔비디아 압도</span><span class="badge b-green">수익성 글로벌 1위</span></div>
+      <div class="ir"><span class="il">HBM 점유율 57% 독주 체제</span><span class="badge b-green">경쟁 우위</span></div>
+      <div class="ir"><span class="il">순현금 35조 (차입금 19.3조)</span><span class="badge b-green">재무 최우량</span></div>
+      <div class="ir"><span class="il">DRAM·낸드 ASP 2Q도 상승</span><span class="badge b-blue">구조적 성장</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#D85A30;">리스크 (Bear)</div>
+      <div class="ir"><span class="il">PBR 8.75x · PSR 10.87x 고평가</span><span class="badge b-red">5단계 밸류에이션</span></div>
+      <div class="ir"><span class="il">BNK 투자의견 하향 (하반기 둔화)</span><span class="badge b-amber">성장세 둔화 우려</span></div>
+      <div class="ir"><span class="il">삼성전자 HBM 추격 가속</span><span class="badge b-amber">점유율 경쟁</span></div>
+      <div class="ir"><span class="il">메모리 사이클 고점 논란</span><span class="badge b-amber">피크아웃 리스크</span></div>
+      <div class="ir"><span class="il">미·중 반도체 규제 불확실성</span><span class="badge b-gray">지정학 리스크</span></div>
+    </div>
+  </div>
+  <div class="ib">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
+      <div><span style="color:var(--color-text-secondary);">투자의견:</span> <span class="badge b-navy">매수 (36/37명)</span></div>
+      <div><span style="color:var(--color-text-secondary);">목표주가 평균:</span> <span style="font-weight:500;">~1,800,000원</span></div>
+      <div><span style="color:var(--color-text-secondary);">상승여력:</span> <span class="up" style="font-weight:500;">+24%</span></div>
+      <div><span style="color:var(--color-text-secondary);">2Q26 영업이익 전망:</span> <span class="up" style="font-weight:500;">~60조원 (이민희 애널리스트)</span></div>
+    </div>
+  </div>
+  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">⚠ 사업보고서 2026.03.17 + 1Q26 공시 기준 · 투자 권고가 아닙니다</div>
+</div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-/* ===== 실제 차트 기반 캔들 SVG ===== */
+/* ===== 캔들차트 SVG ===== */
 (function(){
-  const svg = document.getElementById('hynixSvg');
-  const W=720, H=250, pL=72, pR=14, pT=18, pB=28;
-  const cW=W-pL-pR, cH=H-pT-pB;
-
-  // 실제 차트 반영 (단위: 만원)
-  // 1월: 647K~750K, 2~3월: 급등 ~1,100K, 배당락 후 조정, 4월: 재상승 1,278K
-  const data = [
-    // 1월 (647K 시작)
-    {o:65,h:69,l:63,c:67},{o:67,h:72,l:65,c:70},{o:70,h:75,l:68,c:73},
-    {o:73,h:79,l:70,c:76},{o:76,h:82,l:73,c:79},{o:79,h:85,l:76,c:82},
-    {o:82,h:88,l:78,c:85},{o:85,h:91,l:81,c:88},
-    // 2월 (급등 구간)
-    {o:88,h:96,l:84,c:93},{o:93,h:102,l:89,c:99},{o:99,h:108,l:95,c:105},
-    {o:105,h:114,l:101,c:111},{o:111,h:120,l:107,c:117},{o:117,h:126,l:112,c:122},
-    // 3월 초 급등 후 배당락 조정
-    {o:122,h:132,l:117,c:128},{o:128,h:138,l:110,c:105}, // 배당락
-    {o:105,h:112,l:98,c:108},{o:108,h:115,l:103,c:110},
-    {o:110,h:118,l:105,c:113},{o:113,h:120,l:108,c:116},
-    {o:116,h:122,l:110,c:112},{o:112,h:118,l:106,c:108},
-    // 4월 재상승
-    {o:108,h:115,l:104,c:112},{o:112,h:120,l:108,c:117},
-    {o:117,h:126,l:113,c:123},{o:123,h:132,l:119,c:129},
-    {o:129,h:140,l:125,c:136},{o:136,h:145,l:132,c:142},
-    {o:142,h:150,l:138,c:148},{o:148,h:128,l:120,c:123} // 현재 조정
+  const svg=document.getElementById('hxSvg');
+  const W=720,H=240,pL=72,pR=12,pT=14,pB=24;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  // 실제 차트 기반 (단위: 만원)
+  // 1월: 64.7K → 완만 상승
+  // 2~3월 초: 급등 (배당락 있음)
+  // 3~4월: 조정 (90~95K)
+  // 4월말~5월: 재급등 → 145K 신고가
+  const data=[
+    {o:65,h:70,l:63,c:68},{o:68,h:74,l:66,c:72},{o:72,h:78,l:70,c:76},
+    {o:76,h:83,l:73,c:80},{o:80,h:87,l:78,c:85},{o:85,h:92,l:83,c:90},
+    {o:90,h:97,l:88,c:95},{o:95,h:103,l:92,c:100},
+    // 2월 급등
+    {o:100,h:110,l:97,c:107},{o:107,h:118,l:104,c:114},{o:114,h:126,l:110,c:121},
+    {o:121,h:134,l:117,c:130},
+    // 3월 초 최고 후 배당락
+    {o:130,h:140,l:100,c:104}, // 배당락
+    {o:104,h:110,l:95,c:100},{o:100,h:106,l:91,c:96},
+    {o:96,h:101,l:88,c:93},{o:93,h:98,l:87,c:92},
+    // 4월 조정 및 횡보
+    {o:92,h:97,l:86,c:91},{o:91,h:96,l:85,c:90},
+    {o:90,h:95,l:84,c:89},{o:89,h:94,l:83,c:88},
+    {o:88,h:93,l:84,c:91},{o:91,h:97,l:87,c:95},
+    // 4월말~5월 재급등
+    {o:95,h:103,l:93,c:101},{o:101,h:110,l:99,c:108},
+    {o:108,h:118,l:106,c:115},{o:115,h:126,l:112,c:122},
+    {o:122,h:133,l:118,c:130},{o:130,h:141,l:127,c:138},
+    {o:138,h:148,l:135,c:145}
   ];
-
-  const prices = data.flatMap(d=>[d.h,d.l]);
-  const maxP = Math.max(...prices)+6, minP = Math.min(...prices)-4;
-  const range = maxP-minP;
-  function py(v){ return pT + cH*(1-(v-minP)/range); }
-  const colW = cW/data.length, candW = Math.max(colW*0.6,7);
-
-  // 그리드
-  [70,80,90,100,110,120,130,140].forEach(v=>{
-    if(v<minP||v>maxP) return;
+  const prices=data.flatMap(d=>[d.h,d.l]);
+  const maxP=Math.max(...prices)+6,minP=Math.min(...prices)-4;
+  const rng=maxP-minP;
+  function py(v){return pT+cH*(1-(v-minP)/rng);}
+  const colW=cW/data.length,cw=Math.max(colW*.62,7);
+  [65,75,85,95,105,115,125,135,145].forEach(v=>{
+    if(v<minP||v>maxP)return;
     const y=py(v);
     const l=document.createElementNS('http://www.w3.org/2000/svg','line');
     l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
     l.setAttribute('stroke','rgba(128,128,128,.12)');l.setAttribute('stroke-width','1');svg.appendChild(l);
     const t=document.createElementNS('http://www.w3.org/2000/svg','text');
-    t.setAttribute('x',pL-5);t.setAttribute('y',y+4);t.setAttribute('text-anchor','end');
+    t.setAttribute('x',pL-4);t.setAttribute('y',y+4);t.setAttribute('text-anchor','end');
     t.setAttribute('font-size','9');t.setAttribute('fill','rgba(128,128,128,.7)');
     t.textContent=(v*10000).toLocaleString();svg.appendChild(t);
   });
-
-  // MA
   function calcMA(d,n){return d.map((_,i)=>i<n-1?null:d.slice(i-n+1,i+1).reduce((s,x)=>s+x.c,0)/n);}
-  function drawLine(arr,color,w,dash){
-    let pts=[];arr.forEach((v,i)=>{if(v===null)return;pts.push(`${pL+(i+0.5)*colW},${py(v)}`);});
+  function drawLine(arr,col,w){
+    let pts=[];arr.forEach((v,i)=>{if(v===null)return;pts.push(`${pL+(i+.5)*colW},${py(v)}`);});
     if(pts.length<2)return;
     const p=document.createElementNS('http://www.w3.org/2000/svg','polyline');
     p.setAttribute('points',pts.join(' '));p.setAttribute('fill','none');
-    p.setAttribute('stroke',color);p.setAttribute('stroke-width',w||1.5);
-    if(dash)p.setAttribute('stroke-dasharray',dash);svg.appendChild(p);
+    p.setAttribute('stroke',col);p.setAttribute('stroke-width',w||1.5);svg.appendChild(p);
   }
-
-  // 캔들 (한국식: 상승=빨강, 하락=파랑)
+  // 지지구간 음영
+  const z=document.createElementNS('http://www.w3.org/2000/svg','rect');
+  z.setAttribute('x',pL);z.setAttribute('y',py(90.5));z.setAttribute('width',cW);
+  z.setAttribute('height',py(82.9)-py(90.5));z.setAttribute('fill','rgba(29,158,117,.07)');
+  svg.insertBefore(z,svg.firstChild);
   data.forEach((d,i)=>{
-    const cx=pL+(i+0.5)*colW, isUp=d.c>=d.o;
-    const color=isUp?'#D85A30':'#185FA5';
-    const wick=document.createElementNS('http://www.w3.org/2000/svg','line');
-    wick.setAttribute('x1',cx);wick.setAttribute('x2',cx);wick.setAttribute('y1',py(d.h));wick.setAttribute('y2',py(d.l));
-    wick.setAttribute('stroke',color);wick.setAttribute('stroke-width','1.5');svg.appendChild(wick);
+    const cx=pL+(i+.5)*colW,isUp=d.c>=d.o,col=isUp?'#D85A30':'#185FA5';
+    const wk=document.createElementNS('http://www.w3.org/2000/svg','line');
+    wk.setAttribute('x1',cx);wk.setAttribute('x2',cx);wk.setAttribute('y1',py(d.h));wk.setAttribute('y2',py(d.l));
+    wk.setAttribute('stroke',col);wk.setAttribute('stroke-width','1.5');svg.appendChild(wk);
     const bT=py(Math.max(d.o,d.c)),bB=py(Math.min(d.o,d.c));
-    const body=document.createElementNS('http://www.w3.org/2000/svg','rect');
-    body.setAttribute('x',cx-candW/2);body.setAttribute('y',bT);body.setAttribute('width',candW);
-    body.setAttribute('height',Math.max(bB-bT,2));body.setAttribute('fill',color);body.setAttribute('rx','1');svg.appendChild(body);
+    const bd=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    bd.setAttribute('x',cx-cw/2);bd.setAttribute('y',bT);bd.setAttribute('width',cw);
+    bd.setAttribute('height',Math.max(bB-bT,2));bd.setAttribute('fill',col);bd.setAttribute('rx','1');svg.appendChild(bd);
   });
-
   drawLine(calcMA(data,5),'#FF69B4',1.5);
   drawLine(calcMA(data,20),'#9370DB',1.5);
   drawLine(calcMA(data,60),'#DAA520',2);
   drawLine(calcMA(data,120),'#228B22',2);
-
-  // 최저/최고/배당락 마커
-  const addMark=(idx,label,isLow,color)=>{
-    const cx=pL+(idx+0.5)*colW;
-    const cy=isLow?py(data[idx].l)+14:py(data[idx].h)-10;
+  const mk=(idx,lbl,isLow,col)=>{
+    const cx=pL+(idx+.5)*colW;
+    const cy=isLow?py(data[idx].l)+12:py(data[idx].h)-8;
     const t=document.createElementNS('http://www.w3.org/2000/svg','text');
     t.setAttribute('x',cx);t.setAttribute('y',cy);t.setAttribute('text-anchor','middle');
-    t.setAttribute('font-size','9');t.setAttribute('fill',color||'#185FA5');t.setAttribute('font-weight','500');
-    t.textContent=label;svg.appendChild(t);
+    t.setAttribute('font-size','9');t.setAttribute('fill',col);t.setAttribute('font-weight','500');
+    t.textContent=lbl;svg.appendChild(t);
   };
-  addMark(0,'최저 647K',true,'#185FA5');
-  addMark(28,'최고 1,278K',false,'#D85A30');
-  addMark(15,'배당락(0%)',false,'#D85A30');
-
-  // 지지 구간 음영
-  const z1=py(91),z2=py(85);
-  const zone=document.createElementNS('http://www.w3.org/2000/svg','rect');
-  zone.setAttribute('x',pL);zone.setAttribute('y',z1);zone.setAttribute('width',cW);
-  zone.setAttribute('height',z2-z1);zone.setAttribute('fill','rgba(29,158,117,0.07)');
-  svg.insertBefore(zone,svg.firstChild);
-
-  // X축
-  ['1월','2월','3월','4월'].forEach((m,i)=>{
-    const cx=pL+(i/4)*cW+cW/8;
+  mk(0,'최저 647K(01/02)',true,'#185FA5');
+  mk(12,'배당락',false,'#888');
+  mk(29,'신고가 1,450K(05/04)',false,'#D85A30');
+  ['1월','2월','3월','4월','5월'].forEach((m,i)=>{
+    const cx=pL+(i/5)*cW+cW/10;
     const t=document.createElementNS('http://www.w3.org/2000/svg','text');
     t.setAttribute('x',cx);t.setAttribute('y',H-4);t.setAttribute('text-anchor','middle');
     t.setAttribute('font-size','10');t.setAttribute('fill','rgba(128,128,128,.8)');
     t.textContent=m;svg.appendChild(t);
   });
-
-  // 범례
   [{c:'#D85A30',t:'양봉'},{c:'#185FA5',t:'음봉'},{c:'#FF69B4',t:'MA5'},{c:'#9370DB',t:'MA20'},{c:'#DAA520',t:'MA60'},{c:'#228B22',t:'MA120'}].forEach((l,i)=>{
     const gx=pL+i*90;
     const r=document.createElementNS('http://www.w3.org/2000/svg','rect');
@@ -362,16 +463,14 @@ h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:
 })();
 
 /* ===== 3개년 손익 ===== */
-new Chart(document.getElementById('hynixRevChart'),{
+new Chart(document.getElementById('hxRevChart'),{
   type:'bar',
   data:{
     labels:['2023 (제76기)','2024 (제77기)','2025 (제78기)'],
     datasets:[
       {label:'매출액',data:[32.8,66.2,97.1],backgroundColor:'#042C53',borderRadius:4,yAxisID:'y'},
-      {label:'영업이익',data:[-7.7,23.5,47.2],backgroundColor:'#1D9E75',borderRadius:4,yAxisID:'y'},
-      {label:'영업이익률',type:'line',data:[-23.5,35.5,48.6],
-       borderColor:'#EF9F27',backgroundColor:'rgba(239,159,39,.1)',
-       tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
+      {label:'영업이익',data:[-7.7,23.5,47.2],backgroundColor:['#D85A30','#1D9E75','#1D9E75'],borderRadius:4,yAxisID:'y'},
+      {label:'영업이익률',type:'line',data:[-23.5,35.5,48.6],borderColor:'#EF9F27',backgroundColor:'rgba(239,159,39,.1)',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
     ]
   },
   options:{
@@ -381,6 +480,28 @@ new Chart(document.getElementById('hynixRevChart'),{
       y:{position:'left',ticks:{font:{size:10},callback:v=>v+'조',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
       y2:{position:'right',min:-40,max:60,ticks:{font:{size:10},callback:v=>v+'%',color:'#EF9F27'},grid:{display:false}},
       x:{ticks:{font:{size:11},color:'#888'},grid:{display:false}}
+    }
+  }
+});
+
+/* ===== 피어 비교 ===== */
+new Chart(document.getElementById('peerChart'),{
+  type:'bar',
+  data:{
+    labels:['SK하이닉스','삼성전자','TSMC','엔비디아','인텔','마이크론'],
+    datasets:[{
+      label:'PER',
+      data:[23.37,33.16,24.7,38.5,11.8,22.4],
+      backgroundColor:['#042C53','#B4B2A9','#B4B2A9','#B4B2A9','#B4B2A9','#B4B2A9'],
+      borderRadius:5,borderSkipped:false
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`PER ${ctx.raw}x`}}},
+    scales:{
+      y:{max:50,ticks:{font:{size:10},callback:v=>v+'x',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+      x:{ticks:{font:{size:10},color:'#888'},grid:{display:false}}
     }
   }
 });
