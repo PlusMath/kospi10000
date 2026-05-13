@@ -1,0 +1,417 @@
+<link rel="stylesheet" href="../css/global.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
+.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:16px;}
+.sec{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:12px;}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:14px;}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px;text-align:center;}
+.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
+.mv{font-size:14px;font-weight:500;color:var(--color-text-primary);}
+.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
+.up{color:#1D9E75;}.dn{color:#D85A30;}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
+.b-green{background:#EAF3DE;color:#3B6D11;}.b-amber{background:#FAEEDA;color:#854F0B;}
+.b-red{background:#FCEBEB;color:#A32D2D;}.b-blue{background:#E6F1FB;color:#185FA5;}
+.b-gray{background:#F1EFE8;color:#5F5E5A;}.b-sm{background:#E8EDF5;color:#1A2E5A;}
+.sig{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
+.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
+.ir:last-child{border-bottom:none;}
+.il{color:var(--color-text-secondary);}.iv{font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:6px;}
+.src{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-tertiary);margin-left:6px;}
+.hl{background:#EAF3DE;border-left:3px solid #1D9E75;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.warn{background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ev-1{background:#E6F1FB;color:#0C447C;}.ev-2{background:#EAF3DE;color:#27500A;}
+.ev-3{background:#F1EFE8;color:#444441;}.ev-4{background:#FAEEDA;color:#633806;}
+.ev-5{background:#FCEBEB;color:#791F1F;}
+.ev{font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;}
+.ind-row{display:flex;align-items:center;padding:8px 0;border-bottom:.5px solid var(--color-border-tertiary);gap:10px;}
+.ind-row:last-child{border-bottom:none;}
+.bar-bg{background:var(--color-border-tertiary);border-radius:4px;height:7px;}
+.bar-f{border-radius:4px;height:7px;}
+.stage-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:12px;}
+.stage{text-align:center;padding:12px 6px;border-radius:var(--border-radius-md);}
+.tl{position:relative;padding-left:28px;}
+.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--color-border-tertiary);border-radius:2px;}
+.tl-item{position:relative;margin-bottom:18px;}
+.tl-item:last-child{margin-bottom:0;}
+.tl-dot{position:absolute;left:-24px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid white;}
+.dot-big{background:#1A2E5A;}.dot-pos{background:#1D9E75;}
+.dot-neg{background:#D85A30;}.dot-neu{background:#888780;}
+.tl-date{font-size:11px;font-weight:500;color:var(--color-text-tertiary);margin-bottom:3px;}
+.tl-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px;line-height:1.4;}
+.tl-body{font-size:12px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:5px;}
+.tl-link{font-size:11px;color:#185FA5;text-decoration:none;display:inline-flex;align-items:center;gap:3px;margin-right:8px;}
+.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;margin-right:4px;}
+.tag-big{background:#E8EDF5;color:#1A2E5A;}.tag-pos{background:#EAF3DE;color:#3B6D11;}
+.tag-neg{background:#FCEBEB;color:#791F1F;}.tag-neu{background:#F1EFE8;color:#444441;}
+.nav-bar{display:flex;height:36px;border-radius:6px;overflow:hidden;margin:10px 0;}
+</style>
+
+<div style="padding:1rem 0;" class="box">
+<div style="margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+  <h2>삼성물산 (028260)</h2>
+  <span class="badge b-sm">코스피 시총 15위</span>
+  <span class="badge b-gray">지주·건설·상사·패션·바이오</span>
+  <span class="src">📄 사업보고서 + 📊 실제 차트 + 📰 뉴스</span>
+</div>
+<p class="sub">현재가 429,500원 · 신고가 514,000원 (05/12) · 최저 242,500원 (01/05) · 시총 69.7조 · LC 77.11% · HC -16.44%</p>
+
+<div class="g4">
+  <div class="met"><div class="ml">현재가 (05/13)</div><div class="mv">429,500원</div><div class="ms dn">HC -16.44% · 시총 69.7조</div></div>
+  <div class="met"><div class="ml">52주 범위</div><div class="mv">242,500~514,000</div><div class="ms">최저 01/05 · 신고가 05/12</div></div>
+  <div class="met"><div class="ml">1Q26 매출</div><div class="mv">10조 4,660억원</div><div class="ms up">▲7.5% · 분기 역대최대</div></div>
+  <div class="met"><div class="ml">NAV (주당)</div><div class="mv">894,740원</div><div class="ms dn">현재가 대비 52.0% 할인</div></div>
+</div>
+
+<!-- 1. 기술적 분석 -->
+<div class="card">
+  <div class="sec">1. 기술적 분석 — 실제 HTS 차트 (2026.01~05/13)</div>
+  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;">최저 242,500원 (01/05) → 신고가 514,000원 (05/12) · 현재 429,500원 · LC 77.11% · HC -16.44%</div>
+  <svg id="smSvg" viewBox="0 0 720 230" width="100%" style="display:block;margin-bottom:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:4px;"></svg>
+
+  <div class="g4" style="font-size:11px;margin-bottom:12px;">
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;"><div style="color:#3B6D11;font-weight:500;margin-bottom:3px;">1~2월 — 완만 상승</div><div style="color:#1D9E75;line-height:1.6;">최저 242,500 (01/05)<br>1,553,725(2.7%)<br>1,700,510(3.0%)<br>완만한 우상향</div></div>
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;"><div style="color:#3B6D11;font-weight:500;margin-bottom:3px;">3월 — 박스 후 조정</div><div style="color:#1D9E75;line-height:1.6;">2,412,513(4.3%)<br>3,974,951(7.0%)<br>8,262,251(14.5%)<br>박스 횡보 후 하락</div></div>
+    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 11px;"><div style="color:#854F0B;font-weight:500;margin-bottom:3px;">3~4월 — 조정</div><div style="color:#633806;line-height:1.6;">6,066,190(10.7%)<br>12,053,877(21.2%)<br>16,380,906(28.9%)<br>지지 310,400~290,100</div></div>
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;"><div style="color:#3B6D11;font-weight:500;margin-bottom:3px;">5월 — 신고가 폭등</div><div style="color:#1D9E75;line-height:1.6;">신고가 514,000 (05/12)<br>거래량 2,500K 역대급<br>계열사 지분가치 급등<br>HC -16.44% 조정 중</div></div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;">
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;">이동평균선 현황</div>
+      <div class="ir"><span class="il">5일선</span><span class="badge b-amber">단기 저항</span></div>
+      <div class="ir"><span class="il">20일선</span><span class="badge b-green">정배열 지지</span></div>
+      <div class="ir"><span class="il">60일선</span><span class="badge b-green">빠르게 우상향</span></div>
+      <div class="ir"><span class="il">120일선</span><span class="badge b-blue">우상향</span></div>
+      <div class="ir"><span class="il">배열</span><span class="badge b-green">완전 정배열</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;">핵심 가격대</div>
+      <div class="ir"><span class="il">신고가 / 저항</span><span style="font-weight:500;color:#D85A30;">514,000원 (05/12)</span></div>
+      <div class="ir"><span class="il">핵심 지지</span><span style="font-weight:500;color:#1D9E75;">310,400~290,100원</span></div>
+      <div class="ir"><span class="il">LC / HC</span><span style="font-weight:500;">77.11% / -16.44%</span></div>
+      <div class="ir"><span class="il">목표주가</span><span style="font-weight:500;color:#1D9E75;">58만원 (흥국증권)</span></div>
+      <div class="ir"><span class="il">NAV 주당</span><span style="font-weight:500;color:#1D9E75;">89만4,740원</span></div>
+    </div>
+  </div>
+
+  <div class="sig">
+    <span class="badge b-green">저점(242.5K) 대비 +77.1% 완전 정배열</span>
+    <span class="badge b-green">5월 거래량 2,500K 역대급 폭증</span>
+    <span class="badge b-green">삼성전자 등 계열사 지분가치 급등</span>
+    <span class="badge b-amber">신고가 514K 대비 -16.4% 조정 중</span>
+    <span class="badge b-sm">NAV 52% 할인 — 축소 트렌드 지속</span>
+  </div>
+</div>
+
+<!-- 2. 기본적 분석 -->
+<div class="card">
+  <div class="sec">2. 기본적 분석 — 사업보고서 + 1Q26 실적 <span class="src">📄</span></div>
+  <div style="position:relative;width:100%;height:150px;margin-bottom:12px;">
+    <canvas id="smRevChart"></canvas>
+  </div>
+  <div class="g2" style="margin-bottom:12px;">
+    <div>
+      <div class="ir"><span class="il">1Q26 매출 (연결)</span><span class="iv up">10.47조 (▲7.5%, 분기최대) <span class="ev ev-4">높음</span></span></div>
+      <div class="ir"><span class="il">1Q26 영업이익</span><span class="iv">7,200억 (▼0.6%) <span class="ev ev-3">적정</span></span></div>
+      <div class="ir"><span class="il">1Q26 당기순이익</span><span class="iv up">1조 858억 (▲15.9%) <span class="ev ev-4">높음</span></span></div>
+      <div class="ir"><span class="il">상사 영업이익</span><span class="iv up">1,090억 (▲73%) <span class="ev ev-4">높음</span></span></div>
+      <div class="ir"><span class="il">패션 영업이익</span><span class="iv up">380억 (▲11.8%) <span class="ev ev-3">적정</span></span></div>
+    </div>
+    <div>
+      <div class="ir"><span class="il">건설 영업이익</span><span class="iv dn">1,110억 (▼480억) <span class="ev ev-2">낮음</span></span></div>
+      <div class="ir"><span class="il">리조트 영업이익</span><span class="iv dn">-210억 (적자) <span class="ev ev-5">매우높음(손실)</span></span></div>
+      <div class="ir"><span class="il">삼성전자 지분 (5.01%)</span><span class="iv up">83.6조원 가치 <span class="ev ev-5">매우높음</span></span></div>
+      <div class="ir"><span class="il">삼성바이오 지분 (43.06%)</span><span class="iv up">29.1조원 가치 <span class="ev ev-5">매우높음</span></span></div>
+      <div class="ir"><span class="il">삼성생명 지분 (19.34%)</span><span class="iv up">11.6조원 가치 <span class="ev ev-4">높음</span></span></div>
+    </div>
+  </div>
+
+  <!-- NAV 분석 -->
+  <div style="font-size:13px;font-weight:500;margin-bottom:8px;">📊 NAV (순자산가치) 분석 — 흥국증권 05/12 기준</div>
+  <div class="nav-bar">
+    <div style="width:57.6%;background:#1A2E5A;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:white;">삼성전자 지분 83.6조 (57.6%)</div>
+    <div style="width:20.1%;background:#185FA5;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:white;">삼성바이오 29.1조</div>
+    <div style="width:8.0%;background:#1D9E75;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:white;">삼성생명</div>
+    <div style="width:14.3%;background:#EF9F27;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:white;">기타+영업</div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px;font-size:12px;text-align:center;">
+    <div style="background:#E8EDF5;border-radius:var(--border-radius-md);padding:10px;"><div style="color:#1A2E5A;font-weight:500;margin-bottom:2px;">총 NAV</div><div style="font-size:18px;font-weight:500;color:#1A2E5A;">145조원</div><div style="font-size:10px;color:#3949AB;">주당 894,740원</div></div>
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:10px;"><div style="color:#3B6D11;font-weight:500;margin-bottom:2px;">현재 시총</div><div style="font-size:18px;font-weight:500;color:#3B6D11;">69.7조원</div><div style="font-size:10px;color:#3B6D11;">NAV 대비 <strong>52% 할인</strong></div></div>
+    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:10px;"><div style="color:#854F0B;font-weight:500;margin-bottom:2px;">흥국 목표 할인율</div><div style="font-size:18px;font-weight:500;color:#854F0B;">35%</div><div style="font-size:10px;color:#633806;">목표주가 58만원</div></div>
+  </div>
+
+  <div class="hl">
+    <div style="font-size:13px;font-weight:500;color:#3B6D11;margin-bottom:4px;">💡 핵심 투자 논리 — 삼성그룹 지주사 · 계열사 지분가치 145조 · NAV 52% 할인</div>
+    <div style="font-size:12px;color:#1D9E75;line-height:1.7;">삼성물산은 삼성전자(5.01%)·삼성바이오(43.06%)·삼성생명(19.34%) 등 핵심 계열사 지분을 통해 총 145조원 NAV를 보유. 현재 시총 69.7조원으로 NAV 대비 52% 할인. 흥국증권 목표 할인율 35% 달성 시 목표주가 58만원. <strong>삼성전자·삼성바이오 주가 상승 → 삼성물산 NAV 증가 → 주가 동반 상승 레버리지 구조.</strong></div>
+  </div>
+</div>
+
+<!-- 3. 기본 투자지표 -->
+<div class="card">
+  <div class="sec">3. 기본 투자지표 (Per-Share) <span class="src">📄 보통주 162,170,000주 기준</span></div>
+  <div class="g4">
+    <div class="met"><div class="ml">EPS · 주당순이익</div><div class="mv">14,000원</div><div class="ms">2025년 추정</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
+    <div class="met"><div class="ml">BPS · 주당순자산</div><div class="mv">215,823원</div><div class="ms">지배주주자본 ~35조</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
+    <div class="met"><div class="ml">SPS · 주당매출액</div><div class="mv">246,655원</div><div class="ms">매출 ~40조 ÷ 주식수</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
+    <div class="met"><div class="ml">NAV / 주당</div><div class="mv">894,740원</div><div class="ms">총 NAV 145조 ÷ 주식수</div><div style="margin-top:5px;"><span class="ev ev-5">매우높음 (52% 할인)</span></div></div>
+  </div>
+</div>
+
+<!-- 4. 상대 투자지표 -->
+<div class="card">
+  <div class="sec">4. 상대 투자지표 (Valuation Multiples) · 현재가 429,500원</div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;font-size:11px;">
+    <span style="padding:2px 8px;border-radius:999px;background:#E6F1FB;color:#0C447C;font-weight:500;">1단계 매우낮음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#EAF3DE;color:#27500A;font-weight:500;">2단계 낮음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#F1EFE8;color:#444441;font-weight:500;">3단계 적정</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#FAEEDA;color:#633806;font-weight:500;">4단계 높음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#FCEBEB;color:#791F1F;font-weight:500;">5단계 매우높음</span>
+  </div>
+  <div class="ind-row">
+    <div style="font-size:13px;font-weight:500;min-width:90px;">PER</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">주가÷EPS · 429,500÷14,000 · 복합지주 평균~20x</div>
+    <div style="font-size:14px;font-weight:500;min-width:80px;text-align:right;">30.68x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(10x)</span><span>적정(20x)</span><span>고(40x)</span></div><div class="bar-bg"><div class="bar-f" style="width:70%;background:#FAEEDA;"></div></div></div>
+    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
+  </div>
+  <div class="ind-row">
+    <div style="font-size:13px;font-weight:500;min-width:90px;">PBR</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">주가÷BPS · 429,500÷215,823 · 복합지주 평균~1.5x</div>
+    <div style="font-size:14px;font-weight:500;min-width:80px;text-align:right;">1.99x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(0.5x)</span><span>적정(1.5x)</span><span>고(4x)</span></div><div class="bar-bg"><div class="bar-f" style="width:43%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
+  </div>
+  <div class="ind-row">
+    <div style="font-size:13px;font-weight:500;min-width:90px;">PSR</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">주가÷SPS · 429,500÷246,655 · 복합 평균~1x</div>
+    <div style="font-size:14px;font-weight:500;min-width:80px;text-align:right;">1.74x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(0.5x)</span><span>적정(1x)</span><span>고(3x)</span></div><div class="bar-bg"><div class="bar-f" style="width:50%;background:#FAEEDA;"></div></div></div>
+    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
+  </div>
+  <div class="ind-row">
+    <div style="font-size:13px;font-weight:500;min-width:90px;">NAV 할인율</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">1-(시총 69.7조÷NAV 145조) · 흥국목표 35% · 현재 52%</div>
+    <div style="font-size:14px;font-weight:500;min-width:80px;text-align:right;">52.0%</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>목표(35%)</span><span>현재(52%)</span><span>최고(70%)</span></div><div class="bar-bg"><div class="bar-f" style="width:51%;background:#FAEEDA;"></div></div></div>
+    <span class="ev ev-4" style="min-width:58px;text-align:center;">여전히 높음</span>
+  </div>
+
+  <div class="stage-grid" style="margin-top:14px;">
+    <div class="stage" style="background:#E6F1FB;"><div style="font-size:16px;font-weight:500;color:#0C447C;">1단계</div><div style="font-size:10px;color:#185FA5;margin-top:2px;">매우 저평가</div></div>
+    <div class="stage" style="background:#EAF3DE;border:1.5px solid #3B6D11;"><div style="font-size:16px;font-weight:500;color:#27500A;">2단계</div><div style="font-size:10px;color:#3B6D11;margin-top:2px;">저평가</div><div style="font-size:9px;color:#3B6D11;background:#C8E6C9;border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">← PBR</div></div>
+    <div class="stage" style="background:#F1EFE8;"><div style="font-size:16px;font-weight:500;color:#444441;">3단계</div><div style="font-size:10px;color:#5F5E5A;margin-top:2px;">적정</div></div>
+    <div class="stage" style="background:#FAEEDA;border:2px solid #EF9F27;"><div style="font-size:16px;font-weight:500;color:#633593;">4단계</div><div style="font-size:10px;color:#854F0B;margin-top:2px;">고평가</div><div style="font-size:9px;color:#412402;background:#FAC775;border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">← PER·PSR·NAV할인</div></div>
+    <div class="stage" style="background:#FCEBEB;"><div style="font-size:16px;font-weight:500;color:#791F1F;">5단계</div><div style="font-size:10px;color:#A32D2D;margin-top:2px;">매우 고평가</div></div>
+  </div>
+
+  <div class="warn">
+    <div style="font-size:13px;font-weight:500;color:#633806;margin-bottom:4px;">종합 밸류에이션 — 3단계 (PER 고평가·PBR 저평가·NAV 할인율 52% 축소 트렌드)</div>
+    <div style="font-size:12px;color:#854F0B;line-height:1.6;">PER 30.7x → 4단계. PBR 1.99x → 2단계. <strong>핵심 지표는 NAV 할인율 52%: 계열사 지분가치 145조 대비 시총 69.7조로 절반 가격에 거래. 목표 할인율 35% 달성 시 58만원 = 현재 대비 +35% 상승여력.</strong></div>
+  </div>
+</div>
+
+<!-- 5. 시계열 뉴스 -->
+<div class="card">
+  <div class="sec">5. 시계열 주요 뉴스 <span class="src">📰 실제 출처 링크</span></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;font-size:11px;">
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#1A2E5A;display:inline-block;"></span>초대형</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#1D9E75;display:inline-block;"></span>긍정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#D85A30;display:inline-block;"></span>부정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#888780;display:inline-block;"></span>중립</span>
+  </div>
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2026년 01월 05일</div>
+      <div class="tl-title">주가 242,500원 — 52주 최저 · 연초 조정</div>
+      <div class="tl-body">연초 글로벌 증시 조정으로 242,500원 52주 최저. 이후 삼성그룹 계열사 지분가치 상승과 원전·에너지 사업 확대 기대로 저점 매수세 유입 시작.</div>
+      <span class="tag tag-neg">52주 최저</span><span class="tag tag-pos">최적 진입점</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-pos"></div>
+      <div class="tl-date">2026년 02월 (연초)</div>
+      <div class="tl-title">체코 신규원전 계약 확정 · SMR 추진 · 인도 릴라이언스 암모니아 4.5조 계약</div>
+      <div class="tl-body">삼성물산 건설부문이 체코 신규원전 건설 계약을 확정하며 유럽 원전 시장 진출. 인도 릴라이언스 인더스트리와 30억달러(4.5조원) 규모 그린암모니아 공급 대형 계약 체결. SMR 사업 추진도 구체화.</div>
+      <span class="tag tag-pos">체코 원전</span><span class="tag tag-pos">인도 4.5조 계약</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-pos"></div>
+      <div class="tl-date">2026년 04월 29일</div>
+      <div class="tl-title">1Q26 실적 발표 — 매출 10.47조 분기최대 · 순이익 1.09조(+15.9%) · 상사 영업이익 +73%</div>
+      <div class="tl-body">1분기 매출 10조4,660억원(+7.5%, 분기 사상 최대), 영업이익 7,200억(▼0.6%, 일회성 반영), 당기순이익 1조858억(+15.9%). 상사 부문 영업이익 1,090억(+73%) 전사 실적 견인. 건설은 대형 프로젝트 준공 영향으로 -480억. 지정학 리스크에도 안정적 성과 유지.</div>
+      <span class="tag tag-big">매출 분기 최대</span><span class="tag tag-pos">순이익 +15.9%</span>
+      <a class="tl-link" href="https://www.digitaltoday.co.kr/news/articleView.html?idxno=661554" target="_blank">📎 디지털투데이 →</a>
+      <a class="tl-link" href="https://www.inthenews.co.kr/news/article.html?no=86290" target="_blank">📎 인더뉴스 →</a>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2026년 05월 12일</div>
+      <div class="tl-title">주가 514,000원 신고가 — 삼성전자·삼성바이오 급등 = NAV 급증 · 거래량 2,500K 역대급</div>
+      <div class="tl-body">삼성전자(+755% 영업익) + 삼성바이오(목표가 2.25조) + 삼성생명(지분가치 상승)이 동반 급등하며 삼성물산 NAV가 145조로 급증. 거래량 2,500K 역대급과 함께 514,000원 신고가 달성. NAV 할인율이 70%→52%로 빠르게 축소. 이후 -16.4% 차익실현.</div>
+      <span class="tag tag-big">신고가 514K</span><span class="tag tag-big">NAV 145조</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-pos"></div>
+      <div class="tl-date">2026년 05월 13일 (최신)</div>
+      <div class="tl-title">흥국증권 목표주가 40만→58만원 대폭 상향 · NAV 할인율 35% 목표</div>
+      <div class="tl-body">흥국증권 박종렬 연구원이 삼성전자 지분(83.6조)·삼성바이오(29.1조)·삼성생명(11.6조) 계열사 지분가치 급증을 반영해 목표주가를 40만→58만원으로 대폭 상향. "NAV 대비 할인율 35%를 목표로 주가 재평가 지속".</div>
+      <span class="tag tag-big">목표주가 58만원</span><span class="tag tag-pos">NAV 재평가</span>
+      <a class="tl-link" href="https://edaily.co.kr/News/Read?mediaCodeNo=257&newsId=03135686645448264" target="_blank">📎 이데일리 →</a>
+      <a class="tl-link" href="https://v.daum.net/v/20260513060303441" target="_blank">📎 다음뉴스 →</a>
+    </div>
+  </div>
+</div>
+
+<!-- 6. 투자 포인트 -->
+<div class="card">
+  <div class="sec">6. 2026년 핵심 투자 포인트</div>
+  <div class="g2">
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#1D9E75;">긍정 요인 (Bull)</div>
+      <div class="ir"><span class="il">NAV 145조 vs 시총 69.7조 (52% 할인)</span><span class="badge b-green">극도 저평가</span></div>
+      <div class="ir"><span class="il">삼성전자 급등 → NAV 자동 증가</span><span class="badge b-green">레버리지 구조</span></div>
+      <div class="ir"><span class="il">목표주가 58만원 (+35% 여력)</span><span class="badge b-green">NAV 할인 축소</span></div>
+      <div class="ir"><span class="il">1Q26 매출 분기 역대최대</span><span class="badge b-green">안정적 본업</span></div>
+      <div class="ir"><span class="il">원전·SMR·에너지 신사업</span><span class="badge b-blue">미래 성장</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#D85A30;">리스크 (Bear)</div>
+      <div class="ir"><span class="il">신고가 514K 대비 -16.4% 조정</span><span class="badge b-amber">단기 차익실현</span></div>
+      <div class="ir"><span class="il">건설 영업이익 감소</span><span class="badge b-amber">일회성 비용</span></div>
+      <div class="ir"><span class="il">삼성바이오 역배열 하락 리스크</span><span class="badge b-amber">지분가치 연동</span></div>
+      <div class="ir"><span class="il">리조트 영업손실 -210억</span><span class="badge b-gray">레저 부진</span></div>
+      <div class="ir"><span class="il">금산분리 규제 리스크</span><span class="badge b-gray">지주사 구조 제약</span></div>
+    </div>
+  </div>
+  <div class="ib">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
+      <div><span style="color:var(--color-text-secondary);">투자의견:</span> <span class="badge b-sm">매수 (16명 전원)</span></div>
+      <div><span style="color:var(--color-text-secondary);">목표주가:</span> <span style="font-weight:500;">58만원 (흥국증권, 최신)</span></div>
+      <div><span style="color:var(--color-text-secondary);">현재가 대비:</span> <span class="up" style="font-weight:500;">+35% 상승여력</span></div>
+      <div><span style="color:var(--color-text-secondary);">주당 NAV:</span> <span class="up" style="font-weight:500;">894,740원 (현재의 2.1배)</span></div>
+    </div>
+  </div>
+  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">⚠ 사업보고서 + 1Q26 공시 + 2026.05.13 뉴스 기준 · 투자 권고가 아닙니다</div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+(function(){
+  const svg=document.getElementById('smSvg');
+  const W=720,H=230,pL=68,pR=12,pT=14,pB=24;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  // 실제 차트 기반 (단위: 만원)
+  // 1월: 24.25K 최저 → 완만 상승
+  // 3월: 박스 후 하락
+  // 4~5월: 급등 → 51.4K 신고가
+  const data=[
+    {o:25,h:27,l:24,c:26},{o:26,h:28,l:25,c:27},{o:27,h:29,l:26,c:28},
+    {o:28,h:30,l:27,c:29},{o:29,h:31,l:28,c:30},{o:30,h:32,l:29,c:31},
+    // 3월 박스
+    {o:31,h:33,l:30,c:32},{o:32,h:34,l:31,c:33},{o:33,h:35,l:32,c:33},
+    {o:33,h:35,l:30,c:31},{o:31,h:33,l:29,c:30},
+    // 3~4월 조정
+    {o:30,h:32,l:28,c:29},{o:29,h:31,l:27,c:28},{o:28,h:30,l:26,c:27},
+    {o:27,h:29,l:25,c:28},{o:28,h:30,l:27,c:29},{o:29,h:31,l:28,c:30},
+    // 4~5월 급등
+    {o:30,h:33,l:29,c:32},{o:32,h:36,l:31,c:35},{o:35,h:40,l:34,c:39},
+    {o:39,h:45,l:38,c:44},{o:44,h:51,l:43,c:49},
+    // 신고가 후 조정
+    {o:49,h:51.4,l:43,c:44},{o:44,h:46,l:42,c:43}
+  ];
+  const prices=data.flatMap(d=>[d.h,d.l]);
+  const maxP=Math.max(...prices)+2,minP=Math.min(...prices)-1;
+  const rng=maxP-minP;
+  function py(v){return pT+cH*(1-(v-minP)/rng);}
+  const colW=cW/data.length,cw=Math.max(colW*.62,9);
+  [24,28,32,36,40,44,48].forEach(v=>{
+    if(v<minP||v>maxP)return;
+    const y=py(v);
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
+    l.setAttribute('stroke','rgba(128,128,128,.12)');l.setAttribute('stroke-width','1');svg.appendChild(l);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',pL-4);t.setAttribute('y',y+4);t.setAttribute('text-anchor','end');
+    t.setAttribute('font-size','9');t.setAttribute('fill','rgba(128,128,128,.7)');
+    t.textContent=(v*10000).toLocaleString();svg.appendChild(t);
+  });
+  function calcMA(d,n){return d.map((_,i)=>i<n-1?null:d.slice(i-n+1,i+1).reduce((s,x)=>s+x.c,0)/n);}
+  function drawLine(arr,col,w){
+    let pts=[];arr.forEach((v,i)=>{if(v===null)return;pts.push(`${pL+(i+.5)*colW},${py(v)}`);});
+    if(pts.length<2)return;
+    const p=document.createElementNS('http://www.w3.org/2000/svg','polyline');
+    p.setAttribute('points',pts.join(' '));p.setAttribute('fill','none');p.setAttribute('stroke',col);p.setAttribute('stroke-width',w||1.5);svg.appendChild(p);
+  }
+  const z=document.createElementNS('http://www.w3.org/2000/svg','rect');
+  z.setAttribute('x',pL);z.setAttribute('y',py(31.0));z.setAttribute('width',cW);
+  z.setAttribute('height',py(29.0)-py(31.0));z.setAttribute('fill','rgba(29,158,117,0.07)');
+  svg.insertBefore(z,svg.firstChild);
+  data.forEach((d,i)=>{
+    const cx=pL+(i+.5)*colW,isUp=d.c>=d.o,col=isUp?'#D85A30':'#185FA5';
+    const wk=document.createElementNS('http://www.w3.org/2000/svg','line');
+    wk.setAttribute('x1',cx);wk.setAttribute('x2',cx);wk.setAttribute('y1',py(d.h));wk.setAttribute('y2',py(d.l));
+    wk.setAttribute('stroke',col);wk.setAttribute('stroke-width','1.5');svg.appendChild(wk);
+    const bT=py(Math.max(d.o,d.c)),bB=py(Math.min(d.o,d.c));
+    const bd=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    bd.setAttribute('x',cx-cw/2);bd.setAttribute('y',bT);bd.setAttribute('width',cw);
+    bd.setAttribute('height',Math.max(bB-bT,2));bd.setAttribute('fill',col);bd.setAttribute('rx','1');svg.appendChild(bd);
+  });
+  drawLine(calcMA(data,5),'#FF69B4',1.5);
+  drawLine(calcMA(data,20),'#9370DB',1.5);
+  drawLine(calcMA(data,60),'#DAA520',2);
+  drawLine(calcMA(data,120),'#228B22',2);
+  const mk=(idx,lbl,isLow,col)=>{
+    const cx=pL+(idx+.5)*colW;
+    const cy=isLow?py(data[idx].l)+12:py(data[idx].h)-8;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',cx);t.setAttribute('y',cy);t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','9');t.setAttribute('fill',col);t.setAttribute('font-weight','500');
+    t.textContent=lbl;svg.appendChild(t);
+  };
+  mk(0,'최저 242.5K(01/05)',true,'#185FA5');
+  mk(22,'신고가 514K(05/12)',false,'#D85A30');
+  ['1월','2월','3월','4월','5월'].forEach((m,i)=>{
+    const cx=pL+(i/5)*cW+cW/10;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',cx);t.setAttribute('y',H-4);t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','10');t.setAttribute('fill','rgba(128,128,128,.8)');
+    t.textContent=m;svg.appendChild(t);
+  });
+  [{c:'#D85A30',t:'양봉'},{c:'#185FA5',t:'음봉'},{c:'#FF69B4',t:'MA5'},{c:'#9370DB',t:'MA20'},{c:'#DAA520',t:'MA60'},{c:'#228B22',t:'MA120'}].forEach((l,i)=>{
+    const gx=pL+i*90;
+    const r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    r.setAttribute('x',gx);r.setAttribute('y',2);r.setAttribute('width',10);r.setAttribute('height',10);
+    r.setAttribute('fill',l.c);r.setAttribute('rx','2');svg.appendChild(r);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',gx+13);t.setAttribute('y',11);t.setAttribute('font-size','9');
+    t.setAttribute('fill','rgba(128,128,128,.9)');t.textContent=l.t;svg.appendChild(t);
+  });
+})();
+
+new Chart(document.getElementById('smRevChart'),{
+  type:'bar',
+  data:{
+    labels:['2023 (제9기)','2024 (제10기)','2025 (추정)','1Q26 연환산'],
+    datasets:[
+      {label:'매출',data:[39.4,38.8,40.0,41.9],backgroundColor:['#1A2E5A','#1A2E5A','#1A2E5A','#1D9E75'],borderRadius:4,yAxisID:'y'},
+      {label:'영업이익',type:'line',data:[2.3,2.7,2.8,2.9],borderColor:'#EF9F27',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      y:{position:'left',ticks:{font:{size:10},callback:v=>v+'조',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+      y2:{position:'right',min:0,max:5,ticks:{font:{size:10},callback:v=>v+'조',color:'#EF9F27'},grid:{display:false}},
+      x:{ticks:{font:{size:11},color:'#888'},grid:{display:false}}
+    }
+  }
+});
+</script>

@@ -11,7 +11,6 @@
     }
 
     body {
-
       margin: 100px;
       font-family: Arial, 'Noto Sans KR', sans-serif;
       background-color: #f4f6f8;
@@ -43,9 +42,65 @@
     }
 
     .section-title {
-      margin: 0 0 20px;
+      margin: 0 0 16px;
       font-size: 24px;
       font-weight: 700;
+      text-align: center;
+    }
+
+    .view-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .view-btn,
+    .industry-nav-btn {
+      border: 1px solid #d1d5db;
+      background-color: #ffffff;
+      color: #111827;
+      border-radius: 999px;
+      padding: 10px 18px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    }
+
+    .view-btn:hover,
+    .industry-nav-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .view-btn.active,
+    .industry-nav-btn.active {
+      background-color: #111827;
+      color: #ffffff;
+      border-color: #111827;
+    }
+
+    .industry-nav {
+      display: none;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 0 auto 32px;
+      padding: 14px 16px;
+      background-color: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .industry-nav.show {
+      display: flex;
+    }
+
+    .industry-nav-btn {
+      padding: 8px 14px;
+      font-size: 14px;
     }
 
     .stock-grid {
@@ -105,10 +160,47 @@
       font-weight: 700;
     }
 
-    .stock-code {
+    .stock-code,
+    .stock-industry {
       margin-top: 6px;
       color: #6b7280;
       font-size: 14px;
+    }
+
+    .industry-section {
+      margin-bottom: 42px;
+      scroll-margin-top: 24px;
+    }
+
+    .industry-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .industry-title {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .industry-count {
+      color: #6b7280;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .data-note {
+      margin: 0 auto 28px;
+      max-width: 900px;
+      color: #6b7280;
+      font-size: 13px;
+      line-height: 1.6;
+      text-align: center;
     }
 
     footer {
@@ -119,16 +211,25 @@
     }
 
     @media (max-width: 600px) {
+      body {
+        margin: 20px;
+      }
+
       header h1 {
         font-size: 24px;
       }
 
       .page-wrap {
-        padding: 22px 14px 44px;
+        padding: 22px 0 44px;
       }
 
       .stock-grid {
         grid-template-columns: 1fr;
+      }
+
+      .industry-header {
+        align-items: flex-start;
+        flex-direction: column;
       }
     }
   </style>
@@ -137,13 +238,25 @@
 <body>
   <header>
     <h1>주식을말하다의 KOSPI 분석 홈페이지</h1>
-    <p>KOSPI 10000까지 코스피 TOP 100 분석 페이지</p>
+    <p>KOSPI Top 100 기업 분석 페이지</p>
   </header>
 
   <main class="page-wrap">
-    <h2 class="section-title">KOSPI Top 100</h2>
+    <h2 class="section-title" id="mainTitle">KOSPI Top 100</h2>
 
-    <section class="stock-grid" id="stockGrid"></section>
+    <p class="data-note">
+      기준: 매일경제 마켓 코스피 시가총액 순위 2026.05.13 15:32 기준. 
+      KODEX, TIGER, ACE, RISE 등 ETF/ETN은 기업 분석 목적에 맞지 않아 제외하고, 일반 주식과 우선주 중심으로 100개를 정리했습니다.
+    </p>
+
+    <div class="view-toggle" aria-label="보기 방식 선택">
+      <button class="view-btn active" type="button" id="rankViewBtn">순위별 보기</button>
+      <button class="view-btn" type="button" id="industryViewBtn">업종별 보기</button>
+    </div>
+
+    <nav class="industry-nav" id="industryNav" aria-label="업종별 바로가기"></nav>
+
+    <section id="stockArea"></section>
   </main>
 
   <footer>
@@ -151,221 +264,951 @@
   </footer>
 
   <script>
-const stocks = [
-  {
-    rank: 1,
-    name: '삼성전자',
-    code: '005930',
-    image: 'images/001_samsung-electronics.png',
-    page: 'stocks/1_005930.html'
-  },
-  {
-    rank: 2,
-    name: 'SK하이닉스',
-    code: '000660',
-    image: 'images/002_sk-hynix.png',
-    page: 'stocks/2_000660.html'
-  },
-  {
-    rank: 3,
-    name: '삼성전자우',
-    code: '005935',
-    image: 'images/003_samsung-electronics-preferred.png',
-    page: 'stocks/3_005935.html'
-  },
-  {
-    rank: 4,
-    name: 'LG에너지솔루션',
-    code: '373220',
-    image: 'images/004_lg-energy-solution.png',
-    page: 'stocks/4_373220.html'
-  },
-  {
-    rank: 5,
-    name: '현대차',
-    code: '005380',
-    image: 'images/005_hyundai-motor.png',
-    page: 'stocks/5_005380.html'
-  },
-  {
-    rank: 6,
-    name: 'SK스퀘어',
-    code: '402340',
-    image: 'images/006_sk-square.png',
-    page: 'stocks/6_402340.html'
-  },
-  {
-    rank: 7,
-    name: '두산에너빌리티',
-    code: '034020',
-    image: 'images/007_doosan-enerbility.png',
-    page: 'stocks/7_034020.html'
-  },
-  {
-    rank: 8,
-    name: '한화에어로스페이스',
-    code: '012450',
-    image: 'images/008_hanwha-aerospace.png',
-    page: 'stocks/8_012450.html'
-  },
-  {
-    rank: 9,
-    name: '삼성바이오로직스',
-    code: '207940',
-    image: 'images/009_samsung-biologics.png',
-    page: 'stocks/9_207940.html'
-  },
-  {
-    rank: 10,
-    name: 'HD현대중공업',
-    code: '329180',
-    image: 'images/010_hd-hyundai-heavy-industries.png',
-    page: 'stocks/10_329180.html'
-  },
-  {
-    rank: 11,
-    name: '기아',
-    code: '000270',
-    image: 'images/011_kia.png',
-    page: 'stocks/11_000270.html'
-  },
-  {
-    rank: 12,
-    name: '삼성전기',
-    code: '009150',
-    image: 'images/012_samsung-electro-mechanics.png',
-    page: 'stocks/12_009150.html'
-  },
-  {
-    rank: 13,
-    name: 'KB금융',
-    code: '105560',
-    image: 'images/013_kb-financial.png',
-    page: 'stocks/13_105560.html'
-  },
-  {
-    rank: 14,
-    name: '삼성SDI',
-    code: '006400',
-    image: 'images/014_samsung-sdi.png',
-    page: 'stocks/14_006400.html'
-  },
-  {
-    rank: 15,
-    name: '삼성물산',
-    code: '028260',
-    image: 'images/015_samsung-ct.png',
-    page: 'stocks/15_028260.html'
-  },
-  {
-    rank: 16,
-    name: '삼성생명',
-    code: '032830',
-    image: 'images/016_samsung-life.png',
-    page: 'stocks/16_032830.html'
-  },
-  {
-    rank: 17,
-    name: '신한지주',
-    code: '055550',
-    image: 'images/017_shinhan-financial.png',
-    page: 'stocks/17_055550.html'
-  },
-  {
-    rank: 18,
-    name: '셀트리온',
-    code: '068270',
-    image: 'images/018_celltrion.png',
-    page: 'stocks/18_068270.html'
-  },
-  {
-    rank: 19,
-    name: 'HD현대일렉트릭',
-    code: '267260',
-    image: 'images/019_hd-hyundai-electric.png',
-    page: 'stocks/19_267260.html'
-  },
-  {
-    rank: 20,
-    name: '한화오션',
-    code: '042660',
-    image: 'images/020_hanwha-ocean.png',
-    page: 'stocks/20_042660.html'
-  },
-  {
-    rank: 21,
-    name: '현대모비스',
-    code: '012330',
-    image: 'images/021_hyundai-mobis.png',
-    page: 'stocks/21_012330.html'
-  },
-  {
-    rank: 22,
-    name: '미래에셋증권',
-    code: '006800',
-    image: 'images/022_mirae-asset-securities.png',
-    page: 'stocks/22_006800.html'
-  },
-  {
-    rank: 23,
-    name: 'LS ELECTRIC',
-    code: '010120',
-    image: 'images/023_ls-electric.png',
-    page: 'stocks/23_010120.html'
-  },
-  {
-    rank: 24,
-    name: '고려아연',
-    code: '010130',
-    image: 'images/024_korea-zinc.png',
-    page: 'stocks/24_010130.html'
-  },
-  {
-    rank: 25,
-    name: '효성중공업',
-    code: '298040',
-    image: 'images/025_hyosung-heavy-industries.png',
-    page: 'stocks/25_298040.html'
-  },
-  {
-    rank: 26,
-    name: 'NAVER',
-    code: '035420',
-    image: 'images/026_naver.png',
-    page: 'stocks/26_035420.html'
-  },
-  {
-    rank: 27,
-    name: '하나금융지주',
-    code: '086790',
-    image: 'images/027_hana-financial.png',
-    page: 'stocks/27_086790.html'
-  },
-  {
-    rank: 28,
-    name: 'HD한국조선해양',
-    code: '009540',
-    image: 'images/028_hd-kso.png',
-    page: 'stocks/28_009540.html'
-  },
-  {
-    rank: 29,
-    name: 'POSCO홀딩스',
-    code: '005490',
-    image: 'images/029_posco-holdings.png',
-    page: 'stocks/29_005490.html'
-  },
-  {
-    rank: 30,
-    name: '삼성중공업',
-    code: '010140',
-    image: 'images/030_samsung-heavy-industries.png',
-    page: 'stocks/30_010140.html'
-  }
+    const stocks = [
+      {
+            "rank": 1,
+            "name": "삼성전자",
+            "code": "005930",
+            "industry": "반도체·전자",
+            "slug": "samsung-electronics",
+            "image": "images/001_samsung-electronics.png",
+            "page": "stocks/001_005930.html"
+      },
+      {
+            "rank": 2,
+            "name": "SK하이닉스",
+            "code": "000660",
+            "industry": "반도체·전자",
+            "slug": "sk-hynix",
+            "image": "images/002_sk-hynix.png",
+            "page": "stocks/002_000660.html"
+      },
+      {
+            "rank": 3,
+            "name": "SK스퀘어",
+            "code": "402340",
+            "industry": "지주·투자회사",
+            "slug": "sk-square",
+            "image": "images/003_sk-square.png",
+            "page": "stocks/003_402340.html"
+      },
+      {
+            "rank": 4,
+            "name": "삼성전자우",
+            "code": "005935",
+            "industry": "반도체·전자",
+            "slug": "samsung-electronics-preferred",
+            "image": "images/004_samsung-electronics-preferred.png",
+            "page": "stocks/001_005930.html"
+      },
+      {
+            "rank": 5,
+            "name": "현대차",
+            "code": "005380",
+            "industry": "자동차·부품",
+            "slug": "hyundai-motor",
+            "image": "images/005_hyundai-motor.png",
+            "page": "stocks/005_005380.html"
+      },
+      {
+            "rank": 6,
+            "name": "LG에너지솔루션",
+            "code": "373220",
+            "industry": "2차전지·전기차 소재",
+            "slug": "lg-energy-solution",
+            "image": "images/006_lg-energy-solution.png",
+            "page": "stocks/006_373220.html"
+      },
+      {
+            "rank": 7,
+            "name": "HD현대중공업",
+            "code": "329180",
+            "industry": "조선·해양",
+            "slug": "hd-hyundai-heavy-industries",
+            "image": "images/007_hd-hyundai-heavy-industries.png",
+            "page": "stocks/007_329180.html"
+      },
+      {
+            "rank": 8,
+            "name": "두산에너빌리티",
+            "code": "034020",
+            "industry": "전력·기계·인프라",
+            "slug": "doosan-enerbility",
+            "image": "images/008_doosan-enerbility.png",
+            "page": "stocks/008_034020.html"
+      },
+      {
+            "rank": 9,
+            "name": "삼성전기",
+            "code": "009150",
+            "industry": "반도체·전자",
+            "slug": "samsung-electro-mechanics",
+            "image": "images/009_samsung-electro-mechanics.png",
+            "page": "stocks/009_009150.html"
+      },
+      {
+            "rank": 10,
+            "name": "기아",
+            "code": "000270",
+            "industry": "자동차·부품",
+            "slug": "kia",
+            "image": "images/010_kia.png",
+            "page": "stocks/010_000270.html"
+      },
+      {
+            "rank": 11,
+            "name": "삼성물산",
+            "code": "028260",
+            "industry": "지주·복합기업",
+            "slug": "samsung-ct",
+            "image": "images/011_samsung-ct.png",
+            "page": "stocks/011_028260.html"
+      },
+      {
+            "rank": 12,
+            "name": "한화에어로스페이스",
+            "code": "012450",
+            "industry": "방산·항공우주",
+            "slug": "hanwha-aerospace",
+            "image": "images/012_hanwha-aerospace.png",
+            "page": "stocks/012_012450.html"
+      },
+      {
+            "rank": 13,
+            "name": "삼성바이오로직스",
+            "code": "207940",
+            "industry": "바이오·헬스케어",
+            "slug": "samsung-biologics",
+            "image": "images/013_samsung-biologics.png",
+            "page": "stocks/013_207940.html"
+      },
+      {
+            "rank": 14,
+            "name": "삼성생명",
+            "code": "032830",
+            "industry": "보험",
+            "slug": "samsung-life",
+            "image": "images/014_samsung-life.png",
+            "page": "stocks/014_032830.html"
+      },
+      {
+            "rank": 15,
+            "name": "현대모비스",
+            "code": "012330",
+            "industry": "자동차·부품",
+            "slug": "hyundai-mobis",
+            "image": "images/015_hyundai-mobis.png",
+            "page": "stocks/015_012330.html"
+      },
+      {
+            "rank": 16,
+            "name": "KB금융",
+            "code": "105560",
+            "industry": "금융·은행·증권",
+            "slug": "kb-financial",
+            "image": "images/016_kb-financial.png",
+            "page": "stocks/016_105560.html"
+      },
+      {
+            "rank": 17,
+            "name": "삼성SDI",
+            "code": "006400",
+            "industry": "2차전지·전기차 소재",
+            "slug": "samsung-sdi",
+            "image": "images/017_samsung-sdi.png",
+            "page": "stocks/017_006400.html"
+      },
+      {
+            "rank": 18,
+            "name": "HD현대일렉트릭",
+            "code": "267260",
+            "industry": "전력·기계·인프라",
+            "slug": "hd-hyundai-electric",
+            "image": "images/018_hd-hyundai-electric.png",
+            "page": "stocks/018_267260.html"
+      },
+      {
+            "rank": 19,
+            "name": "신한지주",
+            "code": "055550",
+            "industry": "금융·은행·증권",
+            "slug": "shinhan-financial",
+            "image": "images/019_shinhan-financial.png",
+            "page": "stocks/019_055550.html"
+      },
+      {
+            "rank": 20,
+            "name": "LS ELECTRIC",
+            "code": "010120",
+            "industry": "전력·기계·인프라",
+            "slug": "ls-electric",
+            "image": "images/020_ls-electric.png",
+            "page": "stocks/020_010120.html"
+      },
+      {
+            "rank": 21,
+            "name": "셀트리온",
+            "code": "068270",
+            "industry": "바이오·헬스케어",
+            "slug": "celltrion",
+            "image": "images/021_celltrion.png",
+            "page": "stocks/021_068270.html"
+      },
+      {
+            "rank": 22,
+            "name": "미래에셋증권",
+            "code": "006800",
+            "industry": "금융·은행·증권",
+            "slug": "mirae-asset-securities",
+            "image": "images/022_mirae-asset-securities.png",
+            "page": "stocks/022_006800.html"
+      },
+      {
+            "rank": 23,
+            "name": "SK",
+            "code": "034730",
+            "industry": "지주·복합기업",
+            "slug": "sk",
+            "image": "images/023_sk.png",
+            "page": "stocks/023_034730.html"
+      },
+      {
+            "rank": 24,
+            "name": "효성중공업",
+            "code": "298040",
+            "industry": "전력·기계·인프라",
+            "slug": "hyosung-heavy-industries",
+            "image": "images/024_hyosung-heavy-industries.png",
+            "page": "stocks/024_298040.html"
+      },
+      {
+            "rank": 25,
+            "name": "한미반도체",
+            "code": "042700",
+            "industry": "반도체·전자",
+            "slug": "hanmi-semiconductor",
+            "image": "images/025_hanmi-semiconductor.png",
+            "page": "stocks/025_042700.html"
+      },
+      {
+            "rank": 26,
+            "name": "POSCO홀딩스",
+            "code": "005490",
+            "industry": "철강·비철금속·소재",
+            "slug": "posco-holdings",
+            "image": "images/026_posco-holdings.png",
+            "page": "stocks/026_005490.html"
+      },
+      {
+            "rank": 27,
+            "name": "한화오션",
+            "code": "042660",
+            "industry": "조선·해양",
+            "slug": "hanwha-ocean",
+            "image": "images/027_hanwha-ocean.png",
+            "page": "stocks/027_042660.html"
+      },
+      {
+            "rank": 28,
+            "name": "하나금융지주",
+            "code": "086790",
+            "industry": "금융·은행·증권",
+            "slug": "hana-financial",
+            "image": "images/028_hana-financial.png",
+            "page": "stocks/028_086790.html"
+      },
+      {
+            "rank": 29,
+            "name": "HD한국조선해양",
+            "code": "009540",
+            "industry": "조선·해양",
+            "slug": "hd-korea-shipbuilding",
+            "image": "images/029_hd-korea-shipbuilding.png",
+            "page": "stocks/029_009540.html"
+      },
+      {
+            "rank": 30,
+            "name": "NAVER",
+            "code": "035420",
+            "industry": "인터넷·플랫폼",
+            "slug": "naver",
+            "image": "images/030_naver.png",
+            "page": "stocks/030_035420.html"
+      },
+      {
+            "rank": 31,
+            "name": "고려아연",
+            "code": "010130",
+            "industry": "철강·비철금속·소재",
+            "slug": "korea-zinc",
+            "image": "images/031_korea-zinc.png",
+            "page": "stocks/031_010130.html"
+      },
+      {
+            "rank": 32,
+            "name": "LG전자",
+            "code": "066570",
+            "industry": "전자·가전",
+            "slug": "lg-electronics",
+            "image": "images/032_lg-electronics.png",
+            "page": "stocks/032_066570.html"
+      },
+      {
+            "rank": 33,
+            "name": "LG화학",
+            "code": "051910",
+            "industry": "화학·정유·에너지",
+            "slug": "lg-chem",
+            "image": "images/033_lg-chem.png",
+            "page": "stocks/033_051910.html"
+      },
+      {
+            "rank": 34,
+            "name": "삼성중공업",
+            "code": "010140",
+            "industry": "조선·해양",
+            "slug": "samsung-heavy-industries",
+            "image": "images/034_samsung-heavy-industries.png",
+            "page": "stocks/034_010140.html"
+      },
+      {
+            "rank": 35,
+            "name": "두산",
+            "code": "000150",
+            "industry": "지주·복합기업",
+            "slug": "doosan",
+            "image": "images/035_doosan.png",
+            "page": "stocks/035_000150.html"
+      },
+      {
+            "rank": 36,
+            "name": "한국전력",
+            "code": "015760",
+            "industry": "전력·기계·인프라",
+            "slug": "korea-electric-power",
+            "image": "images/036_korea-electric-power.png",
+            "page": "stocks/036_015760.html"
+      },
+      {
+            "rank": 37,
+            "name": "HD현대",
+            "code": "267250",
+            "industry": "지주·복합기업",
+            "slug": "hd-hyundai",
+            "image": "images/037_hd-hyundai.png",
+            "page": "stocks/037_267250.html"
+      },
+      {
+            "rank": 38,
+            "name": "현대로템",
+            "code": "064350",
+            "industry": "방산·항공우주",
+            "slug": "hyundai-rotem",
+            "image": "images/038_hyundai-rotem.png",
+            "page": "stocks/038_064350.html"
+      },
+      {
+            "rank": 39,
+            "name": "우리금융지주",
+            "code": "316140",
+            "industry": "금융·은행·증권",
+            "slug": "woori-financial",
+            "image": "images/039_woori-financial.png",
+            "page": "stocks/039_316140.html"
+      },
+      {
+            "rank": 40,
+            "name": "SK텔레콤",
+            "code": "017670",
+            "industry": "통신",
+            "slug": "sk-telecom",
+            "image": "images/040_sk-telecom.png",
+            "page": "stocks/040_017670.html"
+      },
+      {
+            "rank": 41,
+            "name": "포스코퓨처엠",
+            "code": "003670",
+            "industry": "2차전지·전기차 소재",
+            "slug": "posco-future-m",
+            "image": "images/041_posco-future-m.png",
+            "page": "stocks/041_003670.html"
+      },
+      {
+            "rank": 42,
+            "name": "삼성화재",
+            "code": "000810",
+            "industry": "보험",
+            "slug": "samsung-fire-marine",
+            "image": "images/042_samsung-fire-marine.png",
+            "page": "stocks/042_000810.html"
+      },
+      {
+            "rank": 43,
+            "name": "SK이노베이션",
+            "code": "096770",
+            "industry": "화학·정유·에너지",
+            "slug": "sk-innovation",
+            "image": "images/043_sk-innovation.png",
+            "page": "stocks/043_096770.html"
+      },
+      {
+            "rank": 44,
+            "name": "현대글로비스",
+            "code": "086280",
+            "industry": "물류·운송",
+            "slug": "hyundai-glovis",
+            "image": "images/044_hyundai-glovis.png",
+            "page": "stocks/044_086280.html"
+      },
+      {
+            "rank": 45,
+            "name": "한화시스템",
+            "code": "272210",
+            "industry": "방산·항공우주",
+            "slug": "hanwha-systems",
+            "image": "images/045_hanwha-systems.png",
+            "page": "stocks/045_272210.html"
+      },
+      {
+            "rank": 46,
+            "name": "KT&G",
+            "code": "033780",
+            "industry": "소비재·식품·유통",
+            "slug": "ktng",
+            "image": "images/046_ktng.png",
+            "page": "stocks/046_033780.html"
+      },
+      {
+            "rank": 47,
+            "name": "LIG디펜스앤에어로스페이스",
+            "code": "079550",
+            "industry": "방산·항공우주",
+            "slug": "lig-defense-aerospace",
+            "image": "images/047_lig-nex1.png",
+            "page": "stocks/047_079550.html"
+      },
+      {
+            "rank": 48,
+            "name": "현대오토에버",
+            "code": "307950",
+            "industry": "IT서비스·SW",
+            "slug": "hyundai-autoever",
+            "image": "images/048_hyundai-autoever.png",
+            "page": "stocks/048_307950.html"
+      },
+      {
+            "rank": 49,
+            "name": "카카오",
+            "code": "035720",
+            "industry": "인터넷·플랫폼",
+            "slug": "kakao",
+            "image": "images/049_kakao.png",
+            "page": "stocks/049_035720.html"
+      },
+      {
+            "rank": 50,
+            "name": "HMM",
+            "code": "011200",
+            "industry": "물류·운송",
+            "slug": "hmm",
+            "image": "images/050_hmm.png",
+            "page": "stocks/050_011200.html"
+      },
+      {
+            "rank": 51,
+            "name": "현대건설",
+            "code": "000720",
+            "industry": "건설·인프라",
+            "slug": "hyundai-engineering-construction",
+            "image": "images/051_hyundai-engineering-construction.png",
+            "page": "stocks/051_000720.html"
+      },
+      {
+            "rank": 52,
+            "name": "메리츠금융지주",
+            "code": "138040",
+            "industry": "금융·은행·증권",
+            "slug": "meritz-financial",
+            "image": "images/052_meritz-financial.png",
+            "page": "stocks/052_138040.html"
+      },
+      {
+            "rank": 53,
+            "name": "LG이노텍",
+            "code": "011070",
+            "industry": "반도체·전자",
+            "slug": "lg-innotek",
+            "image": "images/053_lg-innotek.png",
+            "page": "stocks/053_011070.html"
+      },
+      {
+            "rank": 54,
+            "name": "LG",
+            "code": "003550",
+            "industry": "지주·복합기업",
+            "slug": "lg-corp",
+            "image": "images/054_lg-corp.png",
+            "page": "stocks/054_003550.html"
+      },
+      {
+            "rank": 55,
+            "name": "기업은행",
+            "code": "024110",
+            "industry": "금융·은행·증권",
+            "slug": "ibk",
+            "image": "images/055_ibk.png",
+            "page": "stocks/055_024110.html"
+      },
+      {
+            "rank": 56,
+            "name": "LS",
+            "code": "006260",
+            "industry": "지주·복합기업",
+            "slug": "ls",
+            "image": "images/056_ls.png",
+            "page": "stocks/056_006260.html"
+      },
+      {
+            "rank": 57,
+            "name": "한국항공우주",
+            "code": "047810",
+            "industry": "방산·항공우주",
+            "slug": "korea-aerospace-industries",
+            "image": "images/057_korea-aerospace-industries.png",
+            "page": "stocks/057_047810.html"
+      },
+      {
+            "rank": 58,
+            "name": "에이피알",
+            "code": "278470",
+            "industry": "생활·화장품",
+            "slug": "apr",
+            "image": "images/058_apr.png",
+            "page": "stocks/058_278470.html"
+      },
+      {
+            "rank": 59,
+            "name": "KT",
+            "code": "030200",
+            "industry": "통신",
+            "slug": "kt",
+            "image": "images/059_kt.png",
+            "page": "stocks/059_030200.html"
+      },
+      {
+            "rank": 60,
+            "name": "한국금융지주",
+            "code": "071050",
+            "industry": "금융·은행·증권",
+            "slug": "korea-investment-holdings",
+            "image": "images/060_korea-investment-holdings.png",
+            "page": "stocks/060_071050.html"
+      },
+      {
+            "rank": 61,
+            "name": "삼성에스디에스",
+            "code": "018260",
+            "industry": "IT서비스·SW",
+            "slug": "samsung-sds",
+            "image": "images/061_samsung-sds.png",
+            "page": "stocks/061_018260.html"
+      },
+      {
+            "rank": 62,
+            "name": "크래프톤",
+            "code": "259960",
+            "industry": "게임·엔터테인먼트",
+            "slug": "krafton",
+            "image": "images/062_krafton.png",
+            "page": "stocks/062_259960.html"
+      },
+      {
+            "rank": 63,
+            "name": "S-Oil",
+            "code": "010950",
+            "industry": "화학·정유·에너지",
+            "slug": "s-oil",
+            "image": "images/063_s-oil.png",
+            "page": "stocks/063_010950.html"
+      },
+      {
+            "rank": 64,
+            "name": "포스코인터내셔널",
+            "code": "047050",
+            "industry": "상사·무역",
+            "slug": "posco-international",
+            "image": "images/064_posco-international.png",
+            "page": "stocks/064_047050.html"
+      },
+      {
+            "rank": 65,
+            "name": "삼성에피스홀딩스",
+            "code": "0126Z0",
+            "industry": "바이오·헬스케어",
+            "slug": "samsung-epis-holdings",
+            "image": "images/065_samsung-bioepis.png",
+            "page": "stocks/065_0126Z0.html"
+      },
+      {
+            "rank": 66,
+            "name": "대한전선",
+            "code": "001440",
+            "industry": "전력·기계·인프라",
+            "slug": "taihan-cable",
+            "image": "images/066_taihan-cable.png",
+            "page": "stocks/066_001440.html"
+      },
+      {
+            "rank": 67,
+            "name": "NH투자증권",
+            "code": "005940",
+            "industry": "금융·은행·증권",
+            "slug": "nh-investment-securities",
+            "image": "images/067_nh-investment-securities.png",
+            "page": "stocks/067_005940.html"
+      },
+      {
+            "rank": 68,
+            "name": "대우건설",
+            "code": "047040",
+            "industry": "건설·인프라",
+            "slug": "daewoo-enc",
+            "image": "images/068_daewoo-enc.png",
+            "page": "stocks/068_047040.html"
+      },
+      {
+            "rank": 69,
+            "name": "삼성증권",
+            "code": "016360",
+            "industry": "금융·은행·증권",
+            "slug": "samsung-securities",
+            "image": "images/069_samsung-securities.png",
+            "page": "stocks/069_016360.html"
+      },
+      {
+            "rank": 70,
+            "name": "키움증권",
+            "code": "039490",
+            "industry": "금융·은행·증권",
+            "slug": "kiwoom-securities",
+            "image": "images/070_kiwoom-securities.png",
+            "page": "stocks/070_039490.html"
+      },
+      {
+            "rank": 71,
+            "name": "DB손해보험",
+            "code": "005830",
+            "industry": "보험",
+            "slug": "db-insurance",
+            "image": "images/071_db-insurance.png",
+            "page": "stocks/071_005830.html"
+      },
+      {
+            "rank": 72,
+            "name": "카카오뱅크",
+            "code": "323410",
+            "industry": "금융·은행·증권",
+            "slug": "kakaobank",
+            "image": "images/072_kakaobank.png",
+            "page": "stocks/072_323410.html"
+      },
+      {
+            "rank": 73,
+            "name": "HD현대마린솔루션",
+            "code": "443060",
+            "industry": "조선·해양",
+            "slug": "hd-hyundai-marine-solution",
+            "image": "images/073_hd-hyundai-marine-solution.png",
+            "page": "stocks/073_443060.html"
+      },
+      {
+            "rank": 74,
+            "name": "삼성E&A",
+            "code": "028050",
+            "industry": "건설·인프라",
+            "slug": "samsung-ea",
+            "image": "images/074_samsung-ea.png",
+            "page": "stocks/074_028050.html"
+      },
+      {
+            "rank": 75,
+            "name": "하이브",
+            "code": "352820",
+            "industry": "게임·엔터테인먼트",
+            "slug": "hybe",
+            "image": "images/075_hybe.png",
+            "page": "stocks/075_352820.html"
+      },
+      {
+            "rank": 76,
+            "name": "한화",
+            "code": "000880",
+            "industry": "지주·복합기업",
+            "slug": "hanwha",
+            "image": "images/076_hanwha.png",
+            "page": "stocks/076_000880.html"
+      },
+      {
+            "rank": 77,
+            "name": "현대차2우B",
+            "code": "005387",
+            "industry": "자동차·부품",
+            "slug": "hyundai-motor-preferred-2b",
+            "image": "images/077_hyundai-motor-preferred-2b.png",
+            "page": "stocks/077_005387.html"
+      },
+      {
+            "rank": 78,
+            "name": "이수페타시스",
+            "code": "007660",
+            "industry": "반도체·전자",
+            "slug": "isupetasys",
+            "image": "images/078_isupetasys.png",
+            "page": "stocks/078_007660.html"
+      },
+      {
+            "rank": 79,
+            "name": "삼양식품",
+            "code": "003230",
+            "industry": "소비재·식품·유통",
+            "slug": "samyang-foods",
+            "image": "images/079_samyang-foods.png",
+            "page": "stocks/079_003230.html"
+      },
+      {
+            "rank": 80,
+            "name": "대한항공",
+            "code": "003490",
+            "industry": "물류·운송",
+            "slug": "korean-air",
+            "image": "images/080_korean-air.png",
+            "page": "stocks/080_003490.html"
+      },
+      {
+            "rank": 81,
+            "name": "산일전기",
+            "code": "062040",
+            "industry": "전력·기계·인프라",
+            "slug": "sanil-electric",
+            "image": "images/081_sanil-electric.png",
+            "page": "stocks/081_062040.html"
+      },
+      {
+            "rank": 82,
+            "name": "HD현대건설기계",
+            "code": "267270",
+            "industry": "전력·기계·인프라",
+            "slug": "hd-hyundai-construction-equipment",
+            "image": "images/082_hd-hyundai-construction-equipment.png",
+            "page": "stocks/082_267270.html"
+      },
+      {
+            "rank": 83,
+            "name": "가온전선",
+            "code": "000500",
+            "industry": "전력·기계·인프라",
+            "slug": "gaon-cable",
+            "image": "images/083_gaon-cable.png",
+            "page": "stocks/083_000500.html"
+      },
+      {
+            "rank": 84,
+            "name": "DB하이텍",
+            "code": "000990",
+            "industry": "반도체·전자",
+            "slug": "db-hitek",
+            "image": "images/084_db-hitek.png",
+            "page": "stocks/084_000990.html"
+      },
+      {
+            "rank": 85,
+            "name": "SK바이오팜",
+            "code": "326030",
+            "industry": "바이오·헬스케어",
+            "slug": "sk-biopharmaceuticals",
+            "image": "images/085_sk-biopharmaceuticals.png",
+            "page": "stocks/085_326030.html"
+      },
+      {
+            "rank": 86,
+            "name": "한진칼",
+            "code": "180640",
+            "industry": "지주·복합기업",
+            "slug": "hanjin-kal",
+            "image": "images/086_hanjin-kal.png",
+            "page": "stocks/086_180640.html"
+      },
+      {
+            "rank": 87,
+            "name": "한화솔루션",
+            "code": "009830",
+            "industry": "화학·정유·에너지",
+            "slug": "hanwha-solutions",
+            "image": "images/087_hanwha-solutions.png",
+            "page": "stocks/087_009830.html"
+      },
+      {
+            "rank": 88,
+            "name": "한국타이어앤테크놀로지",
+            "code": "161390",
+            "industry": "자동차·부품",
+            "slug": "hankook-tire-technology",
+            "image": "images/088_hankook-tire-technology.png",
+            "page": "stocks/088_161390.html"
+      },
+      {
+            "rank": 89,
+            "name": "LG씨엔에스",
+            "code": "064400",
+            "industry": "IT서비스·SW",
+            "slug": "lg-cns",
+            "image": "images/089_lg-cns.png",
+            "page": "stocks/089_064400.html"
+      },
+      {
+            "rank": 90,
+            "name": "LG디스플레이",
+            "code": "034220",
+            "industry": "반도체·전자",
+            "slug": "lg-display",
+            "image": "images/090_lg-display.png",
+            "page": "stocks/090_034220.html"
+      },
+      {
+            "rank": 91,
+            "name": "대덕전자",
+            "code": "353200",
+            "industry": "반도체·전자",
+            "slug": "daeduck-electronics",
+            "image": "images/091_daeduck-electronics.png",
+            "page": "stocks/091_353200.html"
+      },
+      {
+            "rank": 92,
+            "name": "아모레퍼시픽",
+            "code": "090430",
+            "industry": "생활·화장품",
+            "slug": "amorepacific",
+            "image": "images/092_amorepacific.png",
+            "page": "stocks/092_090430.html"
+      },
+      {
+            "rank": 93,
+            "name": "카카오페이",
+            "code": "377300",
+            "industry": "금융·은행·증권",
+            "slug": "kakao-pay",
+            "image": "images/093_kakao-pay.png",
+            "page": "stocks/093_377300.html"
+      },
+      {
+            "rank": 94,
+            "name": "엘앤에프",
+            "code": "066970",
+            "industry": "2차전지·전기차 소재",
+            "slug": "l-and-f",
+            "image": "images/094_l-and-f.png",
+            "page": "stocks/094_066970.html"
+      },
+      {
+            "rank": 95,
+            "name": "유한양행",
+            "code": "000100",
+            "industry": "바이오·헬스케어",
+            "slug": "yuhan",
+            "image": "images/095_yuhan.png",
+            "page": "stocks/095_000100.html"
+      },
+      {
+            "rank": 96,
+            "name": "두산밥캣",
+            "code": "241560",
+            "industry": "전력·기계·인프라",
+            "slug": "doosan-bobcat",
+            "image": "images/096_doosan-bobcat.png",
+            "page": "stocks/096_241560.html"
+      },
+      {
+            "rank": 97,
+            "name": "코웨이",
+            "code": "021240",
+            "industry": "소비재·식품·유통",
+            "slug": "coway",
+            "image": "images/097_coway.png",
+            "page": "stocks/097_021240.html"
+      },
+      {
+            "rank": 98,
+            "name": "GS",
+            "code": "078930",
+            "industry": "지주·복합기업",
+            "slug": "gs",
+            "image": "images/098_gs.png",
+            "page": "stocks/098_078930.html"
+      },
+      {
+            "rank": 99,
+            "name": "일진전기",
+            "code": "103590",
+            "industry": "전력·기계·인프라",
+            "slug": "iljin-electric",
+            "image": "images/099_iljin-electric.png",
+            "page": "stocks/099_103590.html"
+      },
+      {
+            "rank": 100,
+            "name": "LG유플러스",
+            "code": "032640",
+            "industry": "통신",
+            "slug": "lg-uplus",
+            "image": "images/100_lg-uplus.png",
+            "page": "stocks/100_032640.html"
+      },
+      {
+            "rank": 101,
+            "name": "농심",
+            "code": "004370",
+            "industry": "소비재·식품·유통",
+            "slug": "nong-sim",
+            "image": "images/100_lg-uplus.png",
+            "page": "stocks/101_004370.html"
+      }
 ];
-    const stockGrid = document.getElementById('stockGrid');
 
-    stocks.forEach((stock) => {
+    const industryOrder = [
+      "반도체·전자",
+      "전자·가전",
+      "2차전지·전기차 소재",
+      "자동차·부품",
+      "금융·은행·증권",
+      "보험",
+      "바이오·헬스케어",
+      "조선·해양",
+      "방산·항공우주",
+      "전력·기계·인프라",
+      "철강·비철금속·소재",
+      "화학·정유·에너지",
+      "인터넷·플랫폼",
+      "IT서비스·SW",
+      "통신",
+      "건설·인프라",
+      "물류·운송",
+      "소비재·식품·유통",
+      "생활·화장품",
+      "게임·엔터테인먼트",
+      "상사·무역",
+      "지주·투자회사",
+      "지주·복합기업"
+];
+
+    const stockArea = document.getElementById('stockArea');
+    const mainTitle = document.getElementById('mainTitle');
+    const rankViewBtn = document.getElementById('rankViewBtn');
+    const industryViewBtn = document.getElementById('industryViewBtn');
+    const industryNav = document.getElementById('industryNav');
+
+    function createStockCard(stock) {
       const card = document.createElement('article');
       card.className = 'stock-card';
 
@@ -376,12 +1219,127 @@ const stocks = [
             <div class="stock-rank">KOSPI ${stock.rank}위</div>
             <h3 class="stock-name">${stock.name}</h3>
             <div class="stock-code">종목코드: ${stock.code}</div>
+            <div class="stock-industry">업종: ${stock.industry}</div>
           </div>
         </a>
       `;
 
-      stockGrid.appendChild(card);
-    });
+      return card;
+    }
+
+    function setActiveViewButton(mode) {
+      rankViewBtn.classList.toggle('active', mode === 'rank');
+      industryViewBtn.classList.toggle('active', mode === 'industry');
+    }
+
+    function setActiveIndustryButton(selectedIndustry) {
+      document.querySelectorAll('.industry-nav-btn').forEach((button) => {
+        button.classList.toggle('active', button.dataset.industry === selectedIndustry);
+      });
+    }
+
+    function getVisibleIndustries() {
+      return industryOrder.filter((industry) =>
+        stocks.some((stock) => stock.industry === industry)
+      );
+    }
+
+    function renderIndustryNav() {
+      industryNav.innerHTML = '';
+
+      const allButton = document.createElement('button');
+      allButton.type = 'button';
+      allButton.className = 'industry-nav-btn active';
+      allButton.dataset.industry = '전체';
+      allButton.textContent = '전체';
+      allButton.addEventListener('click', () => {
+        setActiveIndustryButton('전체');
+        renderIndustrySections('전체');
+      });
+      industryNav.appendChild(allButton);
+
+      getVisibleIndustries().forEach((industry) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'industry-nav-btn';
+        button.dataset.industry = industry;
+        button.textContent = industry;
+        button.addEventListener('click', () => {
+          setActiveIndustryButton(industry);
+          renderIndustrySections(industry);
+        });
+        industryNav.appendChild(button);
+      });
+    }
+
+    function renderRankView() {
+      stockArea.innerHTML = '';
+      mainTitle.textContent = 'KOSPI Top 100 - 순위별 보기';
+      setActiveViewButton('rank');
+      industryNav.classList.remove('show');
+
+      const grid = document.createElement('section');
+      grid.className = 'stock-grid';
+
+      [...stocks]
+        .sort((a, b) => a.rank - b.rank)
+        .forEach((stock) => {
+          grid.appendChild(createStockCard(stock));
+        });
+
+      stockArea.appendChild(grid);
+    }
+
+    function renderIndustrySections(selectedIndustry = '전체') {
+      stockArea.innerHTML = '';
+
+      const industriesToRender =
+        selectedIndustry === '전체' ? getVisibleIndustries() : [selectedIndustry];
+
+      industriesToRender.forEach((industry) => {
+        const industryStocks = stocks
+          .filter((stock) => stock.industry === industry)
+          .sort((a, b) => a.rank - b.rank);
+
+        if (industryStocks.length === 0) return;
+
+        const section = document.createElement('section');
+        section.className = 'industry-section';
+        section.id = `industry-${industry.replaceAll('·', '-').replaceAll(' ', '-')}`;
+
+        const header = document.createElement('div');
+        header.className = 'industry-header';
+        header.innerHTML = `
+          <h3 class="industry-title">${industry}</h3>
+          <span class="industry-count">${industryStocks.length}개 종목</span>
+        `;
+
+        const grid = document.createElement('div');
+        grid.className = 'stock-grid';
+
+        industryStocks.forEach((stock) => {
+          grid.appendChild(createStockCard(stock));
+        });
+
+        section.appendChild(header);
+        section.appendChild(grid);
+        stockArea.appendChild(section);
+      });
+    }
+
+    function renderIndustryView() {
+      mainTitle.textContent = 'KOSPI Top 100 - 업종별 보기';
+      setActiveViewButton('industry');
+      industryNav.classList.add('show');
+
+      renderIndustryNav();
+      renderIndustrySections('전체');
+    }
+
+    rankViewBtn.addEventListener('click', renderRankView);
+    industryViewBtn.addEventListener('click', renderIndustryView);
+
+    renderRankView();
   </script>
 </body>
 </html>
