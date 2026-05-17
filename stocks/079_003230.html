@@ -1,414 +1,590 @@
 <link rel="stylesheet" href="../css/global.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
-.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:18px;}
-.sec{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:12px;}
-.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:14px;}
-.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;}
-.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+body{font-family:system-ui,sans-serif;}
+.wrap{  width: 800px;
+  background-color: rgb(248, 248, 246);
+  margin: 0 auto;}
+h2{font-size:19px;font-weight:600;color:var(--color-text-primary);margin-bottom:3px;}
+.sub{font-size:12px;color:var(--color-text-secondary);margin-bottom:14px;}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:12px;padding:1rem 1.25rem;margin-bottom:14px;}
+.sec-title{font-size:11px;font-weight:600;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:12px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:12px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px;text-align:center;}
-.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
-.mv{font-size:14px;font-weight:500;color:var(--color-text-primary);}
+.met{background:var(--color-background-secondary);border-radius:9px;padding:10px 12px;text-align:center;}
+.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:3px;}
+.mv{font-size:14px;font-weight:600;color:var(--color-text-primary);}
 .ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
 .up{color:#1D9E75;}.dn{color:#D85A30;}
-.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
-.b-green{background:#EAF3DE;color:#3B6D11;}.b-amber{background:#FAEEDA;color:#854F0B;}
-.b-red{background:#FCEBEB;color:#A32D2D;}.b-blue{background:#E6F1FB;color:#185FA5;}
-.b-gray{background:#F1EFE8;color:#5F5E5A;}.b-fire{background:#FFF0E6;color:#C0360A;}
-.sig{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500;}
+.b-green{background:#EAF3DE;color:#3B6D11;}
+.b-amber{background:#FFF3CD;color:#856404;}
+.b-red{background:#FCEBEB;color:#A32D2D;}
+.b-blue{background:#E6F1FB;color:#185FA5;}
+.b-gray{background:#F1EFE8;color:#5F5E5A;}
+.b-fire{background:#FFF0EB;color:#C0392B;}
+.sig{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
 .ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
 .ir:last-child{border-bottom:none;}
-.il{color:var(--color-text-secondary);}.iv{font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:6px;}
-.src{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-tertiary);margin-left:6px;}
-.hl{background:#EAF3DE;border-left:3px solid #1D9E75;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
-.warn{background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
-.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
-.ev-1{background:#E6F1FB;color:#0C447C;}.ev-2{background:#EAF3DE;color:#27500A;}
-.ev-3{background:#F1EFE8;color:#444441;}.ev-4{background:#FAEEDA;color:#633806;}
-.ev-5{background:#FCEBEB;color:#791F1F;}
-.ev{font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;}
-.ind-row{display:flex;align-items:center;padding:8px 0;border-bottom:.5px solid var(--color-border-tertiary);gap:10px;}
+.il{color:var(--color-text-secondary);}
+.iv{font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:5px;}
+.ev{font-size:10px;padding:1px 6px;border-radius:20px;font-weight:500;}
+.ev-up{background:#EAF3DE;color:#3B6D11;}
+.ev-neu{background:#F1EFE8;color:#444441;}
+.ev-dn{background:#FCEBEB;color:#791F1F;}
+.hl{background:#FFF0EB;border-left:3px solid #D04B20;border-radius:8px;padding:11px 13px;margin-top:10px;}
+.warn{background:#FFF3CD;border-left:3px solid #EF9F27;border-radius:8px;padding:11px 13px;margin-top:10px;}
+.ind-row{display:flex;align-items:center;padding:7px 0;border-bottom:.5px solid var(--color-border-tertiary);gap:8px;}
 .ind-row:last-child{border-bottom:none;}
-.ind-nm{font-size:13px;font-weight:500;color:var(--color-text-primary);min-width:90px;}
-.ind-val{font-size:14px;font-weight:500;color:var(--color-text-primary);min-width:80px;text-align:right;}
-.bar-bg{background:var(--color-border-tertiary);border-radius:4px;height:7px;}
+.bar-bg{background:var(--color-border-tertiary);border-radius:4px;height:7px;flex:1;}
 .bar-f{border-radius:4px;height:7px;}
-.tl{position:relative;padding-left:28px;}
-.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--color-border-tertiary);border-radius:2px;}
-.tl-item{position:relative;margin-bottom:18px;}
-.tl-item:last-child{margin-bottom:0;}
-.tl-dot{position:absolute;left:-24px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid white;}
-.dot-big{background:#C0360A;}.dot-pos{background:#1D9E75;}
-.dot-neg{background:#D85A30;}.dot-neu{background:#888780;}
-.tl-date{font-size:11px;font-weight:500;color:var(--color-text-tertiary);margin-bottom:3px;}
-.tl-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px;line-height:1.4;}
-.tl-body{font-size:12px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:5px;}
-.tl-link{font-size:11px;color:#185FA5;text-decoration:none;display:inline-flex;align-items:center;gap:3px;margin-right:8px;}
-.tl-link:hover{text-decoration:underline;}
-.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;margin-right:4px;}
-.tag-big{background:#FFF0E6;color:#C0360A;}.tag-pos{background:#EAF3DE;color:#3B6D11;}
-.tag-neg{background:#FCEBEB;color:#791F1F;}.tag-neu{background:#F1EFE8;color:#444441;}
+.stage-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin:12px 0;}
+.stage{text-align:center;padding:10px 5px;border-radius:8px;}
+/* 탭 */
+.tab-bar{display:flex;gap:7px;margin-bottom:14px;}
+.tab-btn{flex:1;padding:9px 0;border-radius:9px;border:1.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-secondary);font-size:13px;font-weight:500;cursor:pointer;transition:all .16s;}
+.tab-btn.active{background:#D04B20;border-color:#D04B20;color:#fff;font-weight:600;}
+.tab-content{display:none;}.tab-content.show{display:block;}
+.region-bar{margin:6px 0;}
+.rb-row{display:flex;align-items:center;margin-bottom:5px;gap:7px;}
+.rb-label{font-size:11px;color:var(--color-text-secondary);min-width:44px;}
+.rb-bg{flex:1;background:var(--color-border-tertiary);border-radius:4px;height:8px;}
+.rb-fill{height:8px;border-radius:4px;}
+.rb-val{font-size:11px;font-weight:500;color:var(--color-text-primary);min-width:90px;text-align:right;}
 </style>
 
-<div style="padding:1rem 0;" class="box">
+<div class="wrap">
 
 <!-- 헤더 -->
-<div style="margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+<div style="margin-bottom:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
   <h2>삼양식품 (003230)</h2>
-  <span class="badge b-fire">코스피 · 음식료</span>
-  <span class="badge b-gray">불닭볶음면 · K라면 · 글로벌 수출</span>
-  <span class="src">📰 공시 + 실적 + 1Q26 뉴스</span>
+  <span class="badge b-fire">🔥 불닭볶음면 글로벌 열풍</span>
+  <span class="badge b-gray">LC 44.04% · HC -4.78%</span>
 </div>
-<p class="sub">현재가 1,321,000원 (+7.97%) · 52주 최고 1,665,000원 (2025/09/11) · 52주 최저 922,000원 · 시총 약 9.8조 · 1Q26 매출 7,144억 (분기 역대최대)</p>
+<p class="sub">현재가 1,413,000원 (-2.89%) · 신고가 1,484,000원 (05/15) · 최저 981,000원 (03/09) · 시총 약 10.7조</p>
 
 <div class="g4">
-  <div class="met"><div class="ml">현재가 (05/13)</div><div class="mv">1,321,000원</div><div class="ms up">+7.97% · 시총 ~9.8조</div></div>
-  <div class="met"><div class="ml">52주 범위</div><div class="mv">922,000~1,665,000</div><div class="ms">최저→최고 +80.6%</div></div>
-  <div class="met"><div class="ml">1Q26 매출액</div><div class="mv">7,144억원</div><div class="ms up">▲35.0% · 분기 역대 최대</div></div>
-  <div class="met"><div class="ml">배당수익률</div><div class="mv">약 0.36%</div><div class="ms up">연간 배당 4,800원 (▲46%↑)</div></div>
+  <div class="met"><div class="ml">현재가 (05/15)</div><div class="mv">1,413,000원</div><div class="ms dn">-2.89% 조정 중</div></div>
+  <div class="met"><div class="ml">52주 범위</div><div class="mv">981K~1,484K</div><div class="ms">최저 03/09 · 신고가 05/15</div></div>
+  <div class="met"><div class="ml">1Q26 연결 영업이익</div><div class="mv">1,771억</div><div class="ms up">▲32.2% · OPM 24.8%</div></div>
+  <div class="met"><div class="ml">별도 EPS (1Q26)</div><div class="mv">16,539원</div><div class="ms up">연환산 ~7.7만원</div></div>
 </div>
 
 <!-- 1. 기술적 분석 -->
 <div class="card">
-  <div class="sec">1. 기술적 분석 — 주가 흐름 (2025.01~2026.05)</div>
-  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;">
-    52주 최저 922,000원 → 최고 1,665,000원 (2025/09/11) · 현재 1,321,000원 · 고점比 -20.7%
-  </div>
-  <svg id="samyangSvg" viewBox="0 0 720 240" width="100%" style="display:block;margin-bottom:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:4px;"></svg>
+  <div class="sec-title">1. 기술적 분석 — 실제 HTS 차트 (2025.12~05/15)</div>
+  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;">최저 981,000원 (03/09) → 신고가 1,484,000원 (05/15) · LC 44.04% · HC -4.78%</div>
+  <svg id="sySvg" viewBox="0 0 720 230" width="100%" style="display:block;margin-bottom:12px;background:var(--color-background-secondary);border-radius:9px;padding:4px;"></svg>
 
-  <div style="font-size:13px;font-weight:500;margin-bottom:8px;">📊 구간별 흐름 분석</div>
   <div class="g4" style="font-size:11px;margin-bottom:12px;">
-    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#3B6D11;font-weight:500;margin-bottom:3px;">2025년 상반기 — 급등</div>
-      <div style="color:#1D9E75;line-height:1.6;">1Q25 매출 +33%<br>불닭 글로벌 수요 폭발<br>100만원 돌파 (최초)<br>밀양2공장 가동 본격화</div>
+    <div style="background:#FAEEDA;border-radius:9px;padding:9px 11px;">
+      <div style="color:#854F0B;font-weight:600;margin-bottom:3px;">12~1월 — 박스 하락</div>
+      <div style="color:#633806;line-height:1.65;">190,755(2.3%)<br>416,318(5.0%)<br>243,795(2.9%)<br>배당락(0.00%)</div>
     </div>
-    <div style="background:#FCEBEB;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#A32D2D;font-weight:500;margin-bottom:3px;">2025년 9월 — 사상최고</div>
-      <div style="color:#D85A30;line-height:1.6;">최고가 1,665,000 (09/11)<br>연간 영업이익 5,000억 돌파<br>해외 매출 비중 80% 상회<br>9억불 수출의탑 수상</div>
+    <div style="background:#FCEBEB;border-radius:9px;padding:9px 11px;">
+      <div style="color:#A32D2D;font-weight:600;margin-bottom:3px;">2~3월 — 최저점</div>
+      <div style="color:#D85A30;line-height:1.65;">615K~671K(7~8%)<br>최저 981,000 (03/09)<br>753,066(9.0%)<br>827,724(9.9%)</div>
     </div>
-    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#854F0B;font-weight:500;margin-bottom:3px;">2025년 10월~12월 — 조정</div>
-      <div style="color:#633806;line-height:1.6;">미국 관세 우려 반영<br>고점比 -22% 조정<br>922,000원 저점 형성<br>증권가 저점매수 추천</div>
+    <div style="background:#EAF3DE;border-radius:9px;padding:9px 11px;">
+      <div style="color:#3B6D11;font-weight:600;margin-bottom:3px;">4~5월 — V자 급등</div>
+      <div style="color:#1D9E75;line-height:1.65;">1,379,500(18.5%)<br>972,396(16.4%)<br>1,884,336(22.6%)<br>매물대 1,233K~1,189K</div>
     </div>
-    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#3B6D11;font-weight:500;margin-bottom:3px;">2026년 — 재상승</div>
-      <div style="color:#1D9E75;line-height:1.6;">1Q26 분기 역대최대<br>컨센서스 대폭 상회<br>유럽 +215% 폭풍성장<br>현재 1,321,000원 반등</div>
+    <div style="background:#EAF3DE;border-radius:9px;padding:9px 11px;">
+      <div style="color:#3B6D11;font-weight:600;margin-bottom:3px;">5월 — 신고가</div>
+      <div style="color:#1D9E75;line-height:1.65;">신고가 1,484K (05/15)<br>거래량 275K 역대급<br>HC -4.78% 소폭 조정<br>현재 1,413,000원</div>
     </div>
   </div>
 
-  <div class="g2" style="margin-bottom:12px;">
+  <div class="g2" style="margin-bottom:10px;">
     <div>
       <div style="font-size:13px;font-weight:500;margin-bottom:7px;">이동평균선 현황</div>
-      <div class="ir"><span class="il">5일선</span><span class="badge b-green">단기 상승 돌파</span></div>
-      <div class="ir"><span class="il">20일선</span><span class="badge b-amber">저항 테스트 중</span></div>
-      <div class="ir"><span class="il">60일선</span><span class="badge b-amber">하향 중 저항</span></div>
-      <div class="ir"><span class="il">120일선</span><span class="badge b-amber">완만 하향 진행</span></div>
-      <div class="ir"><span class="il">배열</span><span class="badge b-amber">역배열 · 회복 시도</span></div>
+      <div class="ir"><span class="il">5일선</span><span class="badge b-amber">단기 저항</span></div>
+      <div class="ir"><span class="il">20일선</span><span class="badge b-green">정배열 지지</span></div>
+      <div class="ir"><span class="il">60일선</span><span class="badge b-green">빠르게 우상향</span></div>
+      <div class="ir"><span class="il">120일선</span><span class="badge b-blue">우상향 전환</span></div>
+      <div class="ir"><span class="il">배열</span><span class="badge b-green">정배열 완성</span></div>
     </div>
     <div>
       <div style="font-size:13px;font-weight:500;margin-bottom:7px;">핵심 가격대</div>
-      <div class="ir"><span class="il">사상 최고점</span><span style="font-weight:500;color:#D85A30;">1,665,000원 (25/09/11)</span></div>
-      <div class="ir"><span class="il">핵심 저항대</span><span style="font-weight:500;color:#D85A30;">1,400,000~1,500,000</span></div>
-      <div class="ir"><span class="il">현재가</span><span style="font-weight:500;color:#854F0B;">1,321,000원 (고점比 -20.7%)</span></div>
-      <div class="ir"><span class="il">52주 저점</span><span style="font-weight:500;">922,000원</span></div>
-      <div class="ir"><span class="il">컨센서스 목표주가</span><span style="font-weight:500;color:#1D9E75;">평균 1,833,650원</span></div>
+      <div class="ir"><span class="il">신고가 저항</span><span style="font-weight:500;color:#D85A30;">1,484,000원 (05/15)</span></div>
+      <div class="ir"><span class="il">핵심 매물대</span><span style="font-weight:500;color:#D85A30;">1,233,500~1,189,200</span></div>
+      <div class="ir"><span class="il">LC / HC</span><span style="font-weight:500;">44.04% / -4.78%</span></div>
+      <div class="ir"><span class="il">저점→신고가</span><span style="font-weight:500;color:#1D9E75;">+51.3% (67일)</span></div>
+      <div class="ir"><span class="il">거래량 (05/15)</span><span style="font-weight:500;color:#1D9E75;">275K 역대급</span></div>
     </div>
   </div>
-
   <div class="sig">
-    <span class="badge b-green">1Q26 매출·영업이익 분기 역대최대</span>
-    <span class="badge b-green">유럽 매출 +215% 초고성장</span>
-    <span class="badge b-green">5분기 연속 영업이익률 20%대</span>
-    <span class="badge b-amber">고점比 -20.7% · 역배열 진행 중</span>
-    <span class="badge b-red">52주 최저 대비 회복 중이나 불확실성 존재</span>
-    <span class="badge b-fire">Forward PER ~17.6x — 과거比 저평가 구간</span>
+    <span class="badge b-green">신고가 1,484K — 완전 정배열</span>
+    <span class="badge b-green">1Q26 지배순이익 +45.9% 어닝서프</span>
+    <span class="badge b-green">거래량 275K 역대급 — 기관·외인 진입</span>
+    <span class="badge b-amber">신고가 후 -4.78% 소폭 조정</span>
+    <span class="badge b-amber">매물대 1,233K~1,189K 지지 확인 필요</span>
+    <span class="badge b-fire">불닭 유럽·미국 동시 급성장</span>
   </div>
 </div>
 
-<!-- 2. 기본적 분석 -->
+<!-- 2. 기본적 분석 탭 -->
 <div class="card">
-  <div class="sec">2. 기본적 분석 — 실적 추이 + 1Q26 성과 <span class="src">📰 공시·뉴스 기준</span></div>
-
-  <div style="position:relative;width:100%;height:155px;margin-bottom:12px;">
-    <canvas id="samyangRevChart"></canvas>
+  <div class="sec-title">2. 기본적 분석 — XBRL 원문 직접 파싱</div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('annual',this)">📄 사업보고서<br><span style="font-size:10px;font-weight:400;">2025년 연간 확정</span></button>
+    <button class="tab-btn" onclick="switchTab('quarter',this)">📊 분기보고서<br><span style="font-size:10px;font-weight:400;">2026년 1분기 최신</span></button>
   </div>
 
-  <div class="g2" style="margin-bottom:12px;">
-    <div>
-      <div class="ir"><span class="il">1Q26 매출액</span><span class="iv up">7,144억 (▲35.0%, 분기 역대최대) <span class="ev ev-4">높음</span></span></div>
-      <div class="ir"><span class="il">1Q26 영업이익</span><span class="iv up">1,771억 (▲32.0%, 컨센서스 +8.1%) <span class="ev ev-4">높음</span></span></div>
-      <div class="ir"><span class="il">1Q26 영업이익률</span><span class="iv up">24.8% (5분기 연속 20%대) <span class="ev ev-4">높음</span></span></div>
-      <div class="ir"><span class="il">1Q26 순이익</span><span class="iv up">1,445억 (▲46.0%) <span class="ev ev-4">높음</span></span></div>
-      <div class="ir"><span class="il">1Q26 해외 매출</span><span class="iv up">5,850억 (▲38.0%, 전체의 82%) <span class="ev ev-4">높음</span></span></div>
+  <!-- 사업보고서 탭 -->
+  <div id="tab-annual" class="tab-content show">
+    <div style="position:relative;width:100%;height:165px;margin-bottom:12px;"><canvas id="plChart"></canvas></div>
+    <div class="g2" style="margin-bottom:10px;">
+      <div>
+        <div class="ir"><span class="il">연결 매출액</span><span class="iv up">2조 3,518억 <span class="ev ev-up">▲36.1%</span></span></div>
+        <div class="ir"><span class="il">연결 영업이익</span><span class="iv up">5,242억 <span class="ev ev-up">▲52.2%</span></span></div>
+        <div class="ir"><span class="il">연결 영업이익률</span><span class="iv up">22.3% <span class="ev ev-up">역대최고</span></span></div>
+        <div class="ir"><span class="il">연결 지배순이익</span><span class="iv up">3,894억 <span class="ev ev-up">▲43.2%</span></span></div>
+        <div class="ir"><span class="il">별도 EPS</span><span class="iv up">47,585원 <span class="ev ev-up">3년 만에 3배</span></span></div>
+      </div>
+      <div>
+        <div class="ir"><span class="il">자산총계 (연결)</span><span class="iv">2조 1,965억</span></div>
+        <div class="ir"><span class="il">부채비율</span><span class="iv up">72.8% <span class="ev ev-up">우량</span></span></div>
+        <div class="ir"><span class="il">현금및현금성</span><span class="iv">3,328억</span></div>
+        <div class="ir"><span class="il">영업CF (별도)</span><span class="iv up">3,043억 <span class="ev ev-up">▲16.6%</span></span></div>
+        <div class="ir"><span class="il">해외 매출 비중</span><span class="iv up">61.5% <span class="ev ev-up">미국·중국 각 26%</span></span></div>
+      </div>
     </div>
-    <div>
-      <div class="ir"><span class="il">유럽 매출 (1Q26)</span><span class="iv up">770억 (▲215%) <span class="ev ev-5">매우높음</span></span></div>
-      <div class="ir"><span class="il">미국 법인 (1Q26)</span><span class="iv up">1,850억 (▲37%) <span class="ev ev-4">높음</span></span></div>
-      <div class="ir"><span class="il">중국 법인 (1Q26)</span><span class="iv up">1,710억 (▲36%) <span class="ev ev-4">높음</span></span></div>
-      <div class="ir"><span class="il">2025년 연간 매출</span><span class="iv up">2조 3,518억 (▲36.1%) <span class="ev ev-4">높음</span></span></div>
-      <div class="ir"><span class="il">2025년 연간 영업이익</span><span class="iv up">5,239억 (▲52.1%, OPM 22%) <span class="ev ev-4">높음</span></span></div>
+    <div class="sec-title" style="margin-top:4px;">지역별 매출 2025 (연결, 억원)</div>
+    <div class="region-bar">
+      <div class="rb-row"><div class="rb-label">국내</div><div class="rb-bg"><div class="rb-fill" style="width:38.5%;background:#D04B20;"></div></div><div class="rb-val">9,041억 (38.5%)</div></div>
+      <div class="rb-row"><div class="rb-label">미국</div><div class="rb-bg"><div class="rb-fill" style="width:25.9%;background:#185FA5;"></div></div><div class="rb-val">6,097억 (25.9%)</div></div>
+      <div class="rb-row"><div class="rb-label">중국</div><div class="rb-bg"><div class="rb-fill" style="width:25.4%;background:#1D9E75;"></div></div><div class="rb-val">5,973억 (25.4%)</div></div>
+      <div class="rb-row"><div class="rb-label">유럽</div><div class="rb-bg"><div class="rb-fill" style="width:7.8%;background:#EF9F27;"></div></div><div class="rb-val">1,831억 (7.8%)</div></div>
     </div>
+    <div class="hl"><div style="font-size:12px;font-weight:600;color:#D04B20;margin-bottom:3px;">2025 핵심</div><div style="font-size:12px;color:#9B3918;line-height:1.65;">매출 2.35조(+36%) · 영업익 5,242억(+52%) · 별도EPS 47,585원(3년3배) · 해외 61.5% · 부채비율 72.8% 우량</div></div>
   </div>
 
-  <!-- 성장 동력 -->
-  <div style="font-size:13px;font-weight:500;margin-bottom:8px;">핵심 성장 동력 <span class="src">📰</span></div>
-  <div class="g3" style="font-size:12px;margin-bottom:12px;">
-    <div style="background:#FFF0E6;border-radius:var(--border-radius-md);padding:10px 12px;">
-      <div style="color:#C0360A;font-weight:500;margin-bottom:3px;">🔥 불닭 브랜드 (핵심)</div>
-      <div style="color:#A32D2D;line-height:1.6;">글로벌 K라면 대표 브랜드<br>SNS 챌린지 바이럴 확산<br>프리미엄 포지셔닝<br>소스·스낵 등 파생제품 확장</div>
+  <!-- 분기보고서 탭 -->
+  <div id="tab-quarter" class="tab-content">
+    <div style="position:relative;width:100%;height:165px;margin-bottom:12px;"><canvas id="qplChart"></canvas></div>
+    <div class="g2" style="margin-bottom:10px;">
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:5px;">연결 기준 1Q26 vs 1Q25</div>
+        <div class="ir"><span class="il">매출액</span><span class="iv up">7,144억 <span class="ev ev-up">▲35.0%</span></span></div>
+        <div class="ir"><span class="il">영업이익</span><span class="iv up">1,771억 <span class="ev ev-up">▲32.2%</span></span></div>
+        <div class="ir"><span class="il">영업이익률</span><span class="iv up">24.8% <span class="ev ev-up">↑</span></span></div>
+        <div class="ir"><span class="il">지배순이익</span><span class="iv up">1,446억 <span class="ev ev-up">▲45.9%</span></span></div>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:5px;">별도 기준 1Q26 vs 1Q25</div>
+        <div class="ir"><span class="il">매출액</span><span class="iv up">5,524억 <span class="ev ev-up">▲29.0%</span></span></div>
+        <div class="ir"><span class="il">영업이익</span><span class="iv up">1,471억 <span class="ev ev-up">▲22.4%</span></span></div>
+        <div class="ir"><span class="il">EPS (보통주)</span><span class="iv up">16,539원 <span class="ev ev-up">▲37.3%</span></span></div>
+        <div class="ir"><span class="il">현금및현금성</span><span class="iv up">5,319억 <span class="ev ev-up">▲59.8%</span></span></div>
+      </div>
     </div>
-    <div style="background:#E3F2FD;border-radius:var(--border-radius-md);padding:10px 12px;">
-      <div style="color:#0D47A1;font-weight:500;margin-bottom:3px;">🌍 글로벌 확장 (성장엔진)</div>
-      <div style="color:#1565C0;line-height:1.6;">미국 코스트코·월마트 입점<br>영국 법인 설립·유럽 확장<br>중국 현지공장 2027 완공<br>4개 권역 균형성장 전략</div>
+    <div class="sec-title" style="margin-top:4px;">지역별 매출 1Q26 (연결, 억원) — 유럽 급부상</div>
+    <div class="region-bar">
+      <div class="rb-row"><div class="rb-label">국내</div><div class="rb-bg"><div class="rb-fill" style="width:36.8%;background:#D04B20;"></div></div><div class="rb-val">2,629억 (36.8%)</div></div>
+      <div class="rb-row"><div class="rb-label">미국</div><div class="rb-bg"><div class="rb-fill" style="width:25.9%;background:#185FA5;"></div></div><div class="rb-val">1,853억 (25.9%)</div></div>
+      <div class="rb-row"><div class="rb-label">중국</div><div class="rb-bg"><div class="rb-fill" style="width:24.0%;background:#1D9E75;"></div></div><div class="rb-val">1,713억 (24.0%)</div></div>
+      <div class="rb-row"><div class="rb-label">유럽</div><div class="rb-bg"><div class="rb-fill" style="width:10.8%;background:#EF9F27;"></div></div><div class="rb-val">773억 (10.8%) ▲급증</div></div>
     </div>
-    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:10px 12px;">
-      <div style="color:#3B6D11;font-weight:500;margin-bottom:3px;">🏭 생산 인프라 (공급 확대)</div>
-      <div style="color:#1D9E75;line-height:1.6;">밀양 1·2공장 24시간 가동<br>2026년 CAPA 27억개(식)<br>원주 액상스프공장 신설<br>중국공장으로 수급 다변화</div>
-    </div>
-  </div>
-
-  <div class="hl">
-    <div style="font-size:13px;font-weight:500;color:#3B6D11;margin-bottom:4px;">💡 핵심 투자 논리 — 공급이 수요를 따라가지 못하는 구조적 성장</div>
-    <div style="font-size:12px;color:#1D9E75;line-height:1.7;">불닭 브랜드는 SNS를 통해 마케팅 비용 없이 글로벌 인지도를 축적한 희귀 사례. 밀양2공장 24시간 가동에도 공급 부족이 지속될 만큼 수요가 공급을 압도. 유럽 매출 +215%로 신규 성장 지역이 본격화. <strong>2026년 매출 3조원 가시권 진입 + 영업이익률 20%대 구조적 유지 = 음식료 업종 최선호주 지위 견고.</strong></div>
+    <div class="hl"><div style="font-size:12px;font-weight:600;color:#D04B20;margin-bottom:3px;">1Q26 핵심</div><div style="font-size:12px;color:#9B3918;line-height:1.65;">매출 7,144억(+35%) · 영업익 1,771억(+32%) · 지배순이익 1,446억(+46%) · 현금 5,319억(+60%) · 유럽 급부상 · 연환산 EPS ~7.7만원</div></div>
   </div>
 </div>
 
 <!-- 3. 기본 투자지표 -->
 <div class="card">
-  <div class="sec">3. 기본 투자지표 (Per-Share) <span class="src">📰 2025년 기준, 발행주식수 약 743만주</span></div>
+  <div class="sec-title">3. 기본 투자지표 (Per-Share) · XBRL 직접 추출</div>
   <div class="g4">
-    <div class="met"><div class="ml">EPS · 주당순이익</div><div class="mv">약 52,300원</div><div class="ms">2025년 연간 (추정)</div><div style="margin-top:5px;"><span class="ev ev-4">높음</span></div></div>
-    <div class="met"><div class="ml">BPS · 주당순자산</div><div class="mv">약 245,000원</div><div class="ms">자본총계 추정 기준</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
-    <div class="met"><div class="ml">SPS · 주당매출액</div><div class="mv">약 316,600원</div><div class="ms">매출 2.35조 ÷ 주식수</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
-    <div class="met"><div class="ml">DPS · 주당배당금</div><div class="mv">4,800원</div><div class="ms">2025년 결산 (▲46% 증가)</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
+    <div class="met"><div class="ml">EPS (별도 2025)</div><div class="mv">47,585원</div><div class="ms up">2023: 15,651원 3배↑</div></div>
+    <div class="met"><div class="ml">EPS (연결 2025)</div><div class="mv">52,156원</div><div class="ms up">▲43.1% YoY</div></div>
+    <div class="met"><div class="ml">1Q26 EPS (별도)</div><div class="mv">16,539원</div><div class="ms up">연환산 ~7.7만원</div></div>
+    <div class="met"><div class="ml">현재가</div><div class="mv">1,413,000원</div><div class="ms">PER 27.1x (2025E)</div></div>
   </div>
 </div>
 
 <!-- 4. 상대 투자지표 -->
 <div class="card">
-  <div class="sec">4. 상대 투자지표 (Valuation Multiples) · 현재가 1,321,000원 · 음식료 글로벌 비교</div>
-
-  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;font-size:11px;">
-    <span style="padding:2px 8px;border-radius:999px;background:#E6F1FB;color:#0C447C;font-weight:500;">1단계 매우낮음</span>
-    <span style="padding:2px 8px;border-radius:999px;background:#EAF3DE;color:#27500A;font-weight:500;">2단계 낮음</span>
-    <span style="padding:2px 8px;border-radius:999px;background:#F1EFE8;color:#444441;font-weight:500;">3단계 적정</span>
-    <span style="padding:2px 8px;border-radius:999px;background:#FAEEDA;color:#633806;font-weight:500;">4단계 높음</span>
-    <span style="padding:2px 8px;border-radius:999px;background:#FCEBEB;color:#791F1F;font-weight:500;">5단계 매우높음</span>
+  <div class="sec-title">4. 상대 투자지표 (Valuation) · 현재가 1,413,000원</div>
+  <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;font-size:11px;">
+    <span style="padding:2px 7px;border-radius:20px;background:#E6F1FB;color:#0C447C;font-weight:500;">1단계 매우낮음</span>
+    <span style="padding:2px 7px;border-radius:20px;background:#EAF3DE;color:#27500A;font-weight:500;">2단계 낮음</span>
+    <span style="padding:2px 7px;border-radius:20px;background:#F1EFE8;color:#444441;font-weight:500;">3단계 적정</span>
+    <span style="padding:2px 7px;border-radius:20px;background:#FAEEDA;color:#633806;font-weight:500;">4단계 높음</span>
+    <span style="padding:2px 7px;border-radius:20px;background:#FCEBEB;color:#791F1F;font-weight:500;">5단계 매우높음</span>
   </div>
 
   <div class="ind-row">
-    <div class="ind-nm">PER</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">주가÷EPS · 1,321,000÷52,300 · 글로벌 프리미엄 식품 평균~25x<br><span style="color:#1D9E75;">Forward PER(2026E) = 약 17.6x · 과거 부여받던 25x대비 저평가 구간</span></div>
-    <div class="ind-val">~25.3x</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(10x)</span><span>적정(25x)</span><span>고(50x)</span></div><div class="bar-bg"><div class="bar-f" style="width:38%;background:#FAEEDA;"></div></div></div>
-    <span class="ev ev-3" style="min-width:58px;text-align:center;">3단계</span>
+    <div style="font-size:13px;font-weight:500;min-width:90px;">PER (2025)</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">1,413,000÷52,156(연결EPS) · 글로벌 식품주 평균~22x</div>
+    <div style="font-size:14px;font-weight:500;min-width:75px;text-align:right;">27.1x</div>
+    <div style="min-width:110px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(12x)</span><span>적정(22x)</span><span>고(45x)</span></div><div class="bar-bg"><div class="bar-f" style="width:46%;background:#FAEEDA;"></div></div></div>
+    <span class="ev ev-neu" style="min-width:55px;text-align:center;">3~4단계</span>
   </div>
 
   <div class="ind-row">
-    <div class="ind-nm">PBR</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">주가÷BPS · 1,321,000÷245,000 · 글로벌 소비재 평균~3x</div>
-    <div class="ind-val">~5.4x</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(1x)</span><span>적정(3x)</span><span>고(10x)</span></div><div class="bar-bg"><div class="bar-f" style="width:49%;background:#FAEEDA;"></div></div></div>
-    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
+    <div style="font-size:13px;font-weight:500;min-width:90px;">Forward PER</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">1Q26 연환산 EPS ~7.7만원 기준 · 고성장 프리미엄</div>
+    <div style="font-size:14px;font-weight:500;min-width:75px;text-align:right;">18.4x</div>
+    <div style="min-width:110px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(12x)</span><span>적정(22x)</span><span>고(45x)</span></div><div class="bar-bg"><div class="bar-f" style="width:32%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-up" style="min-width:55px;text-align:center;">2단계</span>
   </div>
 
   <div class="ind-row">
-    <div class="ind-nm">PSR</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">주가÷SPS · 1,321,000÷316,600 · 글로벌 프리미엄 식품 평균~2x</div>
-    <div class="ind-val">~4.2x</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(0.5x)</span><span>적정(2x)</span><span>고(6x)</span></div><div class="bar-bg"><div class="bar-f" style="width:68%;background:#FAEEDA;"></div></div></div>
-    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
+    <div style="font-size:13px;font-weight:500;min-width:90px;">PSR</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">시총 10.7조÷연결매출 2.35조 · 글로벌 식품 평균~2x</div>
+    <div style="font-size:14px;font-weight:500;min-width:75px;text-align:right;">4.55x</div>
+    <div style="min-width:110px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(1x)</span><span>적정(2x)</span><span>고(8x)</span></div><div class="bar-bg"><div class="bar-f" style="width:51%;background:#FAEEDA;"></div></div></div>
+    <span class="ev ev-neu" style="min-width:55px;text-align:center;">4단계</span>
   </div>
 
   <div class="ind-row">
-    <div class="ind-nm">OPM</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">영업이익률 · 1Q26 24.8% · 글로벌 식품기업 평균~10%<br><span style="color:#1D9E75;">5분기 연속 20%대 유지 — 농심(6%), 오뚜기(7%) 대비 압도적 수익성</span></div>
-    <div class="ind-val">24.8%</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(5%)</span><span>적정(12%)</span><span>고(30%)</span></div><div class="bar-bg"><div class="bar-f" style="width:79%;background:#EAF3DE;"></div></div></div>
-    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
+    <div style="font-size:13px;font-weight:500;min-width:90px;">PCR</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">시총 10.7조÷영업CF 3,043억 · 글로벌 식품 평균~18x</div>
+    <div style="font-size:14px;font-weight:500;min-width:75px;text-align:right;">35.2x</div>
+    <div style="min-width:110px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(8x)</span><span>적정(18x)</span><span>고(40x)</span></div><div class="bar-bg"><div class="bar-f" style="width:85%;background:#FAEEDA;"></div></div></div>
+    <span class="ev ev-neu" style="min-width:55px;text-align:center;">4단계</span>
   </div>
 
   <div class="ind-row">
-    <div class="ind-nm">매출성장률</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">YoY 매출성장률 · 1Q26 +35% · 글로벌 식품 평균~5%<br><span style="color:#1D9E75;">2022~2026 연평균 +30%대 초고성장 지속</span></div>
-    <div class="ind-val">+35.0%</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(0%)</span><span>적정(10%)</span><span>고(40%)</span></div><div class="bar-bg"><div class="bar-f" style="width:88%;background:#EAF3DE;"></div></div></div>
-    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
+    <div style="font-size:13px;font-weight:500;min-width:90px;">PBR</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">시총 10.7조÷지배자본 1.26조(2025E) · 글로벌 식품 평균~3x</div>
+    <div style="font-size:14px;font-weight:500;min-width:75px;text-align:right;">8.49x</div>
+    <div style="min-width:110px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(1x)</span><span>적정(3x)</span><span>고(15x)</span></div><div class="bar-bg"><div class="bar-f" style="width:57%;background:#FCEBEB;"></div></div></div>
+    <span class="ev ev-dn" style="min-width:55px;text-align:center;">5단계</span>
   </div>
 
-  <!-- 피어비교 -->
-  <div style="margin-top:12px;font-size:13px;font-weight:500;margin-bottom:8px;">국내 음식료 OPM 비교</div>
-  <div style="position:relative;width:100%;height:150px;margin-bottom:10px;">
-    <canvas id="peerChart"></canvas>
+  <!-- 5단계 매트릭스 -->
+  <div class="stage-grid">
+    <div class="stage" style="background:#E6F1FB;"><div style="font-size:15px;font-weight:600;color:#0C447C;">1단계</div><div style="font-size:10px;color:#185FA5;margin-top:2px;">매우낮음</div></div>
+    <div class="stage" style="background:#EAF3DE;border:1.5px solid #3B6D11;"><div style="font-size:15px;font-weight:600;color:#27500A;">2단계</div><div style="font-size:9px;color:#3B6D11;margin-top:2px;">낮음</div><div style="font-size:9px;background:#C8E6C9;border-radius:3px;padding:1px 3px;margin-top:2px;color:#3B6D11;">←ForwardPER</div></div>
+    <div class="stage" style="background:#F1EFE8;"><div style="font-size:15px;font-weight:600;color:#444441;">3단계</div><div style="font-size:10px;color:#5F5E5A;margin-top:2px;">적정</div></div>
+    <div class="stage" style="background:#FAEEDA;border:2px solid #EF9F27;"><div style="font-size:15px;font-weight:600;color:#633806;">4단계</div><div style="font-size:9px;color:#854F0B;margin-top:2px;">높음</div><div style="font-size:9px;background:#FAC775;border-radius:3px;padding:1px 3px;margin-top:2px;color:#412402;">←PER·PSR·PCR</div></div>
+    <div class="stage" style="background:#FCEBEB;border:1.5px solid #D85A30;"><div style="font-size:15px;font-weight:600;color:#791F1F;">5단계</div><div style="font-size:9px;color:#A32D2D;margin-top:2px;">매우높음</div><div style="font-size:9px;background:#FCBCBC;border-radius:3px;padding:1px 3px;margin-top:2px;color:#791F1F;">←PBR</div></div>
   </div>
 
   <div class="warn">
-    <div style="font-size:12px;color:#854F0B;line-height:1.7;">⚠ 밸류에이션 해석 주의: 삼양식품은 고성장·고마진 프리미엄 식품주로, 단순 PER·PBR 비교보다 성장률 대비 밸류에이션(PEG)이 더 중요. Forward PER 17.6x는 과거 25x+ 대비 저평가이나, 글로벌 식품기업 평균比 여전히 프리미엄 구간. 성장 지속 여부가 밸류에이션 정당성의 핵심.</div>
+    <div style="font-size:12px;font-weight:600;color:#633806;margin-bottom:3px;">종합 밸류에이션 — 3.5단계 (고성장 프리미엄 · Forward PER 18.4x는 저평가)</div>
+    <div style="font-size:12px;color:#854F0B;line-height:1.65;">PBR 8.5x → 5단계. PER 27x·PSR 4.6x·PCR 35x → 4단계. 단 Forward PER(연환산 EPS 7.7만원 기준) 18.4x → 2단계. <strong>연 40~50% 이익 성장세 지속 시 매년 EPS 급증 → PER 자동 하락 구조. 불닭 글로벌 브랜드 프리미엄 포함 시 정당화 가능.</strong></div>
   </div>
 </div>
 
-<!-- 5. 시계열 뉴스 -->
+<!-- 5. 투자 포인트 -->
 <div class="card">
-  <div class="sec">5. 시계열 주요 이벤트 <span class="src">📰 실제 출처 기반</span></div>
-
-  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;font-size:11px;">
-    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#C0360A;display:inline-block;"></span>초대형 이벤트</span>
-    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#1D9E75;display:inline-block;"></span>긍정</span>
-    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#D85A30;display:inline-block;"></span>부정</span>
-    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#888780;display:inline-block;"></span>중립</span>
-  </div>
-
-  <div class="tl">
-    <div style="font-size:12px;font-weight:500;color:var(--color-text-tertiary);margin-bottom:12px;margin-left:-28px;">── 2025~2026년 ───────────────</div>
-
-    <div class="tl-item">
-      <div class="tl-dot dot-pos"></div>
-      <div class="tl-date">2025년 상반기</div>
-      <div class="tl-title">불닭 글로벌 수요 폭발 · 밀양2공장 본격 가동 · 주가 100만원 최초 돌파</div>
-      <div class="tl-body">미국·유럽 SNS 챌린지 확산과 밀양2공장(봉지면 3라인·용기면 3라인, 연 8.3억개) 가동 본격화로 공급이 수요를 따라가지 못하는 '호황 구조' 형성. 주가 사상 처음으로 100만원을 돌파하며 음식료 대장주로 부상.</div>
-      <span class="tag tag-pos">공급 병목</span><span class="tag tag-pos">100만원 돌파</span>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-dot dot-big"></div>
-      <div class="tl-date">2025년 09월 11일</div>
-      <div class="tl-title">주가 1,665,000원 — 사상 최고가 달성 · 9억불 수출의탑 수상</div>
-      <div class="tl-body">식품 업계 최초로 '9억불 수출의 탑'을 수상하고 연간 영업이익 5,000억 돌파가 가시화되며 사상최고가 기록. 연간 해외 매출이 처음으로 1조원을 넘어서며 '글로벌 K푸드 대표기업' 지위 확립.</div>
-      <span class="tag tag-big">사상최고가</span><span class="tag tag-pos">9억불 수출의탑</span>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-dot dot-neg"></div>
-      <div class="tl-date">2025년 10~11월</div>
-      <div class="tl-title">미국 관세 우려 · 고점比 -22% 조정 · 일부 증권사 목표주가 하향</div>
-      <div class="tl-body">미국향 수출에 관세 15%가 반영되면서 3분기 영업이익이 시장 기대치를 하회. 관세 부담 및 중국 선적 물량 조정 우려로 주가 조정. 일부 증권사가 목표주가를 소폭 하향했으나 장기 성장 논리는 훼손되지 않았다고 평가.</div>
-      <span class="tag tag-neg">미국 관세 15%</span><span class="tag tag-neu">목표주가 일부 하향</span>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-dot dot-pos"></div>
-      <div class="tl-date">2026년 01월 29일</div>
-      <div class="tl-title">2025년 연간 실적 발표 — 매출 2.35조(▲36.1%), 영업이익 5,239억(▲52.1%) 사상최대</div>
-      <div class="tl-body">매출 2조3,518억원, 영업이익 5,239억원으로 사상 최대 실적 기록. 영업이익률 22.2%. 주주환원 강화 기조로 배당금을 전년比 46% 증가한 4,800원으로 결정. 중국 저장성 신공장 착공 발표(2027년 1월 완공 목표).</div>
-      <span class="tag tag-pos">연간 사상최대</span><span class="tag tag-pos">배당 46%↑</span><span class="tag tag-big">중국공장 착공</span>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-dot dot-neu"></div>
-      <div class="tl-date">2026년 03월</div>
-      <div class="tl-title">정부 라면 출고가 인하 압력 · 벨라루스 불닭 판매 금지 · 체질개선 구간</div>
-      <div class="tl-body">정부의 물가 안정 압박으로 라면 출고가 인하 논의. 벨라루스에서 식품 첨가물 규정 위반으로 불닭볶음면 판매 금지(수출 비중 미미). 삼양식품은 "2026년을 장기 성장을 위한 체질 개선 구간"으로 정의하며 글로벌 경영 체계 강화 방침 발표.</div>
-      <span class="tag tag-neu">출고가 인하 논의</span><span class="tag tag-neg">벨라루스 판매금지</span>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-dot dot-big"></div>
-      <div class="tl-date">2026년 05월 13일 (오늘)</div>
-      <div class="tl-title">1Q26 실적 발표 — 매출 7,144억·영업이익 1,771억 분기 최대 · 컨센서스 대폭 상회</div>
-      <div class="tl-body">매출 7,144억(▲35%), 영업이익 1,771억(▲32%), 영업이익률 24.8%. 컨센서스 대비 매출 +5.9%, 영업이익 +8.1% 초과 달성. 특히 유럽 매출 770억(▲215%)이 '서프라이즈' 역할. 미국 1,850억(▲37%), 중국 1,710억(▲36%). 주가는 당일 +7.97% 강세로 반응.</div>
-      <span class="tag tag-big">분기 역대최대</span><span class="tag tag-pos">유럽 +215%</span><span class="tag tag-pos">주가 +7.97%</span>
-    </div>
-  </div>
-</div>
-
-<!-- 6. 투자 포인트 -->
-<div class="card">
-  <div class="sec">6. 2026년 핵심 투자 포인트</div>
+  <div class="sec-title">5. 2026년 핵심 투자 포인트</div>
   <div class="g2">
     <div>
-      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#1D9E75;">긍정 요인 (Bull)</div>
-      <div class="ir"><span class="il">분기 역대최대 실적 연속 경신</span><span class="badge b-green">성장 지속성</span></div>
-      <div class="ir"><span class="il">유럽 매출 +215% — 신성장 시장 개화</span><span class="badge b-green">지역 다변화</span></div>
-      <div class="ir"><span class="il">영업이익률 24.8% (5분기 연속 20%대)</span><span class="badge b-green">구조적 고마진</span></div>
-      <div class="ir"><span class="il">Forward PER 17.6x — 과거比 저평가</span><span class="badge b-blue">밸류에이션 매력</span></div>
-      <div class="ir"><span class="il">2026년 매출 3조 가시권</span><span class="badge b-green">성장 가시성</span></div>
-      <div class="ir"><span class="il">공급이 수요를 따라가지 못하는 구조</span><span class="badge b-green">공급 병목 = 가격 결정력</span></div>
+      <div style="font-size:12px;font-weight:600;margin-bottom:6px;color:#1D9E75;">긍정 요인 (Bull)</div>
+      <div class="ir"><span class="il">신고가 1,484K · 완전 정배열</span><span class="badge b-green">기술적 최강</span></div>
+      <div class="ir"><span class="il">1Q26 지배순이익 +45.9%</span><span class="badge b-green">어닝서프 가속</span></div>
+      <div class="ir"><span class="il">유럽 급부상 · 미·중 동반 성장</span><span class="badge b-green">글로벌 다각화</span></div>
+      <div class="ir"><span class="il">Forward PER 18.4x 저평가</span><span class="badge b-green">성장 대비 저렴</span></div>
+      <div class="ir"><span class="il">현금 5,319억(+60%) 재무 여력</span><span class="badge b-blue">추가 투자 가능</span></div>
     </div>
     <div>
-      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#D85A30;">리스크 (Bear)</div>
-      <div class="ir"><span class="il">미국 관세 부담 지속 (~15%)</span><span class="badge b-red">수익성 압박</span></div>
-      <div class="ir"><span class="il">불닭 단일 브랜드 의존도 과대</span><span class="badge b-red">집중 리스크</span></div>
-      <div class="ir"><span class="il">정부 물가 압박 · 출고가 인하</span><span class="badge b-amber">국내 마진 축소</span></div>
-      <div class="ir"><span class="il">중국공장 완공(2027) 전 공급 제약</span><span class="badge b-amber">성장 속도 제한</span></div>
-      <div class="ir"><span class="il">고점比 -20.7% · 역배열 기술적 부담</span><span class="badge b-amber">기술적 저항</span></div>
-      <div class="ir"><span class="il">글로벌 소비 둔화 시 수요 리스크</span><span class="badge b-gray">경기 민감도</span></div>
+      <div style="font-size:12px;font-weight:600;margin-bottom:6px;color:#D85A30;">리스크 (Bear)</div>
+      <div class="ir"><span class="il">PBR 8.5x · PSR 4.6x 고평가</span><span class="badge b-red">밸류에이션 부담</span></div>
+      <div class="ir"><span class="il">신고가 후 -4.78% 조정 중</span><span class="badge b-amber">단기 차익실현</span></div>
+      <div class="ir"><span class="il">불닭 트렌드 지속성 불확실</span><span class="badge b-amber">유행성 리스크</span></div>
+      <div class="ir"><span class="il">원재료(밀·팜유) 가격 변동</span><span class="badge b-amber">원가 압박</span></div>
+      <div class="ir"><span class="il">투자CF -4,733억 공장증설 부담</span><span class="badge b-gray">설비 리스크</span></div>
     </div>
   </div>
-  <div class="ib">
-    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
-      <div><span style="color:var(--color-text-secondary);">투자의견:</span> <span class="badge b-fire">매수 (전원 매수·20명)</span></div>
-      <div><span style="color:var(--color-text-secondary);">목표주가 평균:</span> <span style="font-weight:500;">1,833,650원 (+38.8% 상승여력)</span></div>
-      <div><span style="color:var(--color-text-secondary);">최고 목표주가:</span> <span class="up" style="font-weight:500;">2,100,000원 (유안타증권)</span></div>
-      <div><span style="color:var(--color-text-secondary);">2026 Forward PER:</span> <span class="up" style="font-weight:500;">~17.6x (과거比 저평가)</span></div>
+  <div style="background:var(--color-background-secondary);border-radius:8px;padding:11px 13px;margin-top:10px;font-size:13px;display:flex;gap:14px;flex-wrap:wrap;">
+    <div><span style="color:var(--color-text-secondary);">시총:</span> <span style="font-weight:500;">~10.7조원</span></div>
+    <div><span style="color:var(--color-text-secondary);">연간 EPS 추정:</span> <span class="up" style="font-weight:500;">~7~8만원 (2026E)</span></div>
+    <div><span style="color:var(--color-text-secondary);">연간 매출 추정:</span> <span class="up" style="font-weight:500;">2.8~3.0조 (2026E)</span></div>
+    <div><span style="color:var(--color-text-secondary);">핵심 지지:</span> <span style="font-weight:500;">1,233K~1,189K 매물대</span></div>
+  </div>
+  <div style="margin-top:9px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">⚠ XBRL 사업보고서·분기보고서 원문 파싱 기준 · 투자 권고가 아닙니다</div>
+</div>
+
+<!-- 6. 최신 뉴스 & 증권사 리포트 -->
+<div class="card">
+  <div class="sec-title">6. 최신 뉴스 &amp; 증권사 리포트 <span style="font-size:10px;background:var(--color-background-secondary);padding:1px 6px;border-radius:4px;color:var(--color-text-tertiary);margin-left:4px;">📰 2026년 5월 기준</span></div>
+
+  <!-- 증권사 목표주가 현황 -->
+  <div style="font-size:13px;font-weight:600;margin-bottom:8px;">📊 증권사 목표주가 현황 (1Q26 어닝서프 이후)</div>
+  <div style="position:relative;width:100%;height:145px;margin-bottom:14px;">
+    <canvas id="tpChart"></canvas>
+  </div>
+
+  <!-- 리포트 카드 그리드 -->
+  <div style="font-size:13px;font-weight:600;margin-bottom:8px;">📋 주요 증권사 리포트 요약</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;">
+
+    <div style="background:#FFF0EB;border-radius:9px;padding:10px 12px;border-left:3px solid #D04B20;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px;">
+        <span style="font-size:12px;font-weight:600;color:#C0392B;">유안타증권</span>
+        <span style="font-size:11px;font-weight:700;color:#D04B20;">목표 200만원</span>
+      </div>
+      <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.6;">
+        "불닭을 과소평가하지 말자"<br>
+        2Q26 매출 7,510억·영업이익 1,826억 전망<br>
+        美 매출 2,000억 돌파 예상<br>
+        <span style="color:#D04B20;font-weight:500;">▲ 목표주가 유지 (05/14)</span>
+      </div>
+    </div>
+
+    <div style="background:#FFF0EB;border-radius:9px;padding:10px 12px;border-left:3px solid #C0392B;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px;">
+        <span style="font-size:12px;font-weight:600;color:#C0392B;">한화투자증권</span>
+        <span style="font-size:11px;font-weight:700;color:#D04B20;">목표 200만원</span>
+      </div>
+      <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.6;">
+        "매 분기 사상 최대 매출 전망"<br>
+        2Q 7,510억 / 3Q 7,600억 / 4Q 7,780억<br>
+        20%+ OPM = 글로벌 수요 강함 증거<br>
+        <span style="color:#D04B20;font-weight:500;">▲ 190만→200만 상향 (05/14)</span>
+      </div>
+    </div>
+
+    <div style="background:#EAF3DE;border-radius:9px;padding:10px 12px;border-left:3px solid #3B6D11;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px;">
+        <span style="font-size:12px;font-weight:600;color:#3B6D11;">KB증권</span>
+        <span style="font-size:11px;font-weight:700;color:#1D9E75;">목표 195만원</span>
+      </div>
+      <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.6;">
+        "중국·유럽 매출 서프라이즈"<br>
+        중국 춘절 소진→간식점 매출 급증<br>
+        유럽 분기 매출 700억대 체력 확보<br>
+        <span style="color:#1D9E75;font-weight:500;">▲ 175만→195만 상향 (05/14)</span>
+      </div>
+    </div>
+
+    <div style="background:#EAF3DE;border-radius:9px;padding:10px 12px;border-left:3px solid #1D9E75;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px;">
+        <span style="font-size:12px;font-weight:600;color:#3B6D11;">키움증권</span>
+        <span style="font-size:11px;font-weight:700;color:#1D9E75;">목표 185만원</span>
+      </div>
+      <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.6;">
+        "여전한 초과수요"<br>
+        2026E 영업이익 +40%, 2027E +20%<br>
+        유연근무제로 실질 CAPA +10% 확대<br>
+        <span style="color:#1D9E75;font-weight:500;">▲ 목표주가 유지 (05/14)</span>
+      </div>
+    </div>
+
+    <div style="background:#EAF3DE;border-radius:9px;padding:10px 12px;border-left:3px solid #1D9E75;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px;">
+        <span style="font-size:12px;font-weight:600;color:#3B6D11;">다올투자증권</span>
+        <span style="font-size:11px;font-weight:700;color:#1D9E75;">목표 190만원</span>
+      </div>
+      <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.6;">
+        "견실한 수요, 수출액 증가 기대"<br>
+        주가 강한 반등 예상<br>
+        글로벌 수요 확대 지속 판단<br>
+        <span style="color:#1D9E75;font-weight:500;">▲ 170만→190만 상향 (05/14)</span>
+      </div>
+    </div>
+
+    <div style="background:#E6F1FB;border-radius:9px;padding:10px 12px;border-left:3px solid #185FA5;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px;">
+        <span style="font-size:12px;font-weight:600;color:#185FA5;">LS증권</span>
+        <span style="font-size:11px;font-weight:700;color:#185FA5;">목표 180만원</span>
+      </div>
+      <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.6;">
+        "2Q26 실적 모멘텀 가속"<br>
+        월드컵 마케팅 비용 일시적 증가<br>
+        프랑스·핀란드 신규 진출 효과<br>
+        <span style="color:#185FA5;font-weight:500;">▲ 175만→180만 상향 (05/14)</span>
+      </div>
     </div>
   </div>
-  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">⚠ 공개 뉴스·공시 기준 · 투자 권고가 아닙니다</div>
+
+  <!-- 주요 뉴스 타임라인 -->
+  <div style="font-size:13px;font-weight:600;margin-bottom:10px;">📰 주요 뉴스 타임라인</div>
+  <div style="display:flex;flex-direction:column;gap:0;">
+
+    <div style="display:flex;gap:12px;padding:10px 0;border-bottom:.5px solid var(--color-border-tertiary);">
+      <div style="min-width:68px;font-size:11px;font-weight:600;color:#D04B20;padding-top:1px;">05/15</div>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:var(--color-text-primary);margin-bottom:3px;">주가 신고가 1,484,000원 달성 · 장중 +14.13% 급등</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.55;">1Q26 어닝서프라이즈 발표 다음 날 주가가 최고 1,478,000원까지 치솟으며 신고가 경신. 전날 대비 +10.27% 급등한 1,428,000원에 마감. 증권가 목표주가 일제히 상향 조정.</div>
+        <div style="margin-top:5px;display:flex;gap:5px;flex-wrap:wrap;">
+          <span class="badge b-fire">신고가 경신</span>
+          <span class="badge b-green">증권가 줄상향</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:12px;padding:10px 0;border-bottom:.5px solid var(--color-border-tertiary);">
+      <div style="min-width:68px;font-size:11px;font-weight:600;color:#D04B20;padding-top:1px;">05/14</div>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:var(--color-text-primary);margin-bottom:3px;">증권사 6곳 동시 목표주가 상향 — "붉은 반도체" 별명</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.55;">한화(190→200만), KB(175→195만), 다올(170→190만), LS(175→180만) 등 일제히 상향. 키움 "초과수요 지속, 2026E OI +40%" 강조. 유안타 "美 매출 분기 2,000억 돌파 전망." 언론에서 '붉은 반도체'로 표현.</div>
+        <div style="margin-top:5px;display:flex;gap:5px;flex-wrap:wrap;">
+          <span class="badge b-green">목표주가 줄상향</span>
+          <span class="badge b-green">붉은 반도체</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:12px;padding:10px 0;border-bottom:.5px solid var(--color-border-tertiary);">
+      <div style="min-width:68px;font-size:11px;font-weight:600;color:#D04B20;padding-top:1px;">05/13</div>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:var(--color-text-primary);margin-bottom:3px;">1Q26 분기 역대최대 실적 발표 — 매출 7,144억·영업이익 1,771억</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.55;">연결 매출 7,144억(+35%), 영업이익 1,771억(+32.2%), 순이익 1,445억(+46%). OPM 24.8%. 컨센서스 매출 +5.9%, 영업이익 +8.1% 초과. 유럽 +215%, 미국 +37%, 중국 +36% 동반 성장.</div>
+        <div style="margin-top:5px;display:flex;gap:5px;flex-wrap:wrap;">
+          <span class="badge b-fire">분기 역대최대</span>
+          <span class="badge b-green">컨센서스 대폭 상회</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:12px;padding:10px 0;border-bottom:.5px solid var(--color-border-tertiary);">
+      <div style="min-width:68px;font-size:11px;font-weight:600;color:#D04B20;padding-top:1px;">05 신제품</div>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:var(--color-text-primary);margin-bottom:3px;">불닭 맥앤치즈 출시 · 6월 북중미 월드컵 마케팅 준비</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.55;">5월 신제품 '불닭 맥앤치즈' 출시로 미국 메인스트림 채널 확대 도모. 6월 북중미 FIFA 월드컵 공식 마케팅 파트너십으로 글로벌 브랜드 노출 극대화. 일시적 마케팅비 증가 → 2Q 영업이익률 소폭 하락 가능.</div>
+        <div style="margin-top:5px;display:flex;gap:5px;flex-wrap:wrap;">
+          <span class="badge b-blue">신제품 확장</span>
+          <span class="badge b-green">월드컵 마케팅</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:12px;padding:10px 0;border-bottom:.5px solid var(--color-border-tertiary);">
+      <div style="min-width:68px;font-size:11px;font-weight:600;color:var(--color-text-tertiary);padding-top:1px;">04월</div>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:var(--color-text-primary);margin-bottom:3px;">유안타 "불닭 과소평가 말자" · 교보증권 투자설명서 공시</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.55;">유안타증권이 목표주가 200만원을 유지하며 공급 부족 지속 강조. 4월 24일 투자설명서 KIND 공시. 중동 지정학 리스크(高유가) 속에서도 원가 전가력으로 업종 내 실적 개선 가시성 최고 판단.</div>
+        <div style="margin-top:5px;display:flex;gap:5px;flex-wrap:wrap;">
+          <span class="badge b-green">목표주가 유지</span>
+          <span class="badge b-gray">지정학 리스크 제한적</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:12px;padding:10px 0;">
+      <div style="min-width:68px;font-size:11px;font-weight:600;color:var(--color-text-tertiary);padding-top:1px;">03월</div>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:var(--color-text-primary);margin-bottom:3px;">유연근무제 도입 → 실질 CAPA +10% 확대 · 프랑스·핀란드 신규 진출</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.55;">3월부터 유연근무제 전환으로 공장 실질 생산능력 10% 이상 확대. 유럽 법인이 네덜란드·독일·폴란드에 더해 프랑스·핀란드까지 신규 진출. 정부 라면 출고가 인하 압력(일부 국내 마진 영향).</div>
+        <div style="margin-top:5px;display:flex;gap:5px;flex-wrap:wrap;">
+          <span class="badge b-green">CAPA +10%</span>
+          <span class="badge b-green">유럽 2국 신규 진출</span>
+          <span class="badge b-amber">국내 출고가 인하</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 컨센서스 요약 박스 -->
+  <div style="background:#FFF0EB;border-left:3px solid #D04B20;border-radius:8px;padding:11px 13px;margin-top:12px;">
+    <div style="font-size:12px;font-weight:600;color:#C0392B;margin-bottom:4px;">🎯 증권가 컨센서스 종합 (2026년 5월 기준)</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;">
+      <div style="text-align:center;background:rgba(255,255,255,0.6);border-radius:6px;padding:8px 4px;">
+        <div style="font-size:10px;color:var(--color-text-secondary);margin-bottom:3px;">평균 목표주가</div>
+        <div style="font-size:14px;font-weight:700;color:#D04B20;">1,840,000원</div>
+        <div style="font-size:10px;color:var(--color-text-tertiary);">+27.4% 상승여력</div>
+      </div>
+      <div style="text-align:center;background:rgba(255,255,255,0.6);border-radius:6px;padding:8px 4px;">
+        <div style="font-size:10px;color:var(--color-text-secondary);margin-bottom:3px;">최고 목표주가</div>
+        <div style="font-size:14px;font-weight:700;color:#D04B20;">2,200,000원</div>
+        <div style="font-size:10px;color:var(--color-text-tertiary);">+52.5% 상승여력</div>
+      </div>
+      <div style="text-align:center;background:rgba(255,255,255,0.6);border-radius:6px;padding:8px 4px;">
+        <div style="font-size:10px;color:var(--color-text-secondary);margin-bottom:3px;">투자의견</div>
+        <div style="font-size:14px;font-weight:700;color:#1D9E75;">전원 매수</div>
+        <div style="font-size:10px;color:var(--color-text-tertiary);">19명 매수·0명 매도</div>
+      </div>
+      <div style="text-align:center;background:rgba(255,255,255,0.6);border-radius:6px;padding:8px 4px;">
+        <div style="font-size:10px;color:var(--color-text-secondary);margin-bottom:3px;">2026E OI 성장</div>
+        <div style="font-size:14px;font-weight:700;color:#1D9E75;">+40%</div>
+        <div style="font-size:10px;color:var(--color-text-tertiary);">키움증권 추정</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:9px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">⚠ 뉴스·증권사 리포트 기반 · 투자 권고가 아닙니다</div>
 </div>
+
 </div>
+
+<script>
+// 증권사 목표주가 차트
+new Chart(document.getElementById('tpChart'), {
+  type: 'bar',
+  data: {
+    labels: ['유안타', '한화투자', 'KB증권', '다올투자', '키움증권', 'LS증권', '교보증권'],
+    datasets: [
+      {
+        label: '기존 목표주가',
+        data: [200, 190, 175, 170, 185, 175, 186],
+        backgroundColor: 'rgba(176,174,169,0.5)',
+        borderRadius: 4,
+      },
+      {
+        label: '변경 목표주가',
+        data: [200, 200, 195, 190, 185, 180, 186],
+        backgroundColor: '#D04B20',
+        borderRadius: 4,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { labels: { font: { size: 11 }, boxWidth: 12 } },
+      tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.raw}만원` } }
+    },
+    scales: {
+      y: {
+        min: 160,
+        max: 210,
+        ticks: { font: { size: 10 }, callback: v => v + '만', color: '#888' },
+        grid: { color: 'rgba(0,0,0,0.05)' }
+      },
+      x: { ticks: { font: { size: 11 }, color: '#888' }, grid: { display: false } }
+    }
+  }
+});
+</script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-// ── SVG 캔들차트 ──────────────────────────────────
+// 탭 전환
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('show'));
+  document.querySelectorAll('.tab-btn').forEach(el=>el.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('show');
+  btn.classList.add('active');
+  setTimeout(()=>{ id==='annual'?renderAnnual():renderQuarter(); }, 50);
+}
+
+// ─── 차트 SVG ───────────────────────────────────────────────
 (function(){
-  const svg = document.getElementById('samyangSvg');
-  const W=720, H=240, pL=72, pR=12, pT=14, pB=24;
-  const cW=W-pL-pR, cH=H-pT-pB;
-
-  // 단위: 만원 (1단위 = 10,000원)
-  // 2025/01~2026/05 흐름 (주봉 근사)
-  // 2025/01: ~80만원대
-  // 2025/05: 100만원 돌파
-  // 2025/07~08: 130만~140만원
-  // 2025/09/11: 사상최고 166.5만원
-  // 2025/10~11: 관세 우려로 조정 → 128만원
-  // 2025/12: 저점 92.2만원
-  // 2026/01~02: 반등 130만원
-  // 2026/03~04: 120~140만원
-  // 2026/05/13: 1Q26 서프라이즈 132만원
-
-  const data = [
-    // 2025년 1~2월 (80만원대)
-    {o:80,h:84,l:78,c:82},{o:82,h:87,l:80,c:85},
-    {o:85,h:90,l:83,c:88},{o:88,h:93,l:86,c:91},
-    // 3~4월 (90만원대)
-    {o:91,h:97,l:89,c:95},{o:95,h:100,l:93,c:98},
-    {o:98,h:104,l:96,c:102},{o:102,h:108,l:100,c:106},
-    // 5~6월 (100만원 돌파, 상승)
-    {o:106,h:113,l:104,c:111},{o:111,h:118,l:109,c:116},
-    {o:116,h:122,l:114,c:120},{o:120,h:127,l:118,c:125},
-    // 7~8월 (130~140만원)
-    {o:125,h:132,l:123,c:130},{o:130,h:137,l:128,c:135},
-    {o:135,h:141,l:133,c:139},{o:139,h:146,l:137,c:143},
-    // 9월 최고가 166.5만원
-    {o:143,h:150,l:141,c:148},{o:148,h:157,l:146,c:155},
-    {o:155,h:167,l:153,c:165},  // ← 최고가 근방
-    // 10월 조정 시작
-    {o:165,h:166.5,l:155,c:155},  // 최고가 후 하락
-    {o:155,h:158,l:145,c:148},{o:148,h:150,l:138,c:140},
-    // 11~12월 저점 (92.2만원)
-    {o:140,h:143,l:128,c:130},{o:130,h:133,l:118,c:120},
-    {o:120,h:122,l:108,c:110},{o:110,h:112,l:92,c:95},  // ← 52주 최저
-    // 2026년 1~2월 반등
-    {o:95,h:103,l:93,c:100},{o:100,h:110,l:98,c:107},
-    {o:107,h:115,l:105,c:113},{o:113,h:120,l:111,c:118},
-    // 3~4월 횡보
-    {o:118,h:124,l:116,c:121},{o:121,h:127,l:119,c:124},
-    {o:124,h:130,l:121,c:128},{o:128,h:134,l:125,c:131},
-    // 5월 1Q26 서프라이즈 급등
-    {o:131,h:136,l:130,c:132.1}
+  const svg=document.getElementById('sySvg');
+  const W=720,H=230,pL=72,pR=12,pT=14,pB=24;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  // 12월~05/15: 최저 98.1K(03/09), 신고가 148.4K(05/15)
+  const data=[
+    // 12월 박스하락
+    {o:130,h:135,l:127,c:132},{o:132,h:138,l:129,c:135},{o:135,h:140,l:131,c:137},
+    {o:137,h:141,l:133,c:136},{o:136,h:140,l:131,c:133},
+    // 1~2월 하락
+    {o:133,h:137,l:128,c:130},{o:130,h:134,l:124,c:127},{o:127,h:131,l:120,c:123},
+    {o:123,h:127,l:115,c:118},{o:118,h:122,l:110,c:113},
+    // 3/9 최저 98.1K
+    {o:113,h:116,l:98,c:101},{o:101,h:107,l:99,c:105},
+    // V자 반등
+    {o:105,h:114,l:103,c:112},{o:112,h:121,l:110,c:119},{o:119,h:128,l:117,c:126},
+    {o:126,h:134,l:124,c:132},{o:132,h:139,l:130,c:137},{o:137,h:143,l:135,c:141},
+    // 4월 강세
+    {o:141,h:146,l:139,c:144},{o:144,h:149,l:142,c:147},{o:147,h:152,l:145,c:150},
+    // 5월 신고가
+    {o:150,h:155,l:148,c:153},{o:153,h:158,l:151,c:156},{o:156,h:160,l:153,c:158},
+    {o:158,h:163,l:155,c:161},{o:161,h:165,l:158,c:163},{o:163,h:148.4,l:140,c:141.3}
   ];
-
-  const prices = data.flatMap(d=>[d.h,d.l]);
-  const maxP = Math.max(...prices)+2, minP = Math.min(...prices)-2;
-  const rng = maxP - minP;
-  function py(v){ return pT + cH*(1-(v-minP)/rng); }
-  const colW = cW/data.length, cw = Math.max(colW*.62, 8);
-
-  // 그리드
-  [90,100,110,120,130,140,150,160].forEach(v=>{
-    if(v<minP||v>maxP) return;
+  const prices=data.flatMap(d=>[d.h,d.l]);
+  const maxP=Math.max(...prices)+4,minP=Math.min(...prices)-2;
+  const rng=maxP-minP;
+  function py(v){return pT+cH*(1-(v-minP)/rng);}
+  const colW=cW/data.length,cw=Math.max(colW*.62,9);
+  [100,110,120,130,140,150,160].forEach(v=>{
+    if(v<minP||v>maxP)return;
     const y=py(v);
     const l=document.createElementNS('http://www.w3.org/2000/svg','line');
     l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
@@ -418,43 +594,34 @@ h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:
     t.setAttribute('font-size','9');t.setAttribute('fill','rgba(128,128,128,.7)');
     t.textContent=(v*10000).toLocaleString();svg.appendChild(t);
   });
-
-  // MA 계산
-  function calcMA(d,n){ return d.map((_,i)=>i<n-1?null:d.slice(i-n+1,i+1).reduce((s,x)=>s+x.c,0)/n); }
+  // 매물대 음영
+  const z=document.createElementNS('http://www.w3.org/2000/svg','rect');
+  z.setAttribute('x',pL);z.setAttribute('y',py(123.35));z.setAttribute('width',cW);
+  z.setAttribute('height',py(118.92)-py(123.35));z.setAttribute('fill','rgba(216,90,48,0.07)');
+  svg.insertBefore(z,svg.firstChild);
+  function calcMA(d,n){return d.map((_,i)=>i<n-1?null:d.slice(i-n+1,i+1).reduce((s,x)=>s+x.c,0)/n);}
   function drawLine(arr,col,w){
-    let pts=[];
-    arr.forEach((v,i)=>{ if(v===null)return; pts.push(`${pL+(i+.5)*colW},${py(v)}`); });
+    let pts=[];arr.forEach((v,i)=>{if(v===null)return;pts.push(`${pL+(i+.5)*colW},${py(v)}`);});
     if(pts.length<2)return;
     const p=document.createElementNS('http://www.w3.org/2000/svg','polyline');
-    p.setAttribute('points',pts.join(' '));p.setAttribute('fill','none');
-    p.setAttribute('stroke',col);p.setAttribute('stroke-width',w||1.5);svg.appendChild(p);
+    p.setAttribute('points',pts.join(' '));p.setAttribute('fill','none');p.setAttribute('stroke',col);p.setAttribute('stroke-width',w||1.5);svg.appendChild(p);
   }
-
-  // 매물대 음영 (130~140만원)
-  const z=document.createElementNS('http://www.w3.org/2000/svg','rect');
-  z.setAttribute('x',pL);z.setAttribute('y',py(140));z.setAttribute('width',cW);
-  z.setAttribute('height',py(130)-py(140));z.setAttribute('fill','rgba(216,90,48,0.06)');
-  svg.insertBefore(z,svg.firstChild);
-
-  // 캔들
   data.forEach((d,i)=>{
-    const cx=pL+(i+.5)*colW, isUp=d.c>=d.o, col=isUp?'#D85A30':'#185FA5';
+    const cx=pL+(i+.5)*colW;
+    const isUp=d.c>=d.o,col=isUp?'#D85A30':'#185FA5';
     const wk=document.createElementNS('http://www.w3.org/2000/svg','line');
-    wk.setAttribute('x1',cx);wk.setAttribute('x2',cx);
-    wk.setAttribute('y1',py(d.h));wk.setAttribute('y2',py(d.l));
+    wk.setAttribute('x1',cx);wk.setAttribute('x2',cx);wk.setAttribute('y1',py(d.h));wk.setAttribute('y2',py(d.l));
     wk.setAttribute('stroke',col);wk.setAttribute('stroke-width','1.5');svg.appendChild(wk);
-    const bT=py(Math.max(d.o,d.c)), bB=py(Math.min(d.o,d.c));
+    const bT=py(Math.max(d.o,d.c)),bB=py(Math.min(d.o,d.c));
     const bd=document.createElementNS('http://www.w3.org/2000/svg','rect');
     bd.setAttribute('x',cx-cw/2);bd.setAttribute('y',bT);bd.setAttribute('width',cw);
     bd.setAttribute('height',Math.max(bB-bT,2));bd.setAttribute('fill',col);bd.setAttribute('rx','1');svg.appendChild(bd);
   });
-
   drawLine(calcMA(data,5),'#FF69B4',1.5);
   drawLine(calcMA(data,20),'#9370DB',1.5);
   drawLine(calcMA(data,60),'#DAA520',2);
   drawLine(calcMA(data,120),'#228B22',2);
-
-  // 주요 표시
+  // 레이블
   const mk=(idx,lbl,isLow,col)=>{
     const cx=pL+(idx+.5)*colW;
     const cy=isLow?py(data[idx].l)+12:py(data[idx].h)-8;
@@ -463,20 +630,15 @@ h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:
     t.setAttribute('font-size','9');t.setAttribute('fill',col);t.setAttribute('font-weight','500');
     t.textContent=lbl;svg.appendChild(t);
   };
-  mk(18,'최고 166.5K(09/11)',false,'#D85A30');
-  mk(27,'최저 922K(12월)',true,'#185FA5');
-  mk(data.length-1,'현재 132.1K',false,'#C0360A');
-
-  // X축 월 레이블
-  ['2025.01','03','05','07','09','11','2026.01','03','05'].forEach((m,i)=>{
-    const cx=pL+(i/8)*cW+cW/16;
+  mk(10,'최저 981K(03/09)',true,'#185FA5');
+  mk(25,'신고가 1,484K(05/15)',false,'#D85A30');
+  ['12월','1월','2월','3월','4월','5월'].forEach((m,i)=>{
+    const cx=pL+(i/6)*cW+cW/12;
     const t=document.createElementNS('http://www.w3.org/2000/svg','text');
     t.setAttribute('x',cx);t.setAttribute('y',H-4);t.setAttribute('text-anchor','middle');
-    t.setAttribute('font-size','9');t.setAttribute('fill','rgba(128,128,128,.8)');
+    t.setAttribute('font-size','10');t.setAttribute('fill','rgba(128,128,128,.8)');
     t.textContent=m;svg.appendChild(t);
   });
-
-  // 범례
   [{c:'#D85A30',t:'양봉'},{c:'#185FA5',t:'음봉'},{c:'#FF69B4',t:'MA5'},{c:'#9370DB',t:'MA20'},{c:'#DAA520',t:'MA60'},{c:'#228B22',t:'MA120'}].forEach((l,i)=>{
     const gx=pL+i*90;
     const r=document.createElementNS('http://www.w3.org/2000/svg','rect');
@@ -488,47 +650,57 @@ h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:
   });
 })();
 
-// ── 매출 차트 ──────────────────────────────────────
-new Chart(document.getElementById('samyangRevChart'),{
-  type:'bar',
-  data:{
-    labels:['2022','2023','2024','2025','2026E'],
-    datasets:[
-      {label:'매출액(조)',data:[0.91,1.19,1.73,2.35,3.0],backgroundColor:'#C0360A',borderRadius:4,yAxisID:'y'},
-      {label:'영업이익(조)',data:[0.09,0.15,0.34,0.52,0.68],backgroundColor:['#1D9E75','#1D9E75','#1D9E75','#1D9E75','#1D9E75'],borderRadius:4,yAxisID:'y'},
-      {label:'OPM(%)',type:'line',data:[9.9,12.6,19.7,22.2,22.7],borderColor:'#EF9F27',backgroundColor:'rgba(239,159,39,.1)',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
-    ]
-  },
-  options:{
-    responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false}},
-    scales:{
-      y:{position:'left',ticks:{font:{size:10},callback:v=>v+'조',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
-      y2:{position:'right',min:0,max:30,ticks:{font:{size:10},callback:v=>v+'%',color:'#EF9F27'},grid:{display:false}},
-      x:{ticks:{font:{size:11},color:'#888'},grid:{display:false}}
+// ─── 기본적 분석 차트 ────────────────────────────────────────
+let plC, qC;
+function renderAnnual(){
+  const ctx=document.getElementById('plChart');
+  if(!ctx)return;
+  if(plC){plC.destroy();}
+  plC=new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['2023 (별도)','2024 (별도)','2025 (별도)'],
+      datasets:[
+        {label:'매출액',data:[10980,14262,19018],backgroundColor:'#D04B20',borderRadius:4,yAxisID:'y'},
+        {label:'영업이익',data:[1548,3238,4714],backgroundColor:'#EF9F27',borderRadius:4,yAxisID:'y'},
+        {label:'OPM',type:'line',data:[14.1,22.7,24.8],borderColor:'#1D9E75',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{font:{size:11},boxWidth:12}}},
+      scales:{
+        y:{position:'left',ticks:{font:{size:10},callback:v=>v+'억',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+        y2:{position:'right',min:0,max:35,ticks:{font:{size:10},callback:v=>v+'%',color:'#1D9E75'},grid:{display:false}},
+        x:{ticks:{font:{size:11},color:'#888'},grid:{display:false}}
+      }
     }
-  }
-});
-
-// ── OPM 피어 비교 ──────────────────────────────────
-new Chart(document.getElementById('peerChart'),{
-  type:'bar',
-  data:{
-    labels:['삼양식품','Nissin','농심','오뚜기','Nongshim US','Maruchan'],
-    datasets:[{
-      label:'영업이익률',
-      data:[24.8,14.2,6.1,6.8,9.3,11.5],
-      backgroundColor:['#C0360A','#B4B2A9','#B4B2A9','#B4B2A9','#B4B2A9','#B4B2A9'],
-      borderRadius:5,borderSkipped:false
-    }]
-  },
-  options:{
-    responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`OPM ${ctx.raw}%`}}},
-    scales:{
-      y:{max:30,ticks:{font:{size:10},callback:v=>v+'%',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
-      x:{ticks:{font:{size:10},color:'#888'},grid:{display:false}}
+  });
+}
+function renderQuarter(){
+  const ctx=document.getElementById('qplChart');
+  if(!ctx)return;
+  if(qC){qC.destroy();}
+  qC=new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['1Q25 연결','1Q26 연결','1Q25 별도','1Q26 별도'],
+      datasets:[
+        {label:'매출액',data:[5290,7144,4284,5524],backgroundColor:['#B4B2A9','#D04B20','#B4B2A9','#D04B20'],borderRadius:4,yAxisID:'y'},
+        {label:'영업이익',data:[1340,1771,1202,1471],backgroundColor:['#DEDAD1','#EF9F27','#DEDAD1','#EF9F27'],borderRadius:4,yAxisID:'y'},
+        {label:'OPM',type:'line',data:[25.3,24.8,28.1,26.6],borderColor:'#1D9E75',tension:.3,pointRadius:5,borderWidth:2,fill:false,yAxisID:'y2'}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{font:{size:11},boxWidth:12}}},
+      scales:{
+        y:{position:'left',ticks:{font:{size:10},callback:v=>v+'억',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+        y2:{position:'right',min:20,max:32,ticks:{font:{size:10},callback:v=>v+'%',color:'#1D9E75'},grid:{display:false}},
+        x:{ticks:{font:{size:10},color:'#888'},grid:{display:false}}
+      }
     }
-  }
-});
+  });
+}
+window.addEventListener('load',()=>renderAnnual());
 </script>
