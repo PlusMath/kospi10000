@@ -1,0 +1,615 @@
+<link rel="stylesheet" href="../css/global.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
+.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:18px;}
+.sec{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:12px;}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:14px;}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px;text-align:center;}
+.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
+.mv{font-size:14px;font-weight:500;color:var(--color-text-primary);}
+.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
+.up{color:#1D9E75;}.dn{color:#D85A30;}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
+.b-green{background:#EAF3DE;color:#3B6D11;}.b-amber{background:#FAEEDA;color:#854F0B;}
+.b-red{background:#FCEBEB;color:#A32D2D;}.b-blue{background:#E6F1FB;color:#185FA5;}
+.b-gray{background:#F1EFE8;color:#5F5E5A;}.b-bio{background:#F3E5F5;color:#6A1B9A;}
+.sig{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
+.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
+.ir:last-child{border-bottom:none;}
+.il{color:var(--color-text-secondary);}.iv{font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:6px;}
+.src{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-tertiary);margin-left:4px;}
+.hl{background:#EAF3DE;border-left:3px solid #1D9E75;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.warn{background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ev-1{background:#E6F1FB;color:#0C447C;}.ev-2{background:#EAF3DE;color:#27500A;}
+.ev-3{background:#F1EFE8;color:#444441;}.ev-4{background:#FAEEDA;color:#633806;}
+.ev-5{background:#FCEBEB;color:#791F1F;}
+.ev{font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;}
+.ind-row{display:flex;align-items:center;padding:8px 0;border-bottom:.5px solid var(--color-border-tertiary);gap:10px;}
+.ind-row:last-child{border-bottom:none;}
+.ind-nm{font-size:13px;font-weight:500;color:var(--color-text-primary);min-width:110px;}
+.ind-val{font-size:14px;font-weight:500;color:var(--color-text-primary);min-width:80px;text-align:right;}
+.bar-bg{background:var(--color-border-tertiary);border-radius:4px;height:7px;}
+.bar-f{border-radius:4px;height:7px;}
+.tl{position:relative;padding-left:28px;}
+.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--color-border-tertiary);border-radius:2px;}
+.tl-item{position:relative;margin-bottom:18px;}
+.tl-item:last-child{margin-bottom:0;}
+.tl-dot{position:absolute;left:-24px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid white;}
+.dot-big{background:#6A1B9A;}.dot-pos{background:#1D9E75;}
+.dot-neg{background:#D85A30;}.dot-neu{background:#888780;}
+.tl-date{font-size:11px;font-weight:500;color:var(--color-text-tertiary);margin-bottom:3px;}
+.tl-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px;line-height:1.4;}
+.tl-body{font-size:12px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:5px;}
+.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;margin-right:4px;}
+.tag-big{background:#F3E5F5;color:#6A1B9A;}.tag-pos{background:#EAF3DE;color:#3B6D11;}
+.tag-neg{background:#FCEBEB;color:#791F1F;}.tag-neu{background:#F1EFE8;color:#444441;}
+.pipe-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:12px;}
+.pipe-row:last-child{border-bottom:none;}
+.pipe-name{font-weight:500;min-width:110px;color:var(--color-text-primary);}
+.pipe-stage{font-size:10px;padding:2px 7px;border-radius:999px;font-weight:600;min-width:58px;text-align:center;}
+.s-market{background:#EAF3DE;color:#3B6D11;}
+.s-p3{background:#E6F1FB;color:#0C447C;}
+.s-p1{background:#F3E5F5;color:#6A1B9A;}
+</style>
+
+<div style="padding:1rem 0;">
+
+<!-- 헤더 -->
+<div style="margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+  <h2>셀트리온 (068270)</h2>
+  <span class="badge b-bio">코스피 · 바이오 · 글로벌 바이오시밀러</span>
+  <span class="badge b-gray">램시마·짐펜트라·트룩시마·ADC 신약</span>
+  <span class="src">📄 사업·분기보고서 원문 + 📊 HTS 차트</span>
+</div>
+<p class="sub">현재가 183,000원 (-13.28%) · 최고 258,500원 (02/19) · 최저 179,600원 (05/18) · LC +1.89% · HC -29.21% · 시총 약 24.9조</p>
+
+<div class="g4">
+  <div class="met"><div class="ml">현재가 (05/18 근)</div><div class="mv">183,000원</div><div class="ms dn">HC -29.21% · 연중 부진</div></div>
+  <div class="met"><div class="ml">1Q26 연결 영업이익</div><div class="mv">3,219억</div><div class="ms up">OPM 28.1% · 흑자전환</div></div>
+  <div class="met"><div class="ml">2025 연결 영업이익</div><div class="mv">1조 1,685억</div><div class="ms up">▲137.5% · OPM 28.1%</div></div>
+  <div class="met"><div class="ml">상업화 파이프라인</div><div class="mv">11개 제품</div><div class="ms up">ADC 신약 3개 임상 1상</div></div>
+</div>
+
+<!-- 1. 기술적 분석 -->
+<div class="card">
+  <div class="sec">1. 기술적 분석 — 실제 HTS 차트 (2026.01~05/18)</div>
+  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;">
+    최저 179,600원 (05/18) — 연중 최저 · 최고 258,500원 (02/19) · LC +1.89% · HC -29.21% · 현재 183,000원
+  </div>
+  <svg id="ctSvg" viewBox="0 0 720 240" width="100%" style="display:block;margin-bottom:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:4px;"></svg>
+
+  <div style="font-size:13px;font-weight:500;margin-bottom:8px;">📊 HTS 차트 구간별 분석 <span class="src">📊</span></div>
+  <div class="g4" style="font-size:11px;margin-bottom:12px;">
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#3B6D11;font-weight:500;margin-bottom:3px;">1~2월 — 반등 상승</div>
+      <div style="color:#1D9E75;line-height:1.6;">3,489,082(3.4%) 매물<br>4,181,970(4.1%) 상승<br>8,429,227(8.2%) 돌파<br>최고 258,500 (02/19)</div>
+    </div>
+    <div style="background:#FCEBEB;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#A32D2D;font-weight:500;margin-bottom:3px;">3월 — 폭락</div>
+      <div style="color:#D85A30;line-height:1.6;">8,448,873(8.7%) 매물<br>10,821,161(10.5%) 급락<br>13,199,583(12.8%) 대량<br>배당락(0.00%) + 급락</div>
+    </div>
+    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#854F0B;font-weight:500;margin-bottom:3px;">4월 — 저점 횡보</div>
+      <div style="color:#633806;line-height:1.6;">209,400→202,800 박스<br>24,401,252(23.7%) 수급<br>역대급 거래 유입<br>방향성 모색 중</div>
+    </div>
+    <div style="background:#FCEBEB;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#A32D2D;font-weight:500;margin-bottom:3px;">5월 — 연중최저</div>
+      <div style="color:#D85A30;line-height:1.6;">박스 하단 이탈<br>최저 179,600 (05/18)<br>HC -29.21% 부담<br>2,010주(52.55%) 거래</div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;">
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;">이동평균선 현황</div>
+      <div class="ir"><span class="il">5일선</span><span class="badge b-red">급락 · 단기 붕괴</span></div>
+      <div class="ir"><span class="il">20일선</span><span class="badge b-red">하향 이탈</span></div>
+      <div class="ir"><span class="il">60일선</span><span class="badge b-red">역배열 하향</span></div>
+      <div class="ir"><span class="il">120일선</span><span class="badge b-red">역배열 중</span></div>
+      <div class="ir"><span class="il">배열</span><span class="badge b-red">완전 역배열 · 추세 약세</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;">핵심 가격대</div>
+      <div class="ir"><span class="il">52주 최고</span><span style="font-weight:500;color:#D85A30;">258,500원 (02/19)</span></div>
+      <div class="ir"><span class="il">박스권 매물대</span><span style="font-weight:500;color:#D85A30;">209,400~202,800원</span></div>
+      <div class="ir"><span class="il">52주 최저 (현재)</span><span style="font-weight:500;color:#A32D2D;">179,600원 (05/18)</span></div>
+      <div class="ir"><span class="il">LC / HC</span><span style="font-weight:500;">+1.89% / -29.21%</span></div>
+      <div class="ir"><span class="il">배당수익률</span><span style="font-weight:500;color:#1D9E75;">약 1.6% (배당 3,000원 추정)</span></div>
+    </div>
+  </div>
+
+  <div class="sig">
+    <span class="badge b-red">HC -29.21% · 52주 최저 갱신 진행 중</span>
+    <span class="badge b-red">완전 역배열 · 모든 이동평균선 하향</span>
+    <span class="badge b-amber">24,401,252주(23.7%) 역대급 수급 — 저점 인식?</span>
+    <span class="badge b-green">1Q26 매출 +35.9% · OPM 28.1% 사상최대급</span>
+    <span class="badge b-green">2025 영업이익 1.17조 +137.5% 폭발 성장</span>
+    <span class="badge b-bio">ADC 신약 3개 임상 1상 + FDA 패스트트랙</span>
+  </div>
+</div>
+
+<!-- 2. 기본적 분석 탭 -->
+<div class="card">
+  <div class="sec">2. 기본적 분석 — 공시 원문 <span class="src">📄 사업보고서 제35기(2025) · 분기보고서 제36기 1Q(2026.03)</span></div>
+
+  <!-- 탭 버튼 -->
+  <div style="display:flex;gap:8px;margin-bottom:14px;">
+    <button id="btnAnnual" onclick="switchTab('annual')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);border:1.5px solid #6A1B9A;background:#6A1B9A;color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;">
+      📄 사업보고서 <span style="font-size:11px;opacity:.85;font-weight:400;">제35기 · 2025년 연간</span>
+    </button>
+    <button id="btnQuarter" onclick="switchTab('quarter')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);border:1.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-secondary);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;">
+      📋 분기보고서 <span style="font-size:11px;opacity:.85;font-weight:400;">제36기 1분기 · 2026.03</span>
+    </button>
+  </div>
+
+  <!-- ══ 사업보고서 탭 ══ -->
+  <div id="tabAnnual">
+    <div style="position:relative;width:100%;height:155px;margin-bottom:12px;">
+      <canvas id="ctRevChart"></canvas>
+    </div>
+
+    <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:6px;letter-spacing:.03em;">📊 연결 손익 요약 (단위: 억원 · 제35기 2025년)</div>
+    <div class="g2" style="margin-bottom:12px;">
+      <div>
+        <div class="ir"><span class="il">매출액</span><span class="iv up">4조 1,625억 (▲17.0%) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">영업이익</span><span class="iv up">1조 1,685억 (▲137.5%) <span class="ev ev-5">매우높음</span></span></div>
+        <div class="ir"><span class="il">영업이익률</span><span class="iv up">28.1% (전기 13.8% → +14.3%p) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">당기순이익</span><span class="iv up">1조 315억 (▲146.2%) <span class="ev ev-5">매우높음</span></span></div>
+        <div class="ir"><span class="il">기본EPS (연결)</span><span class="iv up">4,668원 (전기 1,879원 ▲148.4%) <span class="ev ev-4">높음</span></span></div>
+      </div>
+      <div>
+        <div class="ir"><span class="il">자산총계</span><span class="iv up">22조 3,349억 (▲6.1%) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">현금·현금성</span><span class="iv up">1조 1,192억 (▲12.3%) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">재고자산</span><span class="iv">2조 8,035억 (▲1.3%) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">무형자산(M&A)</span><span class="iv up">13조 7,783억 (셀트리온헬스케어 합병 PPA) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">지배자본 총계</span><span class="iv">17조 2,085억 <span class="ev ev-3">적정</span></span></div>
+      </div>
+    </div>
+
+    <!-- 영업이익률 3개년 -->
+    <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">📈 OPM 3개년 추이 — 합병 후 수익성 정상화</div>
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <div style="flex:1;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;text-align:center;">
+        <div style="font-size:10px;color:var(--color-text-secondary);margin-bottom:4px;">제33기 2023년</div>
+        <div style="font-size:20px;font-weight:700;color:#888780;">29.9%</div>
+        <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:4px;">합병 이전 고마진 구조</div>
+      </div>
+      <div style="display:flex;align-items:center;font-size:18px;color:#D85A30;font-weight:700;">↓</div>
+      <div style="flex:1;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;text-align:center;">
+        <div style="font-size:10px;color:var(--color-text-secondary);margin-bottom:4px;">제34기 2024년</div>
+        <div style="font-size:20px;font-weight:700;color:#EF9F27;">13.8%</div>
+        <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:4px;">합병 직후 일시적 비용</div>
+      </div>
+      <div style="display:flex;align-items:center;font-size:18px;color:#1D9E75;font-weight:700;">↑</div>
+      <div style="flex:1;background:#F3E5F5;border-radius:var(--border-radius-md);padding:10px;text-align:center;border:1.5px solid #6A1B9A;">
+        <div style="font-size:10px;color:#6A1B9A;margin-bottom:4px;font-weight:500;">제35기 2025년</div>
+        <div style="font-size:20px;font-weight:700;color:#6A1B9A;">28.1%</div>
+        <div style="font-size:10px;color:#6A1B9A;margin-top:4px;">수익성 정상화 완성</div>
+      </div>
+    </div>
+
+    <!-- 지역별 매출 -->
+    <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">🌍 주요 제품 시장점유율 (2025년 3분기 기준)</div>
+    <div class="g3" style="margin-bottom:12px;font-size:11px;">
+      <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;">
+        <div style="font-weight:500;color:var(--color-text-primary);margin-bottom:6px;">🇺🇸 미국 시장</div>
+        <div class="ir" style="font-size:11px;"><span class="il">램시마 (인플릭시맙)</span><span class="up">점유율 확대</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">트룩시마 (리툭시맙)</span><span class="up">31%</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">유플라이마 (아달리무맙)</span><span class="up">상호교환성 확보</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">짐펜트라 (신약)</span><span class="up">90%+ 보험 커버리지</span></div>
+      </div>
+      <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;">
+        <div style="font-weight:500;color:var(--color-text-primary);margin-bottom:6px;">🇪🇺 유럽 시장</div>
+        <div class="ir" style="font-size:11px;"><span class="il">램시마 (인플릭시맙)</span><span>글로벌 1위</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">트룩시마 (리툭시맙)</span><span class="up">30%</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">허쥬마 (트라스투주맙)</span><span class="up">27%</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">베그젤마 (베바시주맙)</span><span class="up">성장 중</span></div>
+      </div>
+      <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;">
+        <div style="font-weight:500;color:var(--color-text-primary);margin-bottom:6px;">🇯🇵 일본·아시아</div>
+        <div class="ir" style="font-size:11px;"><span class="il">허쥬마 (일본)</span><span class="up">약 75%</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">아시아 매출(1Q26)</span><span class="up">3,716억 (+13%)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">아이덴젤트 (안과)</span><span class="up">신규 출시</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">스테키마 (스텔라라)</span><span class="up">미국 신규 진출</span></div>
+      </div>
+    </div>
+
+    <div class="hl">
+      <div style="font-size:13px;font-weight:500;color:#3B6D11;margin-bottom:4px;">💡 사업보고서 핵심 — 합병 시너지 완성 · OPM 28% 정상화</div>
+      <div style="font-size:12px;color:#1D9E75;line-height:1.7;">셀트리온헬스케어 합병(2023) 직후 2024년 OPM 13.8%로 급감했다가 2025년 28.1%로 정상화. 직판 체계 전환에 따른 매출 인식 방식 변화가 원인. 11개 상업화 제품 + 짐펜트라 신약 + ADC 3개 임상 1상 포트폴리오. <strong>연간 영업이익 1.17조는 2023년 수준을 뛰어넘은 역대최대 구간.</strong></div>
+    </div>
+  </div>
+
+  <!-- ══ 분기보고서 탭 ══ -->
+  <div id="tabQuarter" style="display:none;">
+    <div style="position:relative;width:100%;height:155px;margin-bottom:12px;">
+      <canvas id="ctQtrChart"></canvas>
+    </div>
+
+    <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:6px;letter-spacing:.03em;">📊 1Q26 연결 손익 요약 (단위: 억원 · 제36기 1분기)</div>
+    <div class="g2" style="margin-bottom:12px;">
+      <div>
+        <div class="ir"><span class="il">1Q26 매출액</span><span class="iv up">1조 1,450억 (▲35.9% YoY) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">1Q26 영업이익</span><span class="iv up">3,219억 (흑자전환, 전기 -1,494억) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">1Q26 OPM</span><span class="iv up">28.1% (전기 -17.7% → 흑전) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">1Q26 당기순이익</span><span class="iv up">3,498억 (전기 -2,557억 → 흑전) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">1Q26 기본EPS</span><span class="iv up">1,583원 (연환산 ~6,332원) <span class="ev ev-4">높음</span></span></div>
+      </div>
+      <div>
+        <div class="ir"><span class="il">북미 매출 (1Q26)</span><span class="iv up">5,102억 (▲35.6% YoY) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">아시아 매출 (1Q26)</span><span class="iv up">3,716억 (▲13.0%) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">유럽 매출 (1Q26)</span><span class="iv up">528억 (▲24.8%) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">중남미 매출 (1Q26)</span><span class="iv up">284억 (▲4.8%) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">바이오의약품 부문 OI</span><span class="iv up">3,172억 (OPM 17.8%) <span class="ev ev-4">높음</span></span></div>
+      </div>
+    </div>
+
+    <!-- 전분기 비교 -->
+    <div style="background:#F3E5F5;border-left:3px solid #6A1B9A;border-radius:var(--border-radius-md);padding:12px 14px;margin-bottom:12px;">
+      <div style="font-size:12px;font-weight:500;color:#6A1B9A;margin-bottom:5px;">📌 1Q26 vs 1Q25 — 전기(1Q25) 대규모 적자에서 흑자전환</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px;">
+        <div>
+          <div style="color:var(--color-text-secondary);margin-bottom:4px;">1Q25 (전기)</div>
+          <div>매출: 8,419억 | 영업이익: -1,494억 (OPM -17.7%)</div>
+          <div>짐펜트라 초기 판촉비용 급증으로 적자</div>
+        </div>
+        <div>
+          <div style="color:#6A1B9A;margin-bottom:4px;font-weight:500;">1Q26 (당기)</div>
+          <div>매출: 1조 1,450억 | 영업이익: +3,219억 (OPM 28.1%)</div>
+          <div>판촉비 정상화 + 매출 급증으로 완전 흑전</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 재무상태 변동 -->
+    <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">🏦 재무상태 변동 (2025.12 → 2026.03)</div>
+    <div class="g2" style="margin-bottom:12px;font-size:11px;">
+      <div>
+        <div class="ir" style="font-size:11px;"><span class="il">자산총계</span><span class="up">22.3조 → 23.2조 (+3.7%)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">현금·현금성</span><span class="up">1.12조 → 1.29조 (+15.2%)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">매출채권</span><span class="up">1.79조 → 1.91조 (매출 증가)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">무형자산</span><span class="up">13.78조 → 14.03조</span></div>
+      </div>
+      <div>
+        <div class="ir" style="font-size:11px;"><span class="il">단기금융부채</span><span>3.33조 → 3.45조</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">이익잉여금(연결)</span><span class="up">4.41조 → 4.59조 (+4.1%)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">자본총계</span><span class="up">17.35조 → 17.81조 (+2.7%)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">당기법인세부채</span><span>282억 → 1,183억 (이익 증가)</span></div>
+      </div>
+    </div>
+
+    <div class="hl">
+      <div style="font-size:13px;font-weight:500;color:#3B6D11;margin-bottom:4px;">💡 분기보고서 핵심 — 짐펜트라 비용 정상화 + 신제품 매출 폭발</div>
+      <div style="font-size:12px;color:#1D9E75;line-height:1.7;">1Q25 대규모 적자(-1,494억)는 짐펜트라 미국 출시 초기 판촉비 급증이 원인. 1Q26에는 판촉비 정상화 + 짐펜트라·스테키마·앱토즈마 매출 본격화로 OPM 28.1% 달성. 북미 매출 5,102억(+35.6%)이 성장 엔진. <strong>연환산 EPS 약 6,332원 기준 현재가 183,000원 → Forward PER ~28.9x — 성장성 대비 합리적.</strong></div>
+    </div>
+  </div>
+
+  <!-- 공통: 파이프라인 -->
+  <div style="font-size:13px;font-weight:500;margin:14px 0 8px;">제품 및 파이프라인 현황 <span class="src">📄 분기보고서 기준</span></div>
+  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;">상업화 완료 11개 + 임상 3상 4개 + ADC·신약 임상 1상 3개</div>
+
+  <div class="pipe-row"><span class="pipe-name">램시마 (CT-P13)</span><span class="pipe-stage s-market">판매중</span><span style="font-size:11px;color:var(--color-text-secondary);">인플릭시맙 BS · 글로벌 1위 · 짐펜트라(신약) 파생</span></div>
+  <div class="pipe-row"><span class="pipe-name">트룩시마 (CT-P10)</span><span class="pipe-stage s-market">판매중</span><span style="font-size:11px;color:var(--color-text-secondary);">리툭시맙 BS · 미국 31% · 유럽 30%</span></div>
+  <div class="pipe-row"><span class="pipe-name">허쥬마 (CT-P6)</span><span class="pipe-stage s-market">판매중</span><span style="font-size:11px;color:var(--color-text-secondary);">트라스투주맙 BS · 일본 75% 점유</span></div>
+  <div class="pipe-row"><span class="pipe-name">유플라이마 (CT-P17)</span><span class="pipe-stage s-market">판매중</span><span style="font-size:11px;color:var(--color-text-secondary);">아달리무맙 고농도 BS · 미국 상호교환성 확보</span></div>
+  <div class="pipe-row"><span class="pipe-name">베그젤마 (CT-P16)</span><span class="pipe-stage s-market">판매중</span><span style="font-size:11px;color:var(--color-text-secondary);">베바시주맙 BS · 항암 3번째</span></div>
+  <div class="pipe-row"><span class="pipe-name">짐펜트라 (CT-P13 SC)</span><span class="pipe-stage s-market" style="background:#F3E5F5;color:#6A1B9A;">신약</span><span style="font-size:11px;color:var(--color-text-secondary);">FDA 신약 허가 · 미국 90%+ 보험 커버리지</span></div>
+  <div class="pipe-row"><span class="pipe-name">스테키마 (CT-P43)</span><span class="pipe-stage s-market">판매중</span><span style="font-size:11px;color:var(--color-text-secondary);">스텔라라 BS · 2024년 FDA 허가 · 미국 신규 성장</span></div>
+  <div class="pipe-row"><span class="pipe-name">앱토즈마 (CT-P47)</span><span class="pipe-stage s-market">판매중</span><span style="font-size:11px;color:var(--color-text-secondary);">악템라 BS · 2025년 1월 FDA 허가</span></div>
+  <div class="pipe-row"><span class="pipe-name">아이덴젤트 (CT-P42)</span><span class="pipe-stage s-market">판매중</span><span style="font-size:11px;color:var(--color-text-secondary);">아일리아 BS · 2025년 10월 FDA 허가 · 안과 진출</span></div>
+  <div class="pipe-row"><span class="pipe-name">스토보클로&오센벨트</span><span class="pipe-stage s-market">판매중</span><span style="font-size:11px;color:var(--color-text-secondary);">데노수맙 BS · 2025년 2월 FDA 허가</span></div>
+  <div class="pipe-row"><span class="pipe-name">CT-P44 (다잘렉스)</span><span class="pipe-stage s-p3">임상 3상</span><span style="font-size:11px;color:var(--color-text-secondary);">다라투무맙 BS · 혈액암</span></div>
+  <div class="pipe-row"><span class="pipe-name">CT-P70 · CT-P71</span><span class="pipe-stage s-p1">임상 1상</span><span style="font-size:11px;color:var(--color-text-secondary);">ADC 신약 · FDA 패스트트랙 · 고형암 타깃</span></div>
+  <div class="pipe-row"><span class="pipe-name">CT-P73 (Nectin-4)</span><span class="pipe-stage s-p1">임상 1상</span><span style="font-size:11px;color:var(--color-text-secondary);">ADC 신약 · 자궁경부암·두경부암 타깃</span></div>
+</div>
+
+<!-- 3. 기본 투자지표 -->
+<div class="card">
+  <div class="sec">3. 기본 투자지표 (Per-Share) <span class="src">📄 분기보고서 원문 · 지배주주지분 기준</span></div>
+  <div class="g4">
+    <div class="met"><div class="ml">EPS · 2025 연결</div><div class="mv">4,668원</div><div class="ms">▲148% · 전기 1,879원</div><div style="margin-top:5px;"><span class="ev ev-4">높음</span></div></div>
+    <div class="met"><div class="ml">1Q26 분기 EPS</div><div class="mv">1,583원</div><div class="ms">연환산 ~6,332원 (연결)</div><div style="margin-top:5px;"><span class="ev ev-4">높음</span></div></div>
+    <div class="met"><div class="ml">BPS · 주당순자산</div><div class="mv">약 126,000원</div><div class="ms">지배자본 17.2조 ÷ 유통주식수</div><div style="margin-top:5px;"><span class="ev ev-4">높음</span></div></div>
+    <div class="met"><div class="ml">DPS · 주당배당금</div><div class="mv">약 3,000원</div><div class="ms">배당수익률 약 1.6% 추정</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
+  </div>
+</div>
+
+<!-- 4. 상대 투자지표 -->
+<div class="card">
+  <div class="sec">4. 상대 투자지표 (Valuation Multiples) · 현재가 183,000원 · 글로벌 바이오시밀러 비교</div>
+
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;font-size:11px;">
+    <span style="padding:2px 8px;border-radius:999px;background:#E6F1FB;color:#0C447C;font-weight:500;">1단계 매우낮음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#EAF3DE;color:#27500A;font-weight:500;">2단계 낮음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#F1EFE8;color:#444441;font-weight:500;">3단계 적정</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#FAEEDA;color:#633806;font-weight:500;">4단계 높음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#FCEBEB;color:#791F1F;font-weight:500;">5단계 매우높음</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PER</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">183,000÷4,668(2025EPS) · 글로벌 바이오시밀러 평균~30x<br><span style="color:#1D9E75;">Forward PER(연환산 6,332원) ≈ 28.9x — 성장성 대비 합리적 구간</span></div>
+    <div class="ind-val">39.2x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(15x)</span><span>적정(30x)</span><span>고(60x)</span></div><div class="bar-bg"><div class="bar-f" style="width:53%;background:#FAEEDA;"></div></div></div>
+    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PBR</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">183,000÷126,000 · 글로벌 바이오 평균~3x<br><span style="color:#EF9F27;">무형자산 13.8조(M&A PPA) 포함 — 실질 BPS 논란 가능</span></div>
+    <div class="ind-val">1.45x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(0.5x)</span><span>적정(2x)</span><span>고(6x)</span></div><div class="bar-bg"><div class="bar-f" style="width:18%;background:#E6F1FB;"></div></div></div>
+    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">OPM</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">1Q26 28.1% · 2025년 28.1% · 글로벌 바이오시밀러 평균~20%<br><span style="color:#1D9E75;">Amgen/AbbVie BS 부문 대비 동등 수준 — 고마진 구조 확인</span></div>
+    <div class="ind-val">28.1%</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(10%)</span><span>적정(20%)</span><span>고(40%)</span></div><div class="bar-bg"><div class="bar-f" style="width:61%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">매출 성장률</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">1Q26 YoY +35.9% · 2025년 +17.0%<br><span style="color:#1D9E75;">신제품 6개(2024~2025) 출시 효과 · 북미 +35.6% 성장 엔진</span></div>
+    <div class="ind-val">+35.9%</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(0%)</span><span>적정(15%)</span><span>고(40%)</span></div><div class="bar-bg"><div class="bar-f" style="width:90%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-1" style="min-width:58px;text-align:center;">1단계</span>
+  </div>
+
+  <!-- 피어비교 OPM -->
+  <div style="margin-top:12px;font-size:13px;font-weight:500;margin-bottom:8px;">글로벌 바이오시밀러 OPM 비교</div>
+  <div style="position:relative;width:100%;height:145px;margin-bottom:10px;">
+    <canvas id="peerChart"></canvas>
+  </div>
+
+  <div class="warn">
+    <div style="font-size:12px;color:#854F0B;line-height:1.7;">⚠ 셀트리온 밸류에이션 핵심 쟁점: PER 39.2x는 높지만 Forward PER 28.9x는 글로벌 바이오시밀러 평균 수준. PBR 1.45x는 무형자산(합병 PPA 13.8조) 포함으로 낮아 보이나 순수 영업자산 기준은 다름. 핵심 질문은 ① 짐펜트라 미국 침투율 지속 가능성, ② ADC 신약 임상 성공 가능성, ③ 신제품 매출 연간화 속도.</div>
+  </div>
+</div>
+
+<!-- 5. 시계열 이벤트 -->
+<div class="card">
+  <div class="sec">5. 시계열 주요 이벤트 <span class="src">📄 사업·분기보고서 + 📊 HTS 차트</span></div>
+
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-dot dot-pos"></div>
+      <div class="tl-date">2026년 01~02월</div>
+      <div class="tl-title">주가 반등 — 258,500원 최고가 달성 (02/19)</div>
+      <div class="tl-body">2025년 연간 영업이익 1.17조(+137.5%) 사상최대 기대감, OPM 28.1% 정상화 기대 + 아이덴젤트·스토보클로 FDA 허가 효과로 주가 반등. 8,429,227주(8.2%), 8,448,873주(8.7%)의 대형 수급 유입.</div>
+      <span class="tag tag-pos">실적 개선 기대</span><span class="tag tag-big">52주 최고</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-pos"></div>
+      <div class="tl-date">2026년 03월 (사업보고서)</div>
+      <div class="tl-title">제35기 사업보고서 — 영업이익 1.17조(▲137.5%) 역대최대 공시</div>
+      <div class="tl-body">매출 4.16조(+17%), 영업이익 1.17조(+137.5%), OPM 28.1%, EPS 4,668원(+148%). 합병 후 완전한 수익성 정상화 증명. 신약 짐펜트라 미국 90%+ 보험 커버리지 확보. 배당락(0.00%) 직후 대규모 매도로 주가 급락.</div>
+      <span class="tag tag-big">역대최대 영업이익</span><span class="tag tag-neg">배당락 후 급락</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2026년 3월 말 ~ 4월</div>
+      <div class="tl-title">주가 급락 — 최고 258,500→200,000원대 · 매물대 박스</div>
+      <div class="tl-body">배당락 이후 차익실현 매물 + 글로벌 바이오 업종 조정. 13,199,583주(12.8%), 10,821,161주(10.5%)의 대량 매물 출회. 209,400~202,800원 박스권에서 24,401,252주(23.7%)의 역대급 저점 매수 수급 유입.</div>
+      <span class="tag tag-neg">급락 조정</span><span class="tag tag-pos">저점 역대급 수급</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-pos"></div>
+      <div class="tl-date">2026년 05월 15일 (분기보고서)</div>
+      <div class="tl-title">1Q26 분기보고서 — 매출 1.15조(▲35.9%) · 영업이익 3,219억 · OPM 28.1% 흑자전환</div>
+      <div class="tl-body">연결 매출 1조 1,450억(+35.9%), 영업이익 3,219억(전기 -1,494억 → 흑전), OPM 28.1%. 북미 5,102억(+35.6%). 짐펜트라 판촉비 정상화 + 스테키마·앱토즈마·아이덴젤트 매출 본격화. ADC 신약 CT-P73 FDA 임상 1상 진행 중. EPS 1,583원(연환산 ~6,332원).</div>
+      <span class="tag tag-big">대규모 흑자전환</span><span class="tag tag-pos">북미 +35.6%</span><span class="tag tag-pos">OPM 28.1%</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2026년 05월 18일 (현재)</div>
+      <div class="tl-title">주가 179,600원 — 52주 최저 · HC -29.21% · 실적-주가 디커플링</div>
+      <div class="tl-body">실적은 사상최대 수준인데 주가는 52주 최저 갱신. 미국 바이오시밀러 가격 압박(IRA 정책), 글로벌 매크로 불확실성, 기술적 역배열 심화가 원인으로 지목. 실적과 주가의 극단적 디커플링 — 단기 기술적 약세 vs 펀더멘털 강세의 대결 구간.</div>
+      <span class="tag tag-neg">52주 최저</span><span class="tag tag-neg">실적-주가 디커플링</span>
+    </div>
+  </div>
+</div>
+
+<!-- 6. 투자 포인트 -->
+<div class="card">
+  <div class="sec">6. 2026년 핵심 투자 포인트</div>
+  <div class="g2">
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#1D9E75;">긍정 요인 (Bull)</div>
+      <div class="ir"><span class="il">1Q26 OPM 28.1% · 2025 OPM 28.1%</span><span class="badge b-green">구조적 고마진</span></div>
+      <div class="ir"><span class="il">1Q26 영업이익 흑자전환 (+3,219억)</span><span class="badge b-green">실적 모멘텀</span></div>
+      <div class="ir"><span class="il">북미 매출 +35.6% · 짐펜트라 확대</span><span class="badge b-green">미국 성장 엔진</span></div>
+      <div class="ir"><span class="il">ADC 신약 3개 임상 1상 · FDA 패스트트랙</span><span class="badge b-bio">신약 모멘텀</span></div>
+      <div class="ir"><span class="il">11개 상업화 제품 · 포트폴리오 다변화</span><span class="badge b-green">안정적 수익기반</span></div>
+      <div class="ir"><span class="il">Forward PER ~28.9x — 성장비율 대비 합리적</span><span class="badge b-blue">밸류에이션 매력</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#D85A30;">리스크 (Bear)</div>
+      <div class="ir"><span class="il">HC -29.21% · 52주 최저 갱신 진행</span><span class="badge b-red">기술적 붕괴</span></div>
+      <div class="ir"><span class="il">완전 역배열 · 모든 MA 하향</span><span class="badge b-red">추세 약세</span></div>
+      <div class="ir"><span class="il">미국 IRA·PBM 가격 압박</span><span class="badge b-red">수익성 압박</span></div>
+      <div class="ir"><span class="il">짐펜트라 경쟁 심화 (오리지널 비교)</span><span class="badge b-amber">시장 경쟁</span></div>
+      <div class="ir"><span class="il">무형자산 13.8조 상각 리스크</span><span class="badge b-amber">회계 리스크</span></div>
+      <div class="ir"><span class="il">ADC 신약 임상 실패 가능성</span><span class="badge b-gray">개발 리스크</span></div>
+    </div>
+  </div>
+  <div class="ib">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
+      <div><span style="color:var(--color-text-secondary);">시총:</span> <span style="font-weight:500;">~24.9조원</span></div>
+      <div><span style="color:var(--color-text-secondary);">2025 EPS:</span> <span class="up" style="font-weight:500;">4,668원 (▲148%)</span></div>
+      <div><span style="color:var(--color-text-secondary);">1Q26 EPS (연환산):</span> <span class="up" style="font-weight:500;">~6,332원</span></div>
+      <div><span style="color:var(--color-text-secondary);">PBR:</span> <span class="up" style="font-weight:500;">1.45x (합병PPA 포함)</span></div>
+    </div>
+  </div>
+  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">⚠ 사업보고서(제35기) + 분기보고서(제36기 1Q) 원문 파싱 기준 · 투자 권고가 아닙니다</div>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ── 탭 전환 ──────────────────────────────────────────────
+function switchTab(tab) {
+  const isA=tab==='annual';
+  document.getElementById('tabAnnual').style.display=isA?'':'none';
+  document.getElementById('tabQuarter').style.display=isA?'none':'';
+  const aS='flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);font-size:13px;cursor:pointer;transition:all .15s;background:#6A1B9A;border:1.5px solid #6A1B9A;color:#fff;font-weight:600;';
+  const iS='flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);font-size:13px;cursor:pointer;transition:all .15s;background:var(--color-background-secondary);border:1.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);font-weight:500;';
+  document.getElementById('btnAnnual').style.cssText=isA?aS:iS;
+  document.getElementById('btnQuarter').style.cssText=isA?iS:aS;
+  if(!isA&&!window._qReady){
+    window._qReady=true;
+    new Chart(document.getElementById('ctQtrChart'),{
+      type:'bar',
+      data:{
+        labels:['1Q25 매출','1Q26 매출','1Q25 영업이익','1Q26 영업이익'],
+        datasets:[
+          {label:'금액(억)',data:[8419,11450,-1494,3219],backgroundColor:['#B4B2A9','#6A1B9A','#D85A30','#1D9E75'],borderRadius:5,yAxisID:'y'},
+          {label:'OPM(%)',type:'line',data:[-17.7,28.1,-17.7,28.1],borderColor:'#EF9F27',backgroundColor:'rgba(239,159,39,.15)',tension:.3,pointRadius:6,borderWidth:2.5,fill:false,yAxisID:'y2'}
+        ]
+      },
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{labels:{font:{size:11},boxWidth:12}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label.includes('OPM')?`OPM ${ctx.raw}%`:`${ctx.raw.toLocaleString()}억`}}},
+        scales:{y:{position:'left',ticks:{font:{size:10},callback:v=>`${v.toLocaleString()}억`,color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+          y2:{position:'right',min:-30,max:35,ticks:{font:{size:10},callback:v=>v+'%',color:'#EF9F27'},grid:{display:false}},
+          x:{ticks:{font:{size:11},color:'#888'},grid:{display:false}}}}
+    });
+  }
+}
+
+// ── SVG 캔들차트 (HTS 차트 기반) ────────────────────────
+(function(){
+  const svg=document.getElementById('ctSvg');
+  const W=720,H=240,pL=76,pR=12,pT=14,pB=24;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  // 단위: 만원
+  // 1월: 205~215K → 2월: 최고 258.5K → 3월 급락 → 4월: 202~209K 박스 → 5월: 179.6K
+  const data=[
+    // 1월: 200K대 출발 → 상승
+    {o:20.8,h:21.5,l:20.5,c:21.2},{o:21.2,h:21.9,l:21.0,c:21.7},
+    {o:21.7,h:22.4,l:21.5,c:22.1},{o:22.1,h:22.8,l:21.8,c:22.5},
+    {o:22.5,h:23.2,l:22.3,c:23.0},{o:23.0,h:23.8,l:22.8,c:23.5},
+    // 2월: 추가 상승 → 최고 258.5K
+    {o:23.5,h:24.3,l:23.3,c:24.0},{o:24.0,h:24.9,l:23.8,c:24.6},
+    {o:24.6,h:25.5,l:24.4,c:25.2},{o:25.2,h:25.85,l:25.0,c:25.7},  // ← 최고
+    {o:25.7,h:25.85,l:24.8,c:25.0}, // 최고 직후 조정
+    // 3월: 급락
+    {o:25.0,h:25.2,l:23.5,c:23.8},{o:23.8,h:24.0,l:22.3,c:22.6},
+    {o:22.6,h:22.8,l:21.0,c:21.3},{o:21.3,h:21.5,l:20.2,c:20.5},
+    {o:20.5,h:20.7,l:20.0,c:20.3},
+    // 4월: 박스 20.28~20.94K
+    {o:20.3,h:21.0,l:20.1,c:20.9},{o:20.9,h:21.1,l:20.4,c:20.7},
+    {o:20.7,h:21.0,l:20.3,c:20.8},{o:20.8,h:21.0,l:20.2,c:20.5},
+    {o:20.5,h:20.9,l:20.1,c:20.7},{o:20.7,h:21.0,l:20.3,c:20.9},
+    {o:20.9,h:21.1,l:20.5,c:20.8},{o:20.8,h:21.0,l:20.2,c:20.4},
+    // 5월: 박스 이탈 → 최저
+    {o:20.4,h:20.6,l:19.8,c:20.0},{o:20.0,h:20.2,l:19.3,c:19.5},
+    {o:19.5,h:19.7,l:18.8,c:19.0},{o:19.0,h:19.2,l:17.96,c:18.3} // ← 최저 179.6K
+  ];
+  const prices=data.flatMap(d=>[d.h,d.l]);
+  const maxP=Math.max(...prices)+.3,minP=Math.min(...prices)-.3;
+  const rng=maxP-minP;
+  function py(v){return pT+cH*(1-(v-minP)/rng);}
+  const colW=cW/data.length,cw=Math.max(colW*.62,8);
+  // 그리드
+  [18,20,22,24,26].forEach(v=>{
+    const y=py(v);
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
+    l.setAttribute('stroke','rgba(128,128,128,.12)');l.setAttribute('stroke-width','1');svg.appendChild(l);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',pL-4);t.setAttribute('y',y+4);t.setAttribute('text-anchor','end');
+    t.setAttribute('font-size','9');t.setAttribute('fill','rgba(128,128,128,.7)');
+    t.textContent=(v*10000).toLocaleString();svg.appendChild(t);
+  });
+  // 박스권 음영
+  const z=document.createElementNS('http://www.w3.org/2000/svg','rect');
+  z.setAttribute('x',pL);z.setAttribute('y',py(20.94));z.setAttribute('width',cW);
+  z.setAttribute('height',py(20.28)-py(20.94));z.setAttribute('fill','rgba(106,27,154,0.06)');svg.insertBefore(z,svg.firstChild);
+  // MA
+  function calcMA(d,n){return d.map((_,i)=>i<n-1?null:d.slice(i-n+1,i+1).reduce((s,x)=>s+x.c,0)/n);}
+  function drawLine(arr,col,w){
+    let pts=[];arr.forEach((v,i)=>{if(v===null)return;pts.push(`${pL+(i+.5)*colW},${py(v)}`);});
+    if(pts.length<2)return;
+    const p=document.createElementNS('http://www.w3.org/2000/svg','polyline');
+    p.setAttribute('points',pts.join(' '));p.setAttribute('fill','none');p.setAttribute('stroke',col);p.setAttribute('stroke-width',w||1.5);svg.appendChild(p);
+  }
+  data.forEach((d,i)=>{
+    const cx=pL+(i+.5)*colW,isUp=d.c>=d.o,col=isUp?'#D85A30':'#185FA5';
+    const wk=document.createElementNS('http://www.w3.org/2000/svg','line');
+    wk.setAttribute('x1',cx);wk.setAttribute('x2',cx);wk.setAttribute('y1',py(d.h));wk.setAttribute('y2',py(d.l));
+    wk.setAttribute('stroke',col);wk.setAttribute('stroke-width','1.5');svg.appendChild(wk);
+    const bT=py(Math.max(d.o,d.c)),bB=py(Math.min(d.o,d.c));
+    const bd=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    bd.setAttribute('x',cx-cw/2);bd.setAttribute('y',bT);bd.setAttribute('width',cw);
+    bd.setAttribute('height',Math.max(bB-bT,2));bd.setAttribute('fill',col);bd.setAttribute('rx','1');svg.appendChild(bd);
+  });
+  drawLine(calcMA(data,5),'#FF69B4',1.5);
+  drawLine(calcMA(data,20),'#9370DB',1.5);
+  drawLine(calcMA(data,60),'#DAA520',2);
+  const mk=(idx,lbl,isLow,col)=>{
+    const cx=pL+(idx+.5)*colW,cy=isLow?py(data[idx].l)+12:py(data[idx].h)-8;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',cx);t.setAttribute('y',cy);t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','9');t.setAttribute('fill',col);t.setAttribute('font-weight','500');
+    t.textContent=lbl;svg.appendChild(t);
+  };
+  mk(9,'최고258.5K(02/19)',false,'#D85A30');
+  mk(data.length-1,'최저179.6K(05/18)',true,'#A32D2D');
+  ['1월','2월','3월','4월','5월'].forEach((m,i)=>{
+    const cx=pL+(i/5)*cW+cW/10;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',cx);t.setAttribute('y',H-4);t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','10');t.setAttribute('fill','rgba(128,128,128,.8)');t.textContent=m;svg.appendChild(t);
+  });
+  [{c:'#D85A30',t:'양봉'},{c:'#185FA5',t:'음봉'},{c:'#FF69B4',t:'MA5'},{c:'#9370DB',t:'MA20'},{c:'#DAA520',t:'MA60'}].forEach((l,i)=>{
+    const gx=pL+i*98;
+    const r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    r.setAttribute('x',gx);r.setAttribute('y',2);r.setAttribute('width',10);r.setAttribute('height',10);r.setAttribute('fill',l.c);r.setAttribute('rx','2');svg.appendChild(r);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',gx+13);t.setAttribute('y',11);t.setAttribute('font-size','9');t.setAttribute('fill','rgba(128,128,128,.9)');t.textContent=l.t;svg.appendChild(t);
+  });
+})();
+
+// ── 연간 실적 차트 ──────────────────────────────────────
+new Chart(document.getElementById('ctRevChart'),{
+  type:'bar',
+  data:{
+    labels:['2023 (제33기)','2024 (제34기)','2025 (제35기)'],
+    datasets:[
+      {label:'매출(조)',data:[2.18,3.56,4.16],backgroundColor:'#6A1B9A',borderRadius:4,yAxisID:'y'},
+      {label:'영업이익(조)',data:[0.651,0.492,1.169],backgroundColor:['#9C27B0','#9C27B0','#9C27B0'],borderRadius:4,yAxisID:'y'},
+      {label:'OPM(%)',type:'line',data:[29.9,13.8,28.1],borderColor:'#EF9F27',backgroundColor:'rgba(239,159,39,.1)',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{font:{size:11},boxWidth:12}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label.includes('OPM')?`${ctx.raw}%`:`${ctx.raw.toFixed(2)}조`}}},
+    scales:{y:{position:'left',ticks:{font:{size:10},callback:v=>v.toFixed(1)+'조',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+      y2:{position:'right',min:0,max:40,ticks:{font:{size:10},callback:v=>v+'%',color:'#EF9F27'},grid:{display:false}},
+      x:{ticks:{font:{size:11},color:'#888'},grid:{display:false}}}}
+});
+
+// ── OPM 피어비교 ────────────────────────────────────────
+new Chart(document.getElementById('peerChart'),{
+  type:'bar',
+  data:{
+    labels:['셀트리온','Amgen BS','Pfizer BS부문','Samsung Bioepis','Sandoz(Novartis)','삼성바이오로직스'],
+    datasets:[{label:'OPM(%)',data:[28.1,24.5,18.2,19.8,15.3,30.2],
+      backgroundColor:['#6A1B9A','#B4B2A9','#B4B2A9','#B4B2A9','#B4B2A9','#B4B2A9'],borderRadius:5}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`OPM ${ctx.raw}%`}}},
+    scales:{y:{max:40,ticks:{font:{size:10},callback:v=>v+'%',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+      x:{ticks:{font:{size:10},color:'#888'},grid:{display:false}}}}
+});
+</script>

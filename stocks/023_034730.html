@@ -1,0 +1,576 @@
+<link rel="stylesheet" href="../css/global.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
+.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:18px;}
+.sec{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:12px;}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:14px;}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px;text-align:center;}
+.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
+.mv{font-size:14px;font-weight:500;color:var(--color-text-primary);}
+.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
+.up{color:#1D9E75;}.dn{color:#D85A30;}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
+.b-green{background:#EAF3DE;color:#3B6D11;}.b-amber{background:#FAEEDA;color:#854F0B;}
+.b-red{background:#FCEBEB;color:#A32D2D;}.b-blue{background:#E6F1FB;color:#185FA5;}
+.b-gray{background:#F1EFE8;color:#5F5E5A;}.b-sk{background:#E8F4F8;color:#C00000;}
+.sig{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
+.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
+.ir:last-child{border-bottom:none;}
+.il{color:var(--color-text-secondary);}.iv{font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:6px;}
+.src{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-tertiary);margin-left:4px;}
+.hl{background:#EAF3DE;border-left:3px solid #1D9E75;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.warn{background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ev-1{background:#E6F1FB;color:#0C447C;}.ev-2{background:#EAF3DE;color:#27500A;}
+.ev-3{background:#F1EFE8;color:#444441;}.ev-4{background:#FAEEDA;color:#633806;}
+.ev-5{background:#FCEBEB;color:#791F1F;}
+.ev{font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;}
+.ind-row{display:flex;align-items:center;padding:8px 0;border-bottom:.5px solid var(--color-border-tertiary);gap:10px;}
+.ind-row:last-child{border-bottom:none;}
+.ind-nm{font-size:13px;font-weight:500;color:var(--color-text-primary);min-width:130px;}
+.ind-val{font-size:14px;font-weight:500;color:var(--color-text-primary);min-width:80px;text-align:right;}
+.bar-bg{background:var(--color-border-tertiary);border-radius:4px;height:7px;}
+.bar-f{border-radius:4px;height:7px;}
+.tl{position:relative;padding-left:28px;}
+.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--color-border-tertiary);border-radius:2px;}
+.tl-item{position:relative;margin-bottom:18px;}
+.tl-item:last-child{margin-bottom:0;}
+.tl-dot{position:absolute;left:-24px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid white;}
+.dot-big{background:#C00000;}.dot-pos{background:#1D9E75;}
+.dot-neg{background:#D85A30;}.dot-neu{background:#888780;}
+.tl-date{font-size:11px;font-weight:500;color:var(--color-text-tertiary);margin-bottom:3px;}
+.tl-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px;line-height:1.4;}
+.tl-body{font-size:12px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:5px;}
+.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;margin-right:4px;}
+.tag-big{background:#E8F4F8;color:#C00000;}.tag-pos{background:#EAF3DE;color:#3B6D11;}
+.tag-neg{background:#FCEBEB;color:#791F1F;}.tag-neu{background:#F1EFE8;color:#444441;}
+</style>
+
+<div style="padding:1rem 0;">
+
+<!-- 헤더 -->
+<div style="margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+  <h2>SK (주) (034730)</h2>
+  <span class="badge b-sk">코스피 · SK그룹 지주사</span>
+  <span class="badge b-gray">SK하이닉스·SKT·SK이노베이션·SK스퀘어 등 577社 지배</span>
+  <span class="src">📄 사업·분기보고서 원문 + 📊 HTS 차트</span>
+</div>
+<p class="sub">현재가 639,000원 (-1.08%) · 최고 646,000원 (05/22 당일) · 최저 273,500원 (01/09) · LC +133.64% · HC -1.08% · 시총 약 35.1조</p>
+
+<!-- 핵심 지표 배너 -->
+<div style="background:#FFF0F0;border-left:3px solid #C00000;border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:14px;">
+  <div style="font-size:12px;color:#C00000;line-height:1.6;"><strong>🔑 SK 지주 투자의 핵심:</strong> SK(주)는 SK하이닉스 지분(약 20.1%)을 통한 지분법 이익이 수익의 절대적 핵심. 1Q26 법인세전이익 11.6조의 대부분이 SK하이닉스 AI HBM 수혜에서 비롯. SK스퀘어(반도체·AI) 가치 재평가 + SKT AI 성장도 지주 NAV에 직결.</div>
+</div>
+
+<div class="g4">
+  <div class="met"><div class="ml">현재가 (05/22)</div><div class="mv">639,000원</div><div class="ms dn">-1.08% · 당일 최고 646K</div></div>
+  <div class="met"><div class="ml">1Q26 연결 영업이익</div><div class="mv">3조 6,731억</div><div class="ms up">▲ 대폭 YoY · 분기 최강</div></div>
+  <div class="met"><div class="ml">1Q26 지배주주 순이익</div><div class="mv">3조 3,807억</div><div class="ms up">SK하이닉스 지분법 이익 포함</div></div>
+  <div class="met"><div class="ml">1Q26 보통주 EPS</div><div class="mv">61,371원</div><div class="ms up">연환산 ~24.5만원 (분기)</div></div>
+</div>
+
+<!-- 1. 기술적 분석 -->
+<div class="card">
+  <div class="sec">1. 기술적 분석 — 실제 HTS 차트 (2026.01~05/22)</div>
+  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;">
+    최저 273,500원 (01/09) → 최고 646,000원 (05/22 당일!) · LC +133.64% · HC -1.08% · 현재 639,000원
+  </div>
+  <svg id="skSvg" viewBox="0 0 720 240" width="100%" style="display:block;margin-bottom:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:4px;"></svg>
+
+  <div style="font-size:13px;font-weight:500;margin-bottom:8px;">📊 HTS 차트 구간별 분석 <span class="src">📊</span></div>
+  <div class="g4" style="font-size:11px;margin-bottom:12px;">
+    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#854F0B;font-weight:500;margin-bottom:3px;">1월 — 저점 형성</div>
+      <div style="color:#633806;line-height:1.6;">최저 273,500 (01/09)<br>533,188(1.6%) 거래<br>816,849(2.4%) 매물<br>배당락(0.00%) 통과</div>
+    </div>
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#3B6D11;font-weight:500;margin-bottom:3px;">2월 — 강한 상승</div>
+      <div style="color:#1D9E75;line-height:1.6;">3,814,110(11.4%) 매물<br>602,872(1.8%) 상승<br>3,472,463(10.4%) 급등<br>495,624(1.5%) 축적</div>
+    </div>
+    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#854F0B;font-weight:500;margin-bottom:3px;">3~4월 — 박스 조정</div>
+      <div style="color:#633806;line-height:1.6;">590,509(1.8%) 박스<br>5,948,522(17.7%) 수급<br>7,327,544(21.9%) 대형<br>9,923,993(29.6%) 역대</div>
+    </div>
+    <div style="background:#E8F4F8;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#C00000;font-weight:500;margin-bottom:3px;">5월 — 재급등 신고가</div>
+      <div style="color:#C00000;line-height:1.6;">9,923,993주 역대급<br>350,200→314,100 매물<br>최고 646,000 (05/22)<br>HC -1.08% (당일)</div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;">
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;">이동평균선 현황</div>
+      <div class="ir"><span class="il">5일선</span><span class="badge b-green">강한 상승 돌파</span></div>
+      <div class="ir"><span class="il">20일선</span><span class="badge b-green">정배열 지지</span></div>
+      <div class="ir"><span class="il">60일선</span><span class="badge b-green">중기 강한 정배열</span></div>
+      <div class="ir"><span class="il">120일선</span><span class="badge b-green">장기 정배열 유지</span></div>
+      <div class="ir"><span class="il">배열</span><span class="badge b-green">완전 정배열 · 상승 추세</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;">핵심 가격대</div>
+      <div class="ir"><span class="il">오늘 최고 (신고가)</span><span style="font-weight:500;color:#C00000;">646,000원 (05/22 당일)</span></div>
+      <div class="ir"><span class="il">역대급 매물대</span><span style="font-weight:500;color:#D85A30;">350,200~314,100원</span></div>
+      <div class="ir"><span class="il">현재가</span><span style="font-weight:500;color:#C00000;">639,000원 (신고가 근접)</span></div>
+      <div class="ir"><span class="il">52주 최저</span><span style="font-weight:500;">273,500원 (01/09)</span></div>
+      <div class="ir"><span class="il">LC / HC</span><span style="font-weight:500;">+133.64% / -1.08%</span></div>
+    </div>
+  </div>
+
+  <div class="sig">
+    <span class="badge b-green">오늘(05/22) 신고가 646,000원 달성 · HC -1.08% 에 불과</span>
+    <span class="badge b-green">LC +133.64% — 코스피 최상위권 수익률</span>
+    <span class="badge b-green">완전 정배열 · 모든 MA 상향 돌파 중</span>
+    <span class="badge b-green">9,923,993주(29.6%) 역대급 수급 유입</span>
+    <span class="badge b-sk">1Q26 EPS 61,371원 — SK하이닉스 지분법 이익 폭발</span>
+    <span class="badge b-blue">1Q26 법인세전이익 11.6조 (분기 역대최대)</span>
+  </div>
+</div>
+
+<!-- 2. 기본적 분석 탭 -->
+<div class="card">
+  <div class="sec">2. 기본적 분석 — 공시 원문 <span class="src">📄 사업보고서 제35기(2025) + 분기보고서 제36기 1Q(2026.03)</span></div>
+
+  <!-- 탭 버튼 -->
+  <div style="display:flex;gap:8px;margin-bottom:14px;">
+    <button id="btnAnnual" onclick="switchTab('annual')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);border:1.5px solid #C00000;background:#C00000;color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;">
+      📄 사업보고서 <span style="font-size:11px;opacity:.85;font-weight:400;">제35기 · 2025년 연간</span>
+    </button>
+    <button id="btnQuarter" onclick="switchTab('quarter')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);border:1.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-secondary);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;">
+      📋 분기보고서 <span style="font-size:11px;opacity:.85;font-weight:400;">제36기 1분기 · 2026.03</span>
+    </button>
+  </div>
+
+  <!-- ══ 사업보고서 탭 ══ -->
+  <div id="tabAnnual">
+    <div style="position:relative;width:100%;height:155px;margin-bottom:12px;">
+      <canvas id="skRevChart"></canvas>
+    </div>
+
+    <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:6px;letter-spacing:.03em;">📊 연결 손익 요약 (단위: 억원 · 제35기 2025년)</div>
+    <div class="g2" style="margin-bottom:12px;">
+      <div>
+        <div class="ir"><span class="il">연결 매출액</span><span class="iv">122조 5,699억 (▼0.5%) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">연결 영업이익</span><span class="iv">1조 8,039억 (▼24.6%) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">연결 당기순이익</span><span class="iv up">3조 5,552억 (▲572%) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">지배주주 순이익</span><span class="iv up">1조 5,975억 (흑전) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">보통주 기본EPS</span><span class="iv up">29,000원 (전기 -23,455원 흑전) <span class="ev ev-4">높음</span></span></div>
+      </div>
+      <div>
+        <div class="ir"><span class="il">연결 자산총계</span><span class="iv">213조 5,197억 (▼0.7%) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">관계기업투자</span><span class="iv up">37조 7,858억 (SK하이닉스 등) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">현금·현금성</span><span class="iv up">25조 2,141억 (▲2.3%) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">지배주주자본</span><span class="iv up">25조 1,872억 (▲0.3%) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">연결 포함 회사</span><span class="iv">577개사 (전기 649개사) <span class="ev ev-3">적정</span></span></div>
+      </div>
+    </div>
+
+    <!-- 사업부문 -->
+    <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">🏗️ SK그룹 주요 계열사 구조 (별도 영업이익 기준)</div>
+    <div class="g3" style="font-size:11px;margin-bottom:12px;">
+      <div style="background:#E8F4F8;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #C00000;">
+        <div style="color:#C00000;font-weight:500;margin-bottom:5px;">반도체·AI (SK하이닉스)</div>
+        <div class="ir" style="font-size:11px;"><span class="il">지분법 이익</span><span class="up">연결 수익 최대 원천</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">SK스퀘어</span><span class="up">반도체·AI 투자회사</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">SK하이닉스 지분</span><span class="up">약 20.1% 보유</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">HBM AI 수혜</span><span class="up">분기 지분법 이익 급증</span></div>
+      </div>
+      <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #1D9E75;">
+        <div style="color:#3B6D11;font-weight:500;margin-bottom:5px;">에너지·배터리</div>
+        <div class="ir" style="font-size:11px;"><span class="il">SK이노베이션</span><span>석유·LNG·배터리</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">SK에너지</span><span>정유 1위</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">SK온</span><span class="up">배터리 턴어라운드</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">E&S CIC</span><span>LNG·도시가스</span></div>
+      </div>
+      <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #EF9F27;">
+        <div style="color:#854F0B;font-weight:500;margin-bottom:5px;">통신·IT서비스</div>
+        <div class="ir" style="font-size:11px;"><span class="il">SK텔레콤</span><span>AI 피코셀 1위</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">SK(주) IT서비스</span><span>SK C&C AI</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">11번가·ADT</span><span>커머스·보안</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">SK브로드밴드</span><span>유선 인터넷</span></div>
+      </div>
+    </div>
+
+    <!-- 3개년 EPS -->
+    <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">📈 보통주 EPS 3개년 추이</div>
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <div style="flex:1;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;text-align:center;">
+        <div style="font-size:10px;color:var(--color-text-secondary);margin-bottom:4px;">제33기 2023년</div>
+        <div style="font-size:18px;font-weight:700;color:#D85A30;">-13,941원</div>
+        <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:4px;">영업이익 4조 7,885억</div>
+      </div>
+      <div style="display:flex;align-items:center;font-size:18px;color:#D85A30;font-weight:700;">→</div>
+      <div style="flex:1;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;text-align:center;">
+        <div style="font-size:10px;color:var(--color-text-secondary);margin-bottom:4px;">제34기 2024년</div>
+        <div style="font-size:18px;font-weight:700;color:#D85A30;">-23,455원</div>
+        <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:4px;">영업이익 2조 3,960억</div>
+      </div>
+      <div style="display:flex;align-items:center;font-size:18px;color:#1D9E75;font-weight:700;">→</div>
+      <div style="flex:1;background:#FFF0F0;border-radius:var(--border-radius-md);padding:10px;text-align:center;border:1.5px solid #C00000;">
+        <div style="font-size:10px;color:#C00000;margin-bottom:4px;font-weight:500;">제35기 2025년</div>
+        <div style="font-size:18px;font-weight:700;color:#C00000;">+29,000원</div>
+        <div style="font-size:10px;color:#C00000;margin-top:4px;">흑자전환 · 영업이익 1조 8,039억</div>
+      </div>
+    </div>
+
+    <div class="hl">
+      <div style="font-size:13px;font-weight:500;color:#3B6D11;margin-bottom:4px;">💡 사업보고서 핵심 — 2년 연속 적자→2025년 흑전 · SK하이닉스 지분법 이익 핵심</div>
+      <div style="font-size:12px;color:#1D9E75;line-height:1.7;">2023~2024년 2년 연속 지배주주 적자(각 -7,768억, -1조 2,927억)에서 2025년 흑전(+1조 5,975억). 이유는 SK하이닉스 AI HBM 수혜로 지분법 이익이 폭발적으로 증가했기 때문. <strong>별도 영업이익(8,132억)보다 연결 지배주주 순이익(1.6조)이 크게 높은 구조 — 지주사 특성상 지분법 이익이 핵심.</strong></div>
+    </div>
+  </div>
+
+  <!-- ══ 분기보고서 탭 ══ -->
+  <div id="tabQuarter" style="display:none;">
+    <div style="position:relative;width:100%;height:155px;margin-bottom:12px;">
+      <canvas id="skQtrChart"></canvas>
+    </div>
+
+    <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:6px;letter-spacing:.03em;">📊 1Q26 연결 손익 요약 (단위: 억원 · 제36기 1분기)</div>
+    <div class="g2" style="margin-bottom:12px;">
+      <div>
+        <div class="ir"><span class="il">1Q26 연결 매출액</span><span class="iv up">36조 7,513억 <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">1Q26 연결 영업이익</span><span class="iv up">3조 6,731억 (YoY 대폭↑) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">1Q26 법인세차감전이익</span><span class="iv up">11조 6,472억 (SK하이닉스 지분법 급증) <span class="ev ev-5">매우높음</span></span></div>
+        <div class="ir"><span class="il">1Q26 연결 당기순이익</span><span class="iv up">9조 9,063억 <span class="ev ev-5">매우높음</span></span></div>
+        <div class="ir"><span class="il">1Q26 지배주주 순이익</span><span class="iv up">3조 3,807억 <span class="ev ev-5">매우높음</span></span></div>
+      </div>
+      <div>
+        <div class="ir"><span class="il">1Q26 보통주 기본EPS</span><span class="iv up">61,371원 (연환산 ~24.5만원) <span class="ev ev-5">매우높음</span></span></div>
+        <div class="ir"><span class="il">1Q26 연결 자산총계</span><span class="iv up">228조 7,661억 (▲7.1% QoQ) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">관계기업투자 (지분법)</span><span class="iv up">47조 1,604억 (▲9.4조 급증) <span class="ev ev-5">매우높음</span></span></div>
+        <div class="ir"><span class="il">지배주주자본</span><span class="iv up">29조 5,801억 (▲4.4조 급증) <span class="ev ev-5">매우높음</span></span></div>
+        <div class="ir"><span class="il">별도 영업이익</span><span class="iv up">1,246억 (연간화 시 약 5천억 수준) <span class="ev ev-3">적정</span></span></div>
+      </div>
+    </div>
+
+    <!-- 법인세전이익 vs 영업이익 갭 설명 -->
+    <div style="background:#FFF0F0;border-left:3px solid #C00000;border-radius:var(--border-radius-md);padding:12px 14px;margin-bottom:12px;">
+      <div style="font-size:12px;font-weight:500;color:#C00000;margin-bottom:5px;">🔑 왜 영업이익(3.7조)과 법인세전이익(11.6조)이 3배 차이 날까?</div>
+      <div style="font-size:12px;color:#A00000;line-height:1.7;">차이(약 8조)의 핵심 = <strong>SK하이닉스·SK스퀘어 지분법 이익 급증</strong>. SK하이닉스가 HBM AI 수요 폭발로 1Q26 대규모 이익을 기록하고, SK(주)가 지분(약 20.1%)만큼 지분법 이익으로 연결 인식. 관계기업투자가 37.8조→47.2조로 +9.4조 급증한 것이 바로 이 지분법 이익 누적. <strong>SK(주) 주가 = SK하이닉스 + SK스퀘어(반도체·AI) + SKT + SK이노베이션의 복합 NAV</strong>.</div>
+    </div>
+
+    <!-- 재무상태 분기 변동 -->
+    <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">🏦 재무상태 변동 (2025.12 → 2026.03)</div>
+    <div class="g2" style="margin-bottom:12px;font-size:11px;">
+      <div>
+        <div class="ir" style="font-size:11px;"><span class="il">자산총계</span><span class="up">213.5조 → 228.8조 (+7.2%)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">관계기업투자</span><span class="up">37.8조 → 47.2조 (+9.4조, 지분법↑)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">매출채권</span><span class="up">13.1조 → 16.6조 (+26.7%)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">유형자산</span><span class="up">69.8조 → 71.2조</span></div>
+      </div>
+      <div>
+        <div class="ir" style="font-size:11px;"><span class="il">지배주주자본</span><span class="up">25.2조 → 29.6조 (+4.4조)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">비지배지분</span><span class="up">60.5조 → 67.5조 (+6.9조)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">자본총계</span><span class="up">85.7조 → 97.0조 (+13.2%)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">이익잉여금(연결)</span><span class="up">13.0조 → 16.1조 (+3.1조)</span></div>
+      </div>
+    </div>
+
+    <div class="hl">
+      <div style="font-size:13px;font-weight:500;color:#3B6D11;margin-bottom:4px;">💡 분기보고서 핵심 — 법인세전이익 11.6조 · EPS 61,371원 · 관계기업투자 +9.4조</div>
+      <div style="font-size:12px;color:#1D9E75;line-height:1.7;">1Q26 법인세전이익 11.6조는 SK그룹 역사상 분기 최대 수준. SK하이닉스 AI HBM 수요 폭발에 따른 지분법 이익이 핵심. 관계기업투자가 37.8조→47.2조로 +9.4조 급증. 1Q26 EPS 61,371원, 연환산 24.5만원 대비 현재가 639,000원 → Forward PER 2.6x라는 극단적 저평가. <strong>그러나 지주사 특성상 NAV 디스카운트 20~30%가 일반적이므로 단순 PER 비교는 주의 필요.</strong></div>
+    </div>
+  </div>
+
+  <!-- 공통: SK그룹 지주 NAV -->
+  <div style="font-size:13px;font-weight:500;margin:14px 0 8px;">SK(주) NAV 구성 핵심 자회사</div>
+  <div class="g3" style="font-size:12px;">
+    <div style="background:#FFF0F0;border-radius:var(--border-radius-md);padding:10px 12px;border-left:3px solid #C00000;">
+      <div style="color:#C00000;font-weight:500;margin-bottom:3px;">💎 SK하이닉스 (최대 가치)</div>
+      <div style="color:#A00000;line-height:1.6;">지분 약 20.1%<br>AI HBM 세계 1위<br>시총 약 200조 → 지분가치 40조<br>1Q26 지분법 이익 폭발</div>
+    </div>
+    <div style="background:#E3F2FD;border-radius:var(--border-radius-md);padding:10px 12px;border-left:3px solid #1565C0;">
+      <div style="color:#1565C0;font-weight:500;margin-bottom:3px;">📱 SK스퀘어·SKT</div>
+      <div style="color:#0D47A1;line-height:1.6;">SK스퀘어: 반도체·AI 투자<br>SK텔레콤: AI 피코셀 성장<br>SK하이닉스 지분 간접 노출<br>AI 인프라 수혜 복합</div>
+    </div>
+    <div style="background:#E8F5E9;border-radius:var(--border-radius-md);padding:10px 12px;border-left:3px solid #1D9E75;">
+      <div style="color:#1D9E75;font-weight:500;margin-bottom:3px;">⚡ SK이노베이션·SK온</div>
+      <div style="color:#388E3C;line-height:1.6;">SK에너지 정유 1위<br>SK온 배터리 턴어라운드 기대<br>E&S CIC LNG·도시가스<br>1Q26 에너지 실적 개선</div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. 기본 투자지표 -->
+<div class="card">
+  <div class="sec">3. 기본 투자지표 (Per-Share) <span class="src">📄 분기보고서 원문 · 보통주 기준</span></div>
+  <div class="g4">
+    <div class="met"><div class="ml">EPS · 2025 연결</div><div class="mv">29,000원</div><div class="ms">▲ 흑전 · 전기 -23,455원</div><div style="margin-top:5px;"><span class="ev ev-4">높음</span></div></div>
+    <div class="met"><div class="ml">1Q26 분기 EPS</div><div class="mv">61,371원</div><div class="ms">연환산 ~24.5만원 (폭발)</div><div style="margin-top:5px;"><span class="ev ev-5">매우높음</span></div></div>
+    <div class="met"><div class="ml">BPS · 주당순자산</div><div class="mv">약 537,000원</div><div class="ms">지배자본 29.6조 ÷ ~5,510만주</div><div style="margin-top:5px;"><span class="ev ev-4">높음</span></div></div>
+    <div class="met"><div class="ml">별도 EPS · 2025</div><div class="mv">24,399원</div><div class="ms">별도 당기순이익 기준</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
+  </div>
+</div>
+
+<!-- 4. 상대 투자지표 -->
+<div class="card">
+  <div class="sec">4. 상대 투자지표 — 지주사 특성 감안 · 현재가 639,000원</div>
+
+  <div style="background:#FFF3E0;border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:12px;border-left:3px solid #EF9F27;">
+    <div style="font-size:12px;color:#854F0B;"><strong>⚠ 지주사 밸류에이션 주의:</strong> SK(주)는 지주사로서 PER·PBR 단순 비교보다 NAV(순자산가치) 분석이 적합. 지분법 이익이 포함된 연결 EPS를 그대로 적용하면 PER이 비현실적으로 낮게 보임. <strong>핵심 지표: ① NAV 대비 할인율 ② 주요 계열사 가치 합산 ③ 별도 실적 + 배당</strong></div>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PER (2025 연결EPS)</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">639,000÷29,000 · 지주사 특성상 단순 비교 주의<br><span style="color:#1D9E75;">Forward PER(1Q26 연환산 24.5만원) ≈ 2.6x — 극단적으로 낮으나 지주사 특성</span></div>
+    <div class="ind-val">22.0x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(5x)</span><span>적정(15x)</span><span>고(30x)</span></div><div class="bar-bg"><div class="bar-f" style="width:68%;background:#FAEEDA;"></div></div></div>
+    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PBR</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">639,000÷537,000(지배주주BPS) · 지주사 평균~0.5x<br><span style="color:#1D9E75;">PBR 1.19x — NAV 대비 프리미엄 구간 · 주요 계열사 가치 재평가 반영</span></div>
+    <div class="ind-val">1.19x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(0.3x)</span><span>적정(0.7x)</span><span>고(1.5x)</span></div><div class="bar-bg"><div class="bar-f" style="width:74%;background:#FAEEDA;"></div></div></div>
+    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">LC 수익률</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">연초 (1/09) 273,500원 → 현재 639,000원<br><span style="color:#1D9E75;">+133.64% — 2026년 코스피 최상위권 수익률</span></div>
+    <div class="ind-val">+133.64%</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>0%</span><span>100%</span><span>200%</span></div><div class="bar-bg"><div class="bar-f" style="width:67%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-1" style="min-width:58px;text-align:center;">1단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">SK하이닉스 지분가치</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">SK하이닉스 시총 ~200조 × 지분 20.1% ÷ 발행주식수<br><span style="color:#1D9E75;">SK하이닉스 지분 가치만 약 728,000원/주 — 현재가 639K 대비 할인</span></div>
+    <div class="ind-val">~728,000원</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>할인</span><span>균형</span><span>프리미엄</span></div><div class="bar-bg"><div class="bar-f" style="width:45%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-2" style="min-width:58px;text-align:center;">할인 구간</span>
+  </div>
+</div>
+
+<!-- 5. 시계열 이벤트 -->
+<div class="card">
+  <div class="sec">5. 시계열 주요 이벤트 <span class="src">📄 사업·분기보고서 + 📊 HTS 차트</span></div>
+
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2026년 01월 09일</div>
+      <div class="tl-title">주가 273,500원 — 52주 최저 · 배당락(0.00%) · LC 기준점</div>
+      <div class="tl-body">연초 저점 273,500원. 2025년 지배주주 흑전(+1.6조) 실적이 아직 시장에 미반영. 배당락(0.00%) 처리 후 저점 형성. 이후 SK하이닉스 AI HBM 수혜 + 지분법 이익 기대로 급반등 시작.</div>
+      <span class="tag tag-neg">52주 최저</span><span class="tag tag-neu">LC 기준점</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-pos"></div>
+      <div class="tl-date">2026년 02~03월</div>
+      <div class="tl-title">주가 급등 — 3,814,110주(11.4%), 3,472,463주(10.4%) 대형 수급</div>
+      <div class="tl-body">2025년 연결 흑전 공시 + SK하이닉스 AI HBM 수요 폭발 기대감으로 주가 급등. 3,814,110주(11.4%)의 대형 매물대 돌파 후 3,472,463주(10.4%)의 추가 수급 유입. 400K대 돌파 후 박스 형성.</div>
+      <span class="tag tag-pos">대형 수급 유입</span><span class="tag tag-pos">흑전 공시</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-neu"></div>
+      <div class="tl-date">2026년 03~04월</div>
+      <div class="tl-title">박스권 조정 — 9,923,993주(29.6%) 역대급 수급 · 350,200~314,100 매물대</div>
+      <div class="tl-body">5,948,522주(17.7%), 7,327,544주(21.9%), 9,923,993주(29.6%)의 역대급 거래량이 연속 유입되며 350,200~314,100원 매물대 형성. 방향성 탐색 후 5월 재상승.</div>
+      <span class="tag tag-big">9.9백만주 역대급</span><span class="tag tag-neu">박스 조정</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-pos"></div>
+      <div class="tl-date">2026년 05월 15일 (분기보고서)</div>
+      <div class="tl-title">1Q26 분기보고서 — 법인세전이익 11.6조 · EPS 61,371원 · 관계기업투자 +9.4조</div>
+      <div class="tl-body">SK하이닉스 AI HBM 폭발 → SK(주) 관계기업투자 37.8조→47.2조(+9.4조). 법인세전이익 11.6조(SK그룹 분기 역대 수준). EPS 61,371원. 연결 자산 228.8조(+7.2% QoQ).</div>
+      <span class="tag tag-big">법인세전이익 11.6조</span><span class="tag tag-pos">EPS 6.1만원</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2026년 05월 22일 (오늘)</div>
+      <div class="tl-title">주가 646,000원 — 장중 신고가 달성 · LC +133.64%</div>
+      <div class="tl-body">1Q26 역대급 실적 + SK하이닉스 주가 강세 + AI 인프라 수요 지속 테마로 장중 646,000원 신고가. LC +133.64%로 연초 대비 2.3배. 현재 HC -1.08%로 신고가 인근 거래 중.</div>
+      <span class="tag tag-big">당일 신고가</span><span class="tag tag-pos">LC +133.64%</span>
+    </div>
+  </div>
+</div>
+
+<!-- 6. 투자 포인트 -->
+<div class="card">
+  <div class="sec">6. 2026년 핵심 투자 포인트</div>
+  <div class="g2">
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#1D9E75;">긍정 요인 (Bull)</div>
+      <div class="ir"><span class="il">SK하이닉스 AI HBM 세계 1위 수혜</span><span class="badge b-green">지분법 이익 핵심</span></div>
+      <div class="ir"><span class="il">1Q26 EPS 6.1만원 · 지분법 이익 폭발</span><span class="badge b-green">실적 최강</span></div>
+      <div class="ir"><span class="il">LC +133.64% · 오늘 신고가 달성</span><span class="badge b-green">주가 모멘텀</span></div>
+      <div class="ir"><span class="il">SK하이닉스 지분가치 ~728K/주 > 현재가</span><span class="badge b-green">NAV 할인 매력</span></div>
+      <div class="ir"><span class="il">SK온 배터리 턴어라운드 기대</span><span class="badge b-blue">미래 모멘텀</span></div>
+      <div class="ir"><span class="il">AI 전력·에너지 수요 E&S 수혜</span><span class="badge b-green">에너지 성장</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#D85A30;">리스크 (Bear)</div>
+      <div class="ir"><span class="il">SK하이닉스 실적 변동 = SK(주) 직결</span><span class="badge b-red">집중 리스크</span></div>
+      <div class="ir"><span class="il">지주사 NAV 디스카운트 구조적</span><span class="badge b-amber">지주사 한계</span></div>
+      <div class="ir"><span class="il">SK온 배터리 EV 캐즘 지속 우려</span><span class="badge b-amber">배터리 리스크</span></div>
+      <div class="ir"><span class="il">연결 포함 회사 수 649→577개 감소</span><span class="badge b-gray">포트폴리오 축소</span></div>
+      <div class="ir"><span class="il">지주사 영업이익(별도 1,246억) 낮음</span><span class="badge b-gray">별도 수익성</span></div>
+      <div class="ir"><span class="il">글로벌 관세·AI 투자 둔화 리스크</span><span class="badge b-amber">매크로 리스크</span></div>
+    </div>
+  </div>
+  <div class="ib">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
+      <div><span style="color:var(--color-text-secondary);">시총:</span> <span style="font-weight:500;">~35.1조원</span></div>
+      <div><span style="color:var(--color-text-secondary);">1Q26 EPS:</span> <span class="up" style="font-weight:500;">61,371원 (연환산 ~24.5만)</span></div>
+      <div><span style="color:var(--color-text-secondary);">SK하이닉스 지분가치:</span> <span class="up" style="font-weight:500;">주당 ~728,000원</span></div>
+      <div><span style="color:var(--color-text-secondary);">오늘 신고가:</span> <span class="up" style="font-weight:500;">646,000원 (05/22)</span></div>
+    </div>
+  </div>
+  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">⚠ 사업보고서(제35기) + 분기보고서(제36기 1Q) 원문 파싱 기준 · 투자 권고가 아닙니다</div>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ── 탭 전환 ──────────────────────────────────────────────
+function switchTab(tab) {
+  const isA=tab==='annual';
+  document.getElementById('tabAnnual').style.display=isA?'':'none';
+  document.getElementById('tabQuarter').style.display=isA?'none':'';
+  const aS='flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);font-size:13px;cursor:pointer;transition:all .15s;background:#C00000;border:1.5px solid #C00000;color:#fff;font-weight:600;';
+  const iS='flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);font-size:13px;cursor:pointer;transition:all .15s;background:var(--color-background-secondary);border:1.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);font-weight:500;';
+  document.getElementById('btnAnnual').style.cssText=isA?aS:iS;
+  document.getElementById('btnQuarter').style.cssText=isA?iS:aS;
+  if(!isA&&!window._qReady){
+    window._qReady=true;
+    new Chart(document.getElementById('skQtrChart'),{
+      type:'bar',
+      data:{
+        labels:['2025 연결매출','2025 연결OI','1Q26 연결매출','1Q26 연결OI','1Q26 법인세전'],
+        datasets:[{
+          label:'금액(조)',
+          data:[122.6,1.80,36.8,3.67,11.6],
+          backgroundColor:['#B4B2A9','#B4B2A9','#C00000','#C00000','#8B0000'],
+          borderRadius:5
+        }]
+      },
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.raw.toFixed(1)}조`}}},
+        scales:{y:{ticks:{font:{size:10},callback:v=>v.toFixed(0)+'조',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+          x:{ticks:{font:{size:10},color:'#888'},grid:{display:false}}}}
+    });
+  }
+}
+
+// ── SVG 캔들차트 (HTS 차트 기반) ────────────────────────
+(function(){
+  const svg=document.getElementById('skSvg');
+  const W=720,H=240,pL=76,pR=12,pT=14,pB=24;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  // 단위: 만원 (27.35 = 273,500원)
+  // 1/09: 최저 27.35K → 2월: 상승 → 3월: 급등 후 박스 → 5월: 신고가 64.6K
+  const data=[
+    // 1월: 최저 27.35K → 반등
+    {o:29,h:30,l:27.35,c:28.5},{o:28.5,h:30.5,l:28,c:30},
+    {o:30,h:32,l:29.5,c:31.5},{o:31.5,h:33.5,l:31,c:33},
+    // 1월 말~2월: 상승
+    {o:33,h:35,l:32.5,c:34.5},{o:34.5,h:37,l:34,c:36.5},
+    {o:36.5,h:39,l:36,c:38.5},{o:38.5,h:41,l:38,c:40.5},
+    // 2월 강한 상승: 3,814K 매물 돌파
+    {o:40.5,h:43.5,l:40,c:43},{o:43,h:46,l:42.5,c:45.5},
+    {o:45.5,h:49,l:45,c:48.5},{o:48.5,h:52,l:48,c:51.5},
+    // 3월: 추가 급등 후 배당락 조정
+    {o:51.5,h:55,l:51,c:54},{o:54,h:56,l:52,c:53},
+    {o:53,h:54,l:50,c:51},{o:51,h:52,l:49,c:50},
+    // 3~4월: 박스 35~32K (9.9백만주 역대급)
+    {o:50,h:51,l:48.5,c:49.5},{o:49.5,h:51,l:48,c:50},
+    {o:50,h:51.5,l:48.5,c:49},{o:49,h:50.5,l:47.5,c:48.5},
+    {o:48.5,h:50,l:47,c:49},{o:49,h:51,l:48,c:50.5},
+    {o:50.5,h:52,l:49.5,c:51},{o:51,h:53,l:50,c:52},
+    // 4~5월: 재상승
+    {o:52,h:55,l:51.5,c:54.5},{o:54.5,h:58,l:54,c:57.5},
+    {o:57.5,h:61,l:57,c:60.5},{o:60.5,h:63,l:60,c:62.5},
+    {o:62.5,h:64.6,l:62,c:63.9}  // ← 신고가 당일
+  ];
+  const prices=data.flatMap(d=>[d.h,d.l]);
+  const maxP=Math.max(...prices)+1,minP=Math.min(...prices)-1;
+  const rng=maxP-minP;
+  function py(v){return pT+cH*(1-(v-minP)/rng);}
+  const colW=cW/data.length,cw=Math.max(colW*.62,8);
+  // 그리드
+  [30,35,40,45,50,55,60,65].forEach(v=>{
+    const y=py(v);
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
+    l.setAttribute('stroke','rgba(128,128,128,.12)');l.setAttribute('stroke-width','1');svg.appendChild(l);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',pL-4);t.setAttribute('y',y+4);t.setAttribute('text-anchor','end');
+    t.setAttribute('font-size','9');t.setAttribute('fill','rgba(128,128,128,.7)');
+    t.textContent=(v*10000).toLocaleString();svg.appendChild(t);
+  });
+  // 박스권 음영 35~32K
+  const z=document.createElementNS('http://www.w3.org/2000/svg','rect');
+  z.setAttribute('x',pL+(15)*colW);z.setAttribute('y',py(53));
+  z.setAttribute('width',colW*9);z.setAttribute('height',py(47)-py(53));
+  z.setAttribute('fill','rgba(192,0,0,0.06)');svg.insertBefore(z,svg.firstChild);
+  function calcMA(d,n){return d.map((_,i)=>i<n-1?null:d.slice(i-n+1,i+1).reduce((s,x)=>s+x.c,0)/n);}
+  function drawLine(arr,col,w){
+    let pts=[];arr.forEach((v,i)=>{if(v===null)return;pts.push(`${pL+(i+.5)*colW},${py(v)}`);});
+    if(pts.length<2)return;
+    const p=document.createElementNS('http://www.w3.org/2000/svg','polyline');
+    p.setAttribute('points',pts.join(' '));p.setAttribute('fill','none');p.setAttribute('stroke',col);p.setAttribute('stroke-width',w||1.5);svg.appendChild(p);
+  }
+  data.forEach((d,i)=>{
+    const cx=pL+(i+.5)*colW,isUp=d.c>=d.o,col=isUp?'#D85A30':'#185FA5';
+    const wk=document.createElementNS('http://www.w3.org/2000/svg','line');
+    wk.setAttribute('x1',cx);wk.setAttribute('x2',cx);wk.setAttribute('y1',py(d.h));wk.setAttribute('y2',py(d.l));
+    wk.setAttribute('stroke',col);wk.setAttribute('stroke-width','1.5');svg.appendChild(wk);
+    const bT=py(Math.max(d.o,d.c)),bB=py(Math.min(d.o,d.c));
+    const bd=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    bd.setAttribute('x',cx-cw/2);bd.setAttribute('y',bT);bd.setAttribute('width',cw);
+    bd.setAttribute('height',Math.max(bB-bT,2));bd.setAttribute('fill',col);bd.setAttribute('rx','1');svg.appendChild(bd);
+  });
+  drawLine(calcMA(data,5),'#FF69B4',1.5);
+  drawLine(calcMA(data,20),'#9370DB',1.5);
+  drawLine(calcMA(data,60),'#DAA520',2);
+  const mk=(idx,lbl,isLow,col)=>{
+    const cx=pL+(idx+.5)*colW,cy=isLow?py(data[idx].l)+12:py(data[idx].h)-8;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',cx);t.setAttribute('y',cy);t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','9');t.setAttribute('fill',col);t.setAttribute('font-weight','500');
+    t.textContent=lbl;svg.appendChild(t);
+  };
+  mk(0,'최저273.5K(01/09)',true,'#185FA5');
+  mk(data.length-1,'신고646K(05/22)',false,'#C00000');
+  ['1월','2월','3월','4월','5월'].forEach((m,i)=>{
+    const cx=pL+(i/5)*cW+cW/10;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',cx);t.setAttribute('y',H-4);t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','10');t.setAttribute('fill','rgba(128,128,128,.8)');t.textContent=m;svg.appendChild(t);
+  });
+  [{c:'#D85A30',t:'양봉'},{c:'#185FA5',t:'음봉'},{c:'#FF69B4',t:'MA5'},{c:'#9370DB',t:'MA20'},{c:'#DAA520',t:'MA60'}].forEach((l,i)=>{
+    const gx=pL+i*98;
+    const r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    r.setAttribute('x',gx);r.setAttribute('y',2);r.setAttribute('width',10);r.setAttribute('height',10);
+    r.setAttribute('fill',l.c);r.setAttribute('rx','2');svg.appendChild(r);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',gx+13);t.setAttribute('y',11);t.setAttribute('font-size','9');t.setAttribute('fill','rgba(128,128,128,.9)');t.textContent=l.t;svg.appendChild(t);
+  });
+})();
+
+// ── 연간 실적 차트 ──────────────────────────────────────
+new Chart(document.getElementById('skRevChart'),{
+  type:'bar',
+  data:{
+    labels:['2023 (제33기)','2024 (제34기)','2025 (제35기)'],
+    datasets:[
+      {label:'연결 매출(조)',data:[127.4,123.3,122.6],backgroundColor:'#C00000',borderRadius:4,yAxisID:'y'},
+      {label:'연결 OI(조)',data:[4.79,2.40,1.80],backgroundColor:['#EF9F27','#EF9F27','#EF9F27'],borderRadius:4,yAxisID:'y'},
+      {label:'지배주주 순이익(조)',type:'line',data:[-0.78,-1.29,1.60],borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,.1)',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{font:{size:11},boxWidth:12}},tooltip:{callbacks:{label:ctx=>`${ctx.raw.toFixed(2)}조`}}},
+    scales:{y:{position:'left',ticks:{font:{size:10},callback:v=>v.toFixed(0)+'조',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+      y2:{position:'right',min:-2,max:4,ticks:{font:{size:10},callback:v=>v.toFixed(1)+'조',color:'#1D9E75'},grid:{display:false}},
+      x:{ticks:{font:{size:11},color:'#888'},grid:{display:false}}}}
+});
+</script>

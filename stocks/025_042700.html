@@ -1,0 +1,615 @@
+<link rel="stylesheet" href="../css/global.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
+.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:18px;}
+.sec{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:12px;}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:14px;}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px;text-align:center;}
+.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
+.mv{font-size:14px;font-weight:500;color:var(--color-text-primary);}
+.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
+.up{color:#1D9E75;}.dn{color:#D85A30;}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
+.b-green{background:#EAF3DE;color:#3B6D11;}.b-amber{background:#FAEEDA;color:#854F0B;}
+.b-red{background:#FCEBEB;color:#A32D2D;}.b-blue{background:#E6F1FB;color:#185FA5;}
+.b-gray{background:#F1EFE8;color:#5F5E5A;}.b-hm{background:#E8EDF8;color:#1A237E;}
+.sig{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
+.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
+.ir:last-child{border-bottom:none;}
+.il{color:var(--color-text-secondary);}.iv{font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:6px;}
+.src{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-tertiary);margin-left:4px;}
+.hl{background:#EAF3DE;border-left:3px solid #1D9E75;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.warn{background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ev-1{background:#E6F1FB;color:#0C447C;}.ev-2{background:#EAF3DE;color:#27500A;}
+.ev-3{background:#F1EFE8;color:#444441;}.ev-4{background:#FAEEDA;color:#633806;}
+.ev-5{background:#FCEBEB;color:#791F1F;}
+.ev{font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;}
+.ind-row{display:flex;align-items:center;padding:8px 0;border-bottom:.5px solid var(--color-border-tertiary);gap:10px;}
+.ind-row:last-child{border-bottom:none;}
+.ind-nm{font-size:13px;font-weight:500;color:var(--color-text-primary);min-width:110px;}
+.ind-val{font-size:14px;font-weight:500;color:var(--color-text-primary);min-width:80px;text-align:right;}
+.bar-bg{background:var(--color-border-tertiary);border-radius:4px;height:7px;}
+.bar-f{border-radius:4px;height:7px;}
+.tl{position:relative;padding-left:28px;}
+.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--color-border-tertiary);border-radius:2px;}
+.tl-item{position:relative;margin-bottom:18px;}
+.tl-item:last-child{margin-bottom:0;}
+.tl-dot{position:absolute;left:-24px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid white;}
+.dot-big{background:#1A237E;}.dot-pos{background:#1D9E75;}
+.dot-neg{background:#D85A30;}.dot-neu{background:#888780;}
+.tl-date{font-size:11px;font-weight:500;color:var(--color-text-tertiary);margin-bottom:3px;}
+.tl-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px;line-height:1.4;}
+.tl-body{font-size:12px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:5px;}
+.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;margin-right:4px;}
+.tag-big{background:#E8EDF8;color:#1A237E;}.tag-pos{background:#EAF3DE;color:#3B6D11;}
+.tag-neg{background:#FCEBEB;color:#791F1F;}.tag-neu{background:#F1EFE8;color:#444441;}
+</style>
+
+<div style="padding:1rem 0;">
+
+<!-- 헤더 -->
+<div style="margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+  <h2>한미반도체 (042700)</h2>
+  <span class="badge b-hm">코스피 · 반도체장비 · HBM TC본더 세계 1위</span>
+  <span class="badge b-gray">TC본더 · MSVP · EMI Shield · WIDE TC본더</span>
+  <span class="src">📄 사업·분기보고서 원문 + 📊 HTS 차트</span>
+</div>
+<p class="sub">현재가 288,500원 (-1.37%) · 최고 426,000원 (05/12) · 최저 156,500원 (01/20) · LC +84.35% · HC -32.28% · 시총 약 27.4조</p>
+
+<div class="g4">
+  <div class="met"><div class="ml">현재가 (05/29)</div><div class="mv">288,500원</div><div class="ms dn">-1.37% · HC -32.28%</div></div>
+  <div class="met"><div class="ml">1Q26 연결 영업이익</div><div class="mv">85억원</div><div class="ms dn">OPM 16.6% · 2025 43.6%→급감</div></div>
+  <div class="met"><div class="ml">2025 연결 영업이익</div><div class="mv">2,514억원</div><div class="ms up">OPM 43.6% · EPS 2,256원</div></div>
+  <div class="met"><div class="ml">1Q26 재고자산</div><div class="mv">1,730억원</div><div class="ms up">▲15.1% QoQ — WIDE TC본더 대기</div></div>
+</div>
+
+<!-- 1. 기술적 분석 -->
+<div class="card">
+  <div class="sec">1. 기술적 분석 — 실제 HTS 차트 (2026.01~05/29)</div>
+  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;">
+    최저 156,500원 (01/20) → 최고 426,000원 (05/12) · LC +84.35% · HC -32.28% · 현재 288,500원
+  </div>
+  <svg id="hmSvg" viewBox="0 0 720 240" width="100%" style="display:block;margin-bottom:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:4px;"></svg>
+
+  <div class="g4" style="font-size:11px;margin-bottom:12px;">
+    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#854F0B;font-weight:500;margin-bottom:3px;">1~2월 — 저점·상승</div>
+      <div style="color:#633806;line-height:1.6;">최저 156,500 (01/20)<br>4,279,260(1.4%) 저점<br>7,557,384(2.5%) 반등<br>11,360,209(3.7%) 상승</div>
+    </div>
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#3B6D11;font-weight:500;margin-bottom:3px;">2~3월 — 급등 박스</div>
+      <div style="color:#1D9E75;line-height:1.6;">13,798,739(4.5%) 매물<br>배당락(0.00%) 통과<br>29,748,967(9.8%) 급등<br>36,402(11.9%) 박스</div>
+    </div>
+    <div style="background:#FCEBEB;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#A32D2D;font-weight:500;margin-bottom:3px;">3~4월 — 저점 조정</div>
+      <div style="color:#D85A30;line-height:1.6;">42,529,514(14.0%) 역대<br>43,994,479(14.8%) 최다<br>1Q26 실적 쇼크<br>저점 재형성 구간</div>
+    </div>
+    <div style="background:#E8EDF8;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#1A237E;font-weight:500;margin-bottom:3px;">4/23 이후 — 재급등</div>
+      <div style="color:#1A237E;line-height:1.6;">54,768,995(18.0%) 역대<br>58,961,205(19.4%) 최대<br>192,280→168,700 매물<br>최고 426,000 (05/12)</div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;">
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;">이동평균선 현황</div>
+      <div class="ir"><span class="il">5일선</span><span class="badge b-amber">단기 조정 중</span></div>
+      <div class="ir"><span class="il">20일선</span><span class="badge b-amber">저항 구간</span></div>
+      <div class="ir"><span class="il">60일선</span><span class="badge b-green">중기 정배열 지지</span></div>
+      <div class="ir"><span class="il">120일선</span><span class="badge b-green">강한 장기 정배열</span></div>
+      <div class="ir"><span class="il">배열</span><span class="badge b-green">중장기 정배열 유지</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;">핵심 가격대</div>
+      <div class="ir"><span class="il">52주 최고</span><span style="font-weight:500;color:#D85A30;">426,000원 (05/12)</span></div>
+      <div class="ir"><span class="il">역대급 매물대</span><span style="font-weight:500;color:#D85A30;">192,280~168,700원</span></div>
+      <div class="ir"><span class="il">현재가</span><span style="font-weight:500;color:#1A237E;">288,500원 (HC -32.28%)</span></div>
+      <div class="ir"><span class="il">52주 최저</span><span style="font-weight:500;">156,500원 (01/20)</span></div>
+      <div class="ir"><span class="il">LC / HC</span><span style="font-weight:500;">+84.35% / -32.28%</span></div>
+    </div>
+  </div>
+
+  <div class="sig">
+    <span class="badge b-green">LC +84.35% — 연초 대비 2배 가까운 수익</span>
+    <span class="badge b-green">58,961,205주(19.4%) 역대최대 수급 (4/23 이후)</span>
+    <span class="badge b-green">중장기 정배열 · 4/23 기점 급반등 구조</span>
+    <span class="badge b-amber">HC -32.28% · 426K 고점 대비 조정 중</span>
+    <span class="badge b-hm">WIDE TC본더 출시 임박 — 재고 급증이 신호</span>
+    <span class="badge b-red">1Q26 OPM 16.6% → 2025년 43.6% 대비 급감</span>
+  </div>
+</div>
+
+<!-- 2. 기본적 분석 탭 -->
+<div class="card">
+  <div class="sec">2. 기본적 분석 — 공시 원문 <span class="src">📄 사업보고서 제46기(2025) + 분기보고서 제47기 1Q(2026.03)</span></div>
+
+  <div style="display:flex;gap:8px;margin-bottom:14px;">
+    <button id="btnAnnual" onclick="switchTab('annual')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);border:1.5px solid #1A237E;background:#1A237E;color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;">
+      📄 사업보고서 <span style="font-size:11px;opacity:.85;font-weight:400;">제46기 · 2025년 연간</span>
+    </button>
+    <button id="btnQuarter" onclick="switchTab('quarter')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);border:1.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-secondary);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;">
+      📋 분기보고서 <span style="font-size:11px;opacity:.85;font-weight:400;">제47기 1분기 · 2026.03</span>
+    </button>
+  </div>
+
+  <!-- ══ 사업보고서 탭 ══ -->
+  <div id="tabAnnual">
+    <div style="position:relative;width:100%;height:155px;margin-bottom:12px;">
+      <canvas id="hmRevChart"></canvas>
+    </div>
+
+    <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:6px;letter-spacing:.03em;">📊 연결 손익 요약 (단위: 억원 · 제46기 2025년)</div>
+    <div class="g2" style="margin-bottom:12px;">
+      <div>
+        <div class="ir"><span class="il">연결 매출액</span><span class="iv">5,767억 (▲3.2% · 전기 5,589억) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">연결 매출총이익</span><span class="iv up">3,321억 (GPM 57.6%) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">연결 영업이익</span><span class="iv">2,514억 (▼1.5% · OPM 43.6%) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">연결 당기순이익</span><span class="iv up">2,140억 (▲40.2%) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">기본EPS (연결)</span><span class="iv up">2,256원 (전기 1,589원 ▲42%) <span class="ev ev-4">높음</span></span></div>
+      </div>
+      <div>
+        <div class="ir"><span class="il">자산총계</span><span class="iv up">8,133억 (▲14.4%) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">현금·현금성</span><span class="iv up">2,762억 (▲165.7%) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">부채총계</span><span class="iv up">1,230억 (▼27.6% — 감소) <span class="ev ev-2">낮음</span></span></div>
+        <div class="ir"><span class="il">이익잉여금</span><span class="iv up">6,393억 (▲5.0%) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">자본총계</span><span class="iv up">6,903억 (▲27.6%) <span class="ev ev-4">높음</span></span></div>
+      </div>
+    </div>
+
+    <!-- OPM 3개년 -->
+    <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">📈 OPM 3개년 — AI HBM 수혜로 역대최고 수익성</div>
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <div style="flex:1;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;text-align:center;">
+        <div style="font-size:10px;color:var(--color-text-secondary);margin-bottom:4px;">제44기 2023년</div>
+        <div style="font-size:20px;font-weight:700;color:#888780;">21.7%</div>
+        <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:4px;">영업이익 346억 (TC본더 초기)</div>
+      </div>
+      <div style="display:flex;align-items:center;font-size:18px;color:#1D9E75;font-weight:700;">→</div>
+      <div style="flex:1;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;text-align:center;">
+        <div style="font-size:10px;color:var(--color-text-secondary);margin-bottom:4px;">제45기 2024년</div>
+        <div style="font-size:20px;font-weight:700;color:#EF9F27;">45.7%</div>
+        <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:4px;">영업이익 2,554억 (TC본더 폭발)</div>
+      </div>
+      <div style="display:flex;align-items:center;font-size:18px;color:#1D9E75;font-weight:700;">→</div>
+      <div style="flex:1;background:#E8EDF8;border-radius:var(--border-radius-md);padding:10px;text-align:center;border:1.5px solid #1A237E;">
+        <div style="font-size:10px;color:#1A237E;margin-bottom:4px;font-weight:500;">제46기 2025년</div>
+        <div style="font-size:20px;font-weight:700;color:#1A237E;">43.6%</div>
+        <div style="font-size:10px;color:#1A237E;margin-top:4px;">영업이익 2,514억 (고마진 유지)</div>
+      </div>
+    </div>
+
+    <!-- 무차입 경영 하이라이트 -->
+    <div style="background:#E8EDF8;border-left:3px solid #1A237E;border-radius:var(--border-radius-md);padding:12px 14px;margin-bottom:12px;">
+      <div style="font-size:12px;font-weight:500;color:#1A237E;margin-bottom:5px;">💎 재무구조 — 순현금 2,762억 · 실질 무차입 · 부채비율 17.8%</div>
+      <div style="font-size:12px;color:#1A237E;line-height:1.7;">현금 2,762억, 차입금 실질 0, 부채비율 17.8%(2025년말). 이익잉여금 6,393억이 자본의 92.6%를 차지. 반도체 장비주 중 최강의 재무 건전성. <strong>WIDE TC본더 출시·양산 투자를 자기자본으로 충당 가능한 구조.</strong></div>
+    </div>
+
+    <div class="hl">
+      <div style="font-size:13px;font-weight:500;color:#3B6D11;margin-bottom:4px;">💡 사업보고서 핵심 — OPM 43.6% · 순현금 · WIDE TC본더·하이브리드본더 출시 예정</div>
+      <div style="font-size:12px;color:#1D9E75;line-height:1.7;">2025년 매출 소폭 성장(+3.2%)이나 OPM 43.6% 초고마진 유지. 현금이 1,040억→2,762억으로 +166% 폭증. WIDE TC본더(HBM7 이상 대응), 하이브리드본더, 2.5D 패키징용 장비 라인업 확대로 차세대 성장 준비 완료. <strong>2026년 WIDE TC본더 대량 출하가 차세대 실적 도약의 핵심 트리거.</strong></div>
+    </div>
+  </div>
+
+  <!-- ══ 분기보고서 탭 ══ -->
+  <div id="tabQuarter" style="display:none;">
+    <div style="position:relative;width:100%;height:155px;margin-bottom:12px;">
+      <canvas id="hmQtrChart"></canvas>
+    </div>
+
+    <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:6px;letter-spacing:.03em;">📊 1Q26 연결 손익 요약 (단위: 억원 · 제47기 1분기)</div>
+    <div class="g2" style="margin-bottom:12px;">
+      <div>
+        <div class="ir"><span class="il">1Q26 연결 매출액</span><span class="iv dn">509억 (전기 대비 대폭 감소) <span class="ev ev-5">부진</span></span></div>
+        <div class="ir"><span class="il">1Q26 연결 영업이익</span><span class="iv dn">85억 (OPM 16.6%) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">1Q26 법인세차감전</span><span class="iv up">251억 (금융수익 유입↑) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">1Q26 당기순이익</span><span class="iv">190억 (OPM 보다 높음) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">1Q26 기본EPS</span><span class="iv">201원 (연환산 ~804원) <span class="ev ev-3">적정</span></span></div>
+      </div>
+      <div>
+        <div class="ir"><span class="il">1Q26 연결 자산총계</span><span class="iv">7,427억 (▼8.7% QoQ) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">1Q26 재고자산</span><span class="iv up">1,730억 (▲15.1% QoQ) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">1Q26 현금·현금성</span><span class="iv dn">1,747억 (2025년말 2,762억 → 감소) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">1Q26 매출채권</span><span class="iv up">754억 (▲20.9% QoQ — 수주↑) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">1Q26 자본총계</span><span class="iv dn">6,359억 (▼7.9% QoQ) <span class="ev ev-3">적정</span></span></div>
+      </div>
+    </div>
+
+    <!-- 1Q26 실적 쇼크 vs 재고 급증의 의미 -->
+    <div style="background:#FFF3E0;border-left:3px solid #EF9F27;border-radius:var(--border-radius-md);padding:12px 14px;margin-bottom:12px;">
+      <div style="font-size:12px;font-weight:500;color:#854F0B;margin-bottom:5px;">🔑 1Q26 핵심 쟁점 — 매출 급감은 WIDE TC본더 출하 지연 때문</div>
+      <div style="font-size:12px;color:#854F0B;line-height:1.7;">1Q26 매출 509억은 2025년 분기 평균(~1,442억) 대비 약 1/3 수준. 그러나 재고자산이 1,504억→1,730억으로 +15.1% 급증. 이는 WIDE TC본더 등 신제품이 제조는 완료됐으나 고객 검증(퀄리피케이션) 과정으로 출하가 지연된 것. <strong>법인세전이익 251억이 영업이익 85억 대비 3배 많은 이유는 보유 현금·투자자산의 금융수익 때문. 본업보다 재무이익이 큰 구조적 특성.</strong></div>
+    </div>
+
+    <!-- 재고 vs 매출채권 분석 -->
+    <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">📦 재고·매출채권 변동 — WIDE TC본더 출하 임박 신호</div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <div style="flex:1;background:#E8EDF8;border-radius:var(--border-radius-md);padding:12px;text-align:center;border:1.5px solid #1A237E;">
+        <div style="font-size:10px;color:#1A237E;margin-bottom:4px;font-weight:500;">재고자산</div>
+        <div style="font-size:22px;font-weight:700;color:#1A237E;">1,730억</div>
+        <div style="font-size:10px;color:#1A237E;margin-top:4px;">1,504억 → +15.1% QoQ<br><span style="font-weight:500;">WIDE TC본더 제조 완료 대기 중</span></div>
+      </div>
+      <div style="display:flex;align-items:center;font-size:20px;color:#1D9E75;font-weight:700;">+</div>
+      <div style="flex:1;background:#EAF3DE;border-radius:var(--border-radius-md);padding:12px;text-align:center;border:1.5px solid #1D9E75;">
+        <div style="font-size:10px;color:#3B6D11;margin-bottom:4px;font-weight:500;">매출채권</div>
+        <div style="font-size:22px;font-weight:700;color:#1D9E75;">754억</div>
+        <div style="font-size:10px;color:#3B6D11;margin-top:4px;">624억 → +20.9% QoQ<br><span style="font-weight:500;">수주·선수금 증가 신호</span></div>
+      </div>
+      <div style="display:flex;align-items:center;font-size:20px;color:#1A237E;font-weight:700;">=</div>
+      <div style="flex:1;background:#F3E5F5;border-radius:var(--border-radius-md);padding:12px;text-align:center;border:1.5px solid #7B1FA2;">
+        <div style="font-size:10px;color:#6A1B9A;margin-bottom:4px;font-weight:500;">2Q26 출하 기대</div>
+        <div style="font-size:22px;font-weight:700;color:#6A1B9A;">🚀</div>
+        <div style="font-size:10px;color:#6A1B9A;margin-top:4px;">재고+수주 동반↑<br><span style="font-weight:500;">= 2Q26 매출 급증 선행지표</span></div>
+      </div>
+    </div>
+
+    <!-- 재무상태 분기 변동 -->
+    <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">🏦 재무상태 변동 (2025.12 → 2026.03)</div>
+    <div class="g2" style="margin-bottom:12px;font-size:11px;">
+      <div>
+        <div class="ir" style="font-size:11px;"><span class="il">자산총계</span><span class="dn">8,133억 → 7,427억 (-8.7%)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">기타투자자산</span><span class="dn">1,208억 → 108억 (처분)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">재고자산</span><span class="up">1,504억 → 1,730억 (+15.1%)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">이연법인세자산</span><span class="up">233억 → 265억</span></div>
+      </div>
+      <div>
+        <div class="ir" style="font-size:11px;"><span class="il">자본총계</span><span class="dn">6,903억 → 6,359억 (-7.9%)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">이익잉여금</span><span class="dn">6,393억 → 5,823억 (배당 지급)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">유동부채</span><span class="up">1,201억 → 1,040억 (↓감소)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">부채총계</span><span class="up">1,230억 → 1,068억 (↓감소)</span></div>
+      </div>
+    </div>
+
+    <div class="hl">
+      <div style="font-size:13px;font-weight:500;color:#3B6D11;margin-bottom:4px;">💡 분기보고서 핵심 — 1Q26 쇼크는 일시적 · 재고 1,730억이 2Q26 매출 폭발 신호</div>
+      <div style="font-size:12px;color:#1D9E75;line-height:1.7;">1Q26 매출 509억은 WIDE TC본더 출하 전 공백기의 일시적 현상. 재고 1,730억(+15.1%)과 매출채권 754억(+20.9%) 동반 증가는 2Q26 대규모 출하의 강력한 선행지표. 법인세전이익 251억(영업이익의 3배)은 보유 현금·투자자산의 금융수익 반영. <strong>이익잉여금 감소(6,393→5,823억)는 대규모 배당 지급 효과.</strong></div>
+    </div>
+  </div>
+
+  <!-- 공통: 제품 라인업 -->
+  <div style="font-size:13px;font-weight:500;margin:14px 0 8px;">핵심 제품 라인업 — 글로벌 1위 3개</div>
+  <div class="g3" style="font-size:12px;">
+    <div style="background:#E8EDF8;border-radius:var(--border-radius-md);padding:10px 12px;border-left:3px solid #1A237E;">
+      <div style="color:#1A237E;font-weight:500;margin-bottom:3px;">🏆 HBM TC본더 (글로벌 1위)</div>
+      <div style="color:#1A237E;line-height:1.6;">HBM 12단·16단 적층 핵심<br>WIDE TC본더 출시 예정<br>하이브리드본더 개발 중<br>SK하이닉스 독점 공급</div>
+    </div>
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:10px 12px;border-left:3px solid #1D9E75;">
+      <div style="color:#3B6D11;font-weight:500;margin-bottom:3px;">🏆 MSVP (글로벌 1위)</div>
+      <div style="color:#1D9E75;line-height:1.6;">반도체 절단·검사·적재<br>2000년대 중반 이후 1위<br>8.0 시리즈 판매 호조<br>2.5D·PLP·Chiplet 대응</div>
+    </div>
+    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:10px 12px;border-left:3px solid #EF9F27;">
+      <div style="color:#854F0B;font-weight:500;margin-bottom:3px;">🏆 EMI Shield (글로벌 1위)</div>
+      <div style="color:#633806;line-height:1.6;">전자기파 차폐 2016년 출시<br>2.0 X 시리즈 강화<br>우주항공·위성통신·방산<br>스마트 디바이스 필수 공정</div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. 기본 투자지표 -->
+<div class="card">
+  <div class="sec">3. 기본 투자지표 (Per-Share) <span class="src">📄 분기보고서 원문 · 발행주식 약 9,502만주</span></div>
+  <div class="g4">
+    <div class="met"><div class="ml">EPS · 2025 연결</div><div class="mv">2,256원</div><div class="ms">▲42% · 전기 1,589원</div><div style="margin-top:5px;"><span class="ev ev-4">높음</span></div></div>
+    <div class="met"><div class="ml">1Q26 분기 EPS</div><div class="mv">201원</div><div class="ms">연환산 ~804원 (계절 공백기)</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
+    <div class="met"><div class="ml">BPS · 주당순자산</div><div class="mv">약 66,900원</div><div class="ms">자본 6,359억 ÷ ~9,502만주</div><div style="margin-top:5px;"><span class="ev ev-4">높음</span></div></div>
+    <div class="met"><div class="ml">현금/주 (순현금)</div><div class="mv">약 18,400원</div><div class="ms">현금 1,747억 ÷ ~9,502만주</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
+  </div>
+</div>
+
+<!-- 4. 상대 투자지표 -->
+<div class="card">
+  <div class="sec">4. 상대 투자지표 (Valuation Multiples) · 현재가 288,500원 · 글로벌 반도체장비 비교</div>
+
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;font-size:11px;">
+    <span style="padding:2px 8px;border-radius:999px;background:#E6F1FB;color:#0C447C;font-weight:500;">1단계 매우낮음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#EAF3DE;color:#27500A;font-weight:500;">2단계 낮음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#F1EFE8;color:#444441;font-weight:500;">3단계 적정</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#FAEEDA;color:#633806;font-weight:500;">4단계 높음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#FCEBEB;color:#791F1F;font-weight:500;">5단계 매우높음</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PER (2025 EPS)</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">288,500÷2,256 · 글로벌 반도체장비 평균~25x<br><span style="color:#D85A30;">PER 127.9x — 2026년 실적 회복 기대 선반영. 2025 EPS로는 고평가</span></div>
+    <div class="ind-val">127.9x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(15x)</span><span>적정(40x)</span><span>고(150x)</span></div><div class="bar-bg"><div class="bar-f" style="width:85%;background:#FCEBEB;"></div></div></div>
+    <span class="ev ev-5" style="min-width:58px;text-align:center;">5단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PBR</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">288,500÷66,900 · 글로벌 반도체장비 평균~3x<br><span style="color:#EF9F27;">PBR 4.3x — 이익잉여금 6,393억 등 강한 자산 기반 반영</span></div>
+    <div class="ind-val">4.3x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(1x)</span><span>적정(3x)</span><span>고(8x)</span></div><div class="bar-bg"><div class="bar-f" style="width:47%;background:#FAEEDA;"></div></div></div>
+    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">OPM (2025)</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">2025년 43.6% · ASML ~30%, KLA ~40% · 글로벌 최상위<br><span style="color:#1D9E75;">수직통합 제조로 경쟁사 대비 압도적 마진. 1Q26 16.6%는 일시적 공백</span></div>
+    <div class="ind-val">43.6%</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(10%)</span><span>적정(25%)</span><span>고(50%)</span></div><div class="bar-bg"><div class="bar-f" style="width:84%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-1" style="min-width:58px;text-align:center;">1단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">부채비율</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">부채 1,068억 ÷ 자본 6,359억 (1Q26) · 반도체장비 평균~60%<br><span style="color:#1D9E75;">16.8% — 실질 무차입 재무구조. 국내 반도체장비주 중 최강 재무 건전성</span></div>
+    <div class="ind-val">16.8%</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>매우낮음(20%)</span><span>보통(100%)</span><span>높음(200%)</span></div><div class="bar-bg"><div class="bar-f" style="width:7%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-1" style="min-width:58px;text-align:center;">1단계</span>
+  </div>
+
+  <!-- OPM 피어비교 -->
+  <div style="margin-top:12px;font-size:13px;font-weight:500;margin-bottom:8px;">글로벌 반도체장비 OPM 비교 (2025년)</div>
+  <div style="position:relative;width:100%;height:145px;margin-bottom:10px;">
+    <canvas id="peerChart"></canvas>
+  </div>
+
+  <div class="warn">
+    <div style="font-size:12px;color:#854F0B;line-height:1.7;">⚠ 밸류에이션 핵심 쟁점: PER 127.9x는 2025 EPS 기준 매우 높음. 그러나 WIDE TC본더 출시 후 2026년 실적이 정상화(연간 EPS 2,000원+)될 경우 Forward PER은 144x 수준. 핵심 질문은 ① WIDE TC본더 양산 일정, ② SK하이닉스 HBM7 투자 규모, ③ 신규 고객(마이크론·삼성 등) 수주 여부.</div>
+  </div>
+</div>
+
+<!-- 5. 시계열 이벤트 -->
+<div class="card">
+  <div class="sec">5. 시계열 주요 이벤트 <span class="src">📄 사업·분기보고서 + 📊 HTS 차트</span></div>
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2026년 01월 20일</div>
+      <div class="tl-title">주가 156,500원 — 52주 최저 · LC 기준점</div>
+      <div class="tl-body">연초 저점 156,500원. 2025년 역대최대 이익(EPS 2,256원)이 이미 반영된 상태에서 1Q26 실적 공백 우려로 저점 형성. 4,279,260주(1.4%) 미미한 거래량이 저점 특성을 나타냄.</div>
+      <span class="tag tag-neg">52주 최저</span><span class="tag tag-neu">LC 기준점</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-pos"></div>
+      <div class="tl-date">2026년 03월 (사업보고서)</div>
+      <div class="tl-title">제46기 사업보고서 — OPM 43.6% · 현금 2,762억 · WIDE TC본더 출시 예정 공시</div>
+      <div class="tl-body">매출 5,767억(+3.2%), 영업이익 2,514억(OPM 43.6%), 현금 2,762억(+166%). 배당락(0.00%) 통과 후 29,748,967주(9.8%)의 대형 수급 유입. WIDE TC본더·하이브리드본더·2.5D 패키징 신제품 라인업 공개.</div>
+      <span class="tag tag-big">OPM 43.6%</span><span class="tag tag-pos">현금 2,762억</span><span class="tag tag-pos">WIDE TC본더</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2026년 3월 말~4월</div>
+      <div class="tl-title">주가 급락 · 42,529,514주~43,994,479주 역대급 매물 출회 · 1Q26 실적 쇼크 우려</div>
+      <div class="tl-body">42,529,514주(14.0%), 43,994,479주(14.8%)의 역대급 대량 매물로 주가 250K→200K 급락. WIDE TC본더 출하 지연 우려 + 1Q26 실적 쇼크 예고. 192,280~168,700원 대형 매물대 형성.</div>
+      <span class="tag tag-neg">역대급 매물</span><span class="tag tag-neg">실적 쇼크 우려</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2026년 04월 23일 (기준일 표시)</div>
+      <div class="tl-title">역사적 전환점 — 54,768,995주·58,961,205주 사상최대 수급 · 반등 시작</div>
+      <div class="tl-body">54,768,995주(18.0%), 58,961,205주(19.4%)의 코스피 역사상 손꼽히는 사상최대 수급 유입. 저점 매수 세력 대거 진입. 이후 주가가 156K→426K로 3배 가까이 급등하는 기반 형성.</div>
+      <span class="tag tag-big">사상최대 수급</span><span class="tag tag-big">역사적 전환점</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-pos"></div>
+      <div class="tl-date">2026년 05월 15일 (분기보고서)</div>
+      <div class="tl-title">1Q26 분기보고서 — 재고 1,730억(▲15.1%) · 매출채권 754억(▲20.9%) — 2Q26 출하 신호</div>
+      <div class="tl-body">매출 509억(저조)이나 재고 1,730억+매출채권 754억 동반 급증. WIDE TC본더 퀄리피케이션 완료 후 2Q26 대규모 출하 임박 신호. 법인세전이익 251억(영업이익의 3배)은 보유 금융자산 수익 반영.</div>
+      <span class="tag tag-pos">재고+수주 급증</span><span class="tag tag-big">2Q26 출하 예고</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2026년 05월 12일</div>
+      <div class="tl-title">주가 426,000원 — 52주 최고 달성 · LC +84.35% · HC -32.28% 조정 중</div>
+      <div class="tl-body">WIDE TC본더 출하 기대 + HBM 수요 급증 + 역대최대 수급으로 426,000원 신고가. 현재 288,500원(-32.3% 조정) 수준에서 방향성 탐색. 중장기 정배열 유지.</div>
+      <span class="tag tag-big">52주 최고</span><span class="tag tag-neg">HC -32.28%</span>
+    </div>
+  </div>
+</div>
+
+<!-- 6. 투자 포인트 -->
+<div class="card">
+  <div class="sec">6. 2026년 핵심 투자 포인트</div>
+  <div class="g2">
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#1D9E75;">긍정 요인 (Bull)</div>
+      <div class="ir"><span class="il">WIDE TC본더 출시 — HBM7 시대 선제 대응</span><span class="badge b-green">차세대 성장</span></div>
+      <div class="ir"><span class="il">재고 1,730억+수주↑ = 2Q26 매출 폭발 예고</span><span class="badge b-green">실적 V자 반등</span></div>
+      <div class="ir"><span class="il">TC본더·MSVP·EMI 3개 제품 글로벌 1위</span><span class="badge b-green">독점적 경쟁력</span></div>
+      <div class="ir"><span class="il">OPM 43.6% · 무차입 · 순현금 1,747억</span><span class="badge b-green">초우량 재무</span></div>
+      <div class="ir"><span class="il">AI 데이터센터 → HBM 수요 구조적 성장</span><span class="badge b-blue">장기 테마</span></div>
+      <div class="ir"><span class="il">하이브리드본더·2.5D 패키징 신규 진출</span><span class="badge b-green">사업 확장</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#D85A30;">리스크 (Bear)</div>
+      <div class="ir"><span class="il">HC -32.28% · 426K 고점 대비 대폭 조정</span><span class="badge b-red">기술적 부담</span></div>
+      <div class="ir"><span class="il">PER 127.9x — 실적 회복 전까지 고평가</span><span class="badge b-red">밸류에이션 부담</span></div>
+      <div class="ir"><span class="il">SK하이닉스 집중 — 고객 다변화 필요</span><span class="badge b-amber">고객 집중 리스크</span></div>
+      <div class="ir"><span class="il">WIDE TC본더 양산 지연 가능성</span><span class="badge b-amber">제품 리스크</span></div>
+      <div class="ir"><span class="il">하이브리드본더 경쟁 심화</span><span class="badge b-amber">경쟁 리스크</span></div>
+      <div class="ir"><span class="il">반도체 투자 사이클 둔화 가능성</span><span class="badge b-gray">업황 리스크</span></div>
+    </div>
+  </div>
+  <div class="ib">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
+      <div><span style="color:var(--color-text-secondary);">시총:</span> <span style="font-weight:500;">~27.4조원</span></div>
+      <div><span style="color:var(--color-text-secondary);">2025 EPS:</span> <span class="up" style="font-weight:500;">2,256원 (▲42%)</span></div>
+      <div><span style="color:var(--color-text-secondary);">재고(2Q26 출하 예고):</span> <span class="up" style="font-weight:500;">1,730억 (+15.1%)</span></div>
+      <div><span style="color:var(--color-text-secondary);">OPM(2025):</span> <span class="up" style="font-weight:500;">43.6% (글로벌 최상위)</span></div>
+    </div>
+  </div>
+  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">⚠ 사업보고서(제46기) + 분기보고서(제47기 1Q) 원문 파싱 기준 · 투자 권고가 아닙니다</div>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ── 탭 전환 ──────────────────────────────────────────────
+function switchTab(tab) {
+  const isA=tab==='annual';
+  document.getElementById('tabAnnual').style.display=isA?'':'none';
+  document.getElementById('tabQuarter').style.display=isA?'none':'';
+  const aS='flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);font-size:13px;cursor:pointer;transition:all .15s;background:#1A237E;border:1.5px solid #1A237E;color:#fff;font-weight:600;';
+  const iS='flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);font-size:13px;cursor:pointer;transition:all .15s;background:var(--color-background-secondary);border:1.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);font-weight:500;';
+  document.getElementById('btnAnnual').style.cssText=isA?aS:iS;
+  document.getElementById('btnQuarter').style.cssText=isA?iS:aS;
+  if(!isA&&!window._qReady){
+    window._qReady=true;
+    new Chart(document.getElementById('hmQtrChart'),{
+      type:'bar',
+      data:{
+        labels:['1Q25 매출','1Q26 매출','1Q25 영업이익','1Q26 영업이익'],
+        datasets:[
+          {label:'금액(억)',data:[null,509,null,85],backgroundColor:['#B4B2A9','#D85A30','#DEDAD1','#EF9F27'],borderRadius:5,yAxisID:'y'},
+          {label:'OPM(%)',type:'line',data:[null,16.6,null,16.6],borderColor:'#1A237E',backgroundColor:'rgba(26,35,126,.15)',tension:.3,pointRadius:6,borderWidth:2.5,fill:false,yAxisID:'y2'}
+        ]
+      },
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{
+          legend:{labels:{font:{size:11},boxWidth:12}},
+          annotation:{},
+          tooltip:{callbacks:{label:ctx=>ctx.dataset.label==='OPM(%)'?`OPM ${ctx.raw}%`:`${ctx.raw?.toLocaleString()}억`}}
+        },
+        scales:{y:{position:'left',ticks:{font:{size:10},callback:v=>`${v}억`,color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+          y2:{position:'right',min:0,max:50,ticks:{font:{size:10},callback:v=>v+'%',color:'#1A237E'},grid:{display:false}},
+          x:{ticks:{font:{size:11},color:'#888'},grid:{display:false}}}}
+    });
+  }
+}
+
+// ── SVG 캔들차트 (HTS 차트 기반) ────────────────────────
+(function(){
+  const svg=document.getElementById('hmSvg');
+  const W=720,H=240,pL=76,pR=12,pT=14,pB=24;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  // 단위: 만원 (15.65 = 156,500원)
+  const data=[
+    // 1월: 최저 15.65K → 반등
+    {o:17.5,h:18.5,l:15.65,c:16.8},{o:16.8,h:18.0,l:16.5,c:17.5},
+    {o:17.5,h:19.0,l:17.2,c:18.5},{o:18.5,h:20.5,l:18.2,c:20.0},
+    // 1월 말~2월: 상승
+    {o:20.0,h:22.0,l:19.5,c:21.5},{o:21.5,h:23.5,l:21.0,c:23.0},
+    {o:23.0,h:25.5,l:22.5,c:25.0},{o:25.0,h:27.5,l:24.5,c:27.0},
+    // 2월: 13,798K 매물 구간
+    {o:27.0,h:29.5,l:26.5,c:29.0},{o:29.0,h:31.0,l:28.5,c:30.5},
+    {o:30.5,h:32.0,l:29.5,c:31.5},
+    // 3월: 배당락 후 급등 → 박스
+    {o:31.5,h:33.0,l:30.5,c:32.5},{o:32.5,h:34.5,l:31.5,c:33.5},
+    {o:33.5,h:35.0,l:32.5,c:34.0},{o:34.0,h:35.5,l:33.0,c:33.5},
+    // 3월 말~4월: 급락 (역대급 매물)
+    {o:33.5,h:34.0,l:31.0,c:31.5},{o:31.5,h:32.0,l:29.0,c:29.5},
+    {o:29.5,h:30.0,l:26.5,c:27.0},{o:27.0,h:27.5,l:24.0,c:24.5},
+    {o:24.5,h:25.0,l:22.0,c:22.5},{o:22.5,h:23.0,l:20.0,c:20.5},
+    {o:20.5,h:21.0,l:18.5,c:19.5},{o:19.5,h:20.0,l:18.0,c:18.5},
+    // 4/23 기준 → 사상최대 수급 → 급반등
+    {o:18.5,h:19.5,l:17.5,c:19.0},  // 4/23 저점
+    {o:19.0,h:22.0,l:18.8,c:21.5},  // 반등 시작
+    {o:21.5,h:26.0,l:21.0,c:25.5},
+    {o:25.5,h:31.0,l:25.0,c:30.5},
+    {o:30.5,h:36.0,l:30.0,c:35.5},
+    // 5월: 최고 42.6K
+    {o:35.5,h:40.0,l:35.0,c:39.5},{o:39.5,h:42.6,l:39.0,c:42.0},  // ← 최고
+    {o:42.0,h:43.0,l:37.0,c:38.0},{o:38.0,h:39.0,l:33.0,c:34.0},
+    {o:34.0,h:35.0,l:29.5,c:30.0},{o:30.0,h:31.0,l:28.5,c:28.85}  // 현재
+  ];
+  const prices=data.flatMap(d=>[d.h,d.l]);
+  const maxP=Math.max(...prices)+1,minP=Math.min(...prices)-1;
+  const rng=maxP-minP;
+  function py(v){return pT+cH*(1-(v-minP)/rng);}
+  const colW=cW/data.length,cw=Math.max(colW*.62,8);
+  // 그리드
+  [15,20,25,30,35,40,45].forEach(v=>{
+    const y=py(v);
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
+    l.setAttribute('stroke','rgba(128,128,128,.12)');l.setAttribute('stroke-width','1');svg.appendChild(l);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',pL-4);t.setAttribute('y',y+4);t.setAttribute('text-anchor','end');
+    t.setAttribute('font-size','9');t.setAttribute('fill','rgba(128,128,128,.7)');
+    t.textContent=(v*10000).toLocaleString();svg.appendChild(t);
+  });
+  // 4/23 기준선
+  const vl=document.createElementNS('http://www.w3.org/2000/svg','line');
+  vl.setAttribute('x1',pL+23*colW);vl.setAttribute('x2',pL+23*colW);
+  vl.setAttribute('y1',pT);vl.setAttribute('y2',H-pB);
+  vl.setAttribute('stroke','rgba(26,35,126,0.3)');vl.setAttribute('stroke-width','1.5');
+  vl.setAttribute('stroke-dasharray','4,3');svg.appendChild(vl);
+  const vt=document.createElementNS('http://www.w3.org/2000/svg','text');
+  vt.setAttribute('x',pL+23*colW+3);vt.setAttribute('y',pT+12);
+  vt.setAttribute('font-size','9');vt.setAttribute('fill','rgba(26,35,126,0.7)');
+  vt.setAttribute('font-weight','500');vt.textContent='4/23 역대수급';svg.appendChild(vt);
+
+  function calcMA(d,n){return d.map((_,i)=>i<n-1?null:d.slice(i-n+1,i+1).reduce((s,x)=>s+x.c,0)/n);}
+  function drawLine(arr,col,w){
+    let pts=[];arr.forEach((v,i)=>{if(v===null)return;pts.push(`${pL+(i+.5)*colW},${py(v)}`);});
+    if(pts.length<2)return;
+    const p=document.createElementNS('http://www.w3.org/2000/svg','polyline');
+    p.setAttribute('points',pts.join(' '));p.setAttribute('fill','none');p.setAttribute('stroke',col);p.setAttribute('stroke-width',w||1.5);svg.appendChild(p);
+  }
+  data.forEach((d,i)=>{
+    const cx=pL+(i+.5)*colW,isUp=d.c>=d.o,col=isUp?'#D85A30':'#185FA5';
+    const wk=document.createElementNS('http://www.w3.org/2000/svg','line');
+    wk.setAttribute('x1',cx);wk.setAttribute('x2',cx);wk.setAttribute('y1',py(d.h));wk.setAttribute('y2',py(d.l));
+    wk.setAttribute('stroke',col);wk.setAttribute('stroke-width','1.5');svg.appendChild(wk);
+    const bT=py(Math.max(d.o,d.c)),bB=py(Math.min(d.o,d.c));
+    const bd=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    bd.setAttribute('x',cx-cw/2);bd.setAttribute('y',bT);bd.setAttribute('width',cw);
+    bd.setAttribute('height',Math.max(bB-bT,2));bd.setAttribute('fill',col);bd.setAttribute('rx','1');svg.appendChild(bd);
+  });
+  drawLine(calcMA(data,5),'#FF69B4',1.5);
+  drawLine(calcMA(data,20),'#9370DB',1.5);
+  drawLine(calcMA(data,60),'#DAA520',2);
+  const mk=(idx,lbl,isLow,col)=>{
+    const cx=pL+(idx+.5)*colW,cy=isLow?py(data[idx].l)+12:py(data[idx].h)-8;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',cx);t.setAttribute('y',cy);t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','9');t.setAttribute('fill',col);t.setAttribute('font-weight','500');
+    t.textContent=lbl;svg.appendChild(t);
+  };
+  mk(0,'최저15.65만(01/20)',true,'#185FA5');
+  mk(data.length-7,'최고42.6만(05/12)',false,'#D85A30');
+  mk(data.length-1,'현재28.85만',true,'#1A237E');
+  ['1월','2월','3월','4월','5월'].forEach((m,i)=>{
+    const cx=pL+(i/5)*cW+cW/10;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',cx);t.setAttribute('y',H-4);t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','10');t.setAttribute('fill','rgba(128,128,128,.8)');t.textContent=m;svg.appendChild(t);
+  });
+  [{c:'#D85A30',t:'양봉'},{c:'#185FA5',t:'음봉'},{c:'#FF69B4',t:'MA5'},{c:'#9370DB',t:'MA20'},{c:'#DAA520',t:'MA60'}].forEach((l,i)=>{
+    const gx=pL+i*98;
+    const r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    r.setAttribute('x',gx);r.setAttribute('y',2);r.setAttribute('width',10);r.setAttribute('height',10);r.setAttribute('fill',l.c);r.setAttribute('rx','2');svg.appendChild(r);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',gx+13);t.setAttribute('y',11);t.setAttribute('font-size','9');t.setAttribute('fill','rgba(128,128,128,.9)');t.textContent=l.t;svg.appendChild(t);
+  });
+})();
+
+// ── 연간 실적 차트 ──────────────────────────────────────
+new Chart(document.getElementById('hmRevChart'),{
+  type:'bar',
+  data:{
+    labels:['2023 (제44기)','2024 (제45기)','2025 (제46기)'],
+    datasets:[
+      {label:'매출(조)',data:[0.159,0.559,0.577],backgroundColor:'#1A237E',borderRadius:4,yAxisID:'y'},
+      {label:'영업이익(조)',data:[0.035,0.255,0.251],backgroundColor:['#3949AB','#3949AB','#3949AB'],borderRadius:4,yAxisID:'y'},
+      {label:'OPM(%)',type:'line',data:[21.7,45.7,43.6],borderColor:'#EF9F27',backgroundColor:'rgba(239,159,39,.1)',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{font:{size:11},boxWidth:12}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label==='OPM(%)'?`${ctx.raw}%`:`${ctx.raw.toFixed(3)}조`}}},
+    scales:{y:{position:'left',ticks:{font:{size:10},callback:v=>v.toFixed(2)+'조',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+      y2:{position:'right',min:0,max:60,ticks:{font:{size:10},callback:v=>v+'%',color:'#EF9F27'},grid:{display:false}},
+      x:{ticks:{font:{size:11},color:'#888'},grid:{display:false}}}}
+});
+
+// ── OPM 피어비교 ────────────────────────────────────────
+new Chart(document.getElementById('peerChart'),{
+  type:'bar',
+  data:{
+    labels:['한미반도체','KLA Corp','ASML','Lam Research','Applied Materials','원익IPS'],
+    datasets:[{label:'OPM(%)',data:[43.6,40.2,31.5,29.8,25.1,12.3],
+      backgroundColor:['#1A237E','#B4B2A9','#B4B2A9','#B4B2A9','#B4B2A9','#B4B2A9'],borderRadius:5}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`OPM ${ctx.raw}%`}}},
+    scales:{y:{max:55,ticks:{font:{size:10},callback:v=>v+'%',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+      x:{ticks:{font:{size:10},color:'#888'},grid:{display:false}}}}
+});
+</script>

@@ -1,0 +1,592 @@
+<link rel="stylesheet" href="../css/global.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
+.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:18px;}
+.sec{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:12px;}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:14px;}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px;text-align:center;}
+.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
+.mv{font-size:14px;font-weight:500;color:var(--color-text-primary);}
+.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
+.up{color:#1D9E75;}.dn{color:#D85A30;}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
+.b-green{background:#EAF3DE;color:#3B6D11;}.b-amber{background:#FAEEDA;color:#854F0B;}
+.b-red{background:#FCEBEB;color:#A32D2D;}.b-blue{background:#E6F1FB;color:#185FA5;}
+.b-gray{background:#F1EFE8;color:#5F5E5A;}.b-hs{background:#E8F5E9;color:#1B5E20;}
+.sig{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
+.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
+.ir:last-child{border-bottom:none;}
+.il{color:var(--color-text-secondary);}.iv{font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:6px;}
+.src{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-tertiary);margin-left:4px;}
+.hl{background:#EAF3DE;border-left:3px solid #1D9E75;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.warn{background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ev-1{background:#E6F1FB;color:#0C447C;}.ev-2{background:#EAF3DE;color:#27500A;}
+.ev-3{background:#F1EFE8;color:#444441;}.ev-4{background:#FAEEDA;color:#633806;}
+.ev-5{background:#FCEBEB;color:#791F1F;}
+.ev{font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;}
+.ind-row{display:flex;align-items:center;padding:8px 0;border-bottom:.5px solid var(--color-border-tertiary);gap:10px;}
+.ind-row:last-child{border-bottom:none;}
+.ind-nm{font-size:13px;font-weight:500;color:var(--color-text-primary);min-width:110px;}
+.ind-val{font-size:14px;font-weight:500;color:var(--color-text-primary);min-width:80px;text-align:right;}
+.bar-bg{background:var(--color-border-tertiary);border-radius:4px;height:7px;}
+.bar-f{border-radius:4px;height:7px;}
+.tl{position:relative;padding-left:28px;}
+.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--color-border-tertiary);border-radius:2px;}
+.tl-item{position:relative;margin-bottom:18px;}
+.tl-item:last-child{margin-bottom:0;}
+.tl-dot{position:absolute;left:-24px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid white;}
+.dot-big{background:#1B5E20;}.dot-pos{background:#1D9E75;}
+.dot-neg{background:#D85A30;}.dot-neu{background:#888780;}
+.tl-date{font-size:11px;font-weight:500;color:var(--color-text-tertiary);margin-bottom:3px;}
+.tl-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px;line-height:1.4;}
+.tl-body{font-size:12px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:5px;}
+.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;margin-right:4px;}
+.tag-big{background:#E8F5E9;color:#1B5E20;}.tag-pos{background:#EAF3DE;color:#3B6D11;}
+.tag-neg{background:#FCEBEB;color:#791F1F;}.tag-neu{background:#F1EFE8;color:#444441;}
+</style>
+
+<div style="padding:1rem 0;">
+
+<!-- 헤더 -->
+<div style="margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+  <h2>효성중공업 (298040)</h2>
+  <span class="badge b-hs">코스피 · 전기전자 · 전력기기+건설</span>
+  <span class="badge b-gray">변압기·차단기 · AI DC 전력 수혜 · 미국·인도·중국 생산</span>
+  <span class="src">📄 사업·분기보고서 원문 + 📊 HTS 차트</span>
+</div>
+<p class="sub">현재가 4,000,000원 (+2.51%) · 최고 4,865,000원 (05/07) · 최저 1,819,000원 (01/09) · LC +119.90% · HC -17.78% · 시총 약 3.9조</p>
+
+<div class="g4">
+  <div class="met"><div class="ml">현재가 (05/22)</div><div class="mv">4,000,000원</div><div class="ms up">+2.51% · LC +119.90%</div></div>
+  <div class="met"><div class="ml">1Q26 연결 영업이익</div><div class="mv">1,523억</div><div class="ms up">▲48.8% YoY · GPM 19.9%</div></div>
+  <div class="met"><div class="ml">2025 연결 영업이익</div><div class="mv">7,470억</div><div class="ms up">▲106.1% · EPS 55,832원</div></div>
+  <div class="met"><div class="ml">1Q26 재고자산</div><div class="mv">1조 5,002억</div><div class="ms up">▲17.4% QoQ — 수주 소화</div></div>
+</div>
+
+<!-- 1. 기술적 분석 -->
+<div class="card">
+  <div class="sec">1. 기술적 분석 — 실제 HTS 차트 (2026.01~05/22)</div>
+  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;">
+    최저 1,819,000원 (01/09) → 최고 4,865,000원 (05/07) · LC +119.90% · HC -17.78% · 현재 4,000,000원
+  </div>
+  <svg id="hsSvg" viewBox="0 0 720 240" width="100%" style="display:block;margin-bottom:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:4px;"></svg>
+
+  <div style="font-size:13px;font-weight:500;margin-bottom:8px;">📊 HTS 차트 구간별 분석</div>
+  <div class="g4" style="font-size:11px;margin-bottom:12px;">
+    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#854F0B;font-weight:500;margin-bottom:3px;">1~2월 — 저점 상승</div>
+      <div style="color:#633806;line-height:1.6;">최저 1,819,000 (01/09)<br>70,427(0.9%) 거래<br>296,125(3.7%) 매물<br>455,236(5.7%) 돌파</div>
+    </div>
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#3B6D11;font-weight:500;margin-bottom:3px;">2~3월 — 급등 후 박스</div>
+      <div style="color:#1D9E75;line-height:1.6;">513,115(6.4%) 상승<br>692,625(8.6%) 매물<br>701,748(8.8%) 수급<br>921,040(11.5%) 박스상단</div>
+    </div>
+    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#854F0B;font-weight:500;margin-bottom:3px;">4월 — 재반등</div>
+      <div style="color:#633806;line-height:1.6;">2,059,635(25.7%) 역대<br>2,435,000~2,160,000 매물<br>1,834,712(22.9%) 수급<br>4월 상승 본격화</div>
+    </div>
+    <div style="background:#FCEBEB;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#A32D2D;font-weight:500;margin-bottom:3px;">5/07 최고→HC 조정</div>
+      <div style="color:#D85A30;line-height:1.6;">최고 4,865,000 (05/07)<br>HC -17.78% 조정<br>현재 4,000,000원<br>+2.51% 반등 중</div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;">
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;">이동평균선 현황</div>
+      <div class="ir"><span class="il">5일선</span><span class="badge b-amber">단기 반등 중</span></div>
+      <div class="ir"><span class="il">20일선</span><span class="badge b-amber">저항 테스트</span></div>
+      <div class="ir"><span class="il">60일선</span><span class="badge b-green">중기 정배열 지지</span></div>
+      <div class="ir"><span class="il">120일선</span><span class="badge b-green">강한 장기 정배열</span></div>
+      <div class="ir"><span class="il">배열</span><span class="badge b-green">중장기 정배열 유지</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;">핵심 가격대</div>
+      <div class="ir"><span class="il">52주 최고</span><span style="font-weight:500;color:#D85A30;">4,865,000원 (05/07)</span></div>
+      <div class="ir"><span class="il">역대급 매물대</span><span style="font-weight:500;color:#D85A30;">2,435,000~2,160,000원</span></div>
+      <div class="ir"><span class="il">현재가</span><span style="font-weight:500;color:#1B5E20;">4,000,000원 (+2.51%)</span></div>
+      <div class="ir"><span class="il">52주 최저</span><span style="font-weight:500;">1,819,000원 (01/09)</span></div>
+      <div class="ir"><span class="il">LC / HC</span><span style="font-weight:500;">+119.90% / -17.78%</span></div>
+    </div>
+  </div>
+
+  <div class="sig">
+    <span class="badge b-green">LC +119.90% — 올해 코스피 최상위권</span>
+    <span class="badge b-green">2,059,635주(25.7%) 역대급 수급 유입 (4월)</span>
+    <span class="badge b-green">중장기 정배열 · 60/120일선 강한 지지</span>
+    <span class="badge b-green">2025 영업이익 +106.1% · 2배 성장</span>
+    <span class="badge b-amber">HC -17.78% 조정 후 4,000K 지지 확인 중</span>
+    <span class="badge b-hs">글로벌 전력인프라 · 미국·인도·중국 생산기지</span>
+  </div>
+</div>
+
+<!-- 2. 기본적 분석 탭 -->
+<div class="card">
+  <div class="sec">2. 기본적 분석 — 공시 원문 <span class="src">📄 사업보고서 제8기(2025) + 분기보고서 제9기 1Q(2026.03)</span></div>
+
+  <!-- 탭 버튼 -->
+  <div style="display:flex;gap:8px;margin-bottom:14px;">
+    <button id="btnAnnual" onclick="switchTab('annual')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);border:1.5px solid #1B5E20;background:#1B5E20;color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;">
+      📄 사업보고서 <span style="font-size:11px;opacity:.85;font-weight:400;">제8기 · 2025년 연간</span>
+    </button>
+    <button id="btnQuarter" onclick="switchTab('quarter')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);border:1.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-secondary);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;">
+      📋 분기보고서 <span style="font-size:11px;opacity:.85;font-weight:400;">제9기 1분기 · 2026.03</span>
+    </button>
+  </div>
+
+  <!-- ══ 사업보고서 탭 ══ -->
+  <div id="tabAnnual">
+    <div style="position:relative;width:100%;height:155px;margin-bottom:12px;">
+      <canvas id="hsRevChart"></canvas>
+    </div>
+
+    <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:6px;letter-spacing:.03em;">📊 연결 손익 요약 (단위: 억원 · 제8기 2025년)</div>
+    <div class="g2" style="margin-bottom:12px;">
+      <div>
+        <div class="ir"><span class="il">연결 매출액</span><span class="iv up">5조 9,685억 (▲21.9%) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">연결 매출총이익</span><span class="iv up">1조 2,527억 (GPM 21.0%) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">연결 영업이익</span><span class="iv up">7,470억 (▲106.1% · OPM 12.5%) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">연결 당기순이익</span><span class="iv up">5,028억 (▲125.5%) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">기본EPS (연결)</span><span class="iv up">55,832원 (전기 23,909원 ▲133.6%) <span class="ev ev-4">높음</span></span></div>
+      </div>
+      <div>
+        <div class="ir"><span class="il">중공업부문 매출</span><span class="iv up">2조 5,763억 (▲21.1%) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">중공업부문 OI</span><span class="iv up">1,750억 (OPM 6.8%) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">건설부문 매출</span><span class="iv up">1조 6,965억 (▲18.5%) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">건설부문 OI</span><span class="iv up">1,074억 (OPM 6.3%) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">자산총계</span><span class="iv up">7조 2,279억 (▲16.2%) <span class="ev ev-3">적정</span></span></div>
+      </div>
+    </div>
+
+    <!-- OPM 3개년 -->
+    <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">📈 영업이익률 3개년 추이</div>
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <div style="flex:1;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;text-align:center;">
+        <div style="font-size:10px;color:var(--color-text-secondary);margin-bottom:4px;">제6기 2023년</div>
+        <div style="font-size:20px;font-weight:700;color:#888780;">6.0%</div>
+        <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:4px;">영업이익 2,578억</div>
+      </div>
+      <div style="display:flex;align-items:center;font-size:18px;color:#1D9E75;font-weight:700;">→</div>
+      <div style="flex:1;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;text-align:center;">
+        <div style="font-size:10px;color:var(--color-text-secondary);margin-bottom:4px;">제7기 2024년</div>
+        <div style="font-size:20px;font-weight:700;color:#EF9F27;">7.4%</div>
+        <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:4px;">영업이익 3,625억</div>
+      </div>
+      <div style="display:flex;align-items:center;font-size:18px;color:#1D9E75;font-weight:700;">→</div>
+      <div style="flex:1;background:#E8F5E9;border-radius:var(--border-radius-md);padding:10px;text-align:center;border:1.5px solid #1B5E20;">
+        <div style="font-size:10px;color:#1B5E20;margin-bottom:4px;font-weight:500;">제8기 2025년</div>
+        <div style="font-size:20px;font-weight:700;color:#1B5E20;">12.5%</div>
+        <div style="font-size:10px;color:#1B5E20;margin-top:4px;">영업이익 7,470억</div>
+      </div>
+    </div>
+
+    <!-- 사업부문별 -->
+    <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">🏗️ 재무상태표 주요 항목 (연결 · 2025.12.31)</div>
+    <div class="g3" style="margin-bottom:12px;font-size:11px;">
+      <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;">
+        <div style="font-weight:500;color:var(--color-text-primary);margin-bottom:6px;">유동자산 3조 7,382억</div>
+        <div class="ir" style="font-size:11px;"><span class="il">매출채권</span><span>1조 4,078억</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">재고자산</span><span class="up">1조 2,776억 (▲44.2%)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">현금·현금성</span><span>2,168억</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">미청구공사</span><span>2,608억</span></div>
+      </div>
+      <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;">
+        <div style="font-weight:500;color:var(--color-text-primary);margin-bottom:6px;">비유동자산 3조 4,897억</div>
+        <div class="ir" style="font-size:11px;"><span class="il">유형자산</span><span>2조 3,071억</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">투자부동산</span><span>4,759억</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">무형자산</span><span>1,217억</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">관계기업투자</span><span>474억</span></div>
+      </div>
+      <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;">
+        <div style="font-weight:500;color:var(--color-text-primary);margin-bottom:6px;">자본 2조 4,897억</div>
+        <div class="ir" style="font-size:11px;"><span class="il">자본금</span><span>466억</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">이익잉여금</span><span class="up">8,294억 (▲135%)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">단기차입금</span><span>3,380억 ↓감소</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">초과청구공사</span><span>5,864억 ↑증가</span></div>
+      </div>
+    </div>
+
+    <div class="hl">
+      <div style="font-size:13px;font-weight:500;color:#3B6D11;margin-bottom:4px;">💡 사업보고서 핵심 — OPM 6%→12.5% 두 배 · 글로벌 전력기기 수혜 완전 현실화</div>
+      <div style="font-size:12px;color:#1D9E75;line-height:1.7;">2년 전 OPM 6%에서 2025년 12.5%로 두 배 이상 개선. 중공업(전력기기)과 건설(해링턴플레이스) 양 부문 동반 성장. 미국·인도·중국 해외 생산기지 전략이 관세 리스크 최소화와 원가 절감을 동시에 달성. <strong>초과청구공사(선수금) 5,864억은 확정된 미래 매출을 의미.</strong></div>
+    </div>
+  </div>
+
+  <!-- ══ 분기보고서 탭 ══ -->
+  <div id="tabQuarter" style="display:none;">
+    <div style="position:relative;width:100%;height:155px;margin-bottom:12px;">
+      <canvas id="hsQtrChart"></canvas>
+    </div>
+
+    <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:6px;letter-spacing:.03em;">📊 1Q26 연결 손익 요약 (단위: 억원 · 제9기 1분기)</div>
+    <div class="g2" style="margin-bottom:12px;">
+      <div>
+        <div class="ir"><span class="il">1Q26 연결 매출액</span><span class="iv up">1조 3,582억 (▲26.2% YoY) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">1Q26 매출총이익</span><span class="iv up">2,700억 (GPM 19.9% · 전기 18.0%) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">1Q26 영업이익</span><span class="iv up">1,523억 (▲48.8% YoY · OPM 11.2%) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">1Q26 당기순이익</span><span class="iv up">913억 (YoY 소폭 감소: 세금↑) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">1Q26 기본EPS</span><span class="iv up">9,370원 (연환산 ~3.7만원) <span class="ev ev-3">적정</span></span></div>
+      </div>
+      <div>
+        <div class="ir"><span class="il">1Q26 별도 매출</span><span class="iv up">9,550억 (별도기준) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">1Q26 별도 영업이익</span><span class="iv up">1,115억 (OPM 11.7%) <span class="ev ev-4">높음</span></span></div>
+        <div class="ir"><span class="il">법인세비용차감전이익</span><span class="iv">1,291억 (YoY 유사) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">법인세비용</span><span class="iv">378억 (유효세율 29.3%) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">연결 포함 회사 수</span><span class="iv">25개 (전기와 동일) <span class="ev ev-3">적정</span></span></div>
+      </div>
+    </div>
+
+    <!-- 재무상태 분기 변동 -->
+    <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">🏦 재무상태 변동 (2025.12 → 2026.03)</div>
+    <div class="g2" style="margin-bottom:12px;font-size:11px;">
+      <div>
+        <div class="ir" style="font-size:11px;"><span class="il">자산총계</span><span class="up">7조 2,279억 → 7조 8,607억 (+8.8%)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">재고자산</span><span class="up">1조 2,776억 → 1조 5,002억 (+17.4%)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">매출채권</span><span>1조 4,078억 → 1조 3,696억 (유지)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">유형자산</span><span class="up">2조 3,071억 → 2조 3,748억 (CAPEX)</span></div>
+      </div>
+      <div>
+        <div class="ir" style="font-size:11px;"><span class="il">단기차입금</span><span class="up">3,380억 → 2,377억 (↓감소)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">초과청구공사</span><span class="up">5,864억 → 6,030억 (수주↑)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">자본총계</span><span class="up">2조 4,897억 → 2조 5,384억 (+2.0%)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">이익잉여금</span><span class="up">8,294억 → 8,462억 (+2.0%)</span></div>
+      </div>
+    </div>
+
+    <!-- 재고자산 급증 의미 -->
+    <div style="background:#E8F5E9;border-left:3px solid #1B5E20;border-radius:var(--border-radius-md);padding:12px 14px;margin-bottom:10px;">
+      <div style="font-size:12px;font-weight:500;color:#1B5E20;margin-bottom:5px;">📦 재고자산 1.5조 급증 — 부정 신호인가 긍정 신호인가?</div>
+      <div style="font-size:12px;color:#1B5E20;line-height:1.7;">재고자산이 1.28조→1.50조로 +17.4% 증가. 이는 ① 수주잔고 소화를 위한 원자재·부품 선조달, ② 납기 대기 완제품의 누적으로 해석됨. 초과청구공사(선수금 6,030억)와 함께 보면 수주는 충분히 확보됐고 생산이 진행 중인 구조. <strong>재고 증가가 실적 성장 선행지표로 기능 중.</strong></div>
+    </div>
+
+    <div class="hl">
+      <div style="font-size:13px;font-weight:500;color:#3B6D11;margin-bottom:4px;">💡 분기보고서 핵심 — 매출 +26.2% · OPM 11.2% · 단기차입금 ↓감소</div>
+      <div style="font-size:12px;color:#1D9E75;line-height:1.7;">1Q26 매출 1.36조(+26.2%), 영업이익 1,523억(+48.8%), OPM 11.2%로 2025년 연간 수준 유지. 단기차입금이 3,380억→2,377억으로 급감해 재무 건전성 개선. 별도 영업이익 1,115억(OPM 11.7%)으로 중공업 본업 경쟁력 확인. <strong>연환산 EPS ~3.7만원 기준 현재가 4,000,000원 → Forward PER ~108x — 성장 프리미엄.</strong></div>
+    </div>
+  </div>
+
+  <!-- 공통: 핵심 성장 동력 -->
+  <div style="font-size:13px;font-weight:500;margin:14px 0 8px;">핵심 성장 동력</div>
+  <div class="g3" style="font-size:12px;">
+    <div style="background:#E8F5E9;border-radius:var(--border-radius-md);padding:10px 12px;border-left:3px solid #1B5E20;">
+      <div style="color:#1B5E20;font-weight:500;margin-bottom:3px;">⚡ AI DC 전력인프라</div>
+      <div style="color:#1B5E20;line-height:1.6;">AI·DC 전력수요 폭발<br>초고압 변압기·차단기<br>미국 노후 전력망 교체<br>2030년까지 호황 예상</div>
+    </div>
+    <div style="background:#E8F4F8;border-radius:var(--border-radius-md);padding:10px 12px;border-left:3px solid #006699;">
+      <div style="color:#006699;font-weight:500;margin-bottom:3px;">🌍 글로벌 생산 전략</div>
+      <div style="color:#004466;line-height:1.6;">미국·인도·중국 현지 생산<br>관세 리스크 최소화<br>각 시장 규격 인증 보유<br>CAPA 전략적 확대</div>
+    </div>
+    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:10px 12px;border-left:3px solid #EF9F27;">
+      <div style="color:#854F0B;font-weight:500;margin-bottom:3px;">🏗️ 건설부문 안정성</div>
+      <div style="color:#633806;line-height:1.6;">해링턴플레이스 브랜드<br>데이터센터 신사업 진출<br>수소충전소 밸류체인<br>건설+중공업 시너지</div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. 기본 투자지표 -->
+<div class="card">
+  <div class="sec">3. 기본 투자지표 (Per-Share) <span class="src">📄 분기보고서 원문 · 연결 지배주주지분 기준</span></div>
+  <div class="g4">
+    <div class="met"><div class="ml">EPS · 2025 연결</div><div class="mv">55,832원</div><div class="ms">▲133.6% · 전기 23,909원</div><div style="margin-top:5px;"><span class="ev ev-4">높음</span></div></div>
+    <div class="met"><div class="ml">1Q26 분기 EPS</div><div class="mv">9,370원</div><div class="ms">연환산 ~3.7만원</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
+    <div class="met"><div class="ml">BPS · 주당순자산</div><div class="mv">약 257,000원</div><div class="ms">지배자본 2조 3,962억 ÷ ~932만주</div><div style="margin-top:5px;"><span class="ev ev-4">높음</span></div></div>
+    <div class="met"><div class="ml">별도 EPS · 2025</div><div class="mv">29,480원</div><div class="ms">별도 당기순이익 기준</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
+  </div>
+</div>
+
+<!-- 4. 상대 투자지표 -->
+<div class="card">
+  <div class="sec">4. 상대 투자지표 (Valuation Multiples) · 현재가 4,000,000원 · 글로벌 전력기기 비교</div>
+
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;font-size:11px;">
+    <span style="padding:2px 8px;border-radius:999px;background:#E6F1FB;color:#0C447C;font-weight:500;">1단계 매우낮음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#EAF3DE;color:#27500A;font-weight:500;">2단계 낮음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#F1EFE8;color:#444441;font-weight:500;">3단계 적정</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#FAEEDA;color:#633806;font-weight:500;">4단계 높음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#FCEBEB;color:#791F1F;font-weight:500;">5단계 매우높음</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PER (2025 EPS)</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">4,000,000÷55,832 · 글로벌 전력기기 평균~20x<br><span style="color:#D85A30;">Forward PER(연환산 3.7만원) ≈ 108x — 고성장 프리미엄 높음</span></div>
+    <div class="ind-val">71.7x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(15x)</span><span>적정(40x)</span><span>고(100x)</span></div><div class="bar-bg"><div class="bar-f" style="width:66%;background:#FCEBEB;"></div></div></div>
+    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PBR</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">4,000,000÷257,000 · 글로벌 산업재 평균~3x<br><span style="color:#D85A30;">PBR 15.6x — 높은 ROE(2025년 ~26%) + AI 수혜 프리미엄</span></div>
+    <div class="ind-val">15.6x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(1x)</span><span>적정(5x)</span><span>고(20x)</span></div><div class="bar-bg"><div class="bar-f" style="width:76%;background:#FCEBEB;"></div></div></div>
+    <span class="ev ev-5" style="min-width:58px;text-align:center;">5단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">OPM (1Q26)</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">1Q26 11.2% · 2025년 12.5% · 글로벌 산업재 평균~8%<br><span style="color:#1D9E75;">HD현대일렉트릭 24.9% 대비 낮지만 성장 추세 뚜렷 · 건설부문 통합 OPM임에 주의</span></div>
+    <div class="ind-val">11.2%</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(4%)</span><span>적정(10%)</span><span>고(25%)</span></div><div class="bar-bg"><div class="bar-f" style="width:34%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-3" style="min-width:58px;text-align:center;">3단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">매출 성장률</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">1Q26 YoY +26.2% · 2025년 +21.9%<br><span style="color:#1D9E75;">3년 연속 20%+ 성장 · 글로벌 전력기기 수요 구조적 성장</span></div>
+    <div class="ind-val">+26.2%</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(0%)</span><span>적정(10%)</span><span>고(30%)</span></div><div class="bar-bg"><div class="bar-f" style="width:87%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
+  </div>
+
+  <!-- 피어비교 -->
+  <div style="margin-top:12px;font-size:13px;font-weight:500;margin-bottom:8px;">국내외 전력기기 OPM 비교</div>
+  <div style="position:relative;width:100%;height:145px;margin-bottom:10px;">
+    <canvas id="peerChart"></canvas>
+  </div>
+
+  <div class="warn">
+    <div style="font-size:12px;color:#854F0B;line-height:1.7;">⚠ 밸류에이션 핵심 쟁점: PER 71.7x·PBR 15.6x는 절대적으로 높음. 단 중공업+건설 복합 구조에서 중공업만 별도 OPM은 11.7%로 양호. 핵심 질문은 2025년의 폭발적 이익 성장(+106%)이 구조적인가 일시적인가. <strong>초과청구공사(선수금 6,030억)와 재고 1.5조가 향후 매출을 보장하므로 2026년 실적 가시성은 양호.</strong></div>
+  </div>
+</div>
+
+<!-- 5. 시계열 이벤트 -->
+<div class="card">
+  <div class="sec">5. 시계열 주요 이벤트</div>
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2026년 01월 09일</div>
+      <div class="tl-title">주가 1,819,000원 — 52주 최저 · LC 기준점</div>
+      <div class="tl-body">연초 저점 1,819,000원. 2025년 영업이익 7,470억(+106%)의 역대최대 실적이 아직 시장에 미반영. 이후 사업보고서 공시로 급등 시작.</div>
+      <span class="tag tag-neg">52주 최저</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-pos"></div>
+      <div class="tl-date">2026년 03월 (사업보고서)</div>
+      <div class="tl-title">제8기 정정 사업보고서 — 영업이익 7,470억(+106.1%) · OPM 12.5% · EPS 55,832원</div>
+      <div class="tl-body">매출 5.97조(+21.9%), 영업이익 7,470억(+106.1%), OPM 12.5%, EPS 55,832원(+133.6%). 3년 연속 고성장 공시. 692,625주(8.6%), 701,748주(8.8%), 921,040주(11.5%)의 연속 수급 유입.</div>
+      <span class="tag tag-big">연간 역대최대</span><span class="tag tag-pos">OPM 12.5%</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2026년 4월</div>
+      <div class="tl-title">2,059,635주(25.7%) 역대급 수급 · 매물대 2,435,000~2,160,000원 형성 후 돌파</div>
+      <div class="tl-body">1,834,712주(22.9%), 2,059,635주(25.7%)의 역대급 수급 유입으로 박스 상단 돌파. 4월 이후 본격 상승 추세 시작.</div>
+      <span class="tag tag-big">역대급 수급</span><span class="tag tag-pos">박스 돌파</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-pos"></div>
+      <div class="tl-date">2026년 05월 14일 (분기보고서)</div>
+      <div class="tl-title">1Q26 분기보고서 — 매출 1.36조(▲26.2%) · 영업이익 1,523억(▲48.8%) · 재고 1.5조</div>
+      <div class="tl-body">연결 매출 1조 3,582억(+26.2%), 영업이익 1,523억(+48.8%), OPM 11.2%. 재고 1.5조(+17.4% QoQ)는 수주잔고 소화 중인 신호. 단기차입금 3,380→2,377억 급감.</div>
+      <span class="tag tag-pos">분기 실적 우수</span><span class="tag tag-pos">차입금 감소</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2026년 05월 07일</div>
+      <div class="tl-title">주가 4,865,000원 — 52주 최고 · LC +119.90% · 이후 HC -17.78% 조정</div>
+      <div class="tl-body">AI 데이터센터 전력수요 + 역대최대 실적 + 역대급 수급으로 4,865,000원 최고가 달성. 현재 4,000,000원(+2.51%)으로 HC -17.78% 조정 후 반등 시도 중. 중장기 정배열 유지.</div>
+      <span class="tag tag-big">52주 최고</span><span class="tag tag-neg">HC -17.78% 조정</span>
+    </div>
+  </div>
+</div>
+
+<!-- 6. 투자 포인트 -->
+<div class="card">
+  <div class="sec">6. 2026년 핵심 투자 포인트</div>
+  <div class="g2">
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#1D9E75;">긍정 요인 (Bull)</div>
+      <div class="ir"><span class="il">1Q26 매출 +26.2% · OPM 11.2% 유지</span><span class="badge b-green">성장 지속</span></div>
+      <div class="ir"><span class="il">2025 영업이익 +106.1% 역대최대</span><span class="badge b-green">구조적 성장</span></div>
+      <div class="ir"><span class="il">재고 1.5조·선수금 6,030억 — 미래 매출 확보</span><span class="badge b-green">실적 가시성</span></div>
+      <div class="ir"><span class="il">미국·인도·중국 현지 생산 — 관세 최소화</span><span class="badge b-blue">글로벌 전략</span></div>
+      <div class="ir"><span class="il">단기차입금 ↓감소 · 재무 건전성 개선</span><span class="badge b-green">재무 개선</span></div>
+      <div class="ir"><span class="il">AI DC + 중동·유럽 전력망 수요 2030년까지</span><span class="badge b-green">장기 테마</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#D85A30;">리스크 (Bear)</div>
+      <div class="ir"><span class="il">PBR 15.6x · PER 71.7x 절대 고평가</span><span class="badge b-red">밸류에이션 부담</span></div>
+      <div class="ir"><span class="il">HC -17.78% 조정 · 단기 기술적 부담</span><span class="badge b-red">단기 하락</span></div>
+      <div class="ir"><span class="il">건설부문 내수 침체 불확실성</span><span class="badge b-amber">건설 리스크</span></div>
+      <div class="ir"><span class="il">재고 급증 → 수주 둔화 시 이익 압박</span><span class="badge b-amber">재고 리스크</span></div>
+      <div class="ir"><span class="il">원자재(구리·규소강판) 가격 상승</span><span class="badge b-amber">원가 압박</span></div>
+      <div class="ir"><span class="il">HD현대일렉트릭 대비 OPM 열위</span><span class="badge b-gray">상대 경쟁력</span></div>
+    </div>
+  </div>
+  <div class="ib">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
+      <div><span style="color:var(--color-text-secondary);">시총:</span> <span style="font-weight:500;">~3.9조원</span></div>
+      <div><span style="color:var(--color-text-secondary);">2025 EPS:</span> <span class="up" style="font-weight:500;">55,832원 (▲133.6%)</span></div>
+      <div><span style="color:var(--color-text-secondary);">1Q26 EPS:</span> <span class="up" style="font-weight:500;">9,370원 (연환산 ~3.7만)</span></div>
+      <div><span style="color:var(--color-text-secondary);">선수금:</span> <span class="up" style="font-weight:500;">6,030억 (확정 미래매출)</span></div>
+    </div>
+  </div>
+  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">⚠ 정정 사업보고서(제8기) + 분기보고서(제9기 1Q) 원문 파싱 기준 · 투자 권고가 아닙니다</div>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ── 탭 전환 ──────────────────────────────────────────────
+function switchTab(tab) {
+  const isA=tab==='annual';
+  document.getElementById('tabAnnual').style.display=isA?'':'none';
+  document.getElementById('tabQuarter').style.display=isA?'none':'';
+  const aS='flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);font-size:13px;cursor:pointer;transition:all .15s;background:#1B5E20;border:1.5px solid #1B5E20;color:#fff;font-weight:600;';
+  const iS='flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);font-size:13px;cursor:pointer;transition:all .15s;background:var(--color-background-secondary);border:1.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);font-weight:500;';
+  document.getElementById('btnAnnual').style.cssText=isA?aS:iS;
+  document.getElementById('btnQuarter').style.cssText=isA?iS:aS;
+  if(!isA&&!window._qReady){
+    window._qReady=true;
+    new Chart(document.getElementById('hsQtrChart'),{
+      type:'bar',
+      data:{
+        labels:['1Q25 매출','1Q26 매출','1Q25 영업이익','1Q26 영업이익'],
+        datasets:[
+          {label:'금액(억)',data:[10761,13582,1024,1523],backgroundColor:['#B4B2A9','#1B5E20','#DEDAD1','#2E7D32'],borderRadius:5,yAxisID:'y'},
+          {label:'OPM(%)',type:'line',data:[9.5,11.2,9.5,11.2],borderColor:'#EF9F27',backgroundColor:'rgba(239,159,39,.15)',tension:.3,pointRadius:6,borderWidth:2.5,fill:false,yAxisID:'y2'}
+        ]
+      },
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{labels:{font:{size:11},boxWidth:12}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label==='OPM(%)'?`OPM ${ctx.raw}%`:`${ctx.raw.toLocaleString()}억`}}},
+        scales:{y:{position:'left',ticks:{font:{size:10},callback:v=>v.toLocaleString()+'억',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+          y2:{position:'right',min:8,max:14,ticks:{font:{size:10},callback:v=>v+'%',color:'#EF9F27'},grid:{display:false}},
+          x:{ticks:{font:{size:11},color:'#888'},grid:{display:false}}}}
+    });
+  }
+}
+
+// ── SVG 캔들차트 ────────────────────────────────────────
+(function(){
+  const svg=document.getElementById('hsSvg');
+  const W=720,H=240,pL=76,pR=12,pT=14,pB=24;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  // 단위: 만원 (181.9 = 1,819,000원 → 단위 10만원)
+  // 18.19 = 1,819,000원 (단위: 10만원)
+  const data=[
+    // 1월: 18.19K → 반등
+    {o:19.5,h:20.5,l:18.19,c:19.8},{o:19.8,h:21,l:19.5,c:20.5},
+    {o:20.5,h:22,l:20,c:21.5},{o:21.5,h:23,l:21,c:22.5},
+    // 1월 말~2월: 점진 상승
+    {o:22.5,h:24,l:22,c:23.5},{o:23.5,h:25.5,l:23,c:25},
+    {o:25,h:27,l:24.5,c:26.5},{o:26.5,h:28.5,l:26,c:28},
+    // 2월: 급등 후 박스
+    {o:28,h:30.5,l:27.5,c:30},{o:30,h:31.5,l:29,c:30.5},
+    {o:30.5,h:31,l:28,c:29},{o:29,h:30,l:27.5,c:28},
+    // 3월: 박스 2,600~2,400K
+    {o:28,h:29,l:27,c:27.5},{o:27.5,h:28.5,l:26.8,c:27.8},
+    {o:27.8,h:29,l:27.2,c:28.2},{o:28.2,h:29.2,l:27.5,c:28.5},
+    {o:28.5,h:29.5,l:27.8,c:29},{o:29,h:30,l:28.2,c:29.2},
+    // 4월: 역대급 수급 → 급등
+    {o:29.2,h:31,l:28.8,c:30.5},{o:30.5,h:33,l:30,c:32.5},
+    {o:32.5,h:36,l:32,c:35},{o:35,h:39,l:34.5,c:38.5},
+    {o:38.5,h:43,l:38,c:42},{o:42,h:46,l:41.5,c:45.5},
+    // 5월: 최고 → HC 조정
+    {o:45.5,h:48.65,l:45,c:47},{o:47,h:48,l:43,c:44.5},  // ← 최고
+    {o:44.5,h:45,l:39.5,c:41},{o:41,h:42,l:37.5,c:38.5},
+    {o:38.5,h:41,l:38,c:40}  // 현재 4,000K
+  ];
+  const prices=data.flatMap(d=>[d.h,d.l]);
+  const maxP=Math.max(...prices)+1,minP=Math.min(...prices)-1;
+  const rng=maxP-minP;
+  function py(v){return pT+cH*(1-(v-minP)/rng);}
+  const colW=cW/data.length,cw=Math.max(colW*.62,8);
+  // 그리드 (단위: 10만원 → 표시: 만원)
+  [20,25,30,35,40,45,50].forEach(v=>{
+    const y=py(v);
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
+    l.setAttribute('stroke','rgba(128,128,128,.12)');l.setAttribute('stroke-width','1');svg.appendChild(l);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',pL-4);t.setAttribute('y',y+4);t.setAttribute('text-anchor','end');
+    t.setAttribute('font-size','9');t.setAttribute('fill','rgba(128,128,128,.7)');
+    t.textContent=(v*10).toLocaleString()+'만';svg.appendChild(t);
+  });
+  // 박스권
+  const z=document.createElementNS('http://www.w3.org/2000/svg','rect');
+  z.setAttribute('x',pL);z.setAttribute('y',py(24.35));z.setAttribute('width',cW);
+  z.setAttribute('height',py(21.6)-py(24.35));z.setAttribute('fill','rgba(27,94,32,0.06)');svg.insertBefore(z,svg.firstChild);
+  function calcMA(d,n){return d.map((_,i)=>i<n-1?null:d.slice(i-n+1,i+1).reduce((s,x)=>s+x.c,0)/n);}
+  function drawLine(arr,col,w){
+    let pts=[];arr.forEach((v,i)=>{if(v===null)return;pts.push(`${pL+(i+.5)*colW},${py(v)}`);});
+    if(pts.length<2)return;
+    const p=document.createElementNS('http://www.w3.org/2000/svg','polyline');
+    p.setAttribute('points',pts.join(' '));p.setAttribute('fill','none');p.setAttribute('stroke',col);p.setAttribute('stroke-width',w||1.5);svg.appendChild(p);
+  }
+  data.forEach((d,i)=>{
+    const cx=pL+(i+.5)*colW,isUp=d.c>=d.o,col=isUp?'#D85A30':'#185FA5';
+    const wk=document.createElementNS('http://www.w3.org/2000/svg','line');
+    wk.setAttribute('x1',cx);wk.setAttribute('x2',cx);wk.setAttribute('y1',py(d.h));wk.setAttribute('y2',py(d.l));
+    wk.setAttribute('stroke',col);wk.setAttribute('stroke-width','1.5');svg.appendChild(wk);
+    const bT=py(Math.max(d.o,d.c)),bB=py(Math.min(d.o,d.c));
+    const bd=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    bd.setAttribute('x',cx-cw/2);bd.setAttribute('y',bT);bd.setAttribute('width',cw);
+    bd.setAttribute('height',Math.max(bB-bT,2));bd.setAttribute('fill',col);bd.setAttribute('rx','1');svg.appendChild(bd);
+  });
+  drawLine(calcMA(data,5),'#FF69B4',1.5);
+  drawLine(calcMA(data,20),'#9370DB',1.5);
+  drawLine(calcMA(data,60),'#DAA520',2);
+  const mk=(idx,lbl,isLow,col)=>{
+    const cx=pL+(idx+.5)*colW,cy=isLow?py(data[idx].l)+12:py(data[idx].h)-8;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',cx);t.setAttribute('y',cy);t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','9');t.setAttribute('fill',col);t.setAttribute('font-weight','500');
+    t.textContent=lbl;svg.appendChild(t);
+  };
+  mk(0,'최저181.9만(01/09)',true,'#185FA5');
+  mk(23,'최고486.5만(05/07)',false,'#D85A30');
+  mk(data.length-1,'현재400만',true,'#1B5E20');
+  ['1월','2월','3월','4월','5월'].forEach((m,i)=>{
+    const cx=pL+(i/5)*cW+cW/10;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',cx);t.setAttribute('y',H-4);t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','10');t.setAttribute('fill','rgba(128,128,128,.8)');t.textContent=m;svg.appendChild(t);
+  });
+  [{c:'#D85A30',t:'양봉'},{c:'#185FA5',t:'음봉'},{c:'#FF69B4',t:'MA5'},{c:'#9370DB',t:'MA20'},{c:'#DAA520',t:'MA60'}].forEach((l,i)=>{
+    const gx=pL+i*98;
+    const r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    r.setAttribute('x',gx);r.setAttribute('y',2);r.setAttribute('width',10);r.setAttribute('height',10);r.setAttribute('fill',l.c);r.setAttribute('rx','2');svg.appendChild(r);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',gx+13);t.setAttribute('y',11);t.setAttribute('font-size','9');t.setAttribute('fill','rgba(128,128,128,.9)');t.textContent=l.t;svg.appendChild(t);
+  });
+})();
+
+// ── 연간 실적 차트 ──────────────────────────────────────
+new Chart(document.getElementById('hsRevChart'),{
+  type:'bar',
+  data:{
+    labels:['2023 (제6기)','2024 (제7기)','2025 (제8기)'],
+    datasets:[
+      {label:'매출(조)',data:[4.30,4.89,5.97],backgroundColor:'#1B5E20',borderRadius:4,yAxisID:'y'},
+      {label:'영업이익(조)',data:[0.258,0.362,0.747],backgroundColor:['#4CAF50','#4CAF50','#4CAF50'],borderRadius:4,yAxisID:'y'},
+      {label:'OPM(%)',type:'line',data:[6.0,7.4,12.5],borderColor:'#EF9F27',backgroundColor:'rgba(239,159,39,.1)',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{font:{size:11},boxWidth:12}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label==='OPM(%)'?`${ctx.raw}%`:`${ctx.raw.toFixed(2)}조`}}},
+    scales:{y:{position:'left',ticks:{font:{size:10},callback:v=>v.toFixed(1)+'조',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+      y2:{position:'right',min:0,max:20,ticks:{font:{size:10},callback:v=>v+'%',color:'#EF9F27'},grid:{display:false}},
+      x:{ticks:{font:{size:11},color:'#888'},grid:{display:false}}}}
+});
+
+// ── OPM 피어비교 ────────────────────────────────────────
+new Chart(document.getElementById('peerChart'),{
+  type:'bar',
+  data:{
+    labels:['HD현대일렉트릭','효성중공업','LS ELECTRIC\n전력부문','Siemens Energy','ABB 변압기','GE Vernova'],
+    datasets:[{label:'OPM(%)',data:[24.9,11.2,10.7,8.4,15.2,6.8],
+      backgroundColor:['#B4B2A9','#1B5E20','#B4B2A9','#B4B2A9','#B4B2A9','#B4B2A9'],borderRadius:5}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`OPM ${ctx.raw}%`}}},
+    scales:{y:{max:30,ticks:{font:{size:10},callback:v=>v+'%',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+      x:{ticks:{font:{size:10},color:'#888'},grid:{display:false}}}}
+});
+</script>
