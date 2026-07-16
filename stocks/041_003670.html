@@ -1,0 +1,595 @@
+<link rel="stylesheet" href="../css/global.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
+.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:18px;font-variant-numeric:tabular-nums;}
+.sec{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:12px;}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:14px;}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px;text-align:center;}
+.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
+.mv{font-size:14px;font-weight:600;color:var(--color-text-primary);font-variant-numeric:tabular-nums;}
+.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
+.up{color:#1D9E75;}.dn{color:#D85A30;}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
+.b-green{background:#EAF3DE;color:#3B6D11;}.b-amber{background:#FAEEDA;color:#854F0B;}
+.b-red{background:#FCEBEB;color:#A32D2D;}.b-blue{background:#E6F1FB;color:#185FA5;}
+.b-gray{background:#F1EFE8;color:#5F5E5A;}.b-pfm{background:#DDF2E4;color:#1B7340;}
+.sig{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
+.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
+.ir:last-child{border-bottom:none;}
+.il{color:var(--color-text-secondary);}.iv{font-weight:600;color:var(--color-text-primary);display:flex;align-items:center;gap:6px;font-variant-numeric:tabular-nums;}
+.src{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-tertiary);margin-left:4px;}
+.hl{background:#EAF3DE;border-left:3px solid #1D9E75;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.warn{background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ev{font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;}
+.ev-1{background:#E6F1FB;color:#0C447C;}.ev-2{background:#EAF3DE;color:#27500A;}
+.ev-3{background:#F1EFE8;color:#444441;}.ev-4{background:#FAEEDA;color:#633806;}
+.ev-5{background:#FCEBEB;color:#791F1F;}
+.ind-row{display:flex;align-items:center;padding:8px 0;border-bottom:.5px solid var(--color-border-tertiary);gap:10px;}
+.ind-row:last-child{border-bottom:none;}
+.ind-nm{font-size:13px;font-weight:600;color:var(--color-text-primary);min-width:150px;}
+.ind-val{font-size:14px;font-weight:600;color:var(--color-text-primary);min-width:80px;text-align:right;font-variant-numeric:tabular-nums;}
+.bar-bg{background:var(--color-border-tertiary);border-radius:4px;height:7px;}
+.bar-f{border-radius:4px;height:7px;}
+.tl{position:relative;padding-left:28px;}
+.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--color-border-tertiary);border-radius:2px;}
+.tl-item{position:relative;margin-bottom:18px;}
+.tl-item:last-child{margin-bottom:0;}
+.tl-dot{position:absolute;left:-24px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid var(--color-background-primary);}
+.dot-big{background:#1B7340;}.dot-pos{background:#1D9E75;}
+.dot-neg{background:#D85A30;}.dot-neu{background:#888780;}
+.tl-date{font-size:11px;font-weight:600;color:var(--color-text-tertiary);margin-bottom:3px;}
+.tl-title{font-size:13px;font-weight:600;color:var(--color-text-primary);margin-bottom:3px;line-height:1.4;}
+.tl-body{font-size:12px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:5px;}
+.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;margin-right:4px;}
+.tag-big{background:#DDF2E4;color:#1B7340;}.tag-pos{background:#EAF3DE;color:#3B6D11;}
+.tag-neg{background:#FCEBEB;color:#791F1F;}.tag-neu{background:#F1EFE8;color:#444441;}
+button:focus-visible,a:focus-visible{outline:2px solid #1B7340;outline-offset:2px;}
+</style>
+
+<div style="padding:1rem 0;" class="box">
+
+<!-- 헤더 -->
+<div style="margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+  <h2>포스코퓨처엠 (003670)</h2>
+  <span class="badge b-pfm">코스피 · 2차전지·전기차 소재</span>
+  <span class="badge b-gray">양극재·음극재 등 배터리 소재 + 라임화성 소재사업</span>
+  <span class="src">📄 OpenDART 공시 원문(Open API) + 📊 Yahoo Finance 시세</span>
+</div>
+<p class="sub">최근 종가 153,200원 (2026-07-15, 전일대비 +6.17%) · 52주 최고 299,500원 (26/05/08) · 52주 최저 128,100원 (25/09/10) · LC +19.59% · HC -48.85% · 시총 약 13.63조 (유통주식수 기준)</p>
+
+<!-- 핵심 지표 배너 -->
+<div style="background:#DDF2E4;border-left:3px solid #1B7340;border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:14px;">
+  <div style="font-size:12px;color:#1B7340;line-height:1.6;"><strong>🔑 포스코퓨처엠 투자의 핵심:</strong> 2024년 지배주주순이익 -2,123억의 대규모 적자에서 2025년 323억 <strong>흑자전환</strong>했지만, 매출액은 여전히 전년比 -20.6% 감소 중인 2차전지 소재 업황 저점 국면. 주가는 52주 저점(128,100원)에서 5월 8일 299,500원까지 <strong>+133.9% 폭등</strong>한 뒤 -48.85% 폭락해 현재 153,200원. 1Q26 지배주주순이익(27억)은 2025년 분기 평균보다 낮아 <strong>회복 속도가 더딘 모습</strong>이며, 시가총액 대비 이익 규모가 여전히 매우 작아 밸류에이션은 미래 성장 기대에 크게 의존하는 구조.</div>
+</div>
+
+<div class="g4">
+  <div class="met"><div class="ml">최근 종가 (07/15)</div><div class="mv up">153,200원</div><div class="ms up">+6.17% · 고점 대비 -48.9%</div></div>
+  <div class="met"><div class="ml">2025 연결 영업이익</div><div class="mv up">328억</div><div class="ms">전년比 흑자 확대</div></div>
+  <div class="met"><div class="ml">2025 지배주주 순이익</div><div class="mv up">323억</div><div class="ms">전년 -2,123억에서 흑자전환</div></div>
+  <div class="met"><div class="ml">1Q26 지배주주 순이익</div><div class="mv dn">27억</div><div class="ms">2025 분기평균 대비 부진</div></div>
+</div>
+
+<!-- 1. 기술적 분석 -->
+<div class="card">
+  <div class="sec">1. 기술적 분석 — 일봉 기준 (2025.07.15 ~ 2026.07.15, 243거래일)</div>
+  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;">
+    최저 128,100원 (25/09/10) → 최고 299,500원 (26/05/08) → 최근 종가 153,200원 (26/07/15) · LC +19.59% · HC -48.85%
+  </div>
+  <svg id="pfmSvg" viewBox="0 0 720 240" width="100%" style="display:block;margin-bottom:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:4px;"></svg>
+
+  <div style="font-size:13px;font-weight:600;margin-bottom:8px;">📊 구간별 분석 <span class="src">📊 Yahoo Finance 일봉</span></div>
+  <div class="g4" style="font-size:11px;margin-bottom:12px;">
+    <div style="background:#F1EFE8;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#5F5E5A;font-weight:600;margin-bottom:3px;">25.07~09 — 저점권 형성</div>
+      <div style="color:#5F5E5A;line-height:1.6;">최저 128,100 (09/10)<br>128,100~164,900 등락<br>2024년 부진 지속 반영<br>거래량 저조</div>
+    </div>
+    <div style="background:#DDF2E4;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#1B7340;font-weight:600;margin-bottom:3px;">25.10~26.02 — 급등 반복</div>
+      <div style="color:#1B7340;line-height:1.6;">140,700→254,000원<br>5개월간 +80.5%<br>10월 단월 +49.2%<br>2차전지 테마 재부각</div>
+    </div>
+    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#854F0B;font-weight:600;margin-bottom:3px;">26.03~05 — 조정 후 신고가</div>
+      <div style="color:#854F0B;line-height:1.6;">184,500→299,500원<br>3월 조정 후 재반등<br>5/8 52주 신고가<br>변동성 확대</div>
+    </div>
+    <div style="background:#FCEBEB;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#A32D2D;font-weight:600;margin-bottom:3px;">26.06~07 — 신고가 후 폭락</div>
+      <div style="color:#A32D2D;line-height:1.6;">299,500→153,200원<br>고점 대비 -48.9%<br>6월 단월 -27.1%<br>완전 역배열 전환</div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;">
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:7px;">이동평균선 현황 (07/15 기준)</div>
+      <div class="ir"><span class="il">5일선 (149,200원)</span><span class="badge b-green">가격 상회</span></div>
+      <div class="ir"><span class="il">20일선 (167,145원)</span><span class="badge b-red">가격 하회</span></div>
+      <div class="ir"><span class="il">60일선 (213,955원)</span><span class="badge b-red">가격 큰 폭 하회</span></div>
+      <div class="ir"><span class="il">120일선 (214,706원)</span><span class="badge b-red">가격 큰 폭 하회</span></div>
+      <div class="ir"><span class="il">배열</span><span class="badge b-red">완전 역배열 · 급락 추세</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:7px;">핵심 가격대</div>
+      <div class="ir"><span class="il">52주 최고 (신고가)</span><span style="font-weight:600;color:#1B7340;">299,500원 (26/05/08)</span></div>
+      <div class="ir"><span class="il">3월 조정 저점</span><span style="font-weight:600;color:#D85A30;">184,500원 (03월)</span></div>
+      <div class="ir"><span class="il">최근 종가</span><span style="font-weight:600;color:var(--color-text-primary);">153,200원 (07/15)</span></div>
+      <div class="ir"><span class="il">52주 최저</span><span style="font-weight:600;">128,100원 (25/09/10)</span></div>
+      <div class="ir"><span class="il">LC / HC</span><span style="font-weight:600;">+19.59% / -48.85%</span></div>
+    </div>
+  </div>
+
+  <div class="sig">
+    <span class="badge b-red">신고가(05/08) 대비 -48.9% 폭락 · 완전 역배열</span>
+    <span class="badge b-amber">1년간 저점 대비 +133.9% 급등 후 절반 이상 반납</span>
+    <span class="badge b-blue">52주 저점(128,100) 대비는 여전히 +19.6%</span>
+    <span class="badge b-pfm">2025년 지배주주순이익 흑자전환</span>
+  </div>
+</div>
+
+<!-- 2. 기본적 분석 탭 -->
+<div class="card">
+  <div class="sec">2. 기본적 분석 — 공시 원문 <span class="src">📄 사업보고서(2025) + 분기보고서 1Q(2026.03)</span></div>
+
+  <div style="display:flex;gap:8px;margin-bottom:14px;">
+    <button id="btnAnnual" onclick="switchTab('annual')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);border:1.5px solid #1B7340;background:#1B7340;color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;">
+      📄 사업보고서 <span style="font-size:11px;opacity:.85;font-weight:400;">2025년 연간</span>
+    </button>
+    <button id="btnQuarter" onclick="switchTab('quarter')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);border:1.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-secondary);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;">
+      📋 분기보고서 <span style="font-size:11px;opacity:.85;font-weight:400;">1분기 · 2026.03</span>
+    </button>
+  </div>
+
+  <!-- ══ 사업보고서 탭 ══ -->
+  <div id="tabAnnual">
+    <svg id="pfmAnnualChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:12px;"></svg>
+
+    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:6px;letter-spacing:.03em;">📊 연결 손익 요약 (단위: 억원 · 2025년)</div>
+    <div class="g2" style="margin-bottom:12px;">
+      <div>
+        <div class="ir"><span class="il">연결 매출액</span><span class="iv dn">2조 9,387억 (▼20.6%) <span class="ev ev-4">주의</span></span></div>
+        <div class="ir"><span class="il">연결 영업이익</span><span class="iv up">328억 (전년比 흑자 확대) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">연결 당기순이익(전체)</span><span class="iv up">365억 (흑자전환) <span class="ev ev-2">양호</span></span></div>
+        <div class="ir"><span class="il">지배주주 순이익</span><span class="iv up">323억 (흑자전환) <span class="ev ev-2">양호</span></span></div>
+        <div class="ir"><span class="il">공시 기본주당이익</span><span class="iv">51원 (흑자전환) <span class="ev ev-3">적정</span></span></div>
+      </div>
+      <div>
+        <div class="ir"><span class="il">연결 자산총계</span><span class="iv up">9조 1,439억 (▲15.3%) <span class="ev ev-2">양호</span></span></div>
+        <div class="ir"><span class="il">연결 부채총계</span><span class="iv">4조 6,318억 (▲0.4%) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">연결 자본총계</span><span class="iv up">4조 5,121억 (▲35.9%) <span class="ev ev-2">양호</span></span></div>
+        <div class="ir"><span class="il">별도 순이익</span><span class="iv up">318억 (흑자전환) <span class="ev ev-2">양호</span></span></div>
+        <div class="ir"><span class="il">현금배당(보통주)</span><span class="iv">DPS 250원 (2023년 수준 회복) <span class="ev ev-3">적정</span></span></div>
+      </div>
+    </div>
+
+    <div class="warn">
+      <div style="font-size:13px;font-weight:600;color:#854F0B;margin-bottom:5px;">⚠ 공시 EPS 값에 대한 유의사항</div>
+      <div style="font-size:12px;color:#854F0B;line-height:1.7;">DART 공시상 2025년 기본주당이익은 51원(2024년 -2,752원, 2023년 371원)이나, 이는 지배주주순이익(323억)을 기말 유통주식수(8,894만주)로 나눈 값(약 363원)과 큰 차이가 있음 — 연중 신주 발행 등에 따른 가중평균주식수 산정 방식 때문으로 추정. 본 리포트의 PER 등 밸류에이션 지표는 <strong>지배주주순이익 ÷ 기말 유통주식수 기준으로 별도 환산</strong>한 값을 사용함(3번 항목 참고).</div>
+    </div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;margin-top:12px;">🔋 사업 구조 요약</div>
+    <div class="g3" style="font-size:11px;margin-bottom:12px;">
+      <div style="background:#DDF2E4;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #1B7340;">
+        <div style="color:#1B7340;font-weight:600;margin-bottom:5px;">양극재</div>
+        <div class="ir" style="font-size:11px;"><span class="il">주력 제품</span><span>NCM/NCA계 양극재</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">특징</span><span>매출 비중 최대</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">2025년 흐름</span><span class="dn">전기차 수요 둔화 여파</span></div>
+      </div>
+      <div style="background:#E6F1FB;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #185FA5;">
+        <div style="color:#185FA5;font-weight:600;margin-bottom:5px;">음극재</div>
+        <div class="ir" style="font-size:11px;"><span class="il">주력 제품</span><span>천연·인조흑연 음극재</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">역할</span><span>포트폴리오 다각화</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">노출</span><span>중국산 경쟁 심화</span></div>
+      </div>
+      <div style="background:#F1EFE8;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #5F5E5A;">
+        <div style="color:#5F5E5A;font-weight:600;margin-bottom:5px;">라임화성·기타</div>
+        <div class="ir" style="font-size:11px;"><span class="il">사업 영역</span><span>생석회·화성품 등</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">역할</span><span>안정적 기초소재 매출</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">비중</span><span>상대적으로 소규모</span></div>
+      </div>
+    </div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">📈 지배주주순이익 3개년 추이 — 대규모 적자에서 흑자전환</div>
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <div style="flex:1;background:#F1EFE8;border-radius:var(--border-radius-md);padding:10px;text-align:center;">
+        <div style="font-size:10px;color:#5F5E5A;margin-bottom:4px;">2023년</div>
+        <div style="font-size:18px;font-weight:700;color:var(--color-text-primary);">287억</div>
+        <div style="font-size:10px;color:#5F5E5A;margin-top:4px;">공시 EPS 371원</div>
+      </div>
+      <div style="display:flex;align-items:center;font-size:18px;color:#D85A30;font-weight:700;">→</div>
+      <div style="flex:1;background:#FCEBEB;border-radius:var(--border-radius-md);padding:10px;text-align:center;">
+        <div style="font-size:10px;color:#A32D2D;margin-bottom:4px;">2024년</div>
+        <div style="font-size:18px;font-weight:700;color:#D85A30;">-2,123억</div>
+        <div style="font-size:10px;color:#A32D2D;margin-top:4px;">공시 EPS -2,752원</div>
+      </div>
+      <div style="display:flex;align-items:center;font-size:18px;color:#1D9E75;font-weight:700;">→</div>
+      <div style="flex:1;background:#EAF3DE;border-radius:var(--border-radius-md);padding:10px;text-align:center;border:1.5px solid #1D9E75;">
+        <div style="font-size:10px;color:#3B6D11;margin-bottom:4px;font-weight:600;">2025년</div>
+        <div style="font-size:18px;font-weight:700;color:#1D9E75;">323억</div>
+        <div style="font-size:10px;color:#3B6D11;margin-top:4px;">흑자전환 · 공시 EPS 51원</div>
+      </div>
+    </div>
+
+    <div class="hl">
+      <div style="font-size:13px;font-weight:600;color:#3B6D11;margin-bottom:4px;">💡 사업보고서 핵심 — 매출은 계속 줄지만 손익은 흑자전환, 재무구조는 크게 개선</div>
+      <div style="font-size:12px;color:#1D9E75;line-height:1.7;">지배주주순이익이 287억(2023)→-2,123억(2024)→323억(2025)으로 대규모 적자를 딛고 흑자전환. 다만 <strong>매출액은 4조 7,599억(2023)→3조 6,999억(2024)→2조 9,387억(2025)으로 3년 연속 감소</strong>해 외형 축소는 계속되는 중이며, 흑자전환은 비용 통제·손상차손 소멸 등에 따른 것으로 보임. 자산총계는 +15.3%, 자본총계는 +35.9% 늘어 재무구조는 오히려 크게 개선됐고, 2024년 중단됐던 배당도 250원으로 재개.</div>
+    </div>
+  </div>
+
+  <!-- ══ 분기보고서 탭 ══ -->
+  <div id="tabQuarter" style="display:none;">
+    <svg id="pfmQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:12px;"></svg>
+
+    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:6px;letter-spacing:.03em;">📊 1Q26 연결 손익 요약 (단위: 억원 · 1분기)</div>
+    <div class="g2" style="margin-bottom:12px;">
+      <div>
+        <div class="ir"><span class="il">1Q26 연결 매출액</span><span class="iv">7,575억 <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">1Q26 연결 영업이익</span><span class="iv">177억 <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">1Q26 법인세차감전이익</span><span class="iv">100억 <span class="ev ev-4">주의</span></span></div>
+        <div class="ir"><span class="il">1Q26 연결 분기순이익(전체)</span><span class="iv">63억 <span class="ev ev-4">주의</span></span></div>
+        <div class="ir"><span class="il">1Q26 지배주주 순이익</span><span class="iv dn">27억 <span class="ev ev-4">주의</span></span></div>
+      </div>
+      <div>
+        <div class="ir"><span class="il">1Q26 공시 기본EPS</span><span class="iv">-48원 (본문 유의사항 참고) <span class="ev ev-4">주의</span></span></div>
+        <div class="ir"><span class="il">1Q26 비지배지분 순이익</span><span class="iv">36억 (전체의 57.7%) <span class="ev ev-4">주의</span></span></div>
+        <div class="ir"><span class="il">1Q26 연결 자산총계</span><span class="iv up">9조 5,201억 (▲4.1% QoQ) <span class="ev ev-2">양호</span></span></div>
+        <div class="ir"><span class="il">연결 자본총계</span><span class="iv up">4조 6,176억 (▲2.3% QoQ) <span class="ev ev-2">양호</span></span></div>
+        <div class="ir"><span class="il">지배기업소유주지분</span><span class="iv up">4조 1,428억 (▲1.9% QoQ) <span class="ev ev-2">양호</span></span></div>
+      </div>
+    </div>
+
+    <div class="warn">
+      <div style="font-size:13px;font-weight:600;color:#854F0B;margin-bottom:5px;">🔑 1Q26 지배주주순이익이 2025년 분기 평균보다 낮음 — 회복 속도 둔화 신호</div>
+      <div style="font-size:12px;color:#854F0B;line-height:1.7;">1Q26 지배주주순이익 27억은 2025년 연간(323억)의 4분의 1 수준인 81억에도 못 미치는 수준. <strong>연결 분기순이익(63억) 중 비지배지분 몫이 57.7%(36억)로 지배주주 몫(27억)보다 더 커, 자회사(양극재·음극재 합작법인 등) 실적이 부모 회사보다 상대적으로 견조</strong>했던 것으로 해석됨. 다만 자산·자본총계는 QoQ로 견조하게 증가해 투자 확대는 지속되는 모습.</div>
+    </div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;margin-top:12px;">🏦 재무상태 변동 (2025.12 → 2026.03)</div>
+    <div class="g2" style="margin-bottom:12px;font-size:11px;">
+      <div>
+        <div class="ir" style="font-size:11px;"><span class="il">자산총계</span><span class="up">9.14조 → 9.52조 (+4.1%)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">지배기업소유주지분</span><span class="up">4.07조 → 4.14조 (+1.9%)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">1Q26 지배주주 순이익</span><span>27억 (연환산 108억)</span></div>
+      </div>
+      <div>
+        <div class="ir" style="font-size:11px;"><span class="il">자본총계</span><span class="up">4.51조 → 4.62조 (+2.3%)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">부채총계</span><span class="dn">4.63조 → 4.90조 (+5.8%)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">1Q26 vs 2025 연환산 지배주주순이익</span><span class="dn">108억 vs 323억 (-66.6%)</span></div>
+      </div>
+    </div>
+
+    <div class="warn">
+      <div style="font-size:13px;font-weight:600;color:#854F0B;margin-bottom:4px;">⚠ 분기보고서 핵심 — 2025년 흑자전환이 지속가능한지는 다음 분기 확인 필요</div>
+      <div style="font-size:12px;color:#854F0B;line-height:1.7;">1Q26 지배주주순이익을 단순 연환산(×4)하면 108억으로 2025년 연간(323억) 대비 -66.6% 낮은 수준. <strong>2차전지 소재 업황 저점 통과 여부가 아직 뚜렷하게 확인되지 않는 국면</strong>이며, 주가는 이미 저점 대비 +133.9% 급등했다가 신고가 이후 -48.9% 조정된 상태로 실적 회복 속도와 주가 기대치 사이의 괴리가 남아있음.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. 기본 투자지표 -->
+<div class="card">
+  <div class="sec">3. 기본 투자지표 (Per-Share) <span class="src">📄 지배주주순이익 ÷ 기말 유통주식수 환산 · 공시 EPS와 상이(2번 항목 유의사항 참고)</span></div>
+  <div class="g4">
+    <div class="met"><div class="ml">환산 EPS · 2025 연결</div><div class="mv up">약 363원</div><div class="ms">지배주주순이익 323억 ÷ 8,895만주</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
+    <div class="met"><div class="ml">1Q26 환산 분기EPS</div><div class="mv dn">약 30원</div><div class="ms">연환산 ~120원</div><div style="margin-top:5px;"><span class="ev ev-4">주의</span></div></div>
+    <div class="met"><div class="ml">BPS · 주당순자산</div><div class="mv">약 45,730원</div><div class="ms">지배지분 4.07조 ÷ 8,895만주</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
+    <div class="met"><div class="ml">DPS · 주당배당금 (보통주,2025)</div><div class="mv">250원</div><div class="ms">배당성향 60.9% · 배당 재개</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
+  </div>
+</div>
+
+<!-- 4. 상대 투자지표 -->
+<div class="card">
+  <div class="sec">4. 상대 투자지표 — 최근 종가 153,200원 기준</div>
+
+  <div style="background:#FFF3E0;border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:12px;border-left:3px solid #EF9F27;">
+    <div style="font-size:12px;color:#854F0B;"><strong>⚠ 밸류에이션 해석 주의:</strong> PER이 매우 높은 것은 흑자전환 초기 단계라 이익 규모가 아직 매우 작기 때문 — 2차전지 소재 성장 기대가 대부분 반영된 가격. <strong>① 매출 감소세의 저점 통과 여부 ② 1Q26 이익 둔화가 일시적인지 ③ 지배주주 vs 비지배지분 배분 구조</strong>를 함께 봐야 함.</div>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PER (2025 환산EPS)</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">153,200÷363 · 흑자전환 초기 단계라 이익 기반 매우 작음<br><span style="color:#D85A30;">Forward PER(1Q26 연환산 120원) ≈ 1,277x — 회복 둔화 시 극단적으로 높아짐</span></div>
+    <div class="ind-val">422.4x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(50x)</span><span>적정(150x)</span><span>고(400x)</span></div><div class="bar-bg"><div class="bar-f" style="width:100%;background:#FCEBEB;"></div></div></div>
+    <span class="ev ev-5" style="min-width:58px;text-align:center;">5단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PBR</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">153,200÷45,730(지배주주BPS)<br><span style="color:#D85A30;">PBR 3.35x — 2차전지 소재주 특유의 성장 프리미엄 반영</span></div>
+    <div class="ind-val">3.35x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(1x)</span><span>적정(2.5x)</span><span>고(4x)</span></div><div class="bar-bg"><div class="bar-f" style="width:84%;background:#FCEBEB;"></div></div></div>
+    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">배당수익률</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">DPS(보통주) 250원 ÷ 현재가 153,200원<br><span style="color:var(--color-text-secondary);">0.16% — 성장주 특성상 배당보다 재투자 중심 정책</span></div>
+    <div class="ind-val">0.16%</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>0%</span><span>2%</span><span>4%</span></div><div class="bar-bg"><div class="bar-f" style="width:4%;background:#F1EFE8;"></div></div></div>
+    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">HC / LC 수익률</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">고점(299,500, 05/08) 및 저점(128,100, 09/10) 대비 현재가<br><span style="color:#D85A30;">HC -48.85% · LC +19.59% — 1년 내 극단적 진폭</span></div>
+    <div class="ind-val">-48.9%</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>-65%</span><span>-33%</span><span>0%</span></div><div class="bar-bg"><div class="bar-f" style="width:23%;background:#FCEBEB;"></div></div></div>
+    <span class="ev ev-5" style="min-width:58px;text-align:center;">5단계</span>
+  </div>
+</div>
+
+<!-- 5. 시계열 이벤트 -->
+<div class="card">
+  <div class="sec">5. 시계열 주요 이벤트 <span class="src">📄 OpenDART 공시 원문 + 📊 Yahoo Finance 일봉</span></div>
+
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2025년 09월 10일</div>
+      <div class="tl-title">주가 128,100원 — 52주 최저 · 2024년 대규모 적자 여파</div>
+      <div class="tl-body">2024년 지배주주순이익 -2,123억의 대규모 적자와 매출 감소 흐름이 이어지며 연중 최저점 형성. 이후 10월부터 급격한 반전이 시작됨.</div>
+      <span class="tag tag-neg">52주 최저</span><span class="tag tag-neu">LC 기준점</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-pos"></div>
+      <div class="tl-date">2025년 10월 ~ 2026년 02월</div>
+      <div class="tl-title">급등 반복 — 140,700→254,000원 (5개월 +80.5%)</div>
+      <div class="tl-body">10월 단월 +49.2% 폭등을 시작으로 등락을 반복하며 우상향, 2차전지 소재주 전반의 재평가 기대가 반영된 구간.</div>
+      <span class="tag tag-pos">급등 반복</span><span class="tag tag-pos">테마 재부각</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-neu"></div>
+      <div class="tl-date">2026년 03월 (사업보고서 공시)</div>
+      <div class="tl-title">2025년 실적 공시 — 지배주주순이익 323억, 흑자전환</div>
+      <div class="tl-body">2024년 대규모 적자에서 벗어나 흑자전환을 확인시켜준 실적이나, 매출액은 3년 연속 감소가 이어진 점도 함께 확인됨.</div>
+      <span class="tag tag-neu">연간 실적 공시</span><span class="tag tag-pos">흑자전환</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2026년 05월 08일</div>
+      <div class="tl-title">주가 299,500원 — 52주 신고가 · 저점 대비 +133.9%</div>
+      <div class="tl-body">3월 조정 이후 4~5월 재차 반등하며 연중 최고가 기록. 이후 곧바로 급격한 조정 국면에 진입하며 6월 한 달간 -27.1% 되돌림.</div>
+      <span class="tag tag-big">52주 신고가</span><span class="tag tag-neg">즉시 급락</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2026년 06~07월</div>
+      <div class="tl-title">주가 153,200원 — 고점 대비 -48.9% 폭락 지속</div>
+      <div class="tl-body">신고가 형성 두 달여 만에 절반 가까이 급락. 같은 시기 발표된 1Q26 실적은 2025년 분기 평균보다 오히려 부진해, 실적 회복 속도에 대한 의구심이 반영된 것으로 해석 가능.</div>
+      <span class="tag tag-neg">고점대비 -48.9%</span><span class="tag tag-neg">역배열</span>
+    </div>
+  </div>
+</div>
+
+<!-- 6. 투자 포인트 -->
+<div class="card">
+  <div class="sec">6. 2026년 핵심 투자 포인트</div>
+  <div class="g2">
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:7px;color:#1D9E75;">긍정 요인 (Bull)</div>
+      <div class="ir"><span class="il">2024년 대규모 적자에서 2025년 흑자전환</span><span class="badge b-green">실적 턴어라운드</span></div>
+      <div class="ir"><span class="il">자산총계 +15.3%·자본총계 +35.9% 재무구조 개선</span><span class="badge b-blue">재무구조 개선</span></div>
+      <div class="ir"><span class="il">2024년 중단됐던 배당 250원으로 재개</span><span class="badge b-green">배당 재개</span></div>
+      <div class="ir"><span class="il">52주 저점(128,100) 대비 여전히 +19.6%</span><span class="badge b-blue">중기 추세 유지</span></div>
+      <div class="ir"><span class="il">양극재·음극재 등 2차전지 소재 성장 테마 보유</span><span class="badge b-pfm">미래 성장 테마</span></div>
+      <div class="ir"><span class="il">신고가 대비 -48.9% 조정으로 밸류 부담 일부 완화</span><span class="badge b-blue">밸류 조정</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:7px;color:#D85A30;">리스크 (Bear)</div>
+      <div class="ir"><span class="il">매출액 3년 연속 감소(2023~2025)</span><span class="badge b-red">외형 축소 지속</span></div>
+      <div class="ir"><span class="il">1Q26 지배주주순이익 27억, 연환산 시 전년比 -66.6%</span><span class="badge b-red">회복 속도 둔화</span></div>
+      <div class="ir"><span class="il">PER 422x·PBR 3.35x — 이익 대비 여전히 높은 밸류</span><span class="badge b-red">밸류 부담</span></div>
+      <div class="ir"><span class="il">공시 EPS와 환산 EPS 간 불일치 — 지표 해석 유의 필요</span><span class="badge b-amber">공시 데이터 유의</span></div>
+      <div class="ir"><span class="il">1Q26 비지배지분 순이익이 지배주주 몫보다 큰 구조</span><span class="badge b-amber">이익 배분 불균형</span></div>
+      <div class="ir"><span class="il">전기차 수요 둔화·중국산 경쟁 등 업황 불확실성</span><span class="badge b-gray">업황 리스크</span></div>
+    </div>
+  </div>
+  <div class="ib">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
+      <div><span style="color:var(--color-text-secondary);">시총:</span> <span style="font-weight:600;">~13.63조원 (유통주식 기준)</span></div>
+      <div><span style="color:var(--color-text-secondary);">1Q26 환산 EPS:</span> <span style="font-weight:600;">약 30원 (연환산 ~120원)</span></div>
+      <div><span style="color:var(--color-text-secondary);">BPS:</span> <span style="font-weight:600;">~45,730원 (PBR 3.35x)</span></div>
+      <div><span style="color:var(--color-text-secondary);">배당수익률:</span> <span style="font-weight:600;">0.16%</span></div>
+    </div>
+  </div>
+  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">⚠ 사업보고서(2025) + 분기보고서(1Q26) OpenDART 원문 + Yahoo Finance 일봉 기준 · 투자 권고가 아닙니다</div>
+</div>
+
+</div>
+
+<script>
+function switchTab(tab) {
+  const isA=tab==='annual';
+  document.getElementById('tabAnnual').style.display=isA?'':'none';
+  document.getElementById('tabQuarter').style.display=isA?'none':'';
+  const aS='flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:8px;font-size:13px;cursor:pointer;transition:all .15s;background:#1B7340;border:1.5px solid #1B7340;color:#fff;font-weight:600;';
+  const iS='flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:8px;font-size:13px;cursor:pointer;transition:all .15s;background:var(--color-background-secondary);border:1.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);font-weight:500;';
+  document.getElementById('btnAnnual').style.cssText=isA?aS:iS;
+  document.getElementById('btnQuarter').style.cssText=isA?iS:aS;
+  if(!isA && !window._qDrawn){ window._qDrawn=true; drawQtrChart(); }
+}
+
+function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+function svgEl(tag,attrs){
+  const e=document.createElementNS('http://www.w3.org/2000/svg',tag);
+  for(const k in attrs) e.setAttribute(k,attrs[k]);
+  return e;
+}
+
+function drawAnnualChart(){
+  const svg=document.getElementById('pfmAnnualChart');
+  const W=680,H=190,pL=44,pR=44,pT=16,pB=26;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  const cats=['2023년','2024년','2025년'];
+  const rev=[4.76,3.70,2.94];
+  const oi=[0.04,0.01,0.03];
+  const ni=[0.03,-2.12,0.03];
+  const maxV=Math.max(...rev)*1.1;
+  const minV=Math.min(...ni)*1.3;
+  function py(v){ return pT+cH*(1-(v-minV)/(maxV-minV)); }
+  [minV,0,maxV*0.4,maxV*0.8,maxV].forEach(v=>{
+    const y=py(v);
+    svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:y,y2:y,stroke:cssVar('--color-border-tertiary'),'stroke-width':1}));
+  });
+  const revCol='#8B93A0', oiCol='#1B7340', niCol='#185FA5';
+  const pts=[];
+  cats.forEach((cat,i)=>{
+    const gx=pL+i*(cW/cats.length)+(cW/cats.length)/2;
+    const barW=(cW/cats.length)*0.26;
+    const rx=gx-barW-2, ox=gx+2;
+    const rTop=py(rev[i]);
+    svg.appendChild(svgEl('rect',{x:rx,y:rTop,width:barW,height:py(0)-rTop,fill:revCol,rx:2,opacity:0.55}));
+    const oTop=py(Math.max(oi[i],0));
+    svg.appendChild(svgEl('rect',{x:ox,y:oTop,width:barW,height:Math.max(py(0)-oTop,2),fill:oiCol,rx:2}));
+    const t1=svgEl('text',{x:rx+barW/2,y:rTop-4,'text-anchor':'middle','font-size':9,fill:revCol});
+    t1.textContent=rev[i].toFixed(1)+'조'; svg.appendChild(t1);
+    const t2=svgEl('text',{x:ox+barW/2,y:oTop-4,'text-anchor':'middle','font-size':9,fill:oiCol,'font-weight':600});
+    t2.textContent=(oi[i]*10000).toFixed(0)+'억'; svg.appendChild(t2);
+    const t3=svgEl('text',{x:gx,y:H-6,'text-anchor':'middle','font-size':10,fill:cssVar('--color-text-secondary')});
+    t3.textContent=cat; svg.appendChild(t3);
+    pts.push([gx, py(ni[i])]);
+  });
+  svg.appendChild(svgEl('polyline',{points:pts.map(p=>p.join(',')).join(' '),fill:'none',stroke:niCol,'stroke-width':2.5}));
+  pts.forEach((p,i)=>{
+    svg.appendChild(svgEl('circle',{cx:p[0],cy:p[1],r:4,fill:niCol}));
+    const t=svgEl('text',{x:p[0],y:p[1]+(ni[i]<0?14:-9),'text-anchor':'middle','font-size':9,fill:niCol,'font-weight':600});
+    t.textContent=(ni[i]*10000).toFixed(0)+'억'; svg.appendChild(t);
+  });
+  const legend=[[revCol,'매출액'],[oiCol,'영업이익'],[niCol,'지배주주순이익']];
+  legend.forEach((l,i)=>{
+    const lx=pL+i*90;
+    svg.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
+    const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:cssVar('--color-text-secondary')});
+    t.textContent=l[1]; svg.appendChild(t);
+  });
+}
+
+function drawQtrChart(){
+  const svg=document.getElementById('pfmQtrChart');
+  const W=680,H=190,pL=44,pR=20,pT=20,pB=30;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  const labels=['1Q26 매출액(백억)','1Q26 영업이익(억)','1Q26 법인세전(억)','1Q26 분기순이익(억)','1Q26 지배주주순이익(억)'];
+  const vals=[75.75,177,100,63,27];
+  const cols=['#8B93A0','#1B7340','#D85A30','#185FA5','#185FA5'];
+  const maxV=vals[0]*1.15;
+  const groupW=cW/labels.length;
+  const barW=groupW*0.5;
+  function py(v){ return pT+cH*(1-v/maxV); }
+  [0,25,50,75,100].forEach(v=>{
+    const val=v/100*maxV;
+    const y=py(val);
+    svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:y,y2:y,stroke:cssVar('--color-border-tertiary'),'stroke-width':1}));
+  });
+  labels.forEach((lab,i)=>{
+    const gx=pL+i*groupW+groupW/2;
+    const top=py(vals[i]);
+    svg.appendChild(svgEl('rect',{x:gx-barW/2,y:top,width:barW,height:py(0)-top,fill:cols[i],rx:3}));
+    const t1=svgEl('text',{x:gx,y:top-6,'text-anchor':'middle','font-size':10,fill:cssVar('--color-text-primary'),'font-weight':600});
+    t1.textContent=(i===0?vals[i].toFixed(0)+'백억':vals[i].toFixed(0)+'억'); svg.appendChild(t1);
+    const t2=svgEl('text',{x:gx,y:H-8,'text-anchor':'middle','font-size':9,fill:cssVar('--color-text-secondary')});
+    t2.textContent=lab; svg.appendChild(t2);
+  });
+}
+drawAnnualChart();
+
+// ── SVG 캔들차트 (Yahoo Finance 일봉 실데이터) ────────────────────────
+const data=[
+{o:13.57,h:13.71,l:13.25,c:13.25},{o:13.41,h:13.64,l:13.02,c:13.12},{o:13.78,h:16.33,l:13.77,c:15.69},{o:15.3,h:15.85,l:15.23,c:15.64},{o:16.18,h:16.18,l:14.8,c:14.98},{o:15.3,h:15.47,l:14.8,c:15.09},{o:14.99,h:15.4,l:14.83,c:15.02},{o:15.17,h:15.18,l:14.62,c:14.86},
+{o:14.91,h:15.55,l:14.6,c:14.98},{o:14.83,h:14.83,l:14.41,c:14.57},{o:14.64,h:14.89,l:14.46,c:14.76},{o:15.3,h:15.3,l:14.13,c:14.25},{o:14.06,h:14.29,l:13.66,c:13.71},{o:13.82,h:13.96,l:13.56,c:13.67},{o:13.79,h:14.97,l:13.76,c:14.84},{o:14.53,h:15.35,l:14.46,c:15.09},
+{o:15.22,h:15.22,l:14.9,c:15.15},{o:14.99,h:15.09,l:14.83,c:15.04},{o:15.27,h:16.46,l:15.27,c:16.29},{o:15.77,h:16.35,l:15.6,c:15.8},{o:16.02,h:16.06,l:15.74,c:15.89},{o:16.01,h:16.49,l:15.99,c:16.32},{o:16.22,h:16.23,l:15.53,c:15.53},{o:15.73,h:15.82,l:15.28,c:15.42},
+{o:15.08,h:15.54,l:14.99,c:15.35},{o:15.44,h:15.47,l:15.06,c:15.27},{o:15.34,h:15.42,l:15.1,c:15.12},{o:15.47,h:15.94,l:15.33,c:15.8},{o:15.7,h:15.85,l:15.44,c:15.44},{o:15.68,h:15.68,l:15.18,c:15.2},{o:15.37,h:15.54,l:14.53,c:14.53},{o:14.65,h:14.66,l:14.13,c:14.13},
+{o:14.03,h:14.2,l:13.8,c:13.84},{o:13.95,h:14,l:13.58,c:13.69},{o:13.73,h:13.78,l:13.35,c:13.44},{o:13.8,h:13.89,l:13.41,c:13.52},{o:13.55,h:13.55,l:13.1,c:13.16},{o:13.08,h:13.58,l:13.04,c:13.28},{o:13.38,h:13.54,l:13.16,c:13.3},{o:13.23,h:13.23,l:12.81,c:12.96},
+{o:13.03,h:13.08,l:12.85,c:13.08},{o:13.31,h:13.49,l:13.2,c:13.35},{o:13.49,h:13.55,l:13.21,c:13.23},{o:13.34,h:13.36,l:13.12,c:13.19},{o:13.25,h:13.51,l:13.17,c:13.35},{o:13.38,h:14.1,l:13.19,c:13.65},{o:14.22,h:14.63,l:14.07,c:14.14},{o:14.2,h:14.79,l:14.07,c:14.36},
+{o:14.69,h:14.69,l:13.73,c:13.84},{o:13.97,h:14.71,l:13.95,c:14.59},{o:14.32,h:14.33,l:14.08,c:14.13},{o:14.22,h:14.75,l:14.17,c:14.51},{o:14.45,h:14.72,l:14.32,c:14.35},{o:14.51,h:14.93,l:14.07,c:14.75},{o:14.82,h:15.03,l:14.65,c:14.76},{o:14.64,h:14.81,l:14.22,c:14.63},
+{o:14.4,h:16.08,l:14.34,c:15.77},{o:15.69,h:17.27,l:15.52,c:16.67},{o:17.27,h:17.44,l:16.61,c:17.42},{o:17.24,h:19.15,l:17.2,c:19.15},{o:19.21,h:20.1,l:18.8,c:19.35},{o:19.11,h:19.87,l:18.65,c:19.55},{o:19.53,h:21.45,l:19.32,c:20.1},{o:20.55,h:20.75,l:19.8,c:20.4},
+{o:20.85,h:20.95,l:20.1,c:20.35},{o:20.65,h:24.3,l:20.5,c:24.2},{o:25.8,h:26,l:24.2,c:24.55},{o:24,h:24.75,l:22.7,c:24.1},{o:23.8,h:24.25,l:23,c:23.45},{o:23.1,h:24.05,l:21.9,c:22},{o:21.4,h:22.35,l:21.4,c:21.65},{o:22.35,h:22.35,l:21.3,c:21.95},
+{o:22.85,h:22.85,l:21.7,c:21.9},{o:21.4,h:21.88,l:20.3,c:21.35},{o:22,h:22.25,l:21.1,c:21.2},{o:20.7,h:21.3,l:20.1,c:20.7},{o:20.7,h:21.15,l:19.99,c:21},{o:21.4,h:22.25,l:20.6,c:21.05},{o:21.4,h:22,l:20.9,c:21.5},{o:21.85,h:22.35,l:21.35,c:22.05},
+{o:21.4,h:21.65,l:20.8,c:20.95},{o:21.25,h:21.4,l:20.65,c:20.9},{o:21.55,h:21.6,l:20,c:20},{o:20.1,h:20.25,l:19.26,c:19.59},{o:19.99,h:20.38,l:19.78,c:20},{o:19.28,h:19.74,l:19.1,c:19.25},{o:19.44,h:19.45,l:18.58,c:18.68},{o:19.05,h:19.15,l:18.6,c:18.71},
+{o:19.07,h:20.58,l:19.05,c:20.5},{o:20.65,h:20.9,l:20.2,c:20.7},{o:21.15,h:21.15,l:20.4,c:20.65},{o:20.95,h:21.4,l:20.55,c:20.9},{o:21.1,h:21.1,l:20.5,c:20.75},{o:20.8,h:20.95,l:20.4,c:20.6},{o:20.65,h:20.95,l:20.1,c:20.45},{o:20.25,h:20.85,l:20.2,c:20.6},
+{o:20.85,h:22.1,l:20.7,c:22.05},{o:21.8,h:22.8,l:21.65,c:22.4},{o:23,h:23,l:21.85,c:22.05},{o:22.5,h:22.5,l:21.55,c:22.2},{o:22.35,h:22.55,l:21.9,c:22.15},{o:21.85,h:23.5,l:21.65,c:22.7},{o:22.9,h:22.9,l:20.85,c:21},{o:21.3,h:21.4,l:20.55,c:21.05},
+{o:20.1,h:20.4,l:19.55,c:19.55},{o:19.66,h:19.8,l:18.31,c:19.11},{o:19.25,h:19.72,l:19.03,c:19.61},{o:19.63,h:20.1,l:19.41,c:19.65},{o:19.8,h:20.45,l:19.7,c:19.8},{o:20,h:20.2,l:19.45,c:19.62},{o:19.06,h:19.84,l:18.95,c:19.67},{o:19.38,h:19.39,l:18.45,c:18.7},
+{o:18.33,h:18.35,l:17.66,c:17.69},{o:17.4,h:18.19,l:17.38,c:18.1},{o:18.53,h:18.57,l:18.09,c:18.27},{o:18.26,h:18.7,l:17.8,c:18},{o:18.01,h:18.34,l:17.76,c:17.85},{o:17.99,h:18.08,l:17.25,c:17.59},{o:17.41,h:18.93,l:17.4,c:18.8},{o:19.2,h:19.66,l:18.67,c:19.6},
+{o:19.46,h:19.66,l:18.7,c:18.81},{o:18.91,h:19.83,l:18.67,c:19.54},{o:19.55,h:19.6,l:18.85,c:18.87},{o:18.93,h:19.84,l:18.78,c:19.7},{o:20,h:21.4,l:19.73,c:20.5},{o:19.96,h:20.4,l:19.49,c:20.05},{o:20.15,h:21.75,l:20,c:21.7},{o:22.4,h:22.4,l:20.95,c:21.4},
+{o:21.65,h:22.95,l:21.4,c:22.85},{o:22.7,h:23.15,l:22.15,c:22.95},{o:23.45,h:24.05,l:22.95,c:23.95},{o:24.55,h:24.55,l:22.5,c:23.5},{o:23.65,h:23.95,l:22.2,c:22.35},{o:21.85,h:23.25,l:21.45,c:21.75},{o:22.3,h:22.9,l:21.55,c:22.65},{o:22.6,h:23.35,l:22.4,c:23.25},
+{o:23,h:23.4,l:22.2,c:22.55},{o:21.65,h:21.8,l:21,c:21.8},{o:22.45,h:22.75,l:22,c:22.55},{o:22.6,h:22.8,l:21.8,c:22.1},{o:22.15,h:22.25,l:21.6,c:21.85},{o:22.2,h:23,l:21.95,c:22.75},{o:22.4,h:23,l:22,c:22.4},{o:22.8,h:23.65,l:22.5,c:23.45},
+{o:23.55,h:23.7,l:23,c:23.3},{o:23.6,h:23.6,l:22.4,c:22.55},{o:22.8,h:23.95,l:22.65,c:23.6},{o:23.7,h:25.4,l:23.2,c:24.6},{o:24.9,h:25,l:24.05,c:24.7},{o:24.3,h:24.9,l:24.1,c:24.7},{o:24.2,h:25.25,l:22.4,c:22.65},{o:21.5,h:21.9,l:18.45,c:18.52},
+{o:20.3,h:21.3,l:20.15,c:20.8},{o:20.6,h:21.65,l:20.2,c:21.55},{o:20,h:20.7,l:19.6,c:20.25},{o:21.3,h:21.35,l:20.55,c:21},{o:21.4,h:21.85,l:20.85,c:21.05},{o:21,h:21.35,l:20.65,c:21.05},{o:20.15,h:20.15,l:18.96,c:19.09},{o:18.95,h:19.89,l:18.82,c:19.12},
+{o:19.74,h:19.77,l:19.25,c:19.31},{o:19.55,h:20.15,l:19.5,c:20.05},{o:19.43,h:20.4,l:19.41,c:19.8},{o:20.1,h:20.2,l:19.8,c:19.92},{o:19.11,h:19.22,l:18.6,c:18.64},{o:19.29,h:19.99,l:19.23,c:19.64},{o:19.91,h:20.7,l:19.77,c:20.25},{o:20.45,h:21,l:19.9,c:20},
+{o:19.57,h:21.25,l:19.04,c:20.9},{o:20.35,h:22.15,l:20.2,c:21.45},{o:21.4,h:21.45,l:20.15,c:20.35},{o:21.15,h:21.3,l:20.65,c:21.25},{o:21.5,h:23,l:21,c:21.3},{o:21.9,h:22.15,l:20.45,c:21.15},{o:21.05,h:21.85,l:20.85,c:21.1},{o:21,h:21.85,l:20.78,c:20.9},
+{o:21.75,h:22,l:21.25,c:21.75},{o:21.9,h:22.5,l:21.55,c:21.8},{o:21.95,h:22.1,l:21.5,c:21.75},{o:21.4,h:21.72,l:21.1,c:21.45},{o:21.8,h:21.85,l:21.25,c:21.3},{o:21.7,h:22.15,l:21.5,c:21.75},{o:22.25,h:22.7,l:22.1,c:22.35},{o:22.7,h:23.7,l:22.45,c:23.45},
+{o:23.6,h:24.1,l:23.4,c:23.65},{o:24.2,h:25.7,l:23.9,c:25.65},{o:25.7,h:26.15,l:24.75,c:25.75},{o:26.15,h:26.2,l:24,c:24.6},{o:24.9,h:25.35,l:24.4,c:25.2},{o:25.65,h:25.65,l:24.6,c:24.95},{o:25.35,h:26.75,l:25.35,c:26.3},{o:26.25,h:26.85,l:25.4,c:26.1},
+{o:26,h:26.05,l:24.8,c:25.2},{o:26.05,h:27.25,l:26,c:26.7},{o:27.5,h:29.45,l:27.2,c:28.85},{o:28.8,h:29.85,l:27.45,c:29.6},{o:29.25,h:29.95,l:28.2,c:29},{o:29,h:29,l:27.65,c:28},{o:28.05,h:28.25,l:25.7,c:26.1},{o:25.95,h:26.1,l:24.55,c:25.15},
+{o:26.1,h:26.1,l:24.4,c:25.05},{o:25.25,h:26.3,l:23.1,c:23.55},{o:23.25,h:23.65,l:22,c:23.2},{o:23.5,h:23.55,l:21.75,c:22.4},{o:22.45,h:22.5,l:21.15,c:21.65},{o:22.7,h:23.35,l:22.35,c:23.2},{o:23.9,h:24.9,l:23.45,c:24.3},{o:24.95,h:25,l:24,c:24.05},
+{o:24,h:24.4,l:22.9,c:22.9},{o:24,h:24.15,l:22.55,c:23.8},{o:23.75,h:24.95,l:23.15,c:24.55},{o:24.1,h:24.2,l:23,c:23.1},{o:22.75,h:24.45,l:22.15,c:22.25},{o:22.4,h:23.3,l:21.7,c:22.15},{o:22,h:22.2,l:20.3,c:20.9},{o:19.02,h:19.7,l:18.62,c:18.77},
+{o:18.96,h:19.74,l:18.5,c:19.3},{o:19.12,h:19.73,l:18.26,c:18.76},{o:18.11,h:18.74,l:17.74,c:18.47},{o:19.49,h:20.55,l:19.22,c:19.94},{o:20.7,h:21.2,l:20.35,c:21.05},{o:21.05,h:21.2,l:20.55,c:20.9},{o:21.05,h:21.3,l:20.5,c:20.95},{o:20.6,h:20.9,l:19.97,c:20.2},
+{o:20.2,h:21.05,l:19.2,c:19.95},{o:19.91,h:20.1,l:18.95,c:19.2},{o:19.18,h:19.81,l:17.2,c:17.29},{o:17.02,h:18.29,l:16.71,c:17.81},{o:17.97,h:18.27,l:17,c:17.02},{o:16.86,h:17.13,l:15.57,c:16.06},{o:16.2,h:18.78,l:15.9,c:18.76},{o:18.61,h:18.61,l:17.45,c:17.56},
+{o:17.82,h:17.82,l:16.71,c:17.02},{o:16.9,h:16.9,l:15.95,c:16.36},{o:16.34,h:16.36,l:14.95,c:16.22},{o:16.26,h:16.38,l:15.14,c:15.95},{o:15.87,h:16,l:15.28,c:15.82},{o:15.26,h:15.46,l:14.34,c:14.47},{o:14.51,h:15.3,l:14.2,c:14.6},{o:14.82,h:15.94,l:14.82,c:15.18},
+{o:15.19,h:15.97,l:14.91,c:15.07},{o:15.19,h:15.34,l:14.06,c:14.43},{o:14.86,h:15.6,l:14.8,c:15.32},
+];
+
+(function(){
+  const svg=document.getElementById('pfmSvg');
+  const W=720,H=240,pL=64,pR=12,pT=14,pB=24;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  const prices=data.flatMap(d=>[d.h,d.l]);
+  const maxP=Math.max(...prices)+1,minP=Math.min(...prices)-1;
+  const rng=maxP-minP;
+  function py(v){return pT+cH*(1-(v-minP)/rng);}
+  const colW=cW/data.length,cw=Math.max(colW*.62,1.4);
+  const gridCol=cssVar('--color-text-tertiary');
+  const ticks=[15,20,25,30];
+  ticks.forEach(v=>{
+    if(v<minP||v>maxP)return;
+    const y=py(v);
+    svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:y,y2:y,stroke:gridCol,opacity:0.18,'stroke-width':1}));
+    const t=svgEl('text',{x:pL-4,y:y+3,'text-anchor':'end','font-size':9,fill:gridCol,opacity:0.85});
+    t.textContent=(v*10000).toLocaleString(); svg.appendChild(t);
+  });
+  function calcMA(d,n){return d.map((_,i)=>i<n-1?null:d.slice(i-n+1,i+1).reduce((s,x)=>s+x.c,0)/n);}
+  function drawLine(arr,col,w){
+    let pts=[];arr.forEach((v,i)=>{if(v===null)return;pts.push(`${pL+(i+.5)*colW},${py(v)}`);});
+    if(pts.length<2)return;
+    svg.appendChild(svgEl('polyline',{points:pts.join(' '),fill:'none',stroke:col,'stroke-width':w||1.3}));
+  }
+  data.forEach((d,i)=>{
+    const cx=pL+(i+.5)*colW,isUp=d.c>=d.o,col=isUp?'#D85A30':'#185FA5';
+    svg.appendChild(svgEl('line',{x1:cx,x2:cx,y1:py(d.h),y2:py(d.l),stroke:col,'stroke-width':1}));
+    const bT=py(Math.max(d.o,d.c)),bB=py(Math.min(d.o,d.c));
+    svg.appendChild(svgEl('rect',{x:cx-cw/2,y:bT,width:cw,height:Math.max(bB-bT,1),fill:col,rx:0.6}));
+  });
+  drawLine(calcMA(data,5),'#FF69B4',1.3);
+  drawLine(calcMA(data,20),'#9370DB',1.3);
+  drawLine(calcMA(data,60),'#DAA520',1.6);
+  drawLine(calcMA(data,120),'#2E8B57',1.6);
+  const mk=(idx,lbl,isLow,col)=>{
+    const cx=pL+(idx+.5)*colW,cy=isLow?py(data[idx].l)+12:py(data[idx].h)-8;
+    const t=svgEl('text',{x:cx,y:cy,'text-anchor':'middle','font-size':9,fill:col,'font-weight':600});
+    t.textContent=lbl;svg.appendChild(t);
+  };
+  mk(196,'최고29.95(26/05/08)',false,'#1B7340');
+  mk(39,'최저12.81(25/09/10)',true,'#185FA5');
+  (function(){
+    const idx=data.length-1;
+    const cx=pL+(idx+.5)*colW,cy=py(data[idx].h)-8;
+    const t=svgEl('text',{x:cx-4,y:cy,'text-anchor':'end','font-size':9,fill:cssVar('--color-text-primary'),'font-weight':600});
+    t.textContent='현재15.32';svg.appendChild(t);
+  })();
+  const monthTicks=[['25.07',0],['25.09',32],['25.11',71],['26.01',112],['26.03',150],['26.05',193],['26.07',232]];
+  monthTicks.forEach(([m,idx])=>{
+    const cx=pL+(idx+.5)*colW;
+    const t=svgEl('text',{x:cx,y:H-4,'text-anchor':'middle','font-size':9,fill:cssVar('--color-text-secondary')});
+    t.textContent=m; svg.appendChild(t);
+  });
+  const legend=[['#D85A30','양봉'],['#185FA5','음봉'],['#FF69B4','MA5'],['#9370DB','MA20'],['#DAA520','MA60'],['#2E8B57','MA120']];
+  legend.forEach((l,i)=>{
+    const gx=pL+i*74;
+    svg.appendChild(svgEl('rect',{x:gx,y:2,width:9,height:9,fill:l[0],rx:2}));
+    const t=svgEl('text',{x:gx+12,y:10,'font-size':8.5,fill:cssVar('--color-text-secondary')});
+    t.textContent=l[1]; svg.appendChild(t);
+  });
+})();
+</script>
