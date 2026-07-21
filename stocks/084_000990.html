@@ -1,0 +1,509 @@
+<link rel="stylesheet" href="../css/global.css">
+<script src="../js/chart-common.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
+.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:18px;font-variant-numeric:tabular-nums;}
+.sec{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:12px;}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:14px;}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px;text-align:center;}
+.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
+.mv{font-size:14px;font-weight:600;color:var(--color-text-primary);font-variant-numeric:tabular-nums;}
+.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
+.up{color:#1D9E75;}.dn{color:#D85A30;}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
+.b-green{background:#EAF3DE;color:#3B6D11;}.b-amber{background:#FAEEDA;color:#854F0B;}
+.b-red{background:#FCEBEB;color:#A32D2D;}.b-blue{background:#E6F1FB;color:#185FA5;}
+.b-gray{background:#F1EFE8;color:#5F5E5A;}.b-dbh{background:#E1E5EE;color:#293A66;}
+.sig{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
+.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
+.ir:last-child{border-bottom:none;}
+.il{color:var(--color-text-secondary);}.iv{font-weight:600;color:var(--color-text-primary);display:flex;align-items:center;gap:6px;font-variant-numeric:tabular-nums;}
+.src{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-tertiary);margin-left:4px;}
+.hl{background:#EAF3DE;border-left:3px solid #1D9E75;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.warn{background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ev{font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;}
+.ev-1{background:#E6F1FB;color:#0C447C;}.ev-2{background:#EAF3DE;color:#27500A;}
+.ev-3{background:#F1EFE8;color:#444441;}.ev-4{background:#FAEEDA;color:#633806;}
+.ev-5{background:#FCEBEB;color:#791F1F;}
+.ind-row{display:flex;align-items:center;padding:8px 0;border-bottom:.5px solid var(--color-border-tertiary);gap:10px;}
+.ind-row:last-child{border-bottom:none;}
+.ind-nm{font-size:13px;font-weight:600;color:var(--color-text-primary);min-width:150px;}
+.ind-val{font-size:14px;font-weight:600;color:var(--color-text-primary);min-width:80px;text-align:right;font-variant-numeric:tabular-nums;}
+.bar-bg{background:var(--color-border-tertiary);border-radius:4px;height:7px;}
+.bar-f{border-radius:4px;height:7px;}
+.tl{position:relative;padding-left:28px;}
+.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--color-border-tertiary);border-radius:2px;}
+.tl-item{position:relative;margin-bottom:18px;}
+.tl-item:last-child{margin-bottom:0;}
+.tl-dot{position:absolute;left:-24px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid var(--color-background-primary);}
+.dot-big{background:#293A66;}.dot-pos{background:#1D9E75;}
+.dot-neg{background:#D85A30;}.dot-neu{background:#888780;}
+.tl-date{font-size:11px;font-weight:600;color:var(--color-text-tertiary);margin-bottom:3px;}
+.tl-title{font-size:13px;font-weight:600;color:var(--color-text-primary);margin-bottom:3px;line-height:1.4;}
+.tl-body{font-size:12px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:5px;}
+.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;margin-right:4px;}
+.tag-big{background:#E1E5EE;color:#293A66;}.tag-pos{background:#EAF3DE;color:#3B6D11;}
+.tag-neg{background:#FCEBEB;color:#791F1F;}.tag-neu{background:#F1EFE8;color:#444441;}
+button:focus-visible,a:focus-visible{outline:2px solid #293A66;outline-offset:2px;}
+</style>
+
+<div style="padding:1rem 0;" class="box">
+
+<!-- 헤더 -->
+<div style="margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+  <h2>DB하이텍 (000990)</h2>
+  <span class="badge b-dbh">코스피 · 반도체·전자</span>
+  <span class="badge b-gray">8인치(200mm) 특수·아날로그 파운드리 · 전력반도체·DDI</span>
+  <span class="src">📄 OpenDART 공시 원문(Open API) + 📊 Yahoo Finance 시세</span>
+</div>
+<p class="sub">최근 종가 102,000원 (2026-07-20, 전일대비 -6.93%) · 52주 최고 220,500원 (26/05/26) · 52주 최저 43,000원 (25/08/20) · LC +137.21% · HC -53.74%</p>
+
+<!-- 핵심 지표 배너 -->
+<div style="background:#E1E5EE;border-left:3px solid #293A66;border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:14px;">
+  <div style="font-size:12px;color:#293A66;line-height:1.6;"><strong>🔑 DB하이텍 투자의 핵심:</strong> 8인치(200mm) 특수·아날로그 파운드리 전문업체로, 삼성전자·TSMC가 300mm/AI 칩으로 전환하며 8인치 생산을 축소한 틈새 수요를 흡수. 2025년 매출 1조 3,972억(+23.5%), 영업이익 2,773억(+45.3%)으로 2024년의 업황 부진(-28.1%)에서 뚜렷하게 반등했고, 1Q26에는 영업이익 +21.4%·순이익 +89.3%로 성장세가 더욱 가속. 여기에 테슬라向 10년 장기 전력반도체 공급계약 추진설이 재부각되고 <strong>2026년 5월 26일 코스피200 정기 편입 기대감과 1분기 실적 서프라이즈가 겹치며 단일거래일 +16.2% 급등, 52주 신고가(220,500원)</strong>를 기록했으나, 이후 KCGI의 지배구조 이슈 재점화와 차익실현이 겹치며 -53.7% 급락. 배당성향은 22.03%(2024)→13.53%(2025)로 낮아졌는데, 이는 신규 공정 투자를 위한 현금 확보 목적으로 해석됨.</div>
+</div>
+
+<div class="g4">
+  <div class="met"><div class="ml">최근 종가 (07/20)</div><div class="mv dn">102,000원</div><div class="ms dn">-6.93% · 고점 대비 -53.7%</div></div>
+  <div class="met"><div class="ml">2025 매출액</div><div class="mv up">1조 3,972억</div><div class="ms up">+23.5%</div></div>
+  <div class="met"><div class="ml">2025 영업이익</div><div class="mv up">2,773억</div><div class="ms up">+45.3%</div></div>
+  <div class="met"><div class="ml">1Q26 지배주주순이익</div><div class="mv up">873억</div><div class="ms">+89.3% (성장 가속)</div></div>
+</div>
+
+<!-- 1. 기술적 분석 -->
+<div class="card">
+  <div class="sec">1. 기술적 분석 — 일봉 기준 (2025.07.21 ~ 2026.07.20, 242거래일)</div>
+  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;">
+    최고 220,500원 (26/05/26) → 최저 43,000원 (25/08/20) → 최근 종가 102,000원 (26/07/20) · LC +137.21% · HC -53.74%
+  </div>
+  <div id="dbhChartControls" class="kc-controls"></div>
+  <svg id="dbhSvg" viewBox="0 0 720 240" width="100%" style="display:block;margin-bottom:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:4px;"></svg>
+
+  <div style="font-size:13px;font-weight:600;margin-bottom:8px;">📊 구간별 분석 <span class="src">📊 Yahoo Finance 일봉</span></div>
+  <div class="g4" style="font-size:11px;margin-bottom:12px;">
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:var(--color-text-primary);font-weight:600;margin-bottom:3px;">25.07~08 — 저점 형성</div>
+      <div style="color:var(--color-text-secondary);line-height:1.6;">4.7만→4.3만원대<br>52주 최저(08/20)<br>레거시 파운드리 반등 전</div>
+    </div>
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#3B6D11;font-weight:600;margin-bottom:3px;">25.09~26.04 — 레거시 파운드리 랠리</div>
+      <div style="color:#1D9E75;line-height:1.6;">삼성·TSMC 8인치 감산 반사이익<br>테슬라 공급계약설 부각<br>3Q25 영업이익 +71%<br>4.3만→12.79만원대</div>
+    </div>
+    <div style="background:#293A66;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#fff;font-weight:600;margin-bottom:3px;">26.04.20~05.26 — 코스피200 편입 급등</div>
+      <div style="color:#fff;line-height:1.6;">테슬라 공급계약 재부각<br>코스피200 편입 기대감<br>1Q26 실적 서프라이즈<br>52주 신고가(5/26)</div>
+    </div>
+    <div style="background:#FCEBEB;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#A32D2D;font-weight:600;margin-bottom:3px;">26.06~07 — 급락 조정</div>
+      <div style="color:#A32D2D;line-height:1.6;">KCGI 지배구조 이슈 재점화<br>2분기 성장 둔화 우려<br>차익실현 매물<br>22.05만→10.2만원대</div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;">
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:7px;">이동평균선 현황 (07/20 기준)</div>
+      <div class="ir"><span class="il">5일선 (111,320원)</span><span class="badge b-red">가격 하회</span></div>
+      <div class="ir"><span class="il">20일선 (129,200원)</span><span class="badge b-red">가격 큰 폭 하회</span></div>
+      <div class="ir"><span class="il">60일선 (153,978원)</span><span class="badge b-red">가격 큰 폭 하회</span></div>
+      <div class="ir"><span class="il">120일선 (123,374원)</span><span class="badge b-red">가격 하회</span></div>
+      <div class="ir"><span class="il">배열</span><span class="badge b-blue">완전 역배열 · 급등 후 급락</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:7px;">핵심 가격대</div>
+      <div class="ir"><span class="il">52주 최고 (신고가)</span><span style="font-weight:600;color:#293A66;">220,500원 (26/05/26)</span></div>
+      <div class="ir"><span class="il">52주 최저</span><span style="font-weight:600;color:#D85A30;">43,000원 (25/08/20)</span></div>
+      <div class="ir"><span class="il">최근 종가</span><span style="font-weight:600;color:var(--color-text-primary);">102,000원 (07/20)</span></div>
+      <div class="ir"><span class="il">저점 대비 상승폭</span><span style="font-weight:600;color:#1D9E75;">+137.2%</span></div>
+      <div class="ir"><span class="il">LC / HC</span><span style="font-weight:600;">+137.21% / -53.74%</span></div>
+    </div>
+  </div>
+
+  <div class="sig">
+    <span class="badge b-red">전 이평선 하회 · 완전 역배열</span>
+    <span class="badge b-red">52주 고점(26/05/26) 대비 -53.7%</span>
+    <span class="badge b-green">52주 저점(25/08/20) 대비 +137.2%</span>
+    <span class="badge b-dbh">레거시 파운드리 반사수혜 + 지배구조 리스크 혼재</span>
+  </div>
+</div>
+
+<!-- 2. 기본적 분석 탭 -->
+<div class="card">
+  <div class="sec">2. 기본적 분석 — 공시 원문 <span class="src">📄 사업보고서(2025) + 분기보고서 1Q(2026.03)</span></div>
+
+  <div style="display:flex;gap:8px;margin-bottom:14px;">
+    <button id="btnAnnual" onclick="switchTab('annual')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);border:1.5px solid #293A66;background:#293A66;color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;">
+      📄 사업보고서 <span style="font-size:11px;opacity:.85;font-weight:400;">2025년 연간</span>
+    </button>
+    <button id="btnQuarter" onclick="switchTab('quarter')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);border:1.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-secondary);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;">
+      📋 분기보고서 <span style="font-size:11px;opacity:.85;font-weight:400;">1분기 · 2026.03</span>
+    </button>
+  </div>
+
+  <!-- ══ 사업보고서 탭 ══ -->
+  <div id="tabAnnual">
+    <svg id="dbhAnnualChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:12px;"></svg>
+
+    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:6px;letter-spacing:.03em;">📊 연결 손익 요약 (단위: 억원 · 2025년)</div>
+    <div class="g2" style="margin-bottom:12px;">
+      <div>
+        <div class="ir"><span class="il">연결 매출액</span><span class="iv up">1조 3,972억 (▲23.5%) <span class="ev ev-1">우수</span></span></div>
+        <div class="ir"><span class="il">연결 영업이익</span><span class="iv up">2,773억 (▲45.3%) <span class="ev ev-1">우수</span></span></div>
+        <div class="ir"><span class="il">지배주주 순이익</span><span class="iv up">2,561억 (▲11.6%) <span class="ev ev-2">양호</span></span></div>
+        <div class="ir"><span class="il">기본주당손익(EPS)</span><span class="iv up">6,285원 (전년 5,520원) <span class="ev ev-2">양호</span></span></div>
+      </div>
+      <div>
+        <div class="ir"><span class="il">연결 자산총계</span><span class="iv up">2조 9,926억 (▲24.9%) <span class="ev ev-2">양호</span></span></div>
+        <div class="ir"><span class="il">연결 자본총계</span><span class="iv up">2조 2,440억 (▲12.2%) <span class="ev ev-2">양호</span></span></div>
+        <div class="ir"><span class="il">연결 부채총계</span><span class="iv">7,486억 (▲89.0%) <span class="ev ev-4">주의</span></span></div>
+        <div class="ir"><span class="il">현금배당(보통주)</span><span class="iv dn">DPS 810원 (전기比 -34.1%) <span class="ev ev-4">주의</span></span></div>
+      </div>
+    </div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">🏭 8인치 레거시 파운드리 반사수혜 구조</div>
+    <div class="g3" style="font-size:11px;margin-bottom:12px;">
+      <div style="background:#E1E5EE;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #293A66;">
+        <div style="color:#293A66;font-weight:600;margin-bottom:5px;">경쟁사 감산 반사이익</div>
+        <div class="ir" style="font-size:11px;"><span class="il">배경</span><span>삼성·TSMC 8인치 생산 축소</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">전환 방향</span><span>300mm·AI 칩 생산으로 이동</span></div>
+      </div>
+      <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #1D9E75;">
+        <div style="color:#3B6D11;font-weight:600;margin-bottom:5px;">테슬라 공급계약설</div>
+        <div class="ir" style="font-size:11px;"><span class="il">추진 내용</span><span>10년 이상 장기 파운드리 계약</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">대상 제품</span><span>130nm BCD 전력반도체·라이다향 RF칩</span></div>
+      </div>
+      <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #EF9F27;">
+        <div style="color:#854F0B;font-weight:600;margin-bottom:5px;">지배구조 리스크</div>
+        <div class="ir" style="font-size:11px;"><span class="il">2023년 물적분할</span><span>팹리스 자회사 DB글로벌칩 설립</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">2026년 재부각</span><span>KCGI 지배구조 이슈 재점화</span></div>
+      </div>
+    </div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">📈 매출·영업이익·지배주주순이익 3개년 추이 — 2024년 업황 부진 후 뚜렷한 반등</div>
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <div style="flex:1;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;text-align:center;">
+        <div style="font-size:10px;color:var(--color-text-secondary);margin-bottom:4px;">2023년</div>
+        <div style="font-size:18px;font-weight:700;color:var(--color-text-primary);">2,641억</div>
+        <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:4px;">EPS 6,241원</div>
+      </div>
+      <div style="display:flex;align-items:center;font-size:18px;color:#D85A30;font-weight:700;">→</div>
+      <div style="flex:1;background:#FCEBEB;border-radius:var(--border-radius-md);padding:10px;text-align:center;">
+        <div style="font-size:10px;color:#A32D2D;margin-bottom:4px;">2024년</div>
+        <div style="font-size:18px;font-weight:700;color:#A32D2D;">2,295억</div>
+        <div style="font-size:10px;color:#A32D2D;margin-top:4px;">-13.1% · EPS 5,520원</div>
+      </div>
+      <div style="display:flex;align-items:center;font-size:18px;color:#1D9E75;font-weight:700;">→</div>
+      <div style="flex:1;background:#EAF3DE;border-radius:var(--border-radius-md);padding:10px;text-align:center;">
+        <div style="font-size:10px;color:#3B6D11;margin-bottom:4px;">2025년</div>
+        <div style="font-size:18px;font-weight:700;color:#3B6D11;">2,561억</div>
+        <div style="font-size:10px;color:#3B6D11;margin-top:4px;">+11.6% · EPS 6,285원</div>
+      </div>
+    </div>
+
+    <div class="hl">
+      <div style="font-size:13px;font-weight:600;color:#3B6D11;margin-bottom:4px;">💡 사업보고서 핵심 — 반도체 다운사이클을 지나 레거시 파운드리 슈퍼사이클 진입</div>
+      <div style="font-size:12px;color:#3B6D11;line-height:1.7;">지배주주순이익이 2,641억(2023)→2,295억(2024, -13.1%, 업황 부진)→2,561억(2025, +11.6%, 반등)으로 저점을 지나 회복 국면에 진입. 삼성전자·TSMC가 8인치(200mm) 웨이퍼 생산을 축소하고 300mm·AI 칩 중심으로 전환하면서 자동차·전력반도체·디스플레이 구동칩(DDI) 등 8인치向 수요가 DB하이텍으로 이동한 것이 핵심 동력. 배당성향은 13.53%로 낮아졌는데, 회사의 2026년 기업가치제고계획(밸류업) 공시에 따르면 GaN·SiC 등 차세대 공정 투자를 위한 현금 확보 목적의 유연한 배당정책으로 설명됨.</div>
+    </div>
+  </div>
+
+  <!-- ══ 분기보고서 탭 ══ -->
+  <div id="tabQuarter" style="display:none;">
+    <svg id="dbhQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:12px;"></svg>
+
+    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:6px;letter-spacing:.03em;">📊 1Q26 연결 손익 요약 (단위: 억원 · 1분기)</div>
+    <div class="g2" style="margin-bottom:12px;">
+      <div>
+        <div class="ir"><span class="il">1Q26 연결 매출액</span><span class="iv up">3,746억 (▲26.0% YoY) <span class="ev ev-1">우수</span></span></div>
+        <div class="ir"><span class="il">1Q26 연결 영업이익</span><span class="iv up">637억 (▲21.4% YoY) <span class="ev ev-2">양호</span></span></div>
+      </div>
+      <div>
+        <div class="ir"><span class="il">1Q26 지배주주 순이익</span><span class="iv up">873억 (▲89.3% YoY) <span class="ev ev-1">우수</span></span></div>
+        <div class="ir"><span class="il">1Q26 기본EPS</span><span class="iv up">2,087원 (전년 동기 1,132원) <span class="ev ev-1">우수</span></span></div>
+      </div>
+    </div>
+
+    <div style="background:#E1E5EE;border-left:3px solid #293A66;border-radius:var(--border-radius-md);padding:12px 14px;margin-bottom:12px;">
+      <div style="font-size:12px;font-weight:600;color:#293A66;margin-bottom:5px;">🔑 코스피200 편입 기대감과 맞물린 실적 서프라이즈</div>
+      <div style="font-size:12px;color:var(--color-text-primary);line-height:1.7;">1Q26 순이익이 전년 동기比 +89.3% 급증하며 시장 예상을 상회. 이 실적 발표와 2026년 6월 코스피200 정기 편입 심사(HD현대건설기계·달바글로벌·OCI 등과 함께 편입 기대) 시기가 맞물리며 5월 26일 주가가 단일거래일 +16.2% 폭등, 52주 신고가를 기록. 다만 이후 KCGI의 지배구조 개선 요구가 재부각되고 2분기 이후 동일한 성장 속도가 유지될지에 대한 우려가 겹치며 차익실현 매물이 쏟아짐.</div>
+    </div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">🏦 수익성 지표</div>
+    <div class="g2" style="margin-bottom:12px;font-size:11px;">
+      <div>
+        <div class="ir" style="font-size:11px;"><span class="il">1Q26 영업이익률</span><span>17.01% (637억÷3,746억)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">2025 연간 영업이익률</span><span>19.85% (2,773억÷1조 3,972억)</span></div>
+      </div>
+      <div>
+        <div class="ir" style="font-size:11px;"><span class="il">1Q26 분기 EPS</span><span>2,087원 (연환산 약 8,348원)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">연환산 vs 2025 EPS</span><span>8,348원 vs 6,285원 (+32.8%)</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. 기본 투자지표 -->
+<div class="card">
+  <div class="sec">3. 기본 투자지표 (Per-Share) <span class="src">📄 분기보고서 원문 · 보통주 기준</span></div>
+  <div class="g4">
+    <div class="met"><div class="ml">EPS · 2025</div><div class="mv up">6,285원</div><div class="ms">+13.9%</div><div style="margin-top:5px;"><span class="ev ev-2">양호</span></div></div>
+    <div class="met"><div class="ml">1Q26 분기 EPS</div><div class="mv up">2,087원</div><div class="ms">+84.4% (전년 동기 1,132원)</div><div style="margin-top:5px;"><span class="ev ev-1">우수</span></div></div>
+    <div class="met"><div class="ml">BPS · 주당순자산</div><div class="mv">약 50,447원</div><div class="ms">지배지분 2.14조 ÷ 4,247만주</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
+    <div class="met"><div class="ml">DPS · 주당배당금 (2025)</div><div class="mv dn">810원</div><div class="ms">전기比 -34.1% · 배당성향 13.5%</div><div style="margin-top:5px;"><span class="ev ev-4">주의</span></div></div>
+  </div>
+</div>
+
+<!-- 4. 상대 투자지표 -->
+<div class="card">
+  <div class="sec">4. 상대 투자지표 — 최근 종가 102,000원 기준</div>
+
+  <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:12px;border-left:3px solid #EF9F27;">
+    <div style="font-size:12px;color:#854F0B;"><strong>💡 밸류에이션 해석:</strong> PER 16.23x·PBR 2.02x는 반도체 파운드리 업종 평균 대비 무난한 수준으로, 극단적 고평가는 아님. <strong>① 8인치 레거시 파운드리 수요 회복의 지속 가능성 ② 테슬라 등 대형 고객사 계약의 실제 체결 여부 ③ KCGI 지배구조 이슈의 향방</strong>을 함께 확인할 필요.</div>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PER (2025 연결EPS)</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">102,000÷6,285(EPS)<br><span style="color:#854F0B;">파운드리 업종 평균 대비 합리적 수준</span></div>
+    <div class="ind-val">16.23x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(10x)</span><span>적정(17x)</span><span>고(26x)</span></div><div class="bar-bg"><div class="bar-f" style="width:39%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PBR</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">102,000÷50,447(BPS)<br><span style="color:#854F0B;">PBR 2.02x — 파운드리 업황 회복 기대 반영</span></div>
+    <div class="ind-val">2.02x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(1x)</span><span>적정(2x)</span><span>고(3.5x)</span></div><div class="bar-bg"><div class="bar-f" style="width:41%;background:#FAEEDA;"></div></div></div>
+    <span class="ev ev-3" style="min-width:58px;text-align:center;">3단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">배당수익률</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">DPS 810원 ÷ 현재가 102,000원<br><span style="color:#5F5E5A;">0.79% — 배당성향 축소로 낮아진 수준</span></div>
+    <div class="ind-val">0.79%</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>0%</span><span>1.5%</span><span>3%</span></div><div class="bar-bg"><div class="bar-f" style="width:26%;background:#F1EFE8;"></div></div></div>
+    <span class="ev ev-3" style="min-width:58px;text-align:center;">3단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">HC / LC 수익률</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">고점(220,500, 26/05/26) 및 저점(43,000, 25/08/20) 대비 현재가<br><span style="color:#A32D2D;">HC -53.74% · LC +137.21% — 급등 후 급락, 변동성 매우 큼</span></div>
+    <div class="ind-val">-53.7%</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>-62%</span><span>-31%</span><span>0%</span></div><div class="bar-bg"><div class="bar-f" style="width:12%;background:#FCEBEB;"></div></div></div>
+    <span class="ev ev-5" style="min-width:58px;text-align:center;">5단계</span>
+  </div>
+</div>
+
+<!-- 5. 시계열 이벤트 -->
+<div class="card">
+  <div class="sec">5. 시계열 주요 이벤트 <span class="src">📄 OpenDART 공시 원문 + 📊 Yahoo Finance 일봉 + 언론보도</span></div>
+
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2025년 08월 20일</div>
+      <div class="tl-title">주가 43,000원 — 52주 최저</div>
+      <div class="tl-body">레거시 파운드리 반등 이전 분석 기간 중 최저점 기록.</div>
+      <span class="tag tag-neg">52주 최저</span><span class="tag tag-neu">LC 기준점</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-pos"></div>
+      <div class="tl-date">2025년 09월~11월</div>
+      <div class="tl-title">삼성·TSMC 8인치 감산 반사이익 부각 — 3Q25 영업이익 +71%</div>
+      <div class="tl-body">삼성전자(기흥) 및 TSMC가 300mm/AI 칩 전환을 위해 200mm 웨이퍼 생산을 축소하면서 자동차·전력반도체·DDI向 8인치 수요가 DB하이텍으로 이동, 3분기 영업이익이 전년比 71% 급증. 테슬라向 10년 장기 전력반도체(130nm BCD) 공급계약 추진설도 함께 부각.</div>
+      <span class="tag tag-pos">레거시 파운드리 수혜</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2026년 05월 26일</div>
+      <div class="tl-title">주가 220,500원 — 52주 신고가, 단일거래일 +16.2%</div>
+      <div class="tl-body">코스피200 정기 편입 기대감(HD현대건설기계·달바글로벌·OCI 등과 함께 편입 논의)과 1분기 실적 서프라이즈(순이익 +89.3%)가 겹치며 분석 기간 중 최고가 기록.</div>
+      <span class="tag tag-big">52주 신고가</span><span class="tag tag-neg">HC 기준점</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2026년 06월~07월</div>
+      <div class="tl-title">KCGI 지배구조 이슈 재점화 및 급락 — 고점 대비 -53.7%</div>
+      <div class="tl-body">2023년 물적분할(팹리스 자회사 DB글로벌칩 설립) 당시 지배구조 개선을 요구했던 행동주의펀드 KCGI가 재차 관련 이슈를 제기, 여기에 2분기 이후 동일한 성장 속도 유지 여부에 대한 우려와 신고가 이후 차익실현 매물이 겹치며 주가가 급락.</div>
+      <span class="tag tag-neg">지배구조 리스크</span><span class="tag tag-neg">차익실현</span>
+    </div>
+  </div>
+</div>
+
+<!-- 6. 투자 포인트 -->
+<div class="card">
+  <div class="sec">6. 2026년 핵심 투자 포인트</div>
+  <div class="g2">
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:7px;color:#1D9E75;">긍정 요인 (Bull)</div>
+      <div class="ir"><span class="il">삼성·TSMC 8인치 감산에 따른 구조적 반사수혜 지속</span><span class="badge b-dbh">레거시 파운드리 수혜</span></div>
+      <div class="ir"><span class="il">1Q26 순이익 +89.3%로 성장 가속, 2025년보다 빠른 속도</span><span class="badge b-green">이익 모멘텀 강화</span></div>
+      <div class="ir"><span class="il">테슬라向 10년 장기 공급계약 추진, 성사 시 대형 성장동력</span><span class="badge b-blue">신규 고객 확보 기대</span></div>
+      <div class="ir"><span class="il">PER 16.23x·PBR 2.02x로 파운드리 업종 대비 무난한 밸류</span><span class="badge b-blue">밸류 부담 제한적</span></div>
+      <div class="ir"><span class="il">52주 저점 대비 +137.2%, 업황 반등 국면 자체는 견조</span><span class="badge b-blue">업황 반등 사이클</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:7px;color:#D85A30;">리스크 (Bear)</div>
+      <div class="ir"><span class="il">52주 고점 대비 -53.7%, 급등 후 급락의 극심한 변동성</span><span class="badge b-red">가격 변동성</span></div>
+      <div class="ir"><span class="il">KCGI 등 행동주의펀드의 지배구조 개선 압박 재점화</span><span class="badge b-red">지배구조 리스크</span></div>
+      <div class="ir"><span class="il">배당성향 축소(22.0%→13.5%)로 주주환원 매력 약화</span><span class="badge b-amber">배당 축소</span></div>
+      <div class="ir"><span class="il">테슬라 등 대형 계약이 아직 확정되지 않은 추진 단계</span><span class="badge b-amber">수주 불확실성</span></div>
+      <div class="ir"><span class="il">반도체 업황 사이클 특성상 수요 반전 가능성 상존</span><span class="badge b-gray">업황 사이클 리스크</span></div>
+    </div>
+  </div>
+  <div class="ib">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
+      <div><span style="color:var(--color-text-secondary);">시총:</span> <span style="font-weight:600;">~4.44조원</span></div>
+      <div><span style="color:var(--color-text-secondary);">2025 EPS:</span> <span style="font-weight:600;">6,285원 (PER 16.23x)</span></div>
+      <div><span style="color:var(--color-text-secondary);">BPS:</span> <span style="font-weight:600;">~50,447원 (PBR 2.02x)</span></div>
+      <div><span style="color:var(--color-text-secondary);">배당수익률:</span> <span style="font-weight:600;">0.79%</span></div>
+    </div>
+  </div>
+  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">⚠ 사업보고서(2025) + 분기보고서(1Q26) OpenDART 원문 + Yahoo Finance 일봉 기준 · 투자 권고가 아닙니다</div>
+</div>
+
+</div>
+
+<script>
+function switchTab(tab) {
+  const isA=tab==='annual';
+  document.getElementById('tabAnnual').style.display=isA?'':'none';
+  document.getElementById('tabQuarter').style.display=isA?'none':'';
+  const aS='flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:8px;font-size:13px;cursor:pointer;transition:all .15s;background:#293A66;border:1.5px solid #293A66;color:#fff;font-weight:600;';
+  const iS='flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:8px;font-size:13px;cursor:pointer;transition:all .15s;background:var(--color-background-secondary);border:1.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);font-weight:500;';
+  document.getElementById('btnAnnual').style.cssText=isA?aS:iS;
+  document.getElementById('btnQuarter').style.cssText=isA?iS:aS;
+  if(!isA && !window._qDrawn){ window._qDrawn=true; drawQtrChart(); }
+}
+
+function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+function svgEl(tag,attrs){
+  const e=document.createElementNS('http://www.w3.org/2000/svg',tag);
+  for(const k in attrs) e.setAttribute(k,attrs[k]);
+  return e;
+}
+
+function drawAnnualChart(){
+  const svg=document.getElementById('dbhAnnualChart');
+  const W=680,H=190,pL=44,pR=44,pT=16,pB=26;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  const cats=['2023년','2024년','2025년'];
+  const rev=[11542,11312,13972];
+  const oi=[2654,1908,2773];
+  const ni=[2641,2295,2561];
+  const maxV=Math.max(...rev)*1.1;
+  const minV=0;
+  function py(v){ return pT+cH*(1-(v-minV)/(maxV-minV)); }
+  const zeroY=py(0);
+  svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:zeroY,y2:zeroY,stroke:cssVar('--color-border-tertiary'),'stroke-width':1}));
+  const revCol='#8B93A0', oiCol='#293A66', niCol='#1D9E75';
+  const pts=[];
+  cats.forEach((cat,i)=>{
+    const gx=pL+i*(cW/cats.length)+(cW/cats.length)/2;
+    const barW=(cW/cats.length)*0.26;
+    const rx=gx-barW-2, ox=gx+2;
+    const rTop=py(rev[i]);
+    svg.appendChild(svgEl('rect',{x:rx,y:rTop,width:barW,height:py(0)-rTop,fill:revCol,rx:2,opacity:0.55}));
+    const oTop=py(oi[i]);
+    svg.appendChild(svgEl('rect',{x:ox,y:oTop,width:barW,height:py(0)-oTop,fill:oiCol,rx:2}));
+    const t1=svgEl('text',{x:rx+barW/2,y:rTop-4,'text-anchor':'middle','font-size':9,fill:revCol});
+    t1.textContent=Math.round(rev[i])+'억'; svg.appendChild(t1);
+    const t2=svgEl('text',{x:ox+barW/2,y:oTop-4,'text-anchor':'middle','font-size':9,fill:oiCol,'font-weight':600});
+    t2.textContent=Math.round(oi[i])+'억'; svg.appendChild(t2);
+    const t3=svgEl('text',{x:gx,y:H-6,'text-anchor':'middle','font-size':10,fill:cssVar('--color-text-secondary')});
+    t3.textContent=cat; svg.appendChild(t3);
+    pts.push([gx, py(ni[i])]);
+  });
+  for(let i=0;i<pts.length-1;i++){
+    svg.appendChild(svgEl('line',{x1:pts[i][0],y1:pts[i][1],x2:pts[i+1][0],y2:pts[i+1][1],stroke:niCol,'stroke-width':2.5}));
+  }
+  pts.forEach((p,i)=>{
+    svg.appendChild(svgEl('circle',{cx:p[0],cy:p[1],r:4,fill:niCol}));
+    const t=svgEl('text',{x:p[0],y:p[1]-9,'text-anchor':'middle','font-size':9,fill:niCol,'font-weight':600});
+    t.textContent=Math.round(ni[i])+'억'; svg.appendChild(t);
+  });
+  const legend=[[revCol,'매출액'],[oiCol,'영업이익'],[niCol,'지배주주순이익']];
+  legend.forEach((l,i)=>{
+    const lx=pL+i*90;
+    svg.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
+    const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:cssVar('--color-text-secondary')});
+    t.textContent=l[1]; svg.appendChild(t);
+  });
+}
+
+function drawQtrChart(){
+  const svg=document.getElementById('dbhQtrChart');
+  const W=680,H=190,pL=44,pR=20,pT=20,pB=30;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  const labels=['1Q26 매출액','1Q26 영업이익','1Q26 지배주주순이익'];
+  const vals=[3746,637,873];
+  const cols=['#8B93A0','#293A66','#1D9E75'];
+  const maxV=vals[0]*1.15;
+  function py(v){ return pT+cH*(1-v/maxV); }
+  svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:py(0),y2:py(0),stroke:cssVar('--color-border-tertiary'),'stroke-width':1}));
+  labels.forEach((lab,i)=>{
+    const gx=pL+i*(cW/labels.length)+(cW/labels.length)/2;
+    const barW=(cW/labels.length)*0.5;
+    const top=py(vals[i]);
+    svg.appendChild(svgEl('rect',{x:gx-barW/2,y:top,width:barW,height:py(0)-top,fill:cols[i],rx:3}));
+    const t1=svgEl('text',{x:gx,y:top-6,'text-anchor':'middle','font-size':10,fill:cols[i],'font-weight':600});
+    t1.textContent=Math.round(vals[i])+'억'; svg.appendChild(t1);
+    const t2=svgEl('text',{x:gx,y:H-8,'text-anchor':'middle','font-size':9,fill:cssVar('--color-text-secondary')});
+    t2.textContent=lab; svg.appendChild(t2);
+  });
+}
+drawAnnualChart();
+
+// ── SVG 캔들차트 (Yahoo Finance 일봉 실데이터) ────────────────────────
+const data=[
+{d:'2025-07-21',o:4.7,h:4.73,l:4.65,c:4.7},{d:'2025-07-22',o:4.73,h:4.74,l:4.55,c:4.56},{d:'2025-07-23',o:4.58,h:4.6,l:4.47,c:4.59},{d:'2025-07-24',o:4.6,h:4.64,l:4.53,c:4.57},{d:'2025-07-25',o:4.57,h:4.58,l:4.51,c:4.53},{d:'2025-07-28',o:4.58,h:4.65,l:4.5,c:4.62},
+{d:'2025-07-29',o:4.64,h:4.64,l:4.5,c:4.57},{d:'2025-07-30',o:4.52,h:4.63,l:4.52,c:4.61},{d:'2025-07-31',o:4.62,h:4.67,l:4.54,c:4.57},{d:'2025-08-01',o:4.54,h:4.54,l:4.35,c:4.37},{d:'2025-08-04',o:4.42,h:4.56,l:4.36,c:4.55},{d:'2025-08-05',o:4.61,h:4.68,l:4.56,c:4.6},
+{d:'2025-08-06',o:4.56,h:4.58,l:4.46,c:4.5},{d:'2025-08-07',o:4.54,h:4.57,l:4.48,c:4.54},{d:'2025-08-08',o:4.56,h:4.62,l:4.54,c:4.59},{d:'2025-08-11',o:4.64,h:4.68,l:4.52,c:4.62},{d:'2025-08-12',o:4.61,h:4.76,l:4.59,c:4.69},{d:'2025-08-13',o:4.72,h:4.74,l:4.64,c:4.73},
+{d:'2025-08-14',o:4.72,h:4.72,l:4.64,c:4.66},{d:'2025-08-18',o:4.62,h:4.66,l:4.54,c:4.59},{d:'2025-08-19',o:4.57,h:4.59,l:4.42,c:4.44},{d:'2025-08-20',o:4.39,h:4.39,l:4.24,c:4.3},{d:'2025-08-21',o:4.26,h:4.33,l:4.26,c:4.3},{d:'2025-08-22',o:4.32,h:4.34,l:4.29,c:4.32},
+{d:'2025-08-25',o:4.34,h:4.46,l:4.34,c:4.43},{d:'2025-08-26',o:4.42,h:4.74,l:4.41,c:4.66},{d:'2025-08-27',o:4.66,h:4.66,l:4.58,c:4.62},{d:'2025-08-28',o:4.58,h:4.66,l:4.54,c:4.56},{d:'2025-08-29',o:4.56,h:4.64,l:4.56,c:4.6},{d:'2025-09-01',o:4.54,h:4.54,l:4.4,c:4.43},
+{d:'2025-09-02',o:4.44,h:4.49,l:4.36,c:4.39},{d:'2025-09-03',o:4.4,h:4.52,l:4.4,c:4.45},{d:'2025-09-04',o:4.45,h:4.54,l:4.45,c:4.47},{d:'2025-09-05',o:4.51,h:4.55,l:4.48,c:4.48},{d:'2025-09-08',o:4.48,h:4.52,l:4.46,c:4.51},{d:'2025-09-09',o:4.54,h:4.66,l:4.53,c:4.64},
+{d:'2025-09-10',o:4.64,h:5.09,l:4.62,c:5.04},{d:'2025-09-11',o:5.25,h:5.3,l:4.98,c:5.13},{d:'2025-09-12',o:5.16,h:5.2,l:5.08,c:5.15},{d:'2025-09-15',o:5.26,h:5.26,l:5.08,c:5.22},{d:'2025-09-16',o:5.35,h:5.83,l:5.22,c:5.7},{d:'2025-09-17',o:5.59,h:5.77,l:5.51,c:5.68},
+{d:'2025-09-18',o:5.76,h:5.79,l:5.61,c:5.75},{d:'2025-09-22',o:5.78,h:5.92,l:5.7,c:5.83},{d:'2025-09-23',o:5.98,h:5.98,l:5.52,c:5.69},{d:'2025-09-24',o:5.62,h:5.8,l:5.6,c:5.8},{d:'2025-09-25',o:5.71,h:5.77,l:5.53,c:5.71},{d:'2025-09-26',o:5.66,h:5.77,l:5.57,c:5.63},
+{d:'2025-09-29',o:5.7,h:5.74,l:5.6,c:5.7},{d:'2025-09-30',o:5.75,h:5.8,l:5.65,c:5.68},{d:'2025-10-01',o:5.69,h:5.93,l:5.69,c:5.8},{d:'2025-10-02',o:5.91,h:5.91,l:5.45,c:5.62},{d:'2025-10-10',o:5.76,h:6.1,l:5.75,c:5.9},{d:'2025-10-13',o:5.65,h:5.92,l:5.62,c:5.9},
+{d:'2025-10-14',o:5.95,h:6,l:5.46,c:5.53},{d:'2025-10-15',o:5.6,h:5.89,l:5.58,c:5.88},{d:'2025-10-16',o:5.88,h:5.98,l:5.82,c:5.89},{d:'2025-10-17',o:5.89,h:6.13,l:5.85,c:5.91},{d:'2025-10-20',o:5.92,h:6.1,l:5.83,c:5.96},{d:'2025-10-21',o:5.99,h:6.03,l:5.61,c:5.68},
+{d:'2025-10-22',o:5.68,h:5.69,l:5.52,c:5.68},{d:'2025-10-23',o:5.6,h:5.85,l:5.57,c:5.78},{d:'2025-10-24',o:5.87,h:6.25,l:5.83,c:6.03},{d:'2025-10-27',o:6.16,h:6.18,l:6.01,c:6.08},{d:'2025-10-28',o:6.08,h:6.13,l:5.91,c:5.94},{d:'2025-10-29',o:6,h:6.06,l:5.87,c:5.93},
+{d:'2025-10-30',o:5.93,h:5.97,l:5.84,c:5.89},{d:'2025-10-31',o:5.89,h:5.93,l:5.82,c:5.88},{d:'2025-11-03',o:5.89,h:5.97,l:5.74,c:5.89},{d:'2025-11-04',o:5.9,h:6.07,l:5.85,c:5.9},{d:'2025-11-05',o:5.8,h:5.87,l:5.4,c:5.6},{d:'2025-11-06',o:5.7,h:5.78,l:5.4,c:5.56},
+{d:'2025-11-07',o:5.42,h:5.51,l:5.24,c:5.34},{d:'2025-11-10',o:5.56,h:6.41,l:5.55,c:6.18},{d:'2025-11-11',o:6.21,h:7.08,l:6.05,c:6.91},{d:'2025-11-12',o:6.82,h:7.23,l:6.74,c:7.15},{d:'2025-11-13',o:7.14,h:7.22,l:6.7,c:6.75},{d:'2025-11-14',o:6.54,h:6.92,l:6.44,c:6.76},
+{d:'2025-11-17',o:6.81,h:7.27,l:6.74,c:7.04},{d:'2025-11-18',o:6.86,h:7.06,l:6.71,c:6.75},{d:'2025-11-19',o:6.72,h:6.78,l:6.46,c:6.57},{d:'2025-11-20',o:6.78,h:6.82,l:6.53,c:6.64},{d:'2025-11-21',o:6.3,h:6.47,l:6.11,c:6.19},{d:'2025-11-24',o:6.2,h:6.32,l:6.06,c:6.08},
+{d:'2025-11-25',o:6.29,h:6.29,l:6.11,c:6.19},{d:'2025-11-26',o:6.25,h:6.26,l:6.09,c:6.19},{d:'2025-11-27',o:6.26,h:6.43,l:6.22,c:6.36},{d:'2025-11-28',o:6.4,h:6.52,l:6.19,c:6.36},{d:'2025-12-01',o:6.53,h:6.79,l:6.43,c:6.45},{d:'2025-12-02',o:6.45,h:6.62,l:6.37,c:6.5},
+{d:'2025-12-03',o:6.6,h:6.69,l:6.45,c:6.56},{d:'2025-12-04',o:6.54,h:6.54,l:6.32,c:6.44},{d:'2025-12-05',o:6.44,h:6.53,l:6.34,c:6.48},{d:'2025-12-08',o:6.52,h:6.65,l:6.39,c:6.61},{d:'2025-12-09',o:6.64,h:6.78,l:6.48,c:6.49},{d:'2025-12-10',o:6.49,h:6.72,l:6.49,c:6.62},
+{d:'2025-12-11',o:6.68,h:6.72,l:6.59,c:6.65},{d:'2025-12-12',o:6.65,h:6.76,l:6.57,c:6.76},{d:'2025-12-15',o:6.62,h:6.65,l:6.45,c:6.54},{d:'2025-12-16',o:6.5,h:6.99,l:6.48,c:6.53},{d:'2025-12-17',o:6.54,h:6.6,l:6.41,c:6.55},{d:'2025-12-18',o:6.38,h:6.51,l:6.33,c:6.4},
+{d:'2025-12-19',o:6.47,h:6.59,l:6.41,c:6.53},{d:'2025-12-22',o:6.65,h:6.86,l:6.62,c:6.83},{d:'2025-12-23',o:6.83,h:7.05,l:6.8,c:6.94},{d:'2025-12-24',o:6.97,h:7.02,l:6.81,c:6.85},{d:'2025-12-26',o:6.88,h:6.93,l:6.65,c:6.73},{d:'2025-12-29',o:6.74,h:6.75,l:6.58,c:6.71},
+{d:'2025-12-30',o:6.68,h:6.81,l:6.61,c:6.76},{d:'2026-01-02',o:6.79,h:7.39,l:6.71,c:7.37},{d:'2026-01-05',o:7.47,h:7.63,l:7.34,c:7.52},{d:'2026-01-06',o:7.41,h:7.53,l:7.16,c:7.52},{d:'2026-01-07',o:7.57,h:7.58,l:7.21,c:7.42},{d:'2026-01-08',o:7.33,h:7.42,l:7.09,c:7.17},
+{d:'2026-01-09',o:7.24,h:7.35,l:7.11,c:7.19},{d:'2026-01-12',o:7.33,h:7.47,l:7.27,c:7.4},{d:'2026-01-13',o:7.41,h:7.73,l:7.4,c:7.64},{d:'2026-01-14',o:7.7,h:8.46,l:7.7,c:8.19},{d:'2026-01-15',o:8.03,h:8.23,l:7.93,c:8.19},{d:'2026-01-16',o:8.55,h:8.7,l:8.2,c:8.52},
+{d:'2026-01-19',o:8.36,h:8.85,l:8.3,c:8.57},{d:'2026-01-20',o:8.5,h:8.65,l:8.41,c:8.47},{d:'2026-01-21',o:8.18,h:9.09,l:8.17,c:9.03},{d:'2026-01-22',o:9.25,h:9.75,l:8.9,c:9.31},{d:'2026-01-23',o:9.31,h:9.36,l:8.83,c:9.1},{d:'2026-01-26',o:9.15,h:9.19,l:8.9,c:9.07},
+{d:'2026-01-27',o:9.07,h:9.63,l:8.96,c:9.56},{d:'2026-01-28',o:10.21,h:10.63,l:9.95,c:10.47},{d:'2026-01-29',o:10.6,h:10.61,l:9.8,c:10.11},{d:'2026-01-30',o:10.1,h:10.91,l:10.05,c:10.58},{d:'2026-02-02',o:10.51,h:11.18,l:10.19,c:10.3},{d:'2026-02-03',o:10.73,h:11.35,l:10.55,c:11.29},
+{d:'2026-02-04',o:11.09,h:11.22,l:10.81,c:11.08},{d:'2026-02-05',o:10.77,h:11.24,l:10.32,c:10.44},{d:'2026-02-06',o:10,h:10.49,l:9.68,c:10.3},{d:'2026-02-09',o:10.52,h:10.58,l:9.56,c:9.9},{d:'2026-02-10',o:9.93,h:10,l:9.63,c:9.68},{d:'2026-02-11',o:9.69,h:9.81,l:9.3,c:9.38},
+{d:'2026-02-12',o:9.64,h:9.68,l:9.24,c:9.48},{d:'2026-02-13',o:9.38,h:9.43,l:9.23,c:9.3},{d:'2026-02-19',o:9.17,h:9.18,l:8.82,c:9.14},{d:'2026-02-20',o:9.25,h:9.5,l:9.14,c:9.3},{d:'2026-02-23',o:9.21,h:9.44,l:9.07,c:9.3},{d:'2026-02-24',o:9.23,h:9.25,l:8.96,c:9.14},
+{d:'2026-02-25',o:9.05,h:9.33,l:8.99,c:9.09},{d:'2026-02-26',o:9.09,h:9.49,l:9.07,c:9.4},{d:'2026-02-27',o:9.32,h:9.75,l:9.23,c:9.57},{d:'2026-03-03',o:9.36,h:9.81,l:8.94,c:9.05},{d:'2026-03-04',o:9.04,h:9.04,l:7.48,c:7.73},{d:'2026-03-05',o:8.5,h:9.6,l:8.34,c:9.5},
+{d:'2026-03-06',o:9.31,h:9.4,l:8.71,c:9},{d:'2026-03-09',o:8.45,h:8.87,l:8.21,c:8.32},{d:'2026-03-10',o:8.63,h:9.07,l:8.59,c:8.77},{d:'2026-03-11',o:8.85,h:8.94,l:8.4,c:8.5},{d:'2026-03-12',o:8.51,h:8.75,l:8.43,c:8.59},{d:'2026-03-13',o:8.5,h:8.71,l:8.33,c:8.65},
+{d:'2026-03-16',o:8.85,h:9.1,l:8.34,c:8.79},{d:'2026-03-17',o:8.95,h:9.06,l:8.57,c:8.57},{d:'2026-03-18',o:8.74,h:8.81,l:8.58,c:8.79},{d:'2026-03-19',o:8.65,h:8.93,l:8.56,c:8.79},{d:'2026-03-20',o:8.87,h:8.99,l:8.67,c:8.81},{d:'2026-03-23',o:8.76,h:8.76,l:8.27,c:8.35},
+{d:'2026-03-24',o:8.56,h:8.67,l:8.12,c:8.34},{d:'2026-03-25',o:8.48,h:8.56,l:8.17,c:8.24},{d:'2026-03-26',o:8.26,h:8.32,l:7.73,c:7.79},{d:'2026-03-27',o:7.86,h:8.53,l:7.63,c:7.79},{d:'2026-03-30',o:8.29,h:8.37,l:7.96,c:8.08},{d:'2026-03-31',o:8.16,h:8.58,l:7.8,c:7.85},
+{d:'2026-04-01',o:8.27,h:8.65,l:8.01,c:8.6},{d:'2026-04-02',o:8.68,h:8.83,l:8.26,c:8.33},{d:'2026-04-03',o:8.54,h:9.12,l:8.5,c:9.06},{d:'2026-04-06',o:9.05,h:9.48,l:8.97,c:9.16},{d:'2026-04-07',o:9.26,h:9.41,l:8.54,c:8.78},{d:'2026-04-08',o:9.09,h:9.45,l:8.92,c:9.44},
+{d:'2026-04-09',o:9.27,h:9.5,l:9.12,c:9.26},{d:'2026-04-10',o:9.51,h:9.55,l:9.22,c:9.48},{d:'2026-04-13',o:9.23,h:9.78,l:9.1,c:9.65},{d:'2026-04-14',o:9.66,h:10,l:9.54,c:9.67},{d:'2026-04-15',o:9.65,h:10.12,l:9.31,c:9.86},{d:'2026-04-16',o:9.85,h:10.63,l:9.62,c:10.35},
+{d:'2026-04-17',o:10.3,h:10.7,l:10.21,c:10.69},{d:'2026-04-20',o:10.6,h:12.84,l:10.55,c:12.67},{d:'2026-04-21',o:12.37,h:12.47,l:11.77,c:12.2},{d:'2026-04-22',o:12.08,h:12.92,l:12.05,c:12.79},{d:'2026-04-23',o:13.2,h:13.86,l:12.66,c:13.74},{d:'2026-04-24',o:15.56,h:15.92,l:14.61,c:15.2},
+{d:'2026-04-27',o:15.55,h:15.9,l:15.08,c:15.9},{d:'2026-04-28',o:15.97,h:16.45,l:15.35,c:15.47},{d:'2026-04-29',o:14.93,h:16.03,l:14.86,c:15.26},{d:'2026-04-30',o:15.66,h:16.39,l:15.25,c:15.85},{d:'2026-05-04',o:16.81,h:16.89,l:15.61,c:16.17},{d:'2026-05-06',o:16.01,h:16.5,l:15.4,c:16.2},
+{d:'2026-05-07',o:16.2,h:16.2,l:14.76,c:15.75},{d:'2026-05-08',o:15.7,h:16.85,l:15.36,c:16.81},{d:'2026-05-11',o:16.71,h:19.96,l:16.71,c:18.67},{d:'2026-05-12',o:18.42,h:18.42,l:16.21,c:16.58},{d:'2026-05-13',o:16.05,h:18.56,l:16,c:18.56},{d:'2026-05-14',o:18.05,h:18.73,l:17.85,c:18.28},
+{d:'2026-05-15',o:18.1,h:18.4,l:16.21,c:16.35},{d:'2026-05-18',o:16.51,h:17.46,l:15.68,c:17.09},{d:'2026-05-19',o:16.98,h:17.46,l:15.73,c:15.73},{d:'2026-05-20',o:15.85,h:16.2,l:14.56,c:16.2},{d:'2026-05-21',o:16.8,h:18.1,l:16.4,c:18.1},{d:'2026-05-22',o:17.88,h:18.63,l:17.34,c:18.11},
+{d:'2026-05-26',o:19.14,h:22.45,l:19.14,c:22.05},{d:'2026-05-27',o:22.85,h:23.05,l:20,c:20.2},{d:'2026-05-28',o:20.3,h:20.3,l:18.5,c:19.43},{d:'2026-05-29',o:19.71,h:20.2,l:18.05,c:18.55},{d:'2026-06-01',o:18.24,h:19.27,l:18,c:18.14},{d:'2026-06-02',o:18.25,h:18.3,l:16.56,c:17.01},
+{d:'2026-06-04',o:17.4,h:18.38,l:16.8,c:17.64},{d:'2026-06-05',o:16.86,h:17.82,l:16.6,c:17.38},{d:'2026-06-08',o:15.19,h:17.47,l:15.15,c:15.88},{d:'2026-06-09',o:16.62,h:17.35,l:16.14,c:17.03},{d:'2026-06-10',o:16.4,h:16.8,l:14.93,c:15.37},{d:'2026-06-11',o:14.95,h:16.24,l:14.69,c:15.52},
+{d:'2026-06-12',o:16.21,h:18.16,l:15.42,c:17.43},{d:'2026-06-15',o:17.5,h:17.76,l:16.05,c:16.12},{d:'2026-06-16',o:16.48,h:16.76,l:15.76,c:15.8},{d:'2026-06-17',o:15.8,h:15.96,l:15.31,c:15.85},{d:'2026-06-18',o:15.78,h:15.8,l:14.86,c:15.45},{d:'2026-06-19',o:15.65,h:16.2,l:14.95,c:15.61},
+{d:'2026-06-22',o:15.28,h:17.43,l:15.21,c:17.4},{d:'2026-06-23',o:17.2,h:17.2,l:14.92,c:15.11},{d:'2026-06-24',o:15.28,h:15.96,l:14.47,c:15.24},{d:'2026-06-25',o:15.83,h:16.57,l:15.08,c:15.8},{d:'2026-06-26',o:15.6,h:16.5,l:15.18,c:15.83},{d:'2026-06-29',o:15.89,h:15.91,l:14.15,c:14.36},
+{d:'2026-06-30',o:14.39,h:15.08,l:13.84,c:14.42},{d:'2026-07-01',o:14.43,h:14.62,l:12.77,c:13.32},{d:'2026-07-02',o:12.8,h:12.8,l:11.56,c:11.68},{d:'2026-07-03',o:11.68,h:12.07,l:11.56,c:12.07},{d:'2026-07-06',o:12.1,h:12.13,l:10.95,c:11.29},{d:'2026-07-07',o:11.25,h:11.59,l:10.85,c:11.18},
+{d:'2026-07-08',o:10.87,h:11.79,l:10.72,c:11.18},{d:'2026-07-09',o:11.19,h:12.01,l:11.19,c:11.67},{d:'2026-07-10',o:11.98,h:12.41,l:11.57,c:12.19},{d:'2026-07-13',o:12.19,h:12.36,l:10.99,c:11.07},{d:'2026-07-14',o:11.17,h:11.61,l:10.59,c:11.35},{d:'2026-07-15',o:11.86,h:12.3,l:11.61,c:12.08},
+{d:'2026-07-16',o:11.89,h:11.89,l:10.89,c:10.96},{d:'2026-07-20',o:10.85,h:10.94,l:10.15,c:10.2},
+];
+
+renderCandleChart({svgId:'dbhSvg', controlsId:'dbhChartControls', data: data});
+</script>
