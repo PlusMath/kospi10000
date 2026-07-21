@@ -1,0 +1,481 @@
+<link rel="stylesheet" href="../css/global.css">
+<script src="../js/chart-common.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
+.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:18px;font-variant-numeric:tabular-nums;}
+.sec{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:12px;}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:14px;}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px;text-align:center;}
+.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
+.mv{font-size:14px;font-weight:600;color:var(--color-text-primary);font-variant-numeric:tabular-nums;}
+.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
+.up{color:#1D9E75;}.dn{color:#D85A30;}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
+.b-green{background:#EAF3DE;color:#3B6D11;}.b-amber{background:#FAEEDA;color:#854F0B;}
+.b-red{background:#FCEBEB;color:#A32D2D;}.b-blue{background:#E6F1FB;color:#185FA5;}
+.b-gray{background:#F1EFE8;color:#5F5E5A;}.b-eh{background:#DDE6EE;color:#1B4B73;}
+.sig{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
+.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
+.ir:last-child{border-bottom:none;}
+.il{color:var(--color-text-secondary);}.iv{font-weight:600;color:var(--color-text-primary);display:flex;align-items:center;gap:6px;font-variant-numeric:tabular-nums;}
+.src{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-tertiary);margin-left:4px;}
+.hl{background:#EAF3DE;border-left:3px solid #1D9E75;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.warn{background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ev{font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;}
+.ev-1{background:#E6F1FB;color:#0C447C;}.ev-2{background:#EAF3DE;color:#27500A;}
+.ev-3{background:#F1EFE8;color:#444441;}.ev-4{background:#FAEEDA;color:#633806;}
+.ev-5{background:#FCEBEB;color:#791F1F;}
+.ind-row{display:flex;align-items:center;padding:8px 0;border-bottom:.5px solid var(--color-border-tertiary);gap:10px;}
+.ind-row:last-child{border-bottom:none;}
+.ind-nm{font-size:13px;font-weight:600;color:var(--color-text-primary);min-width:150px;}
+.ind-val{font-size:14px;font-weight:600;color:var(--color-text-primary);min-width:80px;text-align:right;font-variant-numeric:tabular-nums;}
+.bar-bg{background:var(--color-border-tertiary);border-radius:4px;height:7px;}
+.bar-f{border-radius:4px;height:7px;}
+.tl{position:relative;padding-left:28px;}
+.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--color-border-tertiary);border-radius:2px;}
+.tl-item{position:relative;margin-bottom:18px;}
+.tl-item:last-child{margin-bottom:0;}
+.tl-dot{position:absolute;left:-24px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid var(--color-background-primary);}
+.dot-big{background:#1B4B73;}.dot-pos{background:#1D9E75;}
+.dot-neg{background:#D85A30;}.dot-neu{background:#888780;}
+.tl-date{font-size:11px;font-weight:600;color:var(--color-text-tertiary);margin-bottom:3px;}
+.tl-title{font-size:13px;font-weight:600;color:var(--color-text-primary);margin-bottom:3px;line-height:1.4;}
+.tl-body{font-size:12px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:5px;}
+.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;margin-right:4px;}
+.tag-big{background:#DDE6EE;color:#1B4B73;}.tag-pos{background:#EAF3DE;color:#3B6D11;}
+.tag-neg{background:#FCEBEB;color:#791F1F;}.tag-neu{background:#F1EFE8;color:#444441;}
+button:focus-visible,a:focus-visible{outline:2px solid #1B4B73;outline-offset:2px;}
+</style>
+
+<div style="padding:1rem 0;" class="box">
+
+<!-- 헤더 -->
+<div style="margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+  <h2>삼성에피스홀딩스 (0126Z0)</h2>
+  <span class="badge b-eh">코스피 · 바이오·헬스케어(지주회사)</span>
+  <span class="badge b-gray">2025.11 인적분할 신규 상장 · 삼성바이오에피스 지분 보유</span>
+  <span class="src">📄 OpenDART 공시 원문(Open API) + 📊 Yahoo Finance 시세</span>
+</div>
+<p class="sub">최근 종가 372,500원 (2026-07-20, 전일대비 -5.93%) · 상장 후 최고 773,000원 (26/01/02) · 상장 후 최저 329,000원 (25/11/26) · LC +13.22% · HC -51.82% · 시총 약 9.27조</p>
+
+<div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:8px 12px;margin-bottom:12px;font-size:11px;color:#854F0B;">⚠ 2025년 11월 분할·재상장된 신설 법인으로, 상장 후 거래일수가 아직 1년 미만(158거래일)입니다. 이 리포트의 "52주 최고/최저"는 상장일(2025-11-25) 이후 전체 거래 데이터 기준이며, 2025년 사업보고서는 분할 후 2개월(11~12월)만 반영된 "제1기" 데이터로 전년 비교가 불가능합니다.</div>
+
+<!-- 핵심 지표 배너 -->
+<div style="background:#DDE6EE;border-left:3px solid #1B4B73;border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:14px;">
+  <div style="font-size:12px;color:#1B4B73;line-height:1.6;"><strong>🔑 삼성에피스홀딩스 투자의 핵심:</strong> 삼성바이오로직스에서 인적분할되어 2025년 11월 25일 재상장된 지주회사로, 삼성바이오에피스(바이오시밀러) 지분을 보유. 상장 직후 급등하며 2026년 1월 2일 773,000원까지 치솟았으나, <strong>4분기(분할 후 2개월) 실적이 PPA(무형자산) 상각 비용 반영으로 636억원의 영업손실을 기록</strong>하고 신약 파이프라인 타임라인에 대한 시장의 신중론이 부각되며 꾸준히 하락, 현재 372,500원까지 <strong>고점 대비 -51.8% 조정</strong>. 다만 2026년 1분기(첫 정상 분기)에는 영업이익 905억원으로 흑자전환에 성공했고, SB27(키트루다 바이오시밀러) 3상 1차 유효성 분석 결과 발표(6/29) 등 파이프라인 모멘텀도 진행 중.</div>
+</div>
+
+<div class="g4">
+  <div class="met"><div class="ml">최근 종가 (07/20)</div><div class="mv dn">372,500원</div><div class="ms dn">-5.93% · 고점 대비 -51.8%</div></div>
+  <div class="met"><div class="ml">2025 영업손익 (제1기, 2개월)</div><div class="mv dn">-636억</div><div class="ms dn">PPA 상각 반영 적자</div></div>
+  <div class="met"><div class="ml">2025 당기순이익 (제1기)</div><div class="mv up">853억</div><div class="ms">법인세수익 반영 흑자</div></div>
+  <div class="met"><div class="ml">1Q26 영업이익</div><div class="mv up">905억</div><div class="ms up">흑자전환 (첫 정상 분기)</div></div>
+</div>
+
+<!-- 1. 기술적 분석 -->
+<div class="card">
+  <div class="sec">1. 기술적 분석 — 일봉 기준 (2025.11.25 상장 ~ 2026.07.20, 158거래일 전체)</div>
+  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;">
+    상장 후 최저 329,000원 (25/11/26) → 최고 773,000원 (26/01/02) → 최근 종가 372,500원 (26/07/20) · LC +13.22% · HC -51.82%
+  </div>
+  <div id="ehChartControls" class="kc-controls"></div>
+  <svg id="ehSvg" viewBox="0 0 720 240" width="100%" style="display:block;margin-bottom:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:4px;"></svg>
+
+  <div style="font-size:13px;font-weight:600;margin-bottom:8px;">📊 구간별 분석 <span class="src">📊 Yahoo Finance 일봉</span></div>
+  <div class="g4" style="font-size:11px;margin-bottom:12px;">
+    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#854F0B;font-weight:600;margin-bottom:3px;">25.11.25~26 — 분할 재상장 첫날 급락</div>
+      <div style="color:#854F0B;line-height:1.6;">기준가 대비 급락 출발<br>329,000원까지 하락(11/26)<br>분할 재상장 초기 변동성<br>거래량 폭증</div>
+    </div>
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#3B6D11;font-weight:600;margin-bottom:3px;">25.11.27~26.01.02 — 급등 랠리</div>
+      <div style="color:#1D9E75;line-height:1.6;">329,000→773,000원<br>5주 만에 +135%<br>바이오시밀러 성장 기대감<br>상장 후 최고가(01/02)</div>
+    </div>
+    <div style="background:#FCEBEB;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#A32D2D;font-weight:600;margin-bottom:3px;">26.01~06 — 지속적 조정</div>
+      <div style="color:#A32D2D;line-height:1.6;">77.3만→45만원대<br>제1기 실적(PPA상각 적자) 발표<br>신약 파이프라인 신중론<br>완만하지만 꾸준한 하락</div>
+    </div>
+    <div style="background:#FCEBEB;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#A32D2D;font-weight:600;margin-bottom:3px;">26.06~07 — 추가 하락 후 반등</div>
+      <div style="color:#A32D2D;line-height:1.6;">45만→32.9만원대 재차 하락<br>1Q26 흑자전환에도 약세 지속<br>SB27 임상 결과 발표(6/29)<br>372,500원까지 소폭 반등</div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;">
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:7px;">이동평균선 현황 (07/20 기준)</div>
+      <div class="ir"><span class="il">5일선 (387,100원)</span><span class="badge b-red">가격 하회</span></div>
+      <div class="ir"><span class="il">20일선 (405,425원)</span><span class="badge b-red">가격 하회</span></div>
+      <div class="ir"><span class="il">60일선 (464,700원)</span><span class="badge b-red">가격 큰 폭 하회</span></div>
+      <div class="ir"><span class="il">배열</span><span class="badge b-blue">상장 이후 뚜렷한 하락추세 지속</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:7px;">핵심 가격대</div>
+      <div class="ir"><span class="il">상장 후 최고</span><span style="font-weight:600;color:#1B4B73;">773,000원 (26/01/02)</span></div>
+      <div class="ir"><span class="il">상장 후 최저</span><span style="font-weight:600;color:#D85A30;">329,000원 (25/11/26)</span></div>
+      <div class="ir"><span class="il">최근 종가</span><span style="font-weight:600;color:var(--color-text-primary);">372,500원 (07/20)</span></div>
+      <div class="ir"><span class="il">저점 대비 상승폭</span><span style="font-weight:600;color:#1D9E75;">+13.2%</span></div>
+      <div class="ir"><span class="il">LC / HC</span><span style="font-weight:600;">+13.22% / -51.82%</span></div>
+    </div>
+  </div>
+
+  <div class="sig">
+    <span class="badge b-red">전 이평선 하회 · 상장 후 뚜렷한 하락추세</span>
+    <span class="badge b-red">상장 후 고점(26/01/02) 대비 -51.8%</span>
+    <span class="badge b-green">상장 후 저점(25/11/26) 대비 +13.2%</span>
+    <span class="badge b-eh">1년 미만 신규 상장주 · 데이터 해석에 유의</span>
+  </div>
+</div>
+
+<!-- 2. 기본적 분석 탭 -->
+<div class="card">
+  <div class="sec">2. 기본적 분석 — 공시 원문 <span class="src">📄 사업보고서(2025, 제1기) + 분기보고서 1Q(2026.03, 제2기)</span></div>
+
+  <div style="display:flex;gap:8px;margin-bottom:14px;">
+    <button id="btnAnnual" onclick="switchTab('annual')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);border:1.5px solid #1B4B73;background:#1B4B73;color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;">
+      📄 사업보고서 <span style="font-size:11px;opacity:.85;font-weight:400;">제1기(25.11~12)</span>
+    </button>
+    <button id="btnQuarter" onclick="switchTab('quarter')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);border:1.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-secondary);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;">
+      📋 분기보고서 <span style="font-size:11px;opacity:.85;font-weight:400;">제2기 1분기 · 2026.03</span>
+    </button>
+  </div>
+
+  <!-- ══ 사업보고서 탭 ══ -->
+  <div id="tabAnnual">
+    <svg id="ehAnnualChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:12px;"></svg>
+
+    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:6px;letter-spacing:.03em;">📊 연결 손익 요약 (단위: 억원 · 제1기, 2025.11~12 2개월)</div>
+    <div class="g2" style="margin-bottom:12px;">
+      <div>
+        <div class="ir"><span class="il">연결 매출</span><span class="iv">2,517억 <span class="ev ev-3">2개월분</span></span></div>
+        <div class="ir"><span class="il">연결 영업손실</span><span class="iv dn">-636억 <span class="ev ev-4">PPA상각 반영</span></span></div>
+        <div class="ir"><span class="il">법인세차감전순손실</span><span class="iv dn">-486억</span></div>
+        <div class="ir"><span class="il">연결 당기순이익</span><span class="iv up">853억 <span class="ev ev-2">법인세수익 반영 흑자</span></span></div>
+        <div class="ir"><span class="il">기본주당이익(EPS)</span><span class="iv">3,433원</span></div>
+      </div>
+      <div>
+        <div class="ir"><span class="il">연결 자산총계</span><span class="iv">7조 7,156억</span></div>
+        <div class="ir"><span class="il">연결 부채총계</span><span class="iv">1조 8,098억</span></div>
+        <div class="ir"><span class="il">연결 자본총계</span><span class="iv">5조 9,058억</span></div>
+        <div class="ir"><span class="il">현금배당</span><span class="iv">없음 (신설법인 첫 결산)</span></div>
+      </div>
+    </div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">💼 사업 구조 요약</div>
+    <div class="g3" style="font-size:11px;margin-bottom:12px;">
+      <div style="background:#DDE6EE;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #1B4B73;">
+        <div style="color:#1B4B73;font-weight:600;margin-bottom:5px;">지주회사 구조</div>
+        <div class="ir" style="font-size:11px;"><span class="il">분할일</span><span>2025년 11월</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">주요 수익원</span><span>자회사 배당·로열티</span></div>
+      </div>
+      <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #1D9E75;">
+        <div style="color:#1D9E75;font-weight:600;margin-bottom:5px;">삼성바이오에피스</div>
+        <div class="ir" style="font-size:11px;"><span class="il">사업</span><span>바이오시밀러</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">파이프라인</span><span>SB27(키트루다 바이오시밀러) 등</span></div>
+      </div>
+      <div style="background:#F1EFE8;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #5F5E5A;">
+        <div style="color:#5F5E5A;font-weight:600;margin-bottom:5px;">회계상 특이점</div>
+        <div class="ir" style="font-size:11px;"><span class="il">PPA 상각</span><span>분할 관련 무형자산 상각비 부담</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">손익 반영 시차</span><span>내부거래 이익은 순차 반영</span></div>
+      </div>
+    </div>
+
+    <div class="warn">
+      <div style="font-size:13px;font-weight:600;color:#854F0B;margin-bottom:4px;">💡 사업보고서 핵심 — 신설 지주회사 첫 결산, 영업손실은 회계상 PPA 상각 영향</div>
+      <div style="font-size:12px;color:#854F0B;line-height:1.7;">2025년 11월 삼성바이오로직스에서 인적분할되어 재상장된 신설법인으로, 제1기는 분할 후 단 2개월(11~12월)만 반영된 결산. <strong>영업손실 636억원은 기업분할 과정에서 발생한 무형자산 상각(PPA 상각) 비용</strong>이 크게 작용한 것으로, 분할 전 내부거래 과정에서 형성된 이익은 제품이 최종 판매되는 시점에 순차적으로 반영되는 구조라 단기 손익이 보수적으로 보일 수 있음. 반면 대규모 법인세수익 반영으로 당기순이익은 853억원 흑자를 기록. <strong>2개월치 스텁 기간 실적이라 연간화하거나 전년과 비교하는 것은 무의미</strong>하며, 다음 분기부터의 정상화된 손익 추이를 지켜봐야 함.</div>
+    </div>
+  </div>
+
+  <!-- ══ 분기보고서 탭 ══ -->
+  <div id="tabQuarter" style="display:none;">
+    <svg id="ehQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:12px;"></svg>
+
+    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:6px;letter-spacing:.03em;">📊 1Q26 연결 손익 요약 (단위: 억원 · 제2기 1분기)</div>
+    <div class="g2" style="margin-bottom:12px;">
+      <div>
+        <div class="ir"><span class="il">1Q26 연결 매출</span><span class="iv">4,539억 <span class="ev ev-3">첫 정상 분기</span></span></div>
+        <div class="ir"><span class="il">1Q26 연결 영업이익</span><span class="iv up">905억 (적자→흑자전환) <span class="ev ev-2">양호</span></span></div>
+        <div class="ir"><span class="il">1Q26 당기순이익</span><span class="iv up">995억 <span class="ev ev-2">양호</span></span></div>
+      </div>
+      <div>
+        <div class="ir"><span class="il">1Q26 기본EPS</span><span class="iv up">4,005원 <span class="ev ev-2">양호</span></span></div>
+        <div class="ir"><span class="il">1Q26 연결 자산총계</span><span class="iv">8조 549억 (▲4.4% QoQ) <span class="ev ev-3">적정</span></span></div>
+        <div class="ir"><span class="il">1Q26 연결 자본총계</span><span class="iv up">6조 63억 (▲1.7% QoQ) <span class="ev ev-3">적정</span></span></div>
+      </div>
+    </div>
+
+    <div style="background:#EAF3DE;border-left:3px solid #1D9E75;border-radius:var(--border-radius-md);padding:12px 14px;margin-bottom:12px;">
+      <div style="font-size:12px;font-weight:600;color:#1D9E75;margin-bottom:5px;">🔑 제1기(2개월 스텁) 영업적자에서 제2기 1분기(첫 정상 분기) 흑자전환</div>
+      <div style="font-size:12px;color:var(--color-text-primary);line-height:1.7;">1Q26은 분할 이후 처음으로 온전한 3개월치가 반영된 분기로, 영업이익 905억원을 기록하며 정상화 국면에 진입. 다만 <strong>전년 동기(1Q25) 데이터가 존재하지 않아 YoY 비교가 불가능</strong>하며, 향후 몇 개 분기의 실적 흐름을 봐야 회사의 정상 수익구조를 판단할 수 있음. 같은 기간 SB27(키트루다 바이오시밀러) 3상 1차 유효성 분석 결과 발표(6/29), 개량항체 공동기술개발 옵션계약 체결(7/9) 등 파이프라인 관련 공시가 이어지고 있어 신약 모멘텀이 향후 주가의 핵심 변수로 지목됨.</div>
+    </div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">🏦 재무상태 변동 (2025.12 → 2026.03)</div>
+    <div class="g2" style="margin-bottom:12px;font-size:11px;">
+      <div>
+        <div class="ir" style="font-size:11px;"><span class="il">자산총계</span><span>7.72조 → 8.05조 (+4.4%)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">자본총계</span><span>5.91조 → 6.01조 (+1.7%)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">1Q26 분기 EPS</span><span>4,005원 (연환산 16,020원)</span></div>
+      </div>
+      <div>
+        <div class="ir" style="font-size:11px;"><span class="il">부채총계</span><span>1.81조 → 2.05조 (+13.2%)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">영업손익</span><span class="up">-636억(제1기, 2개월) → +905억(1Q26)</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. 기본 투자지표 -->
+<div class="card">
+  <div class="sec">3. 기본 투자지표 (Per-Share) <span class="src">📄 분기보고서 원문 · 보통주 기준</span></div>
+  <div class="g4">
+    <div class="met"><div class="ml">EPS · 제1기(2개월)</div><div class="mv">3,433원</div><div class="ms">연간 환산 불가(스텁 기간)</div><div style="margin-top:5px;"><span class="ev ev-3">참고용</span></div></div>
+    <div class="met"><div class="ml">1Q26 분기 EPS</div><div class="mv up">4,005원</div><div class="ms">연환산 ~16,020원</div><div style="margin-top:5px;"><span class="ev ev-2">양호</span></div></div>
+    <div class="met"><div class="ml">BPS · 주당순자산</div><div class="mv">약 237,782원</div><div class="ms">자본 5.91조 ÷ 2,484만주</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
+    <div class="met"><div class="ml">DPS · 주당배당금</div><div class="mv">배당 없음</div><div class="ms">신설법인 첫 결산, 미실시</div><div style="margin-top:5px;"><span class="ev ev-3">해당없음</span></div></div>
+  </div>
+</div>
+
+<!-- 4. 상대 투자지표 -->
+<div class="card">
+  <div class="sec">4. 상대 투자지표 — 최근 종가 372,500원 기준</div>
+
+  <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:12px;border-left:3px solid #EF9F27;">
+    <div style="font-size:12px;color:#854F0B;"><strong>💡 밸류에이션 해석:</strong> 제1기 EPS(3,433원) 기준 PER은 2개월치 스텁 실적이라 <strong>사실상 무의미</strong>하며, <strong>1Q26 연환산 EPS 기준 Forward PER 약 23.3x</strong>가 더 참고할 만한 수치. <strong>① 신약(SB27 등) 파이프라인 타임라인 ② 자회사 배당 외 안정적 현금흐름 확보 여부 ③ PPA 상각 부담이 소멸되는 시점</strong>을 함께 봐야 함.</div>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PER (제1기 EPS, 참고용)</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">372,500÷3,433 · 2개월치 스텁 실적 기준, 해석 유의<br><span style="color:#1D9E75;">Forward PER(1Q26 연환산 16,020원) ≈ 23.3x</span></div>
+    <div class="ind-val">108.5x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>-</span><span>참고용</span><span>-</span></div><div class="bar-bg"><div class="bar-f" style="width:50%;background:#F1EFE8;"></div></div></div>
+    <span class="ev ev-3" style="min-width:58px;text-align:center;">참고용</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PBR</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">372,500÷237,782(BPS)<br><span style="color:#854F0B;">PBR 1.57x — 신약 파이프라인 기대감이 일부 반영</span></div>
+    <div class="ind-val">1.57x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(0.9x)</span><span>적정(1.6x)</span><span>고(2.5x)</span></div><div class="bar-bg"><div class="bar-f" style="width:44%;background:#FAEEDA;"></div></div></div>
+    <span class="ev ev-3" style="min-width:58px;text-align:center;">3단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">배당수익률</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">신설법인 첫 결산으로 배당 미실시<br><span style="color:#5F5E5A;">향후 자회사 배당 흐름에 따라 배당 정책 결정 예상</span></div>
+    <div class="ind-val">해당없음</div>
+    <div style="min-width:120px;flex:1;"><div class="bar-bg"><div class="bar-f" style="width:0%;background:#F1EFE8;"></div></div></div>
+    <span class="ev ev-3" style="min-width:58px;text-align:center;">-</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">HC / LC 수익률</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">상장 후 고점(773,000, 26/01/02) 및 저점(329,000, 25/11/26) 대비 현재가<br><span style="color:#A32D2D;">HC -51.82% · LC +13.22% — 상장 이후 극심한 변동성</span></div>
+    <div class="ind-val">-51.8%</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>-60%</span><span>-30%</span><span>0%</span></div><div class="bar-bg"><div class="bar-f" style="width:14%;background:#FCEBEB;"></div></div></div>
+    <span class="ev ev-5" style="min-width:58px;text-align:center;">5단계</span>
+  </div>
+</div>
+
+<!-- 5. 시계열 이벤트 -->
+<div class="card">
+  <div class="sec">5. 시계열 주요 이벤트 <span class="src">📄 OpenDART 공시 원문 + 📊 Yahoo Finance 일봉</span></div>
+
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2025년 11월 25일</div>
+      <div class="tl-title">삼성바이오로직스에서 인적분할, 삼성에피스홀딩스로 재상장</div>
+      <div class="tl-body">삼성바이오에피스 지분을 보유하는 지주회사로 분할 재상장. 재상장 첫날 큰 폭의 변동성을 보이며 다음날 329,000원까지 급락.</div>
+      <span class="tag tag-big">분할 재상장</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2025년 11월 26일</div>
+      <div class="tl-title">주가 329,000원 — 상장 후 최저</div>
+      <div class="tl-body">분할 재상장 초기 변동성 속 최저점 형성. 이후 바이오시밀러 사업 성장 기대감이 부각되며 급등 전환.</div>
+      <span class="tag tag-neg">상장 후 최저</span><span class="tag tag-neu">LC 기준점</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2026년 01월 02일</div>
+      <div class="tl-title">주가 773,000원 — 상장 후 최고 (5주 만에 +135%)</div>
+      <div class="tl-body">분할 재상장 초기 저점 대비 5주 만에 2배 이상 급등하며 최고가 형성. 신설 지주회사에 대한 초기 재평가·수급 쏠림이 반영된 것으로 추정.</div>
+      <span class="tag tag-big">상장 후 최고</span><span class="tag tag-neg">즉시 조정 전환</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2026년 03월~05월 (제1기 사업보고서 공시)</div>
+      <div class="tl-title">제1기(2개월) 영업손실 636억원 공시 — PPA 상각 부담 확인</div>
+      <div class="tl-body">분할 관련 무형자산 상각 비용이 반영되며 영업손실을 기록. 신약 파이프라인 타임라인에 대한 시장의 신중론과 맞물려 주가는 꾸준한 하락세로 전환.</div>
+      <span class="tag tag-neg">회계상 적자</span><span class="tag tag-neu">파이프라인 신중론</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-pos"></div>
+      <div class="tl-date">2026년 06월 29일</div>
+      <div class="tl-title">SB27(키트루다 바이오시밀러) 3상 1차 유효성 분석 결과 발표</div>
+      <div class="tl-body">자회사 삼성바이오에피스의 핵심 파이프라인인 SB27 임상 데이터 공개. 신약 파이프라인 모멘텀의 구체적 이정표로 주목.</div>
+      <span class="tag tag-pos">파이프라인 모멘텀</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-neu"></div>
+      <div class="tl-date">2026년 07월 (최근)</div>
+      <div class="tl-title">주가 372,500원 — 상장 후 저점 부근에서 등락</div>
+      <div class="tl-body">1Q26 흑자전환(영업이익 905억)에도 불구하고 주가는 여전히 고점 대비 -51.8%에 머무름. 전 이동평균선을 하회하는 하락추세가 이어지는 가운데 저점 대비로는 완만한 반등.</div>
+      <span class="tag tag-neu">전 이평선 하회</span><span class="tag tag-neu">실적·주가 괴리</span>
+    </div>
+  </div>
+</div>
+
+<!-- 6. 투자 포인트 -->
+<div class="card">
+  <div class="sec">6. 2026년 핵심 투자 포인트</div>
+  <div class="g2">
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:7px;color:#1D9E75;">긍정 요인 (Bull)</div>
+      <div class="ir"><span class="il">1Q26 영업이익 905억, 첫 정상 분기부터 흑자전환</span><span class="badge b-green">실적 정상화</span></div>
+      <div class="ir"><span class="il">SB27(키트루다 바이오시밀러) 등 신약 파이프라인 진행</span><span class="badge b-blue">파이프라인 모멘텀</span></div>
+      <div class="ir"><span class="il">Forward PER(연환산 기준) 약 23.3x, 바이오 업종 내 비교 가능</span><span class="badge b-blue">밸류 참고 가능</span></div>
+      <div class="ir"><span class="il">삼성바이오에피스라는 검증된 바이오시밀러 사업 기반</span><span class="badge b-eh">안정적 사업 기반</span></div>
+      <div class="ir"><span class="il">영업손실의 상당 부분은 비현금성 PPA 상각 요인</span><span class="badge b-blue">회계상 왜곡 요인</span></div>
+      <div class="ir"><span class="il">상장 후 저점 대비 +13.2% 반등</span><span class="badge b-blue">단기 반등</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:7px;color:#D85A30;">리스크 (Bear)</div>
+      <div class="ir"><span class="il">상장 후 고점 대비 -51.8%, 극심한 주가 변동성</span><span class="badge b-red">가격 변동성</span></div>
+      <div class="ir"><span class="il">아직 1년 미만 상장주로 실적·주가 데이터 축적 부족</span><span class="badge b-amber">데이터 불충분</span></div>
+      <div class="ir"><span class="il">자회사 배당이 사실상 유일한 수익원 구조</span><span class="badge b-amber">현금흐름 우려</span></div>
+      <div class="ir"><span class="il">신약 파이프라인 지연 시 R&D 비용 부담 부각 가능</span><span class="badge b-amber">파이프라인 리스크</span></div>
+      <div class="ir"><span class="il">전 이동평균선 하회, 상장 후 뚜렷한 하락추세</span><span class="badge b-gray">기술적 약세</span></div>
+      <div class="ir"><span class="il">배당 미실시로 인컴 매력 없음</span><span class="badge b-gray">배당 부재</span></div>
+    </div>
+  </div>
+  <div class="ib">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
+      <div><span style="color:var(--color-text-secondary);">시총:</span> <span style="font-weight:600;">~9.27조원</span></div>
+      <div><span style="color:var(--color-text-secondary);">1Q26 EPS:</span> <span style="font-weight:600;">4,005원 (연환산 ~16,020원)</span></div>
+      <div><span style="color:var(--color-text-secondary);">BPS:</span> <span style="font-weight:600;">~237,782원 (PBR 1.57x)</span></div>
+      <div><span style="color:var(--color-text-secondary);">배당수익률:</span> <span style="font-weight:600;">해당없음</span></div>
+    </div>
+  </div>
+  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">⚠ 사업보고서(2025, 제1기) + 분기보고서(1Q26, 제2기) OpenDART 원문 + Yahoo Finance 일봉 기준 · 신설 상장법인으로 과거 비교 데이터 제한적 · 투자 권고가 아닙니다</div>
+</div>
+
+</div>
+
+<script>
+function switchTab(tab) {
+  const isA=tab==='annual';
+  document.getElementById('tabAnnual').style.display=isA?'':'none';
+  document.getElementById('tabQuarter').style.display=isA?'none':'';
+  const aS='flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:8px;font-size:13px;cursor:pointer;transition:all .15s;background:#1B4B73;border:1.5px solid #1B4B73;color:#fff;font-weight:600;';
+  const iS='flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:8px;font-size:13px;cursor:pointer;transition:all .15s;background:var(--color-background-secondary);border:1.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);font-weight:500;';
+  document.getElementById('btnAnnual').style.cssText=isA?aS:iS;
+  document.getElementById('btnQuarter').style.cssText=isA?iS:aS;
+  if(!isA && !window._qDrawn){ window._qDrawn=true; drawQtrChart(); }
+}
+
+function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+function svgEl(tag,attrs){
+  const e=document.createElementNS('http://www.w3.org/2000/svg',tag);
+  for(const k in attrs) e.setAttribute(k,attrs[k]);
+  return e;
+}
+
+function drawAnnualChart(){
+  const svg=document.getElementById('ehAnnualChart');
+  const W=680,H=190,pL=44,pR=44,pT=16,pB=26;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  const cats=['매출','영업손익','당기순이익'];
+  const vals=[0.252,-0.064,0.085];
+  const cols=['#8B93A0','#D85A30','#1D9E75'];
+  const maxV=Math.max(...vals)*1.2;
+  const minV=Math.min(...vals)*1.5;
+  function py(v){ return pT+cH*(1-(v-minV)/(maxV-minV)); }
+  const zeroY=py(0);
+  svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:zeroY,y2:zeroY,stroke:cssVar('--color-border-tertiary'),'stroke-width':1}));
+  cats.forEach((cat,i)=>{
+    const gx=pL+i*(cW/cats.length)+(cW/cats.length)/2;
+    const barW=(cW/cats.length)*0.4;
+    const top=py(Math.max(vals[i],0));
+    const bot=py(Math.min(vals[i],0));
+    svg.appendChild(svgEl('rect',{x:gx-barW/2,y:top,width:barW,height:Math.max(bot-top,2),fill:cols[i],rx:3}));
+    const t1=svgEl('text',{x:gx,y:vals[i]>=0?top-6:bot+14,'text-anchor':'middle','font-size':10,fill:cols[i],'font-weight':600});
+    t1.textContent=vals[i].toFixed(3)+'조'; svg.appendChild(t1);
+    const t2=svgEl('text',{x:gx,y:H-6,'text-anchor':'middle','font-size':10,fill:cssVar('--color-text-secondary')});
+    t2.textContent=cat; svg.appendChild(t2);
+  });
+  const note=svgEl('text',{x:pL,y:12,'font-size':9,fill:cssVar('--color-text-tertiary')});
+  note.textContent='제1기(2025.11~12, 2개월 스텁 기간)'; svg.appendChild(note);
+}
+
+function drawQtrChart(){
+  const svg=document.getElementById('ehQtrChart');
+  const W=680,H=190,pL=44,pR=20,pT=20,pB=30;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  const labels=['1Q26 매출','1Q26 영업이익','1Q26 순이익'];
+  const vals=[0.454,0.091,0.099];
+  const cols=['#8B93A0','#1B4B73','#1D9E75'];
+  const maxV=vals[0]*1.2;
+  const groupW=cW/labels.length;
+  const barW=groupW*0.5;
+  function py(v){ return pT+cH*(1-v/maxV); }
+  [0,25,50,75,100].forEach(v=>{
+    const val=v/100*maxV;
+    const y=py(val);
+    svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:y,y2:y,stroke:cssVar('--color-border-tertiary'),'stroke-width':1}));
+  });
+  labels.forEach((lab,i)=>{
+    const gx=pL+i*groupW+groupW/2;
+    const top=py(vals[i]);
+    svg.appendChild(svgEl('rect',{x:gx-barW/2,y:top,width:barW,height:py(0)-top,fill:cols[i],rx:3}));
+    const t1=svgEl('text',{x:gx,y:top-6,'text-anchor':'middle','font-size':10,fill:cssVar('--color-text-primary'),'font-weight':600});
+    t1.textContent=vals[i].toFixed(3)+'조'; svg.appendChild(t1);
+    const t2=svgEl('text',{x:gx,y:H-8,'text-anchor':'middle','font-size':9,fill:cssVar('--color-text-secondary')});
+    t2.textContent=lab; svg.appendChild(t2);
+  });
+}
+drawAnnualChart();
+
+// ── SVG 캔들차트 (Yahoo Finance 일봉 실데이터) ────────────────────────
+const data=[
+{d:'2025-11-25',o:39.5,h:41.2,l:33,c:33.55},{d:'2025-11-26',o:33.7,h:39.45,l:32.9,c:36.3},{d:'2025-11-27',o:35.1,h:45.85,l:35.1,c:43.45},{d:'2025-11-28',o:43.7,h:47.6,l:42.55,c:42.9},{d:'2025-12-01',o:42.95,h:43.65,l:39.5,c:39.8},{d:'2025-12-02',o:40.2,h:44.9,l:38.5,c:44.2},
+{d:'2025-12-03',o:45.45,h:56.2,l:45.25,c:54.9},{d:'2025-12-04',o:53.7,h:57.8,l:52.5,c:55.7},{d:'2025-12-05',o:55.2,h:59,l:51.4,c:51.5},{d:'2025-12-08',o:52.5,h:53.7,l:50.6,c:51.5},{d:'2025-12-09',o:52.1,h:58.5,l:51.9,c:57.5},{d:'2025-12-10',o:56.9,h:57.7,l:55.5,c:56.5},
+{d:'2025-12-11',o:57.2,h:60.6,l:56.3,c:56.9},{d:'2025-12-12',o:57.1,h:68.9,l:57,c:66.1},{d:'2025-12-15',o:65,h:73.9,l:64.9,c:70.9},{d:'2025-12-16',o:71.8,h:75.9,l:70.7,c:71.2},{d:'2025-12-17',o:71.2,h:71.3,l:66,c:66.6},{d:'2025-12-18',o:64.8,h:72,l:64.8,c:68},
+{d:'2025-12-19',o:69.3,h:70.3,l:66.3,c:67.3},{d:'2025-12-22',o:68.6,h:68.8,l:65,c:66.3},{d:'2025-12-23',o:66.8,h:67.2,l:64,c:65.2},{d:'2025-12-24',o:64.9,h:66.9,l:63.6,c:63.8},{d:'2025-12-26',o:63.9,h:70.5,l:63.7,c:68},{d:'2025-12-29',o:69.1,h:75,l:68,c:73.9},
+{d:'2025-12-30',o:74.3,h:76.5,l:72.6,c:74.3},{d:'2026-01-02',o:75.4,h:77.3,l:70.1,c:71.5},{d:'2026-01-05',o:70.2,h:72.1,l:67.1,c:70.5},{d:'2026-01-06',o:71.1,h:73.6,l:68.1,c:69},{d:'2026-01-07',o:70,h:70.8,l:68.1,c:69.7},{d:'2026-01-08',o:71.1,h:71.6,l:68.1,c:68.9},
+{d:'2026-01-09',o:69,h:69.9,l:67.55,c:68.8},{d:'2026-01-12',o:69,h:69,l:65.7,c:66.3},{d:'2026-01-13',o:66.7,h:68.6,l:66.1,c:66.8},{d:'2026-01-14',o:67.3,h:67.3,l:65,c:65.2},{d:'2026-01-15',o:64.9,h:69.3,l:64.6,c:68.5},{d:'2026-01-16',o:68.3,h:68.3,l:65.1,c:65.1},
+{d:'2026-01-19',o:65.2,h:65.2,l:63,c:63},{d:'2026-01-20',o:64,h:65.4,l:63,c:63.2},{d:'2026-01-21',o:61.4,h:63,l:59.6,c:61.5},{d:'2026-01-22',o:61.9,h:66.4,l:60.5,c:64},{d:'2026-01-23',o:63.5,h:64.6,l:62.4,c:63.8},{d:'2026-01-26',o:63.1,h:65,l:62.9,c:64},
+{d:'2026-01-27',o:62.5,h:62.6,l:60.7,c:61.2},{d:'2026-01-28',o:61.5,h:64.6,l:61.5,c:62.8},{d:'2026-01-29',o:62.8,h:63.1,l:61.2,c:61.9},{d:'2026-01-30',o:62,h:62.1,l:60.6,c:60.6},{d:'2026-02-02',o:60,h:62.1,l:58.1,c:58.4},{d:'2026-02-03',o:59.5,h:60.4,l:58.3,c:59.8},
+{d:'2026-02-04',o:59,h:60.8,l:59,c:60.7},{d:'2026-02-05',o:61.3,h:61.9,l:58.1,c:58.1},{d:'2026-02-06',o:55.9,h:56.7,l:54.7,c:55.8},{d:'2026-02-09',o:57.4,h:60.5,l:57.2,c:59.8},{d:'2026-02-10',o:60.1,h:62.1,l:58.7,c:61.5},{d:'2026-02-11',o:63.2,h:64.8,l:61.5,c:61.5},
+{d:'2026-02-12',o:61.9,h:61.9,l:60.4,c:61},{d:'2026-02-13',o:61,h:61.7,l:59.9,c:60.3},{d:'2026-02-19',o:60.4,h:62.5,l:60.4,c:62.1},{d:'2026-02-20',o:62.2,h:62.9,l:61.2,c:61.3},{d:'2026-02-23',o:61.4,h:66.4,l:61.2,c:65.5},{d:'2026-02-24',o:65.7,h:68,l:65.2,c:67.4},
+{d:'2026-02-25',o:67.1,h:68.5,l:66.6,c:67.3},{d:'2026-02-26',o:66.8,h:68.7,l:65.9,c:68.1},{d:'2026-02-27',o:68.1,h:68.2,l:65.6,c:67.5},{d:'2026-03-03',o:65.8,h:65.9,l:59.3,c:59.8},{d:'2026-03-04',o:57.8,h:58.9,l:50.5,c:52.5},{d:'2026-03-05',o:56.3,h:57.7,l:54.6,c:56.1},
+{d:'2026-03-06',o:54.1,h:55.4,l:52.4,c:54.4},{d:'2026-03-09',o:51.1,h:51.4,l:49.35,c:51},{d:'2026-03-10',o:54.1,h:54.4,l:52.4,c:53.2},{d:'2026-03-11',o:55.4,h:56.65,l:53.3,c:54.1},{d:'2026-03-12',o:54.9,h:55.2,l:52.2,c:54.2},{d:'2026-03-13',o:52.4,h:54.1,l:52.3,c:53.2},
+{d:'2026-03-16',o:53.5,h:53.5,l:50.9,c:51.5},{d:'2026-03-17',o:52.8,h:54.9,l:52.5,c:52.5},{d:'2026-03-18',o:53.5,h:53.9,l:53.1,c:53.8},{d:'2026-03-19',o:54.2,h:55.8,l:53.2,c:53.2},{d:'2026-03-20',o:53.7,h:55.9,l:52.9,c:55.2},{d:'2026-03-23',o:53,h:53.2,l:51,c:51.1},
+{d:'2026-03-24',o:53,h:53,l:50.6,c:51.6},{d:'2026-03-25',o:52.9,h:54.3,l:52.6,c:54},{d:'2026-03-26',o:54.9,h:55.7,l:52.6,c:53.3},{d:'2026-03-27',o:52.2,h:53.1,l:51.3,c:53.1},{d:'2026-03-30',o:50.3,h:51,l:50,c:50.9},{d:'2026-03-31',o:50,h:50.6,l:48.95,c:49.4},
+{d:'2026-04-01',o:51,h:52.3,l:50.3,c:51.7},{d:'2026-04-02',o:52.2,h:53.1,l:49.1,c:49.35},{d:'2026-04-03',o:50.1,h:50.8,l:49.7,c:49.8},{d:'2026-04-06',o:49.85,h:50.2,l:48.85,c:49.1},{d:'2026-04-07',o:49.4,h:50.4,l:48.35,c:48.55},{d:'2026-04-08',o:50.5,h:52.9,l:50.3,c:52.7},
+{d:'2026-04-09',o:51.8,h:52.7,l:51.6,c:51.7},{d:'2026-04-10',o:52.4,h:55.3,l:52.35,c:54.7},{d:'2026-04-13',o:53.7,h:54.9,l:53.3,c:53.9},{d:'2026-04-14',o:55.1,h:55.2,l:53.5,c:54},{d:'2026-04-15',o:55.5,h:63,l:55.5,c:60.7},{d:'2026-04-16',o:60.7,h:61,l:59.4,c:60.9},
+{d:'2026-04-17',o:60.6,h:60.6,l:58.1,c:59.1},{d:'2026-04-20',o:58.8,h:59.3,l:57.8,c:57.9},{d:'2026-04-21',o:58.4,h:58.7,l:57,c:57.3},{d:'2026-04-22',o:57.3,h:57.3,l:55.5,c:56.2},{d:'2026-04-23',o:57.8,h:58.9,l:56.2,c:58.7},{d:'2026-04-24',o:59.8,h:60,l:57.3,c:57.4},
+{d:'2026-04-27',o:57.5,h:57.8,l:56.4,c:56.6},{d:'2026-04-28',o:56.4,h:57.3,l:55.8,c:56.8},{d:'2026-04-29',o:57.4,h:57.6,l:55.6,c:55.9},{d:'2026-04-30',o:56.4,h:56.4,l:54.2,c:54.3},{d:'2026-05-04',o:53.9,h:54.4,l:52.5,c:52.9},{d:'2026-05-06',o:53.3,h:53.3,l:51.5,c:51.5},
+{d:'2026-05-07',o:52.7,h:53.5,l:51.8,c:52.6},{d:'2026-05-08',o:53.1,h:54,l:51.8,c:53},{d:'2026-05-11',o:52.6,h:53,l:51.5,c:51.5},{d:'2026-05-12',o:51.7,h:53.5,l:50.6,c:52},{d:'2026-05-13',o:53.5,h:53.8,l:50.2,c:50.5},{d:'2026-05-14',o:51,h:52.9,l:50.75,c:52.7},
+{d:'2026-05-15',o:52.8,h:52.9,l:49.8,c:50.7},{d:'2026-05-18',o:50.3,h:50.3,l:48.1,c:49.65},{d:'2026-05-19',o:49.15,h:50.3,l:47,c:47.9},{d:'2026-05-20',o:47.5,h:47.9,l:45.8,c:46.45},{d:'2026-05-21',o:47,h:49.35,l:47,c:48.5},{d:'2026-05-22',o:49.05,h:52.2,l:49.05,c:50},
+{d:'2026-05-26',o:51,h:51.1,l:48.95,c:49},{d:'2026-05-27',o:48.55,h:49.8,l:47.7,c:48.4},{d:'2026-05-28',o:48.65,h:48.9,l:46,c:47.05},{d:'2026-05-29',o:47.2,h:48.4,l:44.45,c:48.4},{d:'2026-06-01',o:47.45,h:48.4,l:46.3,c:48.25},{d:'2026-06-02',o:47.35,h:47.35,l:45.65,c:46.4},
+{d:'2026-06-04',o:45.45,h:46.55,l:45.05,c:45.65},{d:'2026-06-05',o:46.1,h:46.55,l:43.65,c:44.4},{d:'2026-06-08',o:40.6,h:42,l:40.2,c:40.55},{d:'2026-06-09',o:40.7,h:43.3,l:40.55,c:42.1},{d:'2026-06-10',o:41,h:43.2,l:40.55,c:41.9},{d:'2026-06-11',o:41.55,h:43.4,l:40,c:43.4},
+{d:'2026-06-12',o:44.05,h:44.65,l:43.08,c:44.65},{d:'2026-06-15',o:45.15,h:46,l:44.3,c:45.15},{d:'2026-06-16',o:45.3,h:45.8,l:44.15,c:45.35},{d:'2026-06-17',o:46,h:46.95,l:43.5,c:45.35},{d:'2026-06-18',o:45.35,h:45.85,l:44.85,c:45.35},{d:'2026-06-19',o:45.3,h:45.35,l:42.15,c:42.9},
+{d:'2026-06-22',o:42.9,h:42.9,l:40.65,c:41.25},{d:'2026-06-23',o:40.7,h:41.45,l:38.1,c:38.3},{d:'2026-06-24',o:38.3,h:43.05,l:38,c:42.6},{d:'2026-06-25',o:42.35,h:48.2,l:42.05,c:44},{d:'2026-06-26',o:45,h:45.95,l:40.2,c:42.65},{d:'2026-06-29',o:42.9,h:47.2,l:42.4,c:46.85},
+{d:'2026-06-30',o:46.7,h:46.7,l:43,c:43},{d:'2026-07-01',o:43.9,h:43.9,l:41.35,c:41.7},{d:'2026-07-02',o:41.7,h:43.05,l:40.45,c:41.4},{d:'2026-07-03',o:41.85,h:42.45,l:40.4,c:41.65},{d:'2026-07-06',o:41.5,h:41.55,l:38.65,c:39.7},{d:'2026-07-07',o:39.3,h:41.65,l:38.9,c:40.85},
+{d:'2026-07-08',o:40.3,h:40.9,l:37.8,c:38.05},{d:'2026-07-09',o:38.6,h:39.1,l:36.45,c:36.85},{d:'2026-07-10',o:37.15,h:39.25,l:37.15,c:38.45},{d:'2026-07-13',o:38.85,h:40,l:37.15,c:37.8},{d:'2026-07-14',o:39.1,h:43.45,l:37.35,c:38.45},{d:'2026-07-15',o:38.7,h:41.3,l:38.6,c:40.45},
+{d:'2026-07-16',o:39.95,h:39.95,l:38.45,c:39.6},{d:'2026-07-20',o:38.7,h:38.7,l:37,c:37.25},
+];
+
+renderCandleChart({svgId:'ehSvg', controlsId:'ehChartControls', data: data});
+</script>
