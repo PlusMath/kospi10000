@@ -1,0 +1,534 @@
+<link rel="stylesheet" href="../css/global.css">
+<script src="../js/chart-common.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
+.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:18px;font-variant-numeric:tabular-nums;}
+.sec{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:12px;}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:14px;}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px;text-align:center;}
+.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
+.mv{font-size:14px;font-weight:600;color:var(--color-text-primary);font-variant-numeric:tabular-nums;}
+.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
+.up{color:#1D9E75;}.dn{color:#D85A30;}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
+.b-green{background:#EAF3DE;color:#3B6D11;}.b-amber{background:#FAEEDA;color:#854F0B;}
+.b-red{background:#FCEBEB;color:#A32D2D;}.b-blue{background:#E6F1FB;color:#185FA5;}
+.b-gray{background:#F1EFE8;color:#5F5E5A;}.b-yhy{background:#DDF0EC;color:#0C5C4E;}
+.sig{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
+.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
+.ir:last-child{border-bottom:none;}
+.il{color:var(--color-text-secondary);}.iv{font-weight:600;color:var(--color-text-primary);display:flex;align-items:center;gap:6px;font-variant-numeric:tabular-nums;}
+.src{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-tertiary);margin-left:4px;}
+.hl{background:#EAF3DE;border-left:3px solid #1D9E75;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.warn{background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ev{font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;}
+.ev-1{background:#E6F1FB;color:#0C447C;}.ev-2{background:#EAF3DE;color:#27500A;}
+.ev-3{background:#F1EFE8;color:#444441;}.ev-4{background:#FAEEDA;color:#633806;}
+.ev-5{background:#FCEBEB;color:#791F1F;}
+.ind-row{display:flex;align-items:center;padding:8px 0;border-bottom:.5px solid var(--color-border-tertiary);gap:10px;}
+.ind-row:last-child{border-bottom:none;}
+.ind-nm{font-size:13px;font-weight:600;color:var(--color-text-primary);min-width:150px;}
+.ind-val{font-size:14px;font-weight:600;color:var(--color-text-primary);min-width:80px;text-align:right;font-variant-numeric:tabular-nums;}
+.bar-bg{background:var(--color-border-tertiary);border-radius:4px;height:7px;}
+.bar-f{border-radius:4px;height:7px;}
+.tl{position:relative;padding-left:28px;}
+.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--color-border-tertiary);border-radius:2px;}
+.tl-item{position:relative;margin-bottom:18px;}
+.tl-item:last-child{margin-bottom:0;}
+.tl-dot{position:absolute;left:-24px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid var(--color-background-primary);}
+.dot-big{background:#0C5C4E;}.dot-pos{background:#1D9E75;}
+.dot-neg{background:#D85A30;}.dot-neu{background:#888780;}
+.tl-date{font-size:11px;font-weight:600;color:var(--color-text-tertiary);margin-bottom:3px;}
+.tl-title{font-size:13px;font-weight:600;color:var(--color-text-primary);margin-bottom:3px;line-height:1.4;}
+.tl-body{font-size:12px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:5px;}
+.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;margin-right:4px;}
+.tag-big{background:#DDF0EC;color:#0C5C4E;}.tag-pos{background:#EAF3DE;color:#3B6D11;}
+.tag-neg{background:#FCEBEB;color:#791F1F;}.tag-neu{background:#F1EFE8;color:#444441;}
+button:focus-visible,a:focus-visible{outline:2px solid #0C5C4E;outline-offset:2px;}
+</style>
+
+<div style="padding:1rem 0;" class="box">
+
+<!-- 헤더 -->
+<div style="margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+  <h2>유한양행 (000100)</h2>
+  <span class="badge b-yhy">코스피 · 제약 · 국내 최고(最古) 제약사</span>
+  <span class="badge b-gray">렉라자(lazertinib)·얀센(J&J) 글로벌 라이선스</span>
+  <span class="src">📄 OpenDART 공시 원문(Open API) + 📊 Yahoo Finance 시세</span>
+</div>
+<p class="sub">최근 종가 69,600원 (2026-07-21, 전일대비 +0.58%) · 52주 최고 129,200원 (25/11/14) · 52주 최저 65,000원 (26/06/26) · LC +7.08% · HC -46.13%</p>
+
+<!-- 핵심 지표 배너 -->
+<div style="background:#DDF0EC;border-left:3px solid #0C5C4E;border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:14px;">
+  <div style="font-size:12px;color:#0C5C4E;line-height:1.6;"><strong>🔑 유한양행 투자의 핵심:</strong> 폐암 신약 렉라자(lazertinib)의 글로벌 파트너 얀센(J&J) 로열티·마일스톤 수익 확대에 힘입어 <strong>2025년 영업이익 1,043.7억원(+90.2%), 지배주주순이익 1,940.8억원(+174.5%)</strong>으로 뚜렷한 성장을 이어가는 중이며, 1분기26에도 순이익이 +206.4% 급증. 그러나 주가는 2025년 11월 중국 상업화 마일스톤 등 호재로 52주 신고가(129,200원)를 기록한 후, 2026년 3월 이란 전쟁발 증시 급락과 유럽 마일스톤 지급 지연에 따른 1분기26 영업이익 컨센서스 하회(88.2억 vs 기대 221억)가 겹치며 -46.1% 조정. 실적 성장과 주가 흐름의 괴리(역주행)가 뚜렷한 구간.</div>
+</div>
+
+<div class="g4">
+  <div class="met"><div class="ml">최근 종가 (07/21)</div><div class="mv up">69,600원</div><div class="ms dn">+0.58% · 고점 대비 -46.1%</div></div>
+  <div class="met"><div class="ml">2025 매출액</div><div class="mv up">2조 1,866억</div><div class="ms up">+5.7%</div></div>
+  <div class="met"><div class="ml">2025 영업이익</div><div class="mv up">1,043.7억</div><div class="ms up">+90.2% (렉라자 로열티 확대)</div></div>
+  <div class="met"><div class="ml">2025 지배주주순이익</div><div class="mv up">1,940.8억</div><div class="ms up">+174.5%</div></div>
+</div>
+
+<!-- 1. 기술적 분석 -->
+<div class="card">
+  <div class="sec">1. 기술적 분석 — 일봉 기준 (2025.07.22 ~ 2026.07.21, 242거래일)</div>
+  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;">
+    최고 129,200원 (25/11/14) → 최저 65,000원 (26/06/26) → 최근 종가 69,600원 (26/07/21) · LC +7.08% · HC -46.13%
+  </div>
+  <div id="yhyChartControls" class="kc-controls"></div>
+  <svg id="yhySvg" viewBox="0 0 720 240" width="100%" style="display:block;margin-bottom:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:4px;"></svg>
+
+  <div style="font-size:13px;font-weight:600;margin-bottom:8px;">📊 구간별 분석 <span class="src">📊 Yahoo Finance 일봉</span></div>
+  <div class="g4" style="font-size:11px;margin-bottom:12px;">
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:var(--color-text-primary);font-weight:600;margin-bottom:3px;">25.07~25.10 — 완만한 등락</div>
+      <div style="color:var(--color-text-secondary);line-height:1.6;">11만~12만원대 횡보<br>렉라자 임상·매출 기대감 지속</div>
+    </div>
+    <div style="background:#DDF0EC;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#0C5C4E;font-weight:600;margin-bottom:3px;">25.10.31~11.14 — 마일스톤 랠리</div>
+      <div style="color:#0C5C4E;line-height:1.6;">중국 상업화 마일스톤($45M)<br>얀센 3Q 실적 호조<br>11/14 52주 신고가(129,200원)</div>
+    </div>
+    <div style="background:#FCEBEB;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#A32D2D;font-weight:600;margin-bottom:3px;">26.03 — 이란 전쟁 급락</div>
+      <div style="color:#A32D2D;line-height:1.6;">3/4 코스피 전반 급락<br>101,900→92,400원</div>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:var(--color-text-primary);font-weight:600;margin-bottom:3px;">26.05~06 — 마일스톤 지연 조정</div>
+      <div style="color:var(--color-text-secondary);line-height:1.6;">1Q26 영업익 컨센서스 하회<br>유럽 마일스톤 지급 지연<br>6/26 52주 최저(65,000원)</div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;">
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:7px;">이동평균선 현황 (07/21 기준)</div>
+      <div class="ir"><span class="il">5일선 (69,160원)</span><span class="badge b-green">가격 소폭 상회</span></div>
+      <div class="ir"><span class="il">20일선 (69,680원)</span><span class="badge b-red">가격 소폭 하회</span></div>
+      <div class="ir"><span class="il">60일선 (79,293원)</span><span class="badge b-red">가격 하회</span></div>
+      <div class="ir"><span class="il">120일선 (90,546원)</span><span class="badge b-red">가격 큰 폭 하회</span></div>
+      <div class="ir"><span class="il">배열</span><span class="badge b-blue">단기 저점권 안정화 · 중장기 조정 지속</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:7px;">핵심 가격대</div>
+      <div class="ir"><span class="il">52주 최고 (신고가)</span><span style="font-weight:600;color:#0C5C4E;">129,200원 (25/11/14)</span></div>
+      <div class="ir"><span class="il">52주 최저</span><span style="font-weight:600;color:#D85A30;">65,000원 (26/06/26)</span></div>
+      <div class="ir"><span class="il">최근 종가</span><span style="font-weight:600;color:var(--color-text-primary);">69,600원 (07/21)</span></div>
+      <div class="ir"><span class="il">저점 대비 상승폭</span><span style="font-weight:600;color:#1D9E75;">+7.1%</span></div>
+      <div class="ir"><span class="il">LC / HC</span><span style="font-weight:600;">+7.08% / -46.13%</span></div>
+    </div>
+  </div>
+
+  <div class="sig">
+    <span class="badge b-red">신고가(25/11/14) 대비 -46.1% 조정</span>
+    <span class="badge b-amber">52주 저점(26/06/26) 근접 횡보</span>
+    <span class="badge b-yhy">실적 성장 vs 주가 역주행 괴리</span>
+  </div>
+</div>
+
+<!-- 2. 기본적 분석 탭 -->
+<div class="card">
+  <div class="sec">2. 기본적 분석 — 공시 원문 <span class="src">📄 사업보고서(2025) + 분기보고서 1Q(2026.03)</span></div>
+
+  <div class="warn" style="margin-bottom:14px;">
+    <div style="font-size:12px;font-weight:600;color:#854F0B;margin-bottom:4px;">⚠️ 실적은 견조하게 성장 중이나 주가는 오히려 하락 — "역주행" 국면</div>
+    <div style="font-size:12px;color:#854F0B;line-height:1.7;">2025년 지배주주순이익이 +174.5%, 1분기26에는 +206.4% 급증했음에도 주가는 52주 신고가(129,200원, 25/11/14) 대비 -46.1% 하락한 상태입니다. 이는 렉라자의 유럽 상업화 마일스톤($30M)이 당초 1분기26 예상에서 미뤄지며 1분기26 영업이익(88.2억원)이 시장 기대치(약 221억원)를 크게 밑돈 데다, 로열티 수익도 예상보다 낮게 잡히며 "성장은 맞지만 속도가 기대에 못 미친다"는 실망 매물이 출회된 결과로 해석됩니다. 지연된 마일스톤은 5월 중 실제로 수령이 확인되며 취소가 아닌 시점 이연이었음이 드러났습니다.</div>
+  </div>
+
+  <div style="display:flex;gap:8px;margin-bottom:14px;">
+    <button id="btnAnnual" onclick="switchTab('annual')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);border:1.5px solid #0C5C4E;background:#0C5C4E;color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;">
+      📄 사업보고서 <span style="font-size:11px;opacity:.85;font-weight:400;">2025년 연간</span>
+    </button>
+    <button id="btnQuarter" onclick="switchTab('quarter')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);border:1.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-secondary);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;">
+      📋 분기보고서 <span style="font-size:11px;opacity:.85;font-weight:400;">1분기 · 2026.03</span>
+    </button>
+  </div>
+
+  <!-- ══ 사업보고서 탭 ══ -->
+  <div id="tabAnnual">
+    <svg id="yhyAnnualChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:12px;"></svg>
+
+    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:6px;letter-spacing:.03em;">📊 연결 손익 요약 (단위: 억원 · 2025년)</div>
+    <div class="g2" style="margin-bottom:12px;">
+      <div>
+        <div class="ir"><span class="il">연결 매출액</span><span class="iv up">2조 1,866억 (▲5.7%) <span class="ev ev-2">양호</span></span></div>
+        <div class="ir"><span class="il">연결 영업이익</span><span class="iv up">1,043.7억 (▲90.2%) <span class="ev ev-1">우수</span></span></div>
+        <div class="ir"><span class="il">지배주주 순이익</span><span class="iv up">1,940.8억 (▲174.5%) <span class="ev ev-1">우수</span></span></div>
+        <div class="ir"><span class="il">별도(본사) 순이익</span><span class="iv up">2,095.7억 (▲116.7%) <span class="ev ev-1">우수</span></span></div>
+      </div>
+      <div>
+        <div class="ir"><span class="il">현금배당(보통주)</span><span class="iv up">DPS 600원 (전기比 +20.0%) <span class="ev ev-2">양호</span></span></div>
+        <div class="ir"><span class="il">현금배당성향(연결)</span><span class="iv">23.10% (전기 53.00%) <span class="ev ev-2">여력 확대</span></span></div>
+        <div class="ir"><span class="il">기본주당순이익</span><span class="iv up">2,599원 (전년 943원) <span class="ev ev-1">우수</span></span></div>
+        <div class="ir"><span class="il">재무구조</span><span class="iv">부채비율 36.3% (보수적) <span class="ev ev-2">양호</span></span></div>
+      </div>
+    </div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">💊 렉라자(lazertinib) 관련 실적 개선 배경</div>
+    <div class="g3" style="font-size:11px;margin-bottom:12px;">
+      <div style="background:#DDF0EC;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #0C5C4E;">
+        <div style="color:#0C5C4E;font-weight:600;margin-bottom:5px;">얀센 글로벌 매출 급증</div>
+        <div class="ir" style="font-size:11px;"><span class="il">2025 리브레반트+렉라자 매출</span><span>$734M(전년 $327M, +124%)</span></div>
+      </div>
+      <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #1D9E75;">
+        <div style="color:#3B6D11;font-weight:600;margin-bottom:5px;">중국 상업화 마일스톤</div>
+        <div class="ir" style="font-size:11px;"><span class="il">2025.10.31 발표</span><span>$45M(누적 마일스톤 $100M 돌파)</span></div>
+      </div>
+      <div style="background:#E6F1FB;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #185FA5;">
+        <div style="color:#0C447C;font-weight:600;margin-bottom:5px;">피하주사(SC) 제형 승인</div>
+        <div class="ir" style="font-size:11px;"><span class="il">2025.12.17 FDA 승인</span><span>리브레반트 SC(FASPRO)</span></div>
+      </div>
+    </div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">📈 매출·영업이익·순이익 3개년 추이 — 로열티 확대로 본격 이익 성장 국면</div>
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <div style="flex:1;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;text-align:center;">
+        <div style="font-size:10px;color:var(--color-text-secondary);margin-bottom:4px;">2023년</div>
+        <div style="font-size:18px;font-weight:700;color:var(--color-text-primary);">1,362억</div>
+        <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:4px;">EPS 1,816원</div>
+      </div>
+      <div style="display:flex;align-items:center;font-size:18px;color:var(--color-text-tertiary);font-weight:700;">→</div>
+      <div style="flex:1;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;text-align:center;">
+        <div style="font-size:10px;color:var(--color-text-secondary);margin-bottom:4px;">2024년</div>
+        <div style="font-size:18px;font-weight:700;color:var(--color-text-primary);">706.9억</div>
+        <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:4px;">-48.1% · EPS 943원</div>
+      </div>
+      <div style="display:flex;align-items:center;font-size:18px;color:#1D9E75;font-weight:700;">→</div>
+      <div style="flex:1;background:#1D9E75;border-radius:var(--border-radius-md);padding:10px;text-align:center;border:1.5px solid #1D9E75;">
+        <div style="font-size:10px;color:#fff;margin-bottom:4px;font-weight:600;">2025년</div>
+        <div style="font-size:18px;font-weight:700;color:#fff;">1,940.8억</div>
+        <div style="font-size:10px;color:#fff;margin-top:4px;">+174.5% · EPS 2,599원</div>
+      </div>
+    </div>
+
+    <div class="hl">
+      <div style="font-size:13px;font-weight:600;color:#3B6D11;margin-bottom:4px;">💡 사업보고서 핵심 — 렉라자 로열티 확대가 만든 구조적 이익 성장</div>
+      <div style="font-size:12px;color:#3B6D11;line-height:1.7;">2024년 일시적으로 이익이 줄었던 것은 2023년에 있었던 대규모 기술료 수익의 기저효과였으며, 2025년은 얀센의 리브레반트+렉라자 글로벌 매출이 전년 대비 2배 이상 늘고 중국 상업화 마일스톤까지 더해지며 순이익이 뚜렷하게 재성장한 해입니다. 배당성향도 53.0%에서 23.1%로 낮아져 향후 재투자·배당 여력이 함께 확대되고 있습니다.</div>
+    </div>
+  </div>
+
+  <!-- ══ 분기보고서 탭 ══ -->
+  <div id="tabQuarter" style="display:none;">
+    <svg id="yhyQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:12px;"></svg>
+
+    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:6px;letter-spacing:.03em;">📊 1Q26 연결 손익 요약 (단위: 억원 · 1분기)</div>
+    <div class="g2" style="margin-bottom:12px;">
+      <div>
+        <div class="ir"><span class="il">1Q26 연결 매출액</span><span class="iv up">5,267.8억 (▲7.2% YoY) <span class="ev ev-2">양호</span></span></div>
+        <div class="ir"><span class="il">1Q26 연결 영업이익</span><span class="iv up">88.2억 (▲37.3% YoY) <span class="ev ev-3">컨센서스 하회</span></span></div>
+      </div>
+      <div>
+        <div class="ir"><span class="il">1Q26 지배주주 순이익</span><span class="iv up">270.4억 (▲206.4% YoY) <span class="ev ev-1">우수</span></span></div>
+        <div class="ir"><span class="il">1Q26 기본EPS</span><span class="iv up">362원 (전년 동기 118원) <span class="ev ev-1">우수</span></span></div>
+      </div>
+    </div>
+
+    <div style="background:#DDF0EC;border-left:3px solid #0C5C4E;border-radius:var(--border-radius-md);padding:12px 14px;margin-bottom:12px;">
+      <div style="font-size:12px;font-weight:600;color:#0C5C4E;margin-bottom:5px;">🔑 영업이익은 기대 이하, 순이익은 오히려 급증 — "마일스톤 이연" 효과</div>
+      <div style="font-size:12px;color:var(--color-text-primary);line-height:1.7;">1분기26 영업이익(88.2억원)은 컨센서스(약 221억원)를 크게 밑돌았는데, 이는 유럽 상업화에 따른 약 $30M 규모의 마일스톤이 당초 1분기 예상에서 2분기로 이연됐고 로열티 수익도 예상보다 낮게 집계됐기 때문입니다. 반면 순이익은 영업외 항목(금융수익 등)에 힘입어 +206.4% 급증해, 영업이익과 순이익의 방향성이 엇갈리는 다소 이례적인 분기였습니다. 이연된 유럽 마일스톤은 5월 중 실제 수령이 확인되며 2분기 실적에 반영될 전망입니다.</div>
+    </div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">🏦 수익성 지표</div>
+    <div class="g2" style="margin-bottom:12px;font-size:11px;">
+      <div>
+        <div class="ir" style="font-size:11px;"><span class="il">1Q26 영업이익률</span><span>1.67% (88.2억÷5,267.8억)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">2025 연간 영업이익률</span><span>4.77% (1,043.7억÷2조 1,866억)</span></div>
+      </div>
+      <div>
+        <div class="ir" style="font-size:11px;"><span class="il">1Q26 분기 EPS</span><span>362원 (연환산 약 1,448원)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">유럽 마일스톤</span><span>$30M, 1Q26→2Q26 이연 후 5월 수령 확인</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. 기본 투자지표 -->
+<div class="card">
+  <div class="sec">3. 기본 투자지표 (Per-Share) <span class="src">📄 분기보고서 원문 · 보통주 기준</span></div>
+  <div class="g4">
+    <div class="met"><div class="ml">EPS · 2025</div><div class="mv up">2,599원</div><div class="ms">+175.6% (전년 943원)</div><div style="margin-top:5px;"><span class="ev ev-1">우수</span></div></div>
+    <div class="met"><div class="ml">1Q26 분기 EPS</div><div class="mv up">362원</div><div class="ms">+206.8% (전년 동기 118원)</div><div style="margin-top:5px;"><span class="ev ev-1">우수</span></div></div>
+    <div class="met"><div class="ml">BPS · 주당순자산</div><div class="mv">약 30,858원</div><div class="ms">자기자본(지배) 2.31조 ÷ 7,476만주</div><div style="margin-top:5px;"><span class="ev ev-2">양호</span></div></div>
+    <div class="met"><div class="ml">DPS · 주당배당금 (2025)</div><div class="mv up">600원</div><div class="ms">전기比 +20.0% · 배당성향 23.1%</div><div style="margin-top:5px;"><span class="ev ev-2">양호</span></div></div>
+  </div>
+</div>
+
+<!-- 4. 상대 투자지표 -->
+<div class="card">
+  <div class="sec">4. 상대 투자지표 — 최근 종가 69,600원 기준</div>
+
+  <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:12px;border-left:3px solid #EF9F27;">
+    <div style="font-size:12px;color:#854F0B;"><strong>💡 밸류에이션 해석:</strong> PER 26.78x, PBR 2.26x는 이익 급성장(+174.5%) 대비 오히려 낮아진 수준으로, 신고가 대비 -46.1% 조정을 거치며 밸류에이션 부담이 크게 완화됐음을 의미. <strong>① 유럽·중국 등 렉라자 해외 마일스톤·로열티의 분기별 인식 시점 ② 리브레반트 SC 등 신규 제형의 매출 기여 ③ 저마진 유통 사업 비중 축소 여부</strong>가 향후 밸류에이션 재평가의 핵심 변수.</div>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PER (2025 연결EPS)</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">69,600÷2,599(EPS)<br><span style="color:#3B6D11;">이익 +174.5% 성장에도 주가 조정으로 밸류 부담 완화</span></div>
+    <div class="ind-val">26.78x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(15x)</span><span>적정(30x)</span><span>고(50x)</span></div><div class="bar-bg"><div class="bar-f" style="width:34%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PBR</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">69,600÷30,858(BPS)<br><span style="color:#3B6D11;">PBR 2.26x — 순자산·이익 성장 대비 합리적 수준</span></div>
+    <div class="ind-val">2.26x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(1.5x)</span><span>적정(2.5x)</span><span>고(4x)</span></div><div class="bar-bg"><div class="bar-f" style="width:30%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">배당수익률</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">DPS 600원 ÷ 현재가 69,600원<br><span style="color:#5F5E5A;">0.86% — 제약업종 평균 수준, 배당성향 여력 확대 중</span></div>
+    <div class="ind-val">0.86%</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>0%</span><span>1.5%</span><span>3%</span></div><div class="bar-bg"><div class="bar-f" style="width:29%;background:#F1EFE8;"></div></div></div>
+    <span class="ev ev-3" style="min-width:58px;text-align:center;">3단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">HC / LC 수익률</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">고점(129,200, 25/11/14) 및 저점(65,000, 26/06/26) 대비 현재가<br><span style="color:#791F1F;">HC -46.13% — 실적 성장에도 큰 폭 조정, LC +7.08%로 저점권 안정화 초기</span></div>
+    <div class="ind-val">-46.1%</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>-55%</span><span>-27%</span><span>0%</span></div><div class="bar-bg"><div class="bar-f" style="width:17%;background:#FCEBEB;"></div></div></div>
+    <span class="ev ev-5" style="min-width:58px;text-align:center;">5단계</span>
+  </div>
+</div>
+
+<!-- 5. 시계열 이벤트 -->
+<div class="card">
+  <div class="sec">5. 시계열 주요 이벤트 <span class="src">📄 OpenDART 공시 원문 + 📊 Yahoo Finance 일봉 + 언론보도</span></div>
+
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2025년 10월 31일</div>
+      <div class="tl-title">중국 상업화 마일스톤 $45M 수령 — 누적 마일스톤 $100M 돌파</div>
+      <div class="tl-body">렉라자+리브레반트 병용요법의 중국 신약 허가(2025.8) 이후 상업화 개시에 따른 마일스톤을 얀센으로부터 수령, 누적 마일스톤 수익이 처음으로 1억 달러를 넘어섰다는 소식에 주가 상승 탄력 강화.</div>
+      <span class="tag tag-pos">마일스톤 확보</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2025년 11월 14일</div>
+      <div class="tl-title">52주 신고가(129,200원) — 얀센 실적 호조 반영</div>
+      <div class="tl-body">얀센의 3분기 실적 발표에서 리브레반트+렉라자가 종양학 부문 핵심 성장 동력으로 부각되고 연간 매출 가이던스가 상향되는 가운데, 2025년 연간 글로벌 매출이 전년 대비 2배 이상(약 $734M) 급증할 것이라는 기대감이 반영되며 분석기간 최고가를 기록.</div>
+      <span class="tag tag-big">52주 신고가</span><span class="tag tag-pos">실적 기대</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-pos"></div>
+      <div class="tl-date">2025년 12월 17일</div>
+      <div class="tl-title">리브레반트 피하주사(SC) 제형 FDA 승인</div>
+      <div class="tl-body">기존 정맥주사(IV) 대비 투여 편의성이 개선된 피하주사 제형(FASPRO)이 FDA 승인을 받으며 장기 처방 확대 기대감이 유지됐으나, 주가는 이미 고점을 지난 뒤 완만한 조정 국면에 진입.</div>
+      <span class="tag tag-pos">제형 개선 승인</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2026년 03월 03일~04일</div>
+      <div class="tl-title">이란 전쟁 발발 — 코스피 전반 급락</div>
+      <div class="tl-body">미국·이스라엘의 이란 공습과 호르무즈 해협 봉쇄 우려로 코스피 전체가 급락하는 가운데 유한양행도 동반 조정(101,900→92,400원).</div>
+      <span class="tag tag-neg">지정학적 충격</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2026년 05월 04일~06일</div>
+      <div class="tl-title">유럽 마일스톤 지급 지연 — 목표주가 잇단 하향</div>
+      <div class="tl-body">1분기26 영업이익이 컨센서스(약 221억원)를 크게 밑도는 88.2억원에 그친 배경으로, 유럽 상업화에 따른 약 $30M 마일스톤이 1분기에서 2분기로 이연되고 로열티 수익도 기대에 못 미친 점이 지목됨. 현대차증권(14만→12만원), 신한투자증권(17만→12만원) 등 목표주가가 잇달아 하향되며 주가는 93,100→86,600원대로 하락.</div>
+      <span class="tag tag-neg">마일스톤 지연</span><span class="tag tag-neg">목표가 하향</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-neu"></div>
+      <div class="tl-date">2026년 05월 14일</div>
+      <div class="tl-title">지연됐던 유럽 마일스톤 수령 확인 — 단기 반등</div>
+      <div class="tl-body">앞서 지연된 것으로 알려졌던 유럽 마일스톤이 실제로는 취소가 아닌 시점 이연이었음이 확인되며 주가가 84,700→89,400원으로 반등, 다만 이후 재차 약세 흐름으로 복귀.</div>
+      <span class="tag tag-pos">마일스톤 확인</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2026년 06월 26일</div>
+      <div class="tl-title">52주 최저(65,000원) — 밸류 조정 마무리 국면</div>
+      <div class="tl-body">코스피 대비 상대적으로 부진한 흐름(6개월간 코스피 급등 대비 유한양행은 하락)이 이어지며 저점을 형성. 렉라자 자체의 특허·경쟁 이슈는 확인되지 않아, 실적 성장 대비 과도했던 기대감이 조정된 결과로 해석됨.</div>
+      <span class="tag tag-neu">52주 최저</span>
+    </div>
+  </div>
+</div>
+
+<!-- 6. 투자 포인트 -->
+<div class="card">
+  <div class="sec">6. 2026년 핵심 투자 포인트</div>
+  <div class="g2">
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:7px;color:#1D9E75;">긍정 요인 (Bull)</div>
+      <div class="ir"><span class="il">2025년 순이익 +174.5%, 1Q26 +206.4% 급증하는 이익 성장세</span><span class="badge b-green">실적 고성장</span></div>
+      <div class="ir"><span class="il">얀센 리브레반트+렉라자 글로벌 매출 2배 이상 급증($734M)</span><span class="badge b-yhy">파트너십 성과</span></div>
+      <div class="ir"><span class="il">중국·유럽 등 해외 상업화 마일스톤 지속 확보</span><span class="badge b-blue">해외 확장</span></div>
+      <div class="ir"><span class="il">신고가 대비 -46.1% 조정으로 밸류 부담 크게 완화(PER 26.78x)</span><span class="badge b-blue">밸류 매력</span></div>
+      <div class="ir"><span class="il">배당성향 하락(53%→23%)으로 향후 배당 확대 여력 존재</span><span class="badge b-green">배당 여력</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:7px;color:#D85A30;">리스크 (Bear)</div>
+      <div class="ir"><span class="il">마일스톤·로열티 수익의 분기별 인식 시점 변동성(1Q26 컨센서스 하회)</span><span class="badge b-red">실적 변동성</span></div>
+      <div class="ir"><span class="il">52주 고점(25/11/14) 대비 -46.1%, 저점권 안정화 초기 단계</span><span class="badge b-amber">가격 변동성</span></div>
+      <div class="ir"><span class="il">저마진 유통 사업 비중, 자회사(임주넨코리아 등) 손실 부담</span><span class="badge b-amber">사업 믹스 부담</span></div>
+      <div class="ir"><span class="il">렉라자 로열티 의존도가 높은 이익 구조</span><span class="badge b-gray">단일 파이프라인 의존</span></div>
+      <div class="ir"><span class="il">영업이익률 절대 수준(4.77%)은 여전히 낮은 편</span><span class="badge b-gray">낮은 영업마진</span></div>
+    </div>
+  </div>
+  <div class="ib">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
+      <div><span style="color:var(--color-text-secondary);">시총(보통주):</span> <span style="font-weight:600;">~5.12조원</span></div>
+      <div><span style="color:var(--color-text-secondary);">2025 EPS:</span> <span style="font-weight:600;">2,599원 (PER 26.78x)</span></div>
+      <div><span style="color:var(--color-text-secondary);">BPS:</span> <span style="font-weight:600;">~30,858원 (PBR 2.26x)</span></div>
+      <div><span style="color:var(--color-text-secondary);">배당수익률:</span> <span style="font-weight:600;">0.86%</span></div>
+    </div>
+  </div>
+  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">⚠ 사업보고서(2025) + 분기보고서(1Q26) OpenDART 원문 + Yahoo Finance 일봉 기준 · 투자 권고가 아닙니다</div>
+</div>
+
+</div>
+
+<script>
+function switchTab(tab) {
+  const isA=tab==='annual';
+  document.getElementById('tabAnnual').style.display=isA?'':'none';
+  document.getElementById('tabQuarter').style.display=isA?'none':'';
+  const aS='flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:8px;font-size:13px;cursor:pointer;transition:all .15s;background:#0C5C4E;border:1.5px solid #0C5C4E;color:#fff;font-weight:600;';
+  const iS='flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:8px;font-size:13px;cursor:pointer;transition:all .15s;background:var(--color-background-secondary);border:1.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);font-weight:500;';
+  document.getElementById('btnAnnual').style.cssText=isA?aS:iS;
+  document.getElementById('btnQuarter').style.cssText=isA?iS:aS;
+  if(!isA && !window._qDrawn){ window._qDrawn=true; drawQtrChart(); }
+}
+
+function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+function svgEl(tag,attrs){
+  const e=document.createElementNS('http://www.w3.org/2000/svg',tag);
+  for(const k in attrs) e.setAttribute(k,attrs[k]);
+  return e;
+}
+
+function drawAnnualChart(){
+  const svg=document.getElementById('yhyAnnualChart');
+  const W=680,H=190,pL=44,pR=44,pT=16,pB=26;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  const cats=['2023년','2024년','2025년'];
+  const rev=[18590,20678,21866];
+  const oi=[570,549,1044];
+  const ni=[1362,706.9,1940.8];
+  const maxV=Math.max(...rev)*1.1;
+  const minV=0;
+  function py(v){ return pT+cH*(1-(v-minV)/(maxV-minV)); }
+  const zeroY=py(0);
+  svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:zeroY,y2:zeroY,stroke:cssVar('--color-border-tertiary'),'stroke-width':1}));
+  const revCol='#8B93A0', oiCol='#0C5C4E', niCol='#1D9E75';
+  const pts=[];
+  cats.forEach((cat,i)=>{
+    const gx=pL+i*(cW/cats.length)+(cW/cats.length)/2;
+    const barW=(cW/cats.length)*0.26;
+    const rx=gx-barW-2, ox=gx+2;
+    const rTop=py(rev[i]);
+    svg.appendChild(svgEl('rect',{x:rx,y:rTop,width:barW,height:py(0)-rTop,fill:revCol,rx:2,opacity:0.55}));
+    const oTop=py(oi[i]);
+    svg.appendChild(svgEl('rect',{x:ox,y:oTop,width:barW,height:py(0)-oTop,fill:oiCol,rx:2}));
+    const t1=svgEl('text',{x:rx+barW/2,y:rTop-4,'text-anchor':'middle','font-size':9,fill:revCol});
+    t1.textContent=Math.round(rev[i])+'억'; svg.appendChild(t1);
+    const t2=svgEl('text',{x:ox+barW/2,y:oTop-4,'text-anchor':'middle','font-size':9,fill:oiCol,'font-weight':600});
+    t2.textContent=Math.round(oi[i]*10)/10+'억'; svg.appendChild(t2);
+    const t3=svgEl('text',{x:gx,y:H-6,'text-anchor':'middle','font-size':10,fill:cssVar('--color-text-secondary')});
+    t3.textContent=cat; svg.appendChild(t3);
+    pts.push([gx, py(ni[i])]);
+  });
+  for(let i=0;i<pts.length-1;i++){
+    svg.appendChild(svgEl('line',{x1:pts[i][0],y1:pts[i][1],x2:pts[i+1][0],y2:pts[i+1][1],stroke:niCol,'stroke-width':2.5}));
+  }
+  pts.forEach((p,i)=>{
+    svg.appendChild(svgEl('circle',{cx:p[0],cy:p[1],r:4,fill:niCol}));
+    const t=svgEl('text',{x:p[0],y:p[1]-9,'text-anchor':'middle','font-size':9,fill:niCol,'font-weight':600});
+    t.textContent=Math.round(ni[i]*10)/10+'억'; svg.appendChild(t);
+  });
+  const legend=[[revCol,'매출액'],[oiCol,'영업이익'],[niCol,'지배주주순이익']];
+  legend.forEach((l,i)=>{
+    const lx=pL+i*90;
+    svg.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
+    const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:cssVar('--color-text-secondary')});
+    t.textContent=l[1]; svg.appendChild(t);
+  });
+}
+
+function drawQtrChart(){
+  const svg=document.getElementById('yhyQtrChart');
+  const W=680,H=190,pL=44,pR=20,pT=20,pB=30;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  const labels=['1Q25 영업익','1Q26 영업익','1Q25 순익','1Q26 순익'];
+  const vals=[64.2,88.2,88.3,270.4];
+  const cols=['#B7BFCB','#0C5C4E','#9FCB9A','#1D9E75'];
+  const maxV=Math.max(...vals)*1.15;
+  function py(v){ return pT+cH*(1-v/maxV); }
+  svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:py(0),y2:py(0),stroke:cssVar('--color-border-tertiary'),'stroke-width':1}));
+  labels.forEach((lab,i)=>{
+    const gx=pL+i*(cW/labels.length)+(cW/labels.length)/2;
+    const barW=(cW/labels.length)*0.5;
+    const top=py(vals[i]);
+    svg.appendChild(svgEl('rect',{x:gx-barW/2,y:top,width:barW,height:py(0)-top,fill:cols[i],rx:3}));
+    const t1=svgEl('text',{x:gx,y:top-6,'text-anchor':'middle','font-size':10,fill:cols[i],'font-weight':600});
+    t1.textContent=Math.round(vals[i]*10)/10+'억'; svg.appendChild(t1);
+    const t2=svgEl('text',{x:gx,y:H-8,'text-anchor':'middle','font-size':9,fill:cssVar('--color-text-secondary')});
+    t2.textContent=lab; svg.appendChild(t2);
+  });
+}
+drawAnnualChart();
+
+// ── SVG 캔들차트 (Yahoo Finance 일봉 실데이터) ────────────────────────
+const data=[
+{d:'2025-07-22',o:12.63,h:12.78,l:12.31,c:12.5},{d:'2025-07-23',o:12.62,h:12.66,l:12.4,c:12.52},{d:'2025-07-24',o:12.54,h:12.73,l:12.31,c:12.33},{d:'2025-07-25',o:12.33,h:12.4,l:12.22,c:12.24},{d:'2025-07-28',o:12.21,h:12.42,l:11.97,c:12.03},{d:'2025-07-29',o:12.03,h:12.12,l:11.84,c:12.04},
+{d:'2025-07-30',o:12.1,h:12.27,l:11.95,c:11.98},{d:'2025-07-31',o:12.02,h:12.17,l:11.61,c:11.81},{d:'2025-08-01',o:11.67,h:11.73,l:11.24,c:11.27},{d:'2025-08-04',o:11.29,h:11.4,l:11.21,c:11.26},{d:'2025-08-05',o:11.42,h:11.59,l:11.33,c:11.49},{d:'2025-08-06',o:11.37,h:11.53,l:11.23,c:11.45},
+{d:'2025-08-07',o:11.47,h:11.47,l:11.16,c:11.22},{d:'2025-08-08',o:11.23,h:11.39,l:11.2,c:11.2},{d:'2025-08-11',o:11.28,h:11.33,l:11.1,c:11.2},{d:'2025-08-12',o:11.33,h:11.35,l:11.1,c:11.1},{d:'2025-08-13',o:11.19,h:11.39,l:11.15,c:11.34},{d:'2025-08-14',o:11.73,h:11.75,l:11.41,c:11.44},
+{d:'2025-08-18',o:11.52,h:11.7,l:11.32,c:11.37},{d:'2025-08-19',o:11.44,h:11.6,l:11.35,c:11.38},{d:'2025-08-20',o:11.29,h:11.47,l:11.16,c:11.33},{d:'2025-08-21',o:11.37,h:11.52,l:11.36,c:11.37},{d:'2025-08-22',o:11.4,h:11.81,l:11.39,c:11.5},{d:'2025-08-25',o:11.69,h:11.78,l:11.62,c:11.68},
+{d:'2025-08-26',o:11.57,h:11.72,l:11.47,c:11.67},{d:'2025-08-27',o:11.69,h:11.7,l:11.57,c:11.62},{d:'2025-08-28',o:11.64,h:11.66,l:11.52,c:11.53},{d:'2025-08-29',o:11.6,h:11.63,l:11.35,c:11.35},{d:'2025-09-01',o:11.39,h:11.46,l:11.26,c:11.26},{d:'2025-09-02',o:11.29,h:11.43,l:11.26,c:11.4},
+{d:'2025-09-03',o:11.46,h:11.91,l:11.43,c:11.81},{d:'2025-09-04',o:11.77,h:11.83,l:11.55,c:11.81},{d:'2025-09-05',o:11.86,h:11.92,l:11.68,c:11.9},{d:'2025-09-08',o:12.37,h:12.47,l:12.1,c:12.17},{d:'2025-09-09',o:12.12,h:12.15,l:11.92,c:11.99},{d:'2025-09-10',o:11.98,h:12.03,l:11.85,c:11.95},
+{d:'2025-09-11',o:11.98,h:12.05,l:11.87,c:11.89},{d:'2025-09-12',o:11.97,h:12,l:11.83,c:11.97},{d:'2025-09-15',o:12,h:12.02,l:11.86,c:11.9},{d:'2025-09-16',o:11.86,h:11.95,l:11.76,c:11.93},{d:'2025-09-17',o:11.9,h:11.9,l:11.61,c:11.62},{d:'2025-09-18',o:11.72,h:11.81,l:11.63,c:11.64},
+{d:'2025-09-22',o:11.96,h:12.37,l:11.82,c:12.32},{d:'2025-09-23',o:12.32,h:12.47,l:12.12,c:12.31},{d:'2025-09-24',o:12.35,h:12.35,l:11.91,c:12.01},{d:'2025-09-25',o:11.96,h:11.97,l:11.76,c:11.8},{d:'2025-09-26',o:11.75,h:11.78,l:11.44,c:11.47},{d:'2025-09-29',o:11.51,h:11.65,l:11.48,c:11.63},
+{d:'2025-09-30',o:11.57,h:12.42,l:11.56,c:11.91},{d:'2025-10-01',o:11.97,h:12.21,l:11.86,c:11.98},{d:'2025-10-02',o:12.09,h:12.21,l:11.97,c:11.99},{d:'2025-10-10',o:11.99,h:12.2,l:11.9,c:12.07},{d:'2025-10-13',o:11.83,h:11.98,l:11.75,c:11.84},{d:'2025-10-14',o:11.83,h:12.18,l:11.75,c:12},
+{d:'2025-10-15',o:12.04,h:12.05,l:11.69,c:11.72},{d:'2025-10-16',o:11.77,h:11.86,l:11.65,c:11.68},{d:'2025-10-17',o:11.67,h:11.75,l:11.48,c:11.67},{d:'2025-10-20',o:11.63,h:11.83,l:11.56,c:11.79},{d:'2025-10-21',o:11.82,h:11.95,l:11.67,c:11.82},{d:'2025-10-22',o:11.76,h:12.04,l:11.71,c:11.84},
+{d:'2025-10-23',o:11.77,h:11.81,l:11.49,c:11.55},{d:'2025-10-24',o:11.58,h:11.6,l:11.38,c:11.41},{d:'2025-10-27',o:11.44,h:11.98,l:11.41,c:11.95},{d:'2025-10-28',o:12.1,h:12.16,l:11.87,c:11.95},{d:'2025-10-29',o:11.9,h:11.97,l:11.7,c:11.72},{d:'2025-10-30',o:11.8,h:11.99,l:11.59,c:11.6},
+{d:'2025-10-31',o:11.66,h:12,l:11.66,c:11.8},{d:'2025-11-03',o:11.9,h:11.9,l:11.69,c:11.81},{d:'2025-11-04',o:11.75,h:12.3,l:11.65,c:12.04},{d:'2025-11-05',o:12.22,h:12.24,l:11.5,c:11.65},{d:'2025-11-06',o:11.75,h:11.75,l:11.4,c:11.45},{d:'2025-11-07',o:11.34,h:11.84,l:11.24,c:11.53},
+{d:'2025-11-10',o:11.6,h:11.64,l:11.41,c:11.45},{d:'2025-11-11',o:11.46,h:11.54,l:11.21,c:11.24},{d:'2025-11-12',o:11.38,h:12.08,l:11.38,c:11.98},{d:'2025-11-13',o:11.99,h:12.29,l:11.88,c:12.12},{d:'2025-11-14',o:11.97,h:12.92,l:11.91,c:12.5},{d:'2025-11-17',o:12.54,h:12.55,l:12.17,c:12.3},
+{d:'2025-11-18',o:12.4,h:12.42,l:11.88,c:11.99},{d:'2025-11-19',o:12,h:12.01,l:11.53,c:11.6},{d:'2025-11-20',o:11.73,h:11.94,l:11.62,c:11.87},{d:'2025-11-21',o:11.62,h:11.78,l:11.53,c:11.67},{d:'2025-11-24',o:11.81,h:11.97,l:11.51,c:11.52},{d:'2025-11-25',o:11.62,h:11.75,l:11.42,c:11.45},
+{d:'2025-11-26',o:11.56,h:11.96,l:11.54,c:11.94},{d:'2025-11-27',o:11.93,h:12.12,l:11.87,c:12.02},{d:'2025-11-28',o:12.05,h:12.28,l:11.96,c:12.2},{d:'2025-12-01',o:12.14,h:12.23,l:12.06,c:12.19},{d:'2025-12-02',o:12.18,h:12.18,l:11.87,c:12},{d:'2025-12-03',o:12.01,h:12.05,l:11.9,c:11.94},
+{d:'2025-12-04',o:11.94,h:11.99,l:11.66,c:11.84},{d:'2025-12-05',o:11.74,h:11.81,l:11.59,c:11.73},{d:'2025-12-08',o:11.72,h:11.73,l:11.58,c:11.61},{d:'2025-12-09',o:11.7,h:11.72,l:11.59,c:11.65},{d:'2025-12-10',o:11.65,h:11.68,l:11.56,c:11.59},{d:'2025-12-11',o:11.65,h:11.75,l:11.58,c:11.6},
+{d:'2025-12-12',o:11.68,h:11.75,l:11.6,c:11.7},{d:'2025-12-15',o:11.65,h:11.73,l:11.57,c:11.67},{d:'2025-12-16',o:11.72,h:11.74,l:11.48,c:11.51},{d:'2025-12-17',o:11.51,h:11.54,l:11.35,c:11.43},{d:'2025-12-18',o:11.3,h:11.64,l:11.19,c:11.41},{d:'2025-12-19',o:11.66,h:11.72,l:11.5,c:11.64},
+{d:'2025-12-22',o:11.68,h:11.7,l:11.56,c:11.6},{d:'2025-12-23',o:11.63,h:11.73,l:11.6,c:11.62},{d:'2025-12-24',o:11.62,h:11.63,l:11.51,c:11.52},{d:'2025-12-26',o:11.5,h:11.58,l:11.26,c:11.27},{d:'2025-12-29',o:11.26,h:11.31,l:11.2,c:11.31},{d:'2025-12-30',o:11.27,h:11.31,l:11.14,c:11.24},
+{d:'2026-01-02',o:11.26,h:11.42,l:11.24,c:11.28},{d:'2026-01-05',o:11.34,h:11.55,l:11.21,c:11.45},{d:'2026-01-06',o:11.47,h:11.59,l:11.34,c:11.45},{d:'2026-01-07',o:11.36,h:11.43,l:11.22,c:11.32},{d:'2026-01-08',o:11.29,h:11.52,l:11.25,c:11.33},{d:'2026-01-09',o:11.37,h:11.38,l:11.22,c:11.33},
+{d:'2026-01-12',o:11.33,h:11.4,l:11.2,c:11.22},{d:'2026-01-13',o:11.32,h:11.34,l:11.1,c:11.14},{d:'2026-01-14',o:11.21,h:11.21,l:10.89,c:10.92},{d:'2026-01-15',o:10.95,h:10.96,l:10.72,c:10.82},{d:'2026-01-16',o:10.8,h:10.97,l:10.63,c:10.79},{d:'2026-01-19',o:10.8,h:10.81,l:10.56,c:10.59},
+{d:'2026-01-20',o:10.6,h:10.86,l:10.6,c:10.74},{d:'2026-01-21',o:10.56,h:10.57,l:10.15,c:10.28},{d:'2026-01-22',o:10.3,h:10.59,l:10.3,c:10.48},{d:'2026-01-23',o:10.48,h:10.86,l:10.48,c:10.82},{d:'2026-01-26',o:10.87,h:10.99,l:10.83,c:10.9},{d:'2026-01-27',o:10.78,h:10.91,l:10.74,c:10.83},
+{d:'2026-01-28',o:10.91,h:11.13,l:10.84,c:10.97},{d:'2026-01-29',o:11.01,h:11.17,l:10.83,c:11.02},{d:'2026-01-30',o:11.01,h:11.01,l:10.78,c:10.8},{d:'2026-02-02',o:10.64,h:10.74,l:10.44,c:10.46},{d:'2026-02-03',o:10.62,h:10.82,l:10.52,c:10.81},{d:'2026-02-04',o:10.73,h:10.92,l:10.71,c:10.88},
+{d:'2026-02-05',o:10.99,h:11.11,l:10.66,c:10.74},{d:'2026-02-06',o:10.59,h:10.6,l:10.2,c:10.48},{d:'2026-02-09',o:10.58,h:10.81,l:10.52,c:10.73},{d:'2026-02-10',o:10.7,h:10.9,l:10.69,c:10.82},{d:'2026-02-11',o:10.89,h:10.92,l:10.76,c:10.92},{d:'2026-02-12',o:10.98,h:10.98,l:10.69,c:10.94},
+{d:'2026-02-13',o:10.8,h:10.95,l:10.75,c:10.88},{d:'2026-02-19',o:10.97,h:11.32,l:10.94,c:11.29},{d:'2026-02-20',o:11.3,h:11.34,l:11.11,c:11.18},{d:'2026-02-23',o:11.2,h:11.37,l:11.11,c:11.32},{d:'2026-02-24',o:11.39,h:11.45,l:11.26,c:11.36},{d:'2026-02-25',o:11.36,h:11.37,l:11.21,c:11.31},
+{d:'2026-02-26',o:10.91,h:11.17,l:10.66,c:11.09},{d:'2026-02-27',o:11.04,h:11.07,l:10.85,c:11.02},{d:'2026-03-03',o:10.88,h:10.97,l:10.56,c:10.65},{d:'2026-03-04',o:10.19,h:10.4,l:9.16,c:9.24},{d:'2026-03-05',o:9.69,h:10.01,l:9.61,c:9.88},{d:'2026-03-06',o:9.59,h:9.98,l:9.59,c:9.93},
+{d:'2026-03-09',o:9.5,h:9.65,l:9.37,c:9.64},{d:'2026-03-10',o:9.9,h:9.91,l:9.7,c:9.85},{d:'2026-03-11',o:9.94,h:10.14,l:9.77,c:9.85},{d:'2026-03-12',o:10.44,h:10.48,l:9.86,c:9.99},{d:'2026-03-13',o:9.69,h:10.02,l:9.63,c:9.93},{d:'2026-03-16',o:9.9,h:9.93,l:9.69,c:9.74},
+{d:'2026-03-17',o:9.81,h:10.08,l:9.81,c:9.95},{d:'2026-03-18',o:10.04,h:10.1,l:9.97,c:10.02},{d:'2026-03-19',o:9.84,h:9.93,l:9.82,c:9.87},{d:'2026-03-20',o:9.89,h:10.06,l:9.87,c:10.03},{d:'2026-03-23',o:9.72,h:9.73,l:9.33,c:9.35},{d:'2026-03-24',o:9.59,h:9.61,l:9.35,c:9.56},
+{d:'2026-03-25',o:9.65,h:9.9,l:9.64,c:9.89},{d:'2026-03-26',o:10.03,h:10.12,l:9.85,c:9.9},{d:'2026-03-27',o:9.79,h:10.04,l:9.71,c:10.04},{d:'2026-03-30',o:9.67,h:9.86,l:9.63,c:9.85},{d:'2026-03-31',o:9.7,h:9.79,l:9.45,c:9.48},{d:'2026-04-01',o:9.79,h:10.02,l:9.66,c:9.95},
+{d:'2026-04-02',o:9.96,h:10.02,l:9.24,c:9.29},{d:'2026-04-03',o:9.42,h:9.48,l:9.28,c:9.28},{d:'2026-04-06',o:9.28,h:9.35,l:9.17,c:9.18},{d:'2026-04-07',o:9.2,h:9.35,l:9.09,c:9.14},{d:'2026-04-08',o:9.44,h:9.54,l:9.35,c:9.42},{d:'2026-04-09',o:9.4,h:9.47,l:9.26,c:9.38},
+{d:'2026-04-10',o:9.39,h:9.41,l:9.28,c:9.29},{d:'2026-04-13',o:9.2,h:9.22,l:9.12,c:9.21},{d:'2026-04-14',o:9.29,h:9.42,l:9.29,c:9.36},{d:'2026-04-15',o:9.52,h:9.79,l:9.51,c:9.72},{d:'2026-04-16',o:9.82,h:9.85,l:9.75,c:9.77},{d:'2026-04-17',o:9.8,h:9.81,l:9.67,c:9.75},
+{d:'2026-04-20',o:9.79,h:9.8,l:9.68,c:9.71},{d:'2026-04-21',o:9.71,h:9.77,l:9.63,c:9.65},{d:'2026-04-22',o:9.6,h:9.62,l:9.5,c:9.51},{d:'2026-04-23',o:9.64,h:9.65,l:9.4,c:9.47},{d:'2026-04-24',o:9.47,h:9.56,l:9.46,c:9.48},{d:'2026-04-27',o:9.53,h:9.54,l:9.4,c:9.41},
+{d:'2026-04-28',o:9.42,h:9.45,l:9.36,c:9.37},{d:'2026-04-29',o:9.44,h:9.44,l:9.32,c:9.32},{d:'2026-04-30',o:9.32,h:9.34,l:9.16,c:9.16},{d:'2026-05-04',o:9.31,h:9.31,l:9.04,c:9.05},{d:'2026-05-06',o:9.01,h:9.01,l:8.78,c:8.78},{d:'2026-05-07',o:8.87,h:8.98,l:8.78,c:8.8},
+{d:'2026-05-08',o:8.89,h:8.91,l:8.61,c:8.66},{d:'2026-05-11',o:8.59,h:8.65,l:8.45,c:8.46},{d:'2026-05-12',o:8.49,h:8.62,l:8.24,c:8.49},{d:'2026-05-13',o:8.7,h:8.81,l:8.33,c:8.47},{d:'2026-05-14',o:8.47,h:8.98,l:8.44,c:8.94},{d:'2026-05-15',o:9.02,h:9.05,l:8.51,c:8.6},
+{d:'2026-05-18',o:8.59,h:8.61,l:8.18,c:8.34},{d:'2026-05-19',o:8.25,h:8.41,l:8.04,c:8.13},{d:'2026-05-20',o:8.15,h:8.29,l:8,c:8.15},{d:'2026-05-21',o:8.25,h:8.46,l:8.17,c:8.41},{d:'2026-05-22',o:8.57,h:8.96,l:8.5,c:8.83},{d:'2026-05-26',o:8.96,h:8.99,l:8.55,c:8.58},
+{d:'2026-05-27',o:8.62,h:8.75,l:8.5,c:8.52},{d:'2026-05-28',o:8.53,h:8.55,l:8.13,c:8.36},{d:'2026-05-29',o:8.39,h:8.55,l:8.25,c:8.5},{d:'2026-06-01',o:8.42,h:8.48,l:8.26,c:8.34},{d:'2026-06-02',o:8.3,h:8.32,l:8.05,c:8.15},{d:'2026-06-04',o:8.23,h:8.29,l:8.01,c:8.01},
+{d:'2026-06-05',o:8.07,h:8.19,l:7.7,c:7.75},{d:'2026-06-08',o:7.4,h:7.47,l:7.17,c:7.24},{d:'2026-06-09',o:7.25,h:7.77,l:7.18,c:7.67},{d:'2026-06-10',o:7.52,h:7.73,l:7.42,c:7.69},{d:'2026-06-11',o:7.48,h:7.66,l:7.26,c:7.64},{d:'2026-06-12',o:7.77,h:7.9,l:7.7,c:7.72},
+{d:'2026-06-15',o:7.89,h:7.96,l:7.82,c:7.89},{d:'2026-06-16',o:7.9,h:7.97,l:7.81,c:7.83},{d:'2026-06-17',o:7.9,h:8.12,l:7.66,c:7.91},{d:'2026-06-18',o:8,h:8.01,l:7.74,c:7.82},{d:'2026-06-19',o:7.76,h:7.8,l:7.46,c:7.61},{d:'2026-06-22',o:7.56,h:7.59,l:7.3,c:7.34},
+{d:'2026-06-23',o:7.25,h:7.43,l:6.95,c:6.98},{d:'2026-06-24',o:6.94,h:7.31,l:6.9,c:7.23},{d:'2026-06-25',o:7.19,h:7.46,l:7.12,c:7.13},{d:'2026-06-26',o:7.06,h:7.1,l:6.5,c:6.64},{d:'2026-06-29',o:6.65,h:7.4,l:6.65,c:7.38},{d:'2026-06-30',o:7.33,h:7.34,l:7,c:7.02},
+{d:'2026-07-01',o:7.09,h:7.11,l:6.88,c:7.05},{d:'2026-07-02',o:7.04,h:7.28,l:6.81,c:7.01},{d:'2026-07-03',o:7.05,h:7.12,l:6.85,c:7.04},{d:'2026-07-06',o:7.05,h:7.11,l:6.83,c:6.96},{d:'2026-07-07',o:6.9,h:7.04,l:6.83,c:7.03},{d:'2026-07-08',o:7.03,h:7.12,l:6.66,c:6.91},
+{d:'2026-07-09',o:6.86,h:6.98,l:6.73,c:6.74},{d:'2026-07-10',o:6.79,h:7.03,l:6.72,c:6.85},{d:'2026-07-13',o:6.86,h:7.03,l:6.75,c:6.81},{d:'2026-07-14',o:6.81,h:6.83,l:6.62,c:6.67},{d:'2026-07-15',o:6.75,h:7.02,l:6.75,c:6.95},{d:'2026-07-16',o:6.95,h:7.1,l:6.82,c:7.08},
+{d:'2026-07-20',o:7.08,h:7.13,l:6.82,c:6.92},{d:'2026-07-21',o:6.8,h:7.01,l:6.79,c:6.96},
+];
+
+renderCandleChart({svgId:'yhySvg', controlsId:'yhyChartControls', data: data});
+</script>
