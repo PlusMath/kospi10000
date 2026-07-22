@@ -1,0 +1,515 @@
+<link rel="stylesheet" href="../css/global.css">
+<script src="../js/chart-common.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
+.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:18px;font-variant-numeric:tabular-nums;}
+.sec{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:12px;}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:14px;}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px;text-align:center;}
+.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
+.mv{font-size:14px;font-weight:600;color:var(--color-text-primary);font-variant-numeric:tabular-nums;}
+.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
+.up{color:#1D9E75;}.dn{color:#D85A30;}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
+.b-green{background:#EAF3DE;color:#3B6D11;}.b-amber{background:#FAEEDA;color:#854F0B;}
+.b-red{background:#FCEBEB;color:#A32D2D;}.b-blue{background:#E6F1FB;color:#185FA5;}
+.b-gray{background:#F1EFE8;color:#5F5E5A;}.b-gsh{background:#FBE3DC;color:#A23A1F;}
+.sig{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
+.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
+.ir:last-child{border-bottom:none;}
+.il{color:var(--color-text-secondary);}.iv{font-weight:600;color:var(--color-text-primary);display:flex;align-items:center;gap:6px;font-variant-numeric:tabular-nums;}
+.src{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-tertiary);margin-left:4px;}
+.hl{background:#EAF3DE;border-left:3px solid #1D9E75;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.warn{background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ev{font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;}
+.ev-1{background:#E6F1FB;color:#0C447C;}.ev-2{background:#EAF3DE;color:#27500A;}
+.ev-3{background:#F1EFE8;color:#444441;}.ev-4{background:#FAEEDA;color:#633806;}
+.ev-5{background:#FCEBEB;color:#791F1F;}
+.ind-row{display:flex;align-items:center;padding:8px 0;border-bottom:.5px solid var(--color-border-tertiary);gap:10px;}
+.ind-row:last-child{border-bottom:none;}
+.ind-nm{font-size:13px;font-weight:600;color:var(--color-text-primary);min-width:150px;}
+.ind-val{font-size:14px;font-weight:600;color:var(--color-text-primary);min-width:80px;text-align:right;font-variant-numeric:tabular-nums;}
+.bar-bg{background:var(--color-border-tertiary);border-radius:4px;height:7px;}
+.bar-f{border-radius:4px;height:7px;}
+.tl{position:relative;padding-left:28px;}
+.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--color-border-tertiary);border-radius:2px;}
+.tl-item{position:relative;margin-bottom:18px;}
+.tl-item:last-child{margin-bottom:0;}
+.tl-dot{position:absolute;left:-24px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid var(--color-background-primary);}
+.dot-big{background:#A23A1F;}.dot-pos{background:#1D9E75;}
+.dot-neg{background:#D85A30;}.dot-neu{background:#888780;}
+.tl-date{font-size:11px;font-weight:600;color:var(--color-text-tertiary);margin-bottom:3px;}
+.tl-title{font-size:13px;font-weight:600;color:var(--color-text-primary);margin-bottom:3px;line-height:1.4;}
+.tl-body{font-size:12px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:5px;}
+.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;margin-right:4px;}
+.tag-big{background:#FBE3DC;color:#A23A1F;}.tag-pos{background:#EAF3DE;color:#3B6D11;}
+.tag-neg{background:#FCEBEB;color:#791F1F;}.tag-neu{background:#F1EFE8;color:#444441;}
+button:focus-visible,a:focus-visible{outline:2px solid #A23A1F;outline-offset:2px;}
+</style>
+
+<div style="padding:1rem 0;" class="box">
+
+<!-- 헤더 -->
+<div style="margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+  <h2>GS (078930)</h2>
+  <span class="badge b-gsh">코스피 · GS그룹 지주회사</span>
+  <span class="badge b-gray">GS칼텍스(정유)·GS리테일·GS건설 등 지배</span>
+  <span class="src">📄 OpenDART 공시 원문(Open API) + 📊 Yahoo Finance 시세</span>
+</div>
+<p class="sub">최근 종가 82,500원 (2026-07-21, 전일대비 -0.84%) · 52주 최고 87,600원 (26/07/20) · 52주 최저 42,800원 (25/08/20) · LC +92.76% · HC -5.82%</p>
+
+<!-- 핵심 지표 배너 -->
+<div style="background:#FBE3DC;border-left:3px solid #A23A1F;border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:14px;">
+  <div style="font-size:12px;color:#A23A1F;line-height:1.6;"><strong>🔑 GS 투자의 핵심:</strong> GS그룹 지주회사로 GS칼텍스(정유, 지분 50%)·GS리테일·GS건설 등을 지배. 2024년 순이익이 전년 대비 -56.4% 급감(GS칼텍스 정제마진 정상화)했다가, 2025년 코리아 밸류업 프로그램 참여(주주환원 목표 40%+)와 GS건설의 흑자전환 지속으로 순이익 +40.9% 회복. 결정적으로 <strong>2026년 초 미국-이란 전쟁 격화로 정제마진이 배럴당 $40 이상까지 폭등하며 1분기26 지배주주순이익이 전년 대비 +253.3% 폭증</strong>, 주가는 52주 저점(25/08/20) 대비 두 배 가까이(+92.8%) 폭등해 52주 신고가(87,600원, 26/07/20)를 경신. 다만 정제마진 정상화 시 "2분기 실적 절벽" 우려가 상존.</div>
+</div>
+
+<div class="g4">
+  <div class="met"><div class="ml">최근 종가 (07/21)</div><div class="mv up">82,500원</div><div class="ms dn">-0.84% · 고점 대비 -5.8%</div></div>
+  <div class="met"><div class="ml">2025 연결매출</div><div class="mv dn">25조 1,841억</div><div class="ms dn">-0.3%</div></div>
+  <div class="met"><div class="ml">2025 지배주주순이익</div><div class="mv up">7,987.4억</div><div class="ms up">+40.9%</div></div>
+  <div class="met"><div class="ml">1Q26 지배주주순이익</div><div class="mv up">7,231.6억</div><div class="ms up">+253.3% (정제마진 폭등)</div></div>
+</div>
+
+<!-- 1. 기술적 분석 -->
+<div class="card">
+  <div class="sec">1. 기술적 분석 — 일봉 기준 (2025.07.22 ~ 2026.07.21, 242거래일)</div>
+  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;">
+    최고 87,600원 (26/07/20) → 최저 42,800원 (25/08/20) → 최근 종가 82,500원 (26/07/21) · LC +92.76% · HC -5.82%
+  </div>
+  <div id="gshChartControls" class="kc-controls"></div>
+  <svg id="gshSvg" viewBox="0 0 720 240" width="100%" style="display:block;margin-bottom:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:4px;"></svg>
+
+  <div style="font-size:13px;font-weight:600;margin-bottom:8px;">📊 구간별 분석 <span class="src">📊 Yahoo Finance 일봉</span></div>
+  <div class="g4" style="font-size:11px;margin-bottom:12px;">
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:var(--color-text-primary);font-weight:600;margin-bottom:3px;">25.07~25.08 — 저점 형성</div>
+      <div style="color:var(--color-text-secondary);line-height:1.6;">지주사 저평가 국면 지속<br>8/20 52주 최저(42,800원)</div>
+    </div>
+    <div style="background:#FBE3DC;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#A23A1F;font-weight:600;margin-bottom:3px;">25.09~26.02 — 밸류업 재평가</div>
+      <div style="color:#A23A1F;line-height:1.6;">코리아 밸류업 참여(8월)<br>GS건설 흑자기조 정착<br>지주사 할인 축소 랠리</div>
+    </div>
+    <div style="background:#FCEBEB;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#A32D2D;font-weight:600;margin-bottom:3px;">26.03 — 이란 전쟁 급락(일시)</div>
+      <div style="color:#A32D2D;line-height:1.6;">3/4 코스피 전반 급락<br>75,100→61,400원대<br>이후 정제마진 수혜로 재상승</div>
+    </div>
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#3B6D11;font-weight:600;margin-bottom:3px;">26.04~07 — 정제마진 폭등 랠리</div>
+      <div style="color:#3B6D11;line-height:1.6;">GS칼텍스 정제마진 급등<br>1Q26 순이익 +253.3%<br>7/20 52주 신고가(87,600원)</div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;">
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:7px;">이동평균선 현황 (07/21 기준)</div>
+      <div class="ir"><span class="il">5일선 (81,860원)</span><span class="badge b-green">가격 소폭 상회</span></div>
+      <div class="ir"><span class="il">20일선 (74,785원)</span><span class="badge b-green">가격 상회</span></div>
+      <div class="ir"><span class="il">60일선 (74,963원)</span><span class="badge b-green">가격 상회</span></div>
+      <div class="ir"><span class="il">120일선 (71,395원)</span><span class="badge b-green">가격 상회</span></div>
+      <div class="ir"><span class="il">배열</span><span class="badge b-blue">전 구간 정배열 · 신고가 경신 랠리 지속</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:7px;">핵심 가격대</div>
+      <div class="ir"><span class="il">52주 최고 (신고가)</span><span style="font-weight:600;color:#A23A1F;">87,600원 (26/07/20)</span></div>
+      <div class="ir"><span class="il">52주 최저</span><span style="font-weight:600;color:#D85A30;">42,800원 (25/08/20)</span></div>
+      <div class="ir"><span class="il">최근 종가</span><span style="font-weight:600;color:var(--color-text-primary);">82,500원 (07/21)</span></div>
+      <div class="ir"><span class="il">저점 대비 상승폭</span><span style="font-weight:600;color:#1D9E75;">+92.8%</span></div>
+      <div class="ir"><span class="il">LC / HC</span><span style="font-weight:600;">+92.76% / -5.82%</span></div>
+    </div>
+  </div>
+
+  <div class="sig">
+    <span class="badge b-green">52주 저점(25/08/20) 대비 +92.8% 거의 2배 폭등</span>
+    <span class="badge b-amber">신고가(26/07/20) 근접, 조정 가능성 상존</span>
+    <span class="badge b-gsh">정제마진 폭등發 일회성 vs 밸류업 구조적 재평가</span>
+  </div>
+</div>
+
+<!-- 2. 기본적 분석 탭 -->
+<div class="card">
+  <div class="sec">2. 기본적 분석 — 공시 원문 <span class="src">📄 사업보고서(2025) + 분기보고서 1Q(2026.03)</span></div>
+
+  <div class="warn" style="margin-bottom:14px;">
+    <div style="font-size:12px;font-weight:600;color:#854F0B;margin-bottom:4px;">⚠️ 1분기26 순이익 급증은 GS칼텍스 정제마진 폭등에 따른 일회성 성격 강함</div>
+    <div style="font-size:12px;color:#854F0B;line-height:1.7;">2026년 초 미국·이스라엘의 이란 공습과 호르무즈 해협 봉쇄 위협으로 국제유가(WTI)가 2월 중순까지 약 20% 급등했고, 정제마진이 배럴당 $40을 상회하는 이례적 수준까지 치솟았습니다. 지분 50%를 보유한 GS칼텍스의 1분기26 영업이익이 전년 동기 대비 약 +1,310% 급증한 것으로 추정되며, 저가에 매입한 원유 재고를 고가에 판매하는 재고평가이익과 래깅 효과까지 더해지며 GS 지배주주순이익이 +253.3% 폭증했습니다. 다만 이는 지정학적 이벤트에 따른 일시적 정제마진 급등이 주 요인으로, 정세가 안정되면 "2분기 실적 절벽" 우려가 회사 안팎에서 제기되고 있습니다.</div>
+  </div>
+
+  <div style="display:flex;gap:8px;margin-bottom:14px;">
+    <button id="btnAnnual" onclick="switchTab('annual')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);border:1.5px solid #A23A1F;background:#A23A1F;color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;">
+      📄 사업보고서 <span style="font-size:11px;opacity:.85;font-weight:400;">2025년 연간</span>
+    </button>
+    <button id="btnQuarter" onclick="switchTab('quarter')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);border:1.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-secondary);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;">
+      📋 분기보고서 <span style="font-size:11px;opacity:.85;font-weight:400;">1분기 · 2026.03</span>
+    </button>
+  </div>
+
+  <!-- ══ 사업보고서 탭 ══ -->
+  <div id="tabAnnual">
+    <svg id="gshAnnualChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:12px;"></svg>
+
+    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:6px;letter-spacing:.03em;">📊 연결 손익 요약 (단위: 억원 · 2025년)</div>
+    <div class="g2" style="margin-bottom:12px;">
+      <div>
+        <div class="ir"><span class="il">연결 매출액</span><span class="iv dn">25조 1,841억 (▼0.3%) <span class="ev ev-3">보합</span></span></div>
+        <div class="ir"><span class="il">연결 영업이익</span><span class="iv dn">2조 9,361억 (▼4.6%) <span class="ev ev-3">참고</span></span></div>
+        <div class="ir"><span class="il">지배주주 순이익</span><span class="iv up">7,987.4억 (▲40.9%) <span class="ev ev-1">우수</span></span></div>
+        <div class="ir"><span class="il">별도(지주사) 순이익</span><span class="iv dn">2,499.0억 (▼55.5%) <span class="ev ev-3">참고</span></span></div>
+      </div>
+      <div>
+        <div class="ir"><span class="il">현금배당(보통주)</span><span class="iv up">DPS 3,000원 (전기比 +11.1%) <span class="ev ev-2">양호</span></span></div>
+        <div class="ir"><span class="il">현금배당성향(연결)</span><span class="iv">35.60% (전기 45.10%) <span class="ev ev-3">참고</span></span></div>
+        <div class="ir"><span class="il">기본주당순이익</span><span class="iv up">8,435원 (전년 5,988원) <span class="ev ev-1">우수</span></span></div>
+        <div class="ir"><span class="il">자기자본(지배지분)</span><span class="iv">14조 7,033억 <span class="ev ev-2">양호</span></span></div>
+      </div>
+    </div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">🏭 실적 변동의 핵심 배경</div>
+    <div class="g3" style="font-size:11px;margin-bottom:12px;">
+      <div style="background:#FBE3DC;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #A23A1F;">
+        <div style="color:#A23A1F;font-weight:600;margin-bottom:5px;">GS칼텍스 정제마진 변동</div>
+        <div class="ir" style="font-size:11px;"><span class="il">2023년</span><span>전년 대비 -58% 정상화</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">2026년초</span><span>$40+/배럴 이례적 급등</span></div>
+      </div>
+      <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #1D9E75;">
+        <div style="color:#3B6D11;font-weight:600;margin-bottom:5px;">GS건설 흑자 정착</div>
+        <div class="ir" style="font-size:11px;"><span class="il">2023년(붕괴사고)</span><span>영업손실 -3,879억</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">2024년 이후</span><span>영업이익 +2,862억 흑자전환</span></div>
+      </div>
+      <div style="background:#E6F1FB;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #185FA5;">
+        <div style="color:#0C447C;font-weight:600;margin-bottom:5px;">코리아 밸류업 참여</div>
+        <div class="ir" style="font-size:11px;"><span class="il">2025.08 계획 공시</span><span>3개년 순이익 40%+ 환원</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">2026.05 자사주 소각</span><span>보통주+우선주 약 18.6억원</span></div>
+      </div>
+    </div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">📈 지배주주순이익 3개년 추이 — 정유 계열사 실적 변동에 좌우되는 이익 구조</div>
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <div style="flex:1;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;text-align:center;">
+        <div style="font-size:10px;color:var(--color-text-secondary);margin-bottom:4px;">2023년</div>
+        <div style="font-size:18px;font-weight:700;color:var(--color-text-primary);">1조 3,007억</div>
+        <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:4px;">우크라전쟁발 고마진 기저 · EPS 13,737원</div>
+      </div>
+      <div style="display:flex;align-items:center;font-size:18px;color:#D85A30;font-weight:700;">→</div>
+      <div style="flex:1;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;text-align:center;">
+        <div style="font-size:10px;color:var(--color-text-secondary);margin-bottom:4px;">2024년</div>
+        <div style="font-size:18px;font-weight:700;color:#D85A30;">5,670.2억</div>
+        <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:4px;">-56.4% · 정제마진 정상화 · EPS 5,988원</div>
+      </div>
+      <div style="display:flex;align-items:center;font-size:18px;color:#1D9E75;font-weight:700;">→</div>
+      <div style="flex:1;background:#1D9E75;border-radius:var(--border-radius-md);padding:10px;text-align:center;border:1.5px solid #1D9E75;">
+        <div style="font-size:10px;color:#fff;margin-bottom:4px;font-weight:600;">2025년</div>
+        <div style="font-size:18px;font-weight:700;color:#fff;">7,987.4억</div>
+        <div style="font-size:10px;color:#fff;margin-top:4px;">+40.9% · GS건설 흑자기여 · EPS 8,435원</div>
+      </div>
+    </div>
+
+    <div class="hl">
+      <div style="font-size:13px;font-weight:600;color:#3B6D11;margin-bottom:4px;">💡 사업보고서 핵심 — 정유 계열사 실적 변동성이 지주사 이익의 최대 변수</div>
+      <div style="font-size:12px;color:#3B6D11;line-height:1.7;">GS의 연결 순이익은 지분 50%를 보유한 GS칼텍스의 정제마진 사이클에 크게 좌우됩니다. 2023년 우크라이나 전쟁발 고마진 기저효과가 소멸한 2024년 순이익이 반토막났고, 2025년에는 GS건설의 흑자 정착이 더해지며 회복됐습니다. 여기에 2025년 8월 코리아 밸류업 프로그램 참여를 계기로 주주환원 정책이 강화되며 전통적인 "지주사 할인"이 축소되는 재평가 국면이 진행 중입니다.</div>
+    </div>
+  </div>
+
+  <!-- ══ 분기보고서 탭 ══ -->
+  <div id="tabQuarter" style="display:none;">
+    <svg id="gshQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:12px;"></svg>
+
+    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:6px;letter-spacing:.03em;">📊 1Q26 연결 손익 요약 (단위: 억원 · 1분기)</div>
+    <div class="g2" style="margin-bottom:12px;">
+      <div>
+        <div class="ir"><span class="il">1Q26 연결 매출액</span><span class="iv up">6조 8,423억 (▲9.7% YoY) <span class="ev ev-2">양호</span></span></div>
+        <div class="ir"><span class="il">1Q26 연결 영업이익</span><span class="iv up">1조 2,586억 (▲57.3% YoY) <span class="ev ev-1">우수</span></span></div>
+      </div>
+      <div>
+        <div class="ir"><span class="il">1Q26 지배주주 순이익</span><span class="iv up">7,231.6억 (▲253.3% YoY) <span class="ev ev-1">우수</span></span></div>
+        <div class="ir"><span class="il">1Q26 기본EPS</span><span class="iv up">7,638원 (전년 동기 2,162원) <span class="ev ev-1">우수</span></span></div>
+      </div>
+    </div>
+
+    <div style="background:#FBE3DC;border-left:3px solid #A23A1F;border-radius:var(--border-radius-md);padding:12px 14px;margin-bottom:12px;">
+      <div style="font-size:12px;font-weight:600;color:#A23A1F;margin-bottom:5px;">🔑 지정학적 이벤트發 정제마진 급등이 실적 서프라이즈의 본질</div>
+      <div style="font-size:12px;color:var(--color-text-primary);line-height:1.7;">1분기26 순이익 급증은 미국-이란 전쟁으로 인한 정제마진 폭등(배럴당 $40+)과 저가 매입 원유 재고의 재고평가이익이 결합된 결과로, GS리테일·GS EPS 등 다른 계열사의 기여는 상대적으로 제한적이었던 것으로 보입니다. 이러한 정제마진 수준은 2022~2023년 우크라이나 전쟁 이후 최고치에 해당하는 이례적인 수치로, 지정학적 리스크가 완화되면 정제마진도 정상화될 가능성이 높아 2분기 이후 이익 규모의 지속가능성을 지켜볼 필요가 있습니다.</div>
+    </div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">🏦 수익성 지표</div>
+    <div class="g2" style="margin-bottom:12px;font-size:11px;">
+      <div>
+        <div class="ir" style="font-size:11px;"><span class="il">1Q26 영업이익률</span><span>18.40% (1조 2,586억÷6조 8,423억)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">2025 연간 영업이익률</span><span>11.66% (2조 9,361억÷25조 1,841억)</span></div>
+      </div>
+      <div>
+        <div class="ir" style="font-size:11px;"><span class="il">1Q26 분기 EPS</span><span>7,638원 (연환산 약 30,552원)</span></div>
+        <div class="ir" style="font-size:11px;"><span class="il">연환산 vs 2025 EPS</span><span>30,552원 vs 8,435원 (일회성 급등 반영)</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. 기본 투자지표 -->
+<div class="card">
+  <div class="sec">3. 기본 투자지표 (Per-Share) <span class="src">📄 분기보고서 원문 · 보통주 기준</span></div>
+  <div class="g4">
+    <div class="met"><div class="ml">EPS · 2025</div><div class="mv up">8,435원</div><div class="ms">+40.9% (전년 5,988원)</div><div style="margin-top:5px;"><span class="ev ev-1">우수</span></div></div>
+    <div class="met"><div class="ml">1Q26 분기 EPS</div><div class="mv up">7,638원</div><div class="ms">+253.3% (전년 동기 2,162원)</div><div style="margin-top:5px;"><span class="ev ev-1">우수(일회성 주의)</span></div></div>
+    <div class="met"><div class="ml">BPS · 주당순자산</div><div class="mv">약 155,304원</div><div class="ms">지배지분 14.70조 ÷ 9,468만주</div><div style="margin-top:5px;"><span class="ev ev-2">양호</span></div></div>
+    <div class="met"><div class="ml">DPS · 주당배당금 (2025)</div><div class="mv up">3,000원</div><div class="ms">전기比 +11.1% · 배당성향 35.6%</div><div style="margin-top:5px;"><span class="ev ev-2">양호</span></div></div>
+  </div>
+</div>
+
+<!-- 4. 상대 투자지표 -->
+<div class="card">
+  <div class="sec">4. 상대 투자지표 — 최근 종가 82,500원 기준</div>
+
+  <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:12px;border-left:3px solid #EF9F27;">
+    <div style="font-size:12px;color:#854F0B;"><strong>💡 밸류에이션 해석:</strong> PER 9.78x, PBR 0.53배로 지주회사 특유의 저평가("지주사 할인")가 여전히 상당 부분 남아있는 수준. 1분기26의 정제마진 급등 효과가 소멸할 경우 이익 정상화에 따른 밸류에이션 재조정 가능성 존재. <strong>① 정제마진의 정상화 속도 ② GS건설 흑자 기조의 지속성 ③ 코리아 밸류업 정책의 지속 이행 여부</strong>가 핵심 변수.</div>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PER (2025 연결EPS)</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">82,500÷8,435(EPS)<br><span style="color:#3B6D11;">지주사 할인 반영된 낮은 밸류, 1Q26 연환산 시 2.70배까지 하락</span></div>
+    <div class="ind-val">9.78x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(6x)</span><span>적정(10x)</span><span>고(15x)</span></div><div class="bar-bg"><div class="bar-f" style="width:39%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PBR</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">82,500÷155,304(BPS)<br><span style="color:#3B6D11;">PBR 0.53x — 순자산가치 대비 뚜렷한 저평가, 전형적 지주사 할인</span></div>
+    <div class="ind-val">0.53x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(0.3x)</span><span>적정(0.6x)</span><span>고(1x)</span></div><div class="bar-bg"><div class="bar-f" style="width:38%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">배당수익률</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">DPS 3,000원 ÷ 현재가 82,500원<br><span style="color:#3B6D11;">3.64% — 코스피 평균을 크게 상회하는 고배당</span></div>
+    <div class="ind-val">3.64%</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>0%</span><span>3%</span><span>6%</span></div><div class="bar-bg"><div class="bar-f" style="width:61%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-1" style="min-width:58px;text-align:center;">1단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">HC / LC 수익률</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">고점(87,600, 26/07/20) 및 저점(42,800, 25/08/20) 대비 현재가<br><span style="color:#3B6D11;">LC +92.76% — 저점 대비 거의 2배, HC -5.82% — 신고가 근접권 유지</span></div>
+    <div class="ind-val">-5.8%</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>-15%</span><span>-7.5%</span><span>0%</span></div><div class="bar-bg"><div class="bar-f" style="width:61%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
+  </div>
+</div>
+
+<!-- 5. 시계열 이벤트 -->
+<div class="card">
+  <div class="sec">5. 시계열 주요 이벤트 <span class="src">📄 OpenDART 공시 원문 + 📊 Yahoo Finance 일봉 + 언론보도</span></div>
+
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-dot dot-neu"></div>
+      <div class="tl-date">2025년 08월 20일</div>
+      <div class="tl-title">52주 최저(42,800원) — 지주사 저평가 국면</div>
+      <div class="tl-body">2024년 순이익 급감(-56.4%)의 여파와 전형적인 지주사 할인이 반영되며 분석기간 최저치를 기록.</div>
+      <span class="tag tag-neu">52주 최저</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2025년 08월 (하순)</div>
+      <div class="tl-title">코리아 밸류업 프로그램 참여 발표</div>
+      <div class="tl-body">GS가 국내 10대 그룹 중 마지막으로 밸류업 공시를 완료, 2025~2027년 3개년 평균 순이익의 40% 이상을 주주환원(배당+자사주)하겠다는 목표를 제시하며 지주사 할인 축소 기대감이 부각되기 시작.</div>
+      <span class="tag tag-big">밸류업 참여</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2026년 03월 03일~04일</div>
+      <div class="tl-title">이란 전쟁 발발 — 코스피 전반 급락(일시적)</div>
+      <div class="tl-body">미국·이스라엘의 이란 공습에 따른 지정학적 충격으로 코스피가 급락(3/4)하는 가운데 GS도 동반 조정(75,100→61,400원). 다만 이는 이후 정제마진 폭등 랠리로 이어지는 같은 사건의 초기 국면이었음.</div>
+      <span class="tag tag-neg">지정학적 충격(일시)</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2026년 04월~07월</div>
+      <div class="tl-title">정제마진 폭등 랠리 — 1분기26 순이익 +253.3%, 52주 신고가</div>
+      <div class="tl-body">이란 전쟁 장기화로 정제마진이 배럴당 $40 이상까지 치솟으며 GS칼텍스의 1분기26 영업이익이 전년 대비 약 +1,310% 급증한 것으로 추정, GS의 지배주주순이익도 +253.3% 폭증. 이 실적을 반영해 주가가 지속 상승하며 7/20 52주 신고가(87,600원)를 경신.</div>
+      <span class="tag tag-big">52주 신고가</span><span class="tag tag-pos">정제마진 폭등</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-pos"></div>
+      <div class="tl-date">2026년 05월 14일</div>
+      <div class="tl-title">자사주 소각 — 밸류업 이행 재확인</div>
+      <div class="tl-body">보통주·우선주 합산 약 18.6억원 규모의 자사주를 소각, 밸류업 정책에 따른 주주환원 이행을 재확인.</div>
+      <span class="tag tag-pos">자사주 소각</span>
+    </div>
+  </div>
+</div>
+
+<!-- 6. 투자 포인트 -->
+<div class="card">
+  <div class="sec">6. 2026년 핵심 투자 포인트</div>
+  <div class="g2">
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:7px;color:#1D9E75;">긍정 요인 (Bull)</div>
+      <div class="ir"><span class="il">코리아 밸류업 참여로 주주환원 정책 강화, 지주사 할인 축소 재평가</span><span class="badge b-green">밸류업 재평가</span></div>
+      <div class="ir"><span class="il">GS건설 흑자 정착, 2023년 붕괴사고 여파 완전 해소</span><span class="badge b-gsh">계열사 정상화</span></div>
+      <div class="ir"><span class="il">배당수익률 3.64%로 코스피 평균 상회하는 고배당</span><span class="badge b-green">고배당 매력</span></div>
+      <div class="ir"><span class="il">PBR 0.53배로 순자산가치 대비 뚜렷한 저평가 지속</span><span class="badge b-blue">밸류 매력</span></div>
+      <div class="ir"><span class="il">52주 저점 대비 +92.8% 폭등, 정배열 유지되는 상승 추세</span><span class="badge b-blue">추세 강세</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:7px;color:#D85A30;">리스크 (Bear)</div>
+      <div class="ir"><span class="il">1분기26 실적 급증은 정제마진 폭등에 따른 일회성 성격, "2분기 실적 절벽" 우려</span><span class="badge b-red">일회성 이익 리스크</span></div>
+      <div class="ir"><span class="il">지정학적 리스크(이란 전쟁) 완화 시 정제마진 정상화 가능성</span><span class="badge b-red">유가·마진 변동성</span></div>
+      <div class="ir"><span class="il">52주 신고가 근접권, 단기 과열에 따른 조정 가능성</span><span class="badge b-amber">가격 부담</span></div>
+      <div class="ir"><span class="il">GS칼텍스 실적 사이클 의존도가 높은 이익 구조</span><span class="badge b-amber">단일 계열사 의존</span></div>
+      <div class="ir"><span class="il">연결 매출·영업이익은 오히려 소폭 감소(-0.3%, -4.6%)</span><span class="badge b-gray">외형 정체</span></div>
+    </div>
+  </div>
+  <div class="ib">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
+      <div><span style="color:var(--color-text-secondary);">시총:</span> <span style="font-weight:600;">~7.81조원</span></div>
+      <div><span style="color:var(--color-text-secondary);">2025 EPS:</span> <span style="font-weight:600;">8,435원 (PER 9.78x)</span></div>
+      <div><span style="color:var(--color-text-secondary);">BPS:</span> <span style="font-weight:600;">~155,304원 (PBR 0.53x)</span></div>
+      <div><span style="color:var(--color-text-secondary);">배당수익률:</span> <span style="font-weight:600;">3.64%</span></div>
+    </div>
+  </div>
+  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">⚠ 사업보고서(2025) + 분기보고서(1Q26) OpenDART 원문 + Yahoo Finance 일봉 기준 · 투자 권고가 아닙니다</div>
+</div>
+
+</div>
+
+<script>
+function switchTab(tab) {
+  const isA=tab==='annual';
+  document.getElementById('tabAnnual').style.display=isA?'':'none';
+  document.getElementById('tabQuarter').style.display=isA?'none':'';
+  const aS='flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:8px;font-size:13px;cursor:pointer;transition:all .15s;background:#A23A1F;border:1.5px solid #A23A1F;color:#fff;font-weight:600;';
+  const iS='flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:8px;font-size:13px;cursor:pointer;transition:all .15s;background:var(--color-background-secondary);border:1.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);font-weight:500;';
+  document.getElementById('btnAnnual').style.cssText=isA?aS:iS;
+  document.getElementById('btnQuarter').style.cssText=isA?iS:aS;
+  if(!isA && !window._qDrawn){ window._qDrawn=true; drawQtrChart(); }
+}
+
+function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+function svgEl(tag,attrs){
+  const e=document.createElementNS('http://www.w3.org/2000/svg',tag);
+  for(const k in attrs) e.setAttribute(k,attrs[k]);
+  return e;
+}
+
+function drawAnnualChart(){
+  const svg=document.getElementById('gshAnnualChart');
+  const W=680,H=190,pL=44,pR=44,pT=16,pB=26;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  const cats=['2023년','2024년','2025년'];
+  const rev=[259247,252500,251841];
+  const ni=[13007,5670,7987];
+  const maxV=Math.max(...rev)*1.1;
+  const minV=0;
+  function py(v){ return pT+cH*(1-(v-minV)/(maxV-minV)); }
+  const zeroY=py(0);
+  svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:zeroY,y2:zeroY,stroke:cssVar('--color-border-tertiary'),'stroke-width':1}));
+  const revCol='#8B93A0', niCol='#A23A1F';
+  const pts=[];
+  cats.forEach((cat,i)=>{
+    const gx=pL+i*(cW/cats.length)+(cW/cats.length)/2;
+    const barW=(cW/cats.length)*0.3;
+    const rTop=py(rev[i]);
+    svg.appendChild(svgEl('rect',{x:gx-barW/2,y:rTop,width:barW,height:py(0)-rTop,fill:revCol,rx:2,opacity:0.55}));
+    const t1=svgEl('text',{x:gx,y:rTop-4,'text-anchor':'middle','font-size':9,fill:revCol});
+    t1.textContent=Math.round(rev[i]/1000)+'십억'; svg.appendChild(t1);
+    const t3=svgEl('text',{x:gx,y:H-6,'text-anchor':'middle','font-size':10,fill:cssVar('--color-text-secondary')});
+    t3.textContent=cat; svg.appendChild(t3);
+    pts.push([gx, py(ni[i])]);
+  });
+  for(let i=0;i<pts.length-1;i++){
+    svg.appendChild(svgEl('line',{x1:pts[i][0],y1:pts[i][1],x2:pts[i+1][0],y2:pts[i+1][1],stroke:niCol,'stroke-width':2.5}));
+  }
+  pts.forEach((p,i)=>{
+    svg.appendChild(svgEl('circle',{cx:p[0],cy:p[1],r:4,fill:niCol}));
+    const t=svgEl('text',{x:p[0],y:p[1]-9,'text-anchor':'middle','font-size':9,fill:niCol,'font-weight':600});
+    t.textContent=Math.round(ni[i])+'억'; svg.appendChild(t);
+  });
+  const legend=[[revCol,'매출액(십억원)'],[niCol,'지배주주순이익(억원)']];
+  legend.forEach((l,i)=>{
+    const lx=pL+i*130;
+    svg.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
+    const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:cssVar('--color-text-secondary')});
+    t.textContent=l[1]; svg.appendChild(t);
+  });
+}
+
+function drawQtrChart(){
+  const svg=document.getElementById('gshQtrChart');
+  const W=680,H=190,pL=44,pR=20,pT=20,pB=30;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  const labels=['1Q25 영업이익','1Q26 영업이익','1Q25 순이익','1Q26 순이익'];
+  const vals=[8001.6,12585.7,2046.7,7231.6];
+  const cols=['#D8B0A6','#A23A1F','#9FCB9A','#1D9E75'];
+  const maxV=Math.max(...vals)*1.15;
+  function py(v){ return pT+cH*(1-v/maxV); }
+  svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:py(0),y2:py(0),stroke:cssVar('--color-border-tertiary'),'stroke-width':1}));
+  labels.forEach((lab,i)=>{
+    const gx=pL+i*(cW/labels.length)+(cW/labels.length)/2;
+    const barW=(cW/labels.length)*0.5;
+    const top=py(vals[i]);
+    svg.appendChild(svgEl('rect',{x:gx-barW/2,y:top,width:barW,height:py(0)-top,fill:cols[i],rx:3}));
+    const t1=svgEl('text',{x:gx,y:top-6,'text-anchor':'middle','font-size':10,fill:cols[i],'font-weight':600});
+    t1.textContent=Math.round(vals[i])+'억'; svg.appendChild(t1);
+    const t2=svgEl('text',{x:gx,y:H-8,'text-anchor':'middle','font-size':9,fill:cssVar('--color-text-secondary')});
+    t2.textContent=lab; svg.appendChild(t2);
+  });
+}
+drawAnnualChart();
+
+// ── SVG 캔들차트 (Yahoo Finance 일봉 실데이터) ────────────────────────
+const data=[
+{d:'2025-07-22',o:5.22,h:5.31,l:5.15,c:5.16},{d:'2025-07-23',o:5.2,h:5.28,l:5.12,c:5.17},{d:'2025-07-24',o:5.22,h:5.28,l:5.09,c:5.12},{d:'2025-07-25',o:5.11,h:5.19,l:5.09,c:5.13},{d:'2025-07-28',o:5.07,h:5.13,l:4.96,c:4.99},{d:'2025-07-29',o:4.94,h:4.98,l:4.87,c:4.95},
+{d:'2025-07-30',o:4.95,h:5.04,l:4.95,c:4.97},{d:'2025-07-31',o:4.96,h:5.05,l:4.9,c:4.93},{d:'2025-08-01',o:4.86,h:4.9,l:4.68,c:4.68},{d:'2025-08-04',o:4.67,h:4.78,l:4.67,c:4.76},{d:'2025-08-05',o:4.78,h:4.84,l:4.75,c:4.75},{d:'2025-08-06',o:4.74,h:4.85,l:4.74,c:4.84},
+{d:'2025-08-07',o:4.85,h:4.86,l:4.76,c:4.82},{d:'2025-08-08',o:4.78,h:4.83,l:4.77,c:4.8},{d:'2025-08-11',o:4.79,h:4.79,l:4.67,c:4.71},{d:'2025-08-12',o:4.68,h:4.78,l:4.64,c:4.64},{d:'2025-08-13',o:4.68,h:4.7,l:4.62,c:4.66},{d:'2025-08-14',o:4.66,h:4.7,l:4.59,c:4.59},
+{d:'2025-08-18',o:4.54,h:4.54,l:4.39,c:4.39},{d:'2025-08-19',o:4.41,h:4.42,l:4.35,c:4.38},{d:'2025-08-20',o:4.36,h:4.4,l:4.28,c:4.36},{d:'2025-08-21',o:4.4,h:4.44,l:4.38,c:4.4},{d:'2025-08-22',o:4.42,h:4.47,l:4.37,c:4.41},{d:'2025-08-25',o:4.43,h:4.46,l:4.4,c:4.45},
+{d:'2025-08-26',o:4.47,h:4.49,l:4.42,c:4.43},{d:'2025-08-27',o:4.42,h:4.43,l:4.38,c:4.4},{d:'2025-08-28',o:4.4,h:4.65,l:4.36,c:4.6},{d:'2025-08-29',o:4.62,h:4.62,l:4.52,c:4.55},{d:'2025-09-01',o:4.55,h:4.58,l:4.47,c:4.54},{d:'2025-09-02',o:4.55,h:4.58,l:4.47,c:4.49},
+{d:'2025-09-03',o:4.44,h:4.5,l:4.44,c:4.47},{d:'2025-09-04',o:4.45,h:4.54,l:4.45,c:4.54},{d:'2025-09-05',o:4.51,h:4.57,l:4.5,c:4.54},{d:'2025-09-08',o:4.54,h:4.57,l:4.51,c:4.56},{d:'2025-09-09',o:4.59,h:4.64,l:4.57,c:4.6},{d:'2025-09-10',o:4.61,h:4.68,l:4.61,c:4.64},
+{d:'2025-09-11',o:4.66,h:4.68,l:4.6,c:4.66},{d:'2025-09-12',o:4.7,h:4.7,l:4.57,c:4.64},{d:'2025-09-15',o:4.65,h:4.89,l:4.64,c:4.8},{d:'2025-09-16',o:4.83,h:4.86,l:4.72,c:4.72},{d:'2025-09-17',o:4.74,h:4.75,l:4.65,c:4.67},{d:'2025-09-18',o:4.7,h:4.72,l:4.64,c:4.7},
+{d:'2025-09-22',o:4.62,h:4.66,l:4.6,c:4.61},{d:'2025-09-23',o:4.61,h:4.66,l:4.45,c:4.54},{d:'2025-09-24',o:4.58,h:4.58,l:4.51,c:4.53},{d:'2025-09-25',o:4.53,h:4.57,l:4.5,c:4.57},{d:'2025-09-26',o:4.54,h:4.55,l:4.5,c:4.51},{d:'2025-09-29',o:4.56,h:4.66,l:4.55,c:4.63},
+{d:'2025-09-30',o:4.6,h:4.66,l:4.58,c:4.6},{d:'2025-10-01',o:4.62,h:4.62,l:4.53,c:4.55},{d:'2025-10-02',o:4.58,h:4.62,l:4.53,c:4.55},{d:'2025-10-10',o:4.52,h:4.57,l:4.45,c:4.5},{d:'2025-10-13',o:4.46,h:4.46,l:4.4,c:4.44},{d:'2025-10-14',o:4.43,h:4.5,l:4.43,c:4.44},
+{d:'2025-10-15',o:4.45,h:4.54,l:4.45,c:4.53},{d:'2025-10-16',o:4.51,h:4.66,l:4.51,c:4.62},{d:'2025-10-17',o:4.58,h:4.62,l:4.53,c:4.55},{d:'2025-10-20',o:4.55,h:4.65,l:4.49,c:4.65},{d:'2025-10-21',o:4.66,h:4.71,l:4.61,c:4.62},{d:'2025-10-22',o:4.62,h:4.9,l:4.61,c:4.89},
+{d:'2025-10-23',o:4.88,h:4.92,l:4.79,c:4.83},{d:'2025-10-24',o:4.87,h:5,l:4.86,c:4.92},{d:'2025-10-27',o:4.9,h:5,l:4.85,c:4.93},{d:'2025-10-28',o:4.92,h:4.93,l:4.85,c:4.91},{d:'2025-10-29',o:4.91,h:4.93,l:4.83,c:4.92},{d:'2025-10-30',o:4.9,h:4.95,l:4.85,c:4.87},
+{d:'2025-10-31',o:4.86,h:4.87,l:4.76,c:4.8},{d:'2025-11-03',o:4.77,h:4.86,l:4.76,c:4.84},{d:'2025-11-04',o:4.84,h:4.92,l:4.8,c:4.89},{d:'2025-11-05',o:4.94,h:4.94,l:4.7,c:4.78},{d:'2025-11-06',o:4.82,h:5.12,l:4.75,c:5.06},{d:'2025-11-07',o:5.03,h:5.15,l:4.96,c:5.09},
+{d:'2025-11-10',o:5.22,h:5.7,l:5.16,c:5.69},{d:'2025-11-11',o:5.64,h:5.7,l:5.58,c:5.68},{d:'2025-11-12',o:5.77,h:6.08,l:5.7,c:6.06},{d:'2025-11-13',o:5.96,h:6.1,l:5.93,c:6.06},{d:'2025-11-14',o:5.91,h:6.03,l:5.82,c:5.83},{d:'2025-11-17',o:5.93,h:6.01,l:5.8,c:5.96},
+{d:'2025-11-18',o:5.87,h:6.05,l:5.83,c:5.89},{d:'2025-11-19',o:5.96,h:6.12,l:5.8,c:6.05},{d:'2025-11-20',o:6.07,h:6.24,l:6.02,c:6.16},{d:'2025-11-21',o:6.06,h:6.06,l:5.85,c:5.94},{d:'2025-11-24',o:5.91,h:5.98,l:5.82,c:5.96},{d:'2025-11-25',o:5.96,h:5.97,l:5.69,c:5.75},
+{d:'2025-11-26',o:5.82,h:5.82,l:5.66,c:5.8},{d:'2025-11-27',o:5.78,h:5.78,l:5.65,c:5.66},{d:'2025-11-28',o:5.71,h:5.78,l:5.53,c:5.64},{d:'2025-12-01',o:5.64,h:5.72,l:5.55,c:5.63},{d:'2025-12-02',o:5.66,h:5.79,l:5.61,c:5.76},{d:'2025-12-03',o:5.71,h:5.95,l:5.7,c:5.85},
+{d:'2025-12-04',o:5.85,h:5.89,l:5.81,c:5.87},{d:'2025-12-05',o:5.82,h:5.88,l:5.73,c:5.84},{d:'2025-12-08',o:5.84,h:5.84,l:5.64,c:5.75},{d:'2025-12-09',o:5.74,h:5.77,l:5.66,c:5.75},{d:'2025-12-10',o:5.78,h:5.78,l:5.62,c:5.65},{d:'2025-12-11',o:5.7,h:5.7,l:5.48,c:5.61},
+{d:'2025-12-12',o:5.65,h:5.67,l:5.56,c:5.67},{d:'2025-12-15',o:5.67,h:5.76,l:5.56,c:5.68},{d:'2025-12-16',o:5.7,h:5.75,l:5.53,c:5.58},{d:'2025-12-17',o:5.6,h:5.63,l:5.52,c:5.63},{d:'2025-12-18',o:5.63,h:5.63,l:5.42,c:5.52},{d:'2025-12-19',o:5.57,h:5.58,l:5.46,c:5.53},
+{d:'2025-12-22',o:5.58,h:5.58,l:5.49,c:5.56},{d:'2025-12-23',o:5.58,h:5.6,l:5.48,c:5.51},{d:'2025-12-24',o:5.54,h:5.56,l:5.44,c:5.45},{d:'2025-12-26',o:5.46,h:5.48,l:5.33,c:5.35},{d:'2025-12-29',o:5.33,h:5.48,l:5.28,c:5.4},{d:'2025-12-30',o:5.4,h:5.64,l:5.35,c:5.63},
+{d:'2026-01-02',o:5.57,h:5.63,l:5.5,c:5.53},{d:'2026-01-05',o:5.62,h:5.95,l:5.61,c:5.83},{d:'2026-01-06',o:5.78,h:5.85,l:5.7,c:5.83},{d:'2026-01-07',o:5.74,h:5.84,l:5.65,c:5.7},{d:'2026-01-08',o:5.65,h:5.67,l:5.54,c:5.58},{d:'2026-01-09',o:5.65,h:5.81,l:5.63,c:5.72},
+{d:'2026-01-12',o:5.73,h:5.82,l:5.66,c:5.82},{d:'2026-01-13',o:5.85,h:5.91,l:5.79,c:5.86},{d:'2026-01-14',o:5.94,h:6.13,l:5.85,c:6},{d:'2026-01-15',o:5.99,h:6.16,l:5.99,c:6.08},{d:'2026-01-16',o:6.04,h:6.04,l:5.93,c:5.96},{d:'2026-01-19',o:5.99,h:6.1,l:5.95,c:5.99},
+{d:'2026-01-20',o:5.9,h:6.19,l:5.89,c:6.08},{d:'2026-01-21',o:6,h:6.09,l:5.96,c:6.09},{d:'2026-01-22',o:6.08,h:6.16,l:6.01,c:6.15},{d:'2026-01-23',o:6.15,h:6.24,l:6.09,c:6.22},{d:'2026-01-26',o:6.24,h:6.3,l:6.13,c:6.15},{d:'2026-01-27',o:6.22,h:6.48,l:6.15,c:6.39},
+{d:'2026-01-28',o:6.47,h:6.47,l:6.32,c:6.41},{d:'2026-01-29',o:6.42,h:6.72,l:6.39,c:6.65},{d:'2026-01-30',o:6.64,h:7,l:6.62,c:6.87},{d:'2026-02-02',o:6.87,h:6.87,l:6.36,c:6.44},{d:'2026-02-03',o:6.52,h:6.82,l:6.47,c:6.81},{d:'2026-02-04',o:6.81,h:7.03,l:6.75,c:7.01},
+{d:'2026-02-05',o:6.95,h:7.06,l:6.89,c:6.93},{d:'2026-02-06',o:6.73,h:6.82,l:6.5,c:6.77},{d:'2026-02-09',o:6.99,h:7.38,l:6.91,c:7.13},{d:'2026-02-10',o:7.21,h:7.22,l:6.82,c:7},{d:'2026-02-11',o:7.02,h:7.08,l:6.76,c:6.97},{d:'2026-02-12',o:7.01,h:7.07,l:6.86,c:7.02},
+{d:'2026-02-13',o:6.95,h:7.19,l:6.89,c:7.1},{d:'2026-02-19',o:7.3,h:7.38,l:7.17,c:7.32},{d:'2026-02-20',o:7.49,h:7.6,l:7.33,c:7.57},{d:'2026-02-23',o:8,h:8.1,l:7.15,c:7.3},{d:'2026-02-24',o:7.2,h:7.35,l:7.11,c:7.3},{d:'2026-02-25',o:7.34,h:7.47,l:7.27,c:7.33},
+{d:'2026-02-26',o:7.17,h:7.18,l:6.98,c:7.02},{d:'2026-02-27',o:7.02,h:7.02,l:6.8,c:6.87},{d:'2026-03-03',o:7.52,h:7.65,l:7,c:7.05},{d:'2026-03-04',o:7.51,h:7.77,l:6.07,c:6.14},{d:'2026-03-05',o:6.31,h:6.84,l:6.28,c:6.66},{d:'2026-03-06',o:6.79,h:6.8,l:6.45,c:6.56},
+{d:'2026-03-09',o:6.63,h:6.68,l:6.31,c:6.52},{d:'2026-03-10',o:6.5,h:6.64,l:6.29,c:6.4},{d:'2026-03-11',o:6.38,h:6.72,l:6.37,c:6.52},{d:'2026-03-12',o:6.6,h:6.7,l:6.5,c:6.63},{d:'2026-03-13',o:6.49,h:6.49,l:6.34,c:6.38},{d:'2026-03-16',o:6.3,h:6.51,l:6.21,c:6.23},
+{d:'2026-03-17',o:6.27,h:6.47,l:6.24,c:6.42},{d:'2026-03-18',o:6.45,h:6.74,l:6.45,c:6.65},{d:'2026-03-19',o:6.58,h:6.64,l:6.47,c:6.54},{d:'2026-03-20',o:6.59,h:7,l:6.57,c:6.9},{d:'2026-03-23',o:6.71,h:6.91,l:6.45,c:6.53},{d:'2026-03-24',o:6.78,h:6.78,l:6.5,c:6.77},
+{d:'2026-03-25',o:6.9,h:7.02,l:6.79,c:7.02},{d:'2026-03-26',o:7.02,h:7.02,l:6.74,c:6.78},{d:'2026-03-27',o:6.72,h:6.82,l:6.51,c:6.79},{d:'2026-03-30',o:6.48,h:6.64,l:6.4,c:6.59},{d:'2026-03-31',o:6.45,h:6.58,l:6.35,c:6.38},{d:'2026-04-01',o:6.65,h:6.72,l:6.46,c:6.68},
+{d:'2026-04-02',o:6.65,h:6.67,l:6.23,c:6.28},{d:'2026-04-03',o:6.32,h:6.43,l:6.3,c:6.33},{d:'2026-04-06',o:6.35,h:6.63,l:6.35,c:6.56},{d:'2026-04-07',o:6.41,h:6.57,l:6.4,c:6.46},{d:'2026-04-08',o:6.73,h:6.89,l:6.69,c:6.86},{d:'2026-04-09',o:6.77,h:7.05,l:6.76,c:6.94},
+{d:'2026-04-10',o:6.95,h:7.26,l:6.91,c:7.17},{d:'2026-04-13',o:7.26,h:7.43,l:7.15,c:7.27},{d:'2026-04-14',o:7.28,h:7.42,l:7.24,c:7.32},{d:'2026-04-15',o:7.32,h:7.4,l:7.12,c:7.23},{d:'2026-04-16',o:7.22,h:7.33,l:7.11,c:7.3},{d:'2026-04-17',o:7.28,h:7.38,l:7.11,c:7.19},
+{d:'2026-04-20',o:7.29,h:7.29,l:7.08,c:7.1},{d:'2026-04-21',o:7.1,h:7.15,l:6.98,c:7.08},{d:'2026-04-22',o:7.09,h:7.1,l:6.94,c:7.08},{d:'2026-04-23',o:7.29,h:7.76,l:7.11,c:7.68},{d:'2026-04-24',o:7.66,h:7.72,l:7.49,c:7.57},{d:'2026-04-27',o:7.62,h:7.78,l:7.38,c:7.65},
+{d:'2026-04-28',o:7.65,h:7.89,l:7.62,c:7.68},{d:'2026-04-29',o:7.97,h:8.24,l:7.73,c:8.21},{d:'2026-04-30',o:8.13,h:8.4,l:8.1,c:8.19},{d:'2026-05-04',o:8.24,h:8.32,l:7.98,c:8.09},{d:'2026-05-06',o:7.87,h:7.96,l:7.57,c:7.69},{d:'2026-05-07',o:7.7,h:7.88,l:7.56,c:7.86},
+{d:'2026-05-08',o:7.89,h:7.98,l:7.65,c:7.94},{d:'2026-05-11',o:7.86,h:8.12,l:7.65,c:7.74},{d:'2026-05-12',o:7.8,h:7.85,l:7.29,c:7.62},{d:'2026-05-13',o:7.74,h:7.98,l:7.09,c:7.19},{d:'2026-05-14',o:7.17,h:7.61,l:6.82,c:7.47},{d:'2026-05-15',o:7.55,h:8.67,l:7.55,c:7.73},
+{d:'2026-05-18',o:7.88,h:7.89,l:7.13,c:7.48},{d:'2026-05-19',o:7.4,h:7.63,l:7.13,c:7.55},{d:'2026-05-20',o:7.6,h:7.66,l:7.22,c:7.39},{d:'2026-05-21',o:7.42,h:7.6,l:7.34,c:7.54},{d:'2026-05-22',o:7.62,h:7.7,l:7.44,c:7.69},{d:'2026-05-26',o:7.95,h:7.99,l:7.59,c:7.7},
+{d:'2026-05-27',o:7.71,h:7.74,l:7.37,c:7.48},{d:'2026-05-28',o:7.52,h:7.54,l:7.11,c:7.41},{d:'2026-05-29',o:7.46,h:7.48,l:7.04,c:7.25},{d:'2026-06-01',o:7.24,h:7.39,l:7,c:7.32},{d:'2026-06-02',o:7.39,h:7.39,l:7.03,c:7.26},{d:'2026-06-04',o:7.4,h:7.74,l:7.26,c:7.63},
+{d:'2026-06-05',o:7.63,h:7.63,l:7.16,c:7.41},{d:'2026-06-08',o:7.14,h:7.3,l:6.87,c:6.99},{d:'2026-06-09',o:7.1,h:7.44,l:6.99,c:7.38},{d:'2026-06-10',o:7.31,h:7.45,l:7.05,c:7.26},{d:'2026-06-11',o:7.15,h:7.37,l:6.96,c:7.17},{d:'2026-06-12',o:7.35,h:7.47,l:7.2,c:7.25},
+{d:'2026-06-15',o:7.5,h:7.83,l:7.32,c:7.56},{d:'2026-06-16',o:7.6,h:7.94,l:7.43,c:7.92},{d:'2026-06-17',o:7.92,h:7.92,l:7.29,c:7.29},{d:'2026-06-18',o:7.23,h:7.32,l:7.07,c:7.13},{d:'2026-06-19',o:7.15,h:7.18,l:6.76,c:7},{d:'2026-06-22',o:6.94,h:6.97,l:6.7,c:6.76},
+{d:'2026-06-23',o:6.72,h:6.8,l:6.44,c:6.5},{d:'2026-06-24',o:6.53,h:6.68,l:6.3,c:6.61},{d:'2026-06-25',o:6.6,h:6.77,l:6.42,c:6.42},{d:'2026-06-26',o:6.48,h:6.49,l:6.08,c:6.25},{d:'2026-06-29',o:6.33,h:6.79,l:6.26,c:6.73},{d:'2026-06-30',o:6.73,h:6.8,l:6.49,c:6.63},
+{d:'2026-07-01',o:6.82,h:7.31,l:6.7,c:7.3},{d:'2026-07-02',o:7.25,h:7.85,l:7.09,c:7.69},{d:'2026-07-03',o:7.74,h:7.8,l:7.19,c:7.3},{d:'2026-07-06',o:7.3,h:8.11,l:7.3,c:7.81},{d:'2026-07-07',o:7.79,h:8.23,l:7.64,c:8.01},{d:'2026-07-08',o:7.99,h:8.19,l:7.7,c:7.86},
+{d:'2026-07-09',o:7.92,h:8.08,l:7.5,c:7.56},{d:'2026-07-10',o:7.85,h:8.22,l:7.6,c:8.02},{d:'2026-07-13',o:8.07,h:8.63,l:7.88,c:7.95},{d:'2026-07-14',o:8.12,h:8.14,l:7.78,c:7.9},{d:'2026-07-15',o:8.01,h:8.33,l:7.95,c:8.18},{d:'2026-07-16',o:8.25,h:8.53,l:8.11,c:8.28},
+{d:'2026-07-20',o:8.27,h:8.76,l:7.94,c:8.32},{d:'2026-07-21',o:8.11,h:8.4,l:7.95,c:8.25},
+];
+
+renderCandleChart({svgId:'gshSvg', controlsId:'gshChartControls', data: data});
+</script>
