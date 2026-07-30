@@ -1,0 +1,120 @@
+<link rel="stylesheet" href="../css/global.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
+.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:18px;font-variant-numeric:tabular-nums;}
+.sec{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:4px;}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:14px;}
+.note{font-size:12px;color:var(--color-text-tertiary);line-height:1.6;margin-bottom:14px;}
+.up{color:#1D9E75;}.dn{color:#D85A30;}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
+.b-gray{background:#F1EFE8;color:#5F5E5A;}
+.b-blue{background:#E6F1FB;color:#185FA5;}
+.rank-row{display:grid;grid-template-columns:34px 1fr auto auto;align-items:center;gap:12px;padding:9px 0;border-bottom:.5px solid var(--color-border-tertiary);}
+.rank-row:last-child{border-bottom:none;}
+.rk{font-size:13px;font-weight:700;color:var(--color-text-tertiary);font-variant-numeric:tabular-nums;text-align:center;}
+.rk.top3{color:var(--color-text-primary);font-size:15px;}
+.nm{min-width:0;}
+.nm-main{font-size:13.5px;font-weight:600;color:var(--color-text-primary);}
+.nm-sub{font-size:11px;color:var(--color-text-tertiary);font-variant-numeric:tabular-nums;margin-top:1px;}
+.val-block{text-align:right;min-width:64px;}
+.val-label{font-size:9.5px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.04em;}
+.val-num{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;}
+.val-num.flag{font-size:12px;font-weight:600;}
+button:focus-visible,a:focus-visible{outline:2px solid #1428A0;outline-offset:2px;}
+@media (max-width:520px){
+  .rank-row{grid-template-columns:26px 1fr auto;}
+  .val-block.rev{display:none;}
+}
+</style>
+
+<div style="padding:1rem 0;" class="box">
+
+<div style="margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+  <h2>2026년 2분기 잠정실적 랭킹</h2>
+  <span class="badge b-blue">DART 공정공시</span>
+</div>
+<div class="sub">KOSPI 시가총액 Top 100 중 잠정실적 공시 종목 · 기준일 2026-07-27</div>
+
+<div class="note">
+  DART 공정공시(연결재무제표기준 영업(잠정)실적)를 낸 종목만 집계했습니다. 정식 반기보고서 법정 제출기한(반기 종료 후 45일, ~8/14)이 아직 남아 있어 나머지 종목은 수치가 없습니다.
+  월별(6월) 실적만 공시한 HD현대중공업·HD한국조선해양·오리온은 분기 비교가 아니라서 제외했습니다.
+  정렬 기준은 <b>영업이익 전년동기(25년 2분기) 대비 증감율</b>이며, 매출액도 함께 표기했습니다. 종목별 공시 단위(조원/억원/백만원)가 달라 절대금액은 종목 간 직접 비교가 어렵습니다.
+</div>
+
+<div class="card">
+  <div class="sec">순위 · 종목명 (시총순위) — 매출액 YoY / 영업이익 YoY</div>
+  <div id="rankList"></div>
+</div>
+
+<div class="note" style="margin-bottom:0;">
+  공시 완료 31 · 미공시 66 · 월별실적(비교제외) 3 — 총 100종목
+</div>
+
+</div>
+
+<script>
+const ROWS = [
+  {rank:1, name:"LG이노텍", capRank:53, code:"011070", rvY:40.5, oiY:2057.3, oiCur:"2,457억", oiPrev:"114억", unit:"백만원"},
+  {rank:2, name:"삼성전자", capRank:1, code:"005930", rvY:129.31, oiY:1810.26, oiCur:"89.40조", oiPrev:"4.68조", unit:"조원"},
+  {rank:3, name:"하나금융지주", capRank:28, code:"086790", rvY:164.02, oiY:783.27, oiCur:"2,037억", oiPrev:"231억", unit:"백만원"},
+  {rank:4, name:"LG전자", capRank:32, code:"066570", rvY:14.9, oiY:146.9, oiCur:"1조5,788억", oiPrev:"6,394억", unit:"억원"},
+  {rank:5, name:"NH투자증권", capRank:67, code:"005940", rvY:207.79, oiY:111.62, oiCur:"6,812억", oiPrev:"3,219억", unit:"백만원"},
+  {rank:6, name:"한화오션", capRank:27, code:"042660", rvY:65.2, oiY:98.0, oiCur:"7,361억", oiPrev:"3,717억", unit:"억원"},
+  {rank:7, name:"셀트리온", capRank:21, code:"068270", rvY:44.95, oiY:86.31, oiCur:"4,518억", oiPrev:"2,425억", unit:"억원"},
+  {rank:8, name:"LS ELECTRIC", capRank:20, code:"010120", rvY:32.18, oiY:64.39, oiCur:"1,785억", oiPrev:"1,086억", unit:"백만원"},
+  {rank:9, name:"삼성중공업", capRank:34, code:"010140", rvY:20.4, oiY:58.7, oiCur:"3,250억", oiPrev:"2,048억", unit:"억원"},
+  {rank:10, name:"가온전선", capRank:83, code:"000500", rvY:35.1, oiY:55.5, oiCur:"361억", oiPrev:"232억", unit:"백만원"},
+  {rank:11, name:"삼성E&A", capRank:74, code:"028050", rvY:19.8, oiY:51.0, oiCur:"2,731억", oiPrev:"1,809억", unit:"백만원"},
+  {rank:11, name:"한미반도체", capRank:25, code:"042700", rvY:39.5, oiY:51.0, oiCur:"1,303억", oiPrev:"863억", unit:"백만원"},
+  {rank:13, name:"JB금융지주", capRank:90, code:"175330", rvY:19.2, oiY:47.8, oiCur:"1,383억", oiPrev:"936억", unit:"백만원"},
+  {rank:14, name:"두산밥캣", capRank:96, code:"241560", rvY:11.2, oiY:42.9, oiCur:"2,917억", oiPrev:"2,042억", unit:"억원"},
+  {rank:15, name:"두산", capRank:35, code:"000150", rvY:5.0, oiY:37.8, oiCur:"4,884억", oiPrev:"3,544억", unit:"억원"},
+  {rank:16, name:"KB금융", capRank:16, code:"105560", rvY:31.23, oiY:27.17, oiCur:"2조7,125억", oiPrev:"2조1,330억", unit:"백만원"},
+  {rank:17, name:"삼성바이오로직스", capRank:13, code:"207940", rvY:30.2, oiY:22.9, oiCur:"5,864억", oiPrev:"4,772억", unit:"억원"},
+  {rank:18, name:"HD현대마린솔루션", capRank:73, code:"443060", rvY:24.1, oiY:17.6, oiCur:"976억", oiPrev:"830억", unit:"억원"},
+  {rank:19, name:"두산에너빌리티", capRank:8, code:"034020", rvY:3, oiY:16, oiCur:"3,143억", oiPrev:"2,711억", unit:"백만원"},
+  {rank:20, name:"신한지주", capRank:19, code:"055550", rvY:78.68, oiY:12.89, oiCur:"2,663억", oiPrev:"2,359억", unit:"백만원"},
+  {rank:21, name:"현대모비스", capRank:15, code:"012330", rvY:2.44, oiY:12.09, oiCur:"9,752억", oiPrev:"8,700억", unit:"백만원"},
+  {rank:22, name:"LG디스플레이", capRank:102, code:"034220", rvY:0, oiY:null, note:"적자 지속, 전년比 적자폭 약 7%↓", oiCur:"-1,077억", oiPrev:"-1,160억", unit:"백만원"},
+  {rank:23, name:"삼성카드", capRank:84, code:"029780", rvY:-6.3, oiY:4.1, oiCur:"2,086억", oiPrev:"2,005억", unit:"억원"},
+  {rank:24, name:"기업은행", capRank:55, code:"024110", rvY:-5.7, oiY:-1.3, oiCur:"9,151억", oiPrev:"9,274억", unit:"백만원"},
+  {rank:25, name:"우리금융지주", capRank:39, code:"316140", rvY:-25.03, oiY:-1.70, oiCur:"1조828억", oiPrev:"1조1,016억", unit:"백만원"},
+  {rank:26, name:"기아", capRank:10, code:"000270", rvY:12.6, oiY:-4.9, oiCur:"2조6,286억", oiPrev:"2조7,648억", unit:"백만원"},
+  {rank:27, name:"현대글로비스", capRank:44, code:"086280", rvY:15.8, oiY:-8.1, oiCur:"4,951억", oiPrev:"5,389억", unit:"백만원"},
+  {rank:28, name:"현대로템", capRank:38, code:"064350", rvY:13.3, oiY:-9.7, oiCur:"2,324억", oiPrev:"2,576억", unit:"백만원"},
+  {rank:29, name:"현대차", capRank:5, code:"005380", rvY:1.9, oiY:-20.8, oiCur:"2조8,509억", oiPrev:"3조6,016억", unit:"백만원"},
+  {rank:30, name:"대한항공", capRank:80, code:"003490", rvY:25.9, oiY:-34.4, oiCur:"2,618억", oiPrev:"3,989억", unit:"억원"},
+  {rank:31, name:"LG에너지솔루션", capRank:6, code:"373220", rvY:24.8, oiY:-77.0, note:"전기比(QoQ) 흑자전환", oiCur:"1,133억", oiPrev:"4,921억", unit:"억원"},
+];
+
+function fmtPct(v) {
+  if (v == null) return "";
+  const s = (v > 0 ? "+" : "") + v.toFixed(1) + "%";
+  return s;
+}
+
+function oiClass(r) {
+  if (r.oiY == null) return "";
+  return r.oiY > 0 ? "up" : r.oiY < 0 ? "dn" : "";
+}
+
+const list = document.getElementById("rankList");
+list.innerHTML = ROWS.map(r => `
+  <div class="rank-row">
+    <div class="rk ${r.rank <= 3 ? "top3" : ""}">${r.rank}</div>
+    <div class="nm">
+      <div class="nm-main">${r.name}</div>
+      <div class="nm-sub">시총 ${r.capRank}위 · 당기 ${r.oiCur} / 전년동기 ${r.oiPrev}${r.note ? " · " + r.note : ""}</div>
+    </div>
+    <div class="val-block rev">
+      <div class="val-label">매출 YoY</div>
+      <div class="val-num ${r.rvY > 0 ? "up" : r.rvY < 0 ? "dn" : ""}">${fmtPct(r.rvY)}</div>
+    </div>
+    <div class="val-block">
+      <div class="val-label">영업이익 YoY</div>
+      <div class="val-num ${oiClass(r)}">${r.oiY == null ? "적자축소" : fmtPct(r.oiY)}</div>
+    </div>
+  </div>
+`).join("");
+</script>
