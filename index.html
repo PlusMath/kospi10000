@@ -247,6 +247,44 @@
       overflow: hidden;
     }
 
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .page-btn {
+      border: 1px solid var(--color-border);
+      background: var(--color-card-bg);
+      color: var(--color-text-secondary);
+      border-radius: 8px;
+      min-width: 34px;
+      height: 34px;
+      padding: 0 10px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .page-btn:hover:not(:disabled) {
+      background: oklch(0.97 0.004 90);
+    }
+
+    .page-btn.active {
+      background: var(--color-accent);
+      border-color: var(--color-accent);
+      color: #fff;
+    }
+
+    .page-btn:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+
     .rank-table-head,
     .rank-row {
       display: grid;
@@ -585,6 +623,13 @@
     }
 
     @media (max-width: 768px) {
+      .page-btn {
+        min-width: 30px;
+        height: 30px;
+        padding: 0 8px;
+        font-size: 12px;
+      }
+
       header {
         padding: 0 16px;
         height: 56px;
@@ -2081,6 +2126,8 @@
     let favorites = new Set(JSON.parse(localStorage.getItem(FAV_KEY) || '[]'));
     let currentView = 'rank';
     let favOnlyActive = false;
+    let rankPage = 1;
+    const RANK_PAGE_SIZE = 10;
 
     function saveFavorites() {
       localStorage.setItem(FAV_KEY, JSON.stringify([...favorites]));
@@ -2175,11 +2222,48 @@
       return row;
     }
 
+    function createPagination(totalItems, pageSize, page, onChange) {
+      const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+      if (page > totalPages) page = totalPages;
+
+      const nav = document.createElement('div');
+      nav.className = 'pagination';
+      nav.setAttribute('role', 'navigation');
+      nav.setAttribute('aria-label', '페이지 이동');
+
+      const makeBtn = (label, targetPage, opts = {}) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'page-btn' + (opts.active ? ' active' : '');
+        btn.textContent = label;
+        btn.disabled = !!opts.disabled;
+        if (!opts.disabled) {
+          btn.addEventListener('click', () => onChange(targetPage));
+        }
+        return btn;
+      };
+
+      nav.appendChild(makeBtn('← 이전', page - 1, { disabled: page <= 1 }));
+      for (let p = 1; p <= totalPages; p++) {
+        nav.appendChild(makeBtn(String(p), p, { active: p === page }));
+      }
+      nav.appendChild(makeBtn('다음 →', page + 1, { disabled: page >= totalPages }));
+
+      return nav;
+    }
+
     function renderRankView() {
       stockArea.innerHTML = '';
       mainTitle.textContent = 'KOSPI Top 100 - 순위별 보기';
 
-      const base = stocks.filter((s) => !favOnlyActive || favorites.has(s.code));
+      const base = [...stocks]
+        .filter((s) => !favOnlyActive || favorites.has(s.code))
+        .sort((a, b) => a.rank - b.rank);
+
+      const totalPages = Math.max(1, Math.ceil(base.length / RANK_PAGE_SIZE));
+      if (rankPage > totalPages) rankPage = totalPages;
+      const start = (rankPage - 1) * RANK_PAGE_SIZE;
+      const pageItems = base.slice(start, start + RANK_PAGE_SIZE);
 
       const table = document.createElement('div');
       table.className = 'rank-table';
@@ -2199,11 +2283,19 @@
       `;
       table.appendChild(head);
 
-      [...base]
-        .sort((a, b) => a.rank - b.rank)
-        .forEach((stock) => table.appendChild(createRankRow(stock)));
+      pageItems.forEach((stock) => table.appendChild(createRankRow(stock)));
 
       stockArea.appendChild(table);
+
+      if (base.length > 0) {
+        stockArea.appendChild(
+          createPagination(base.length, RANK_PAGE_SIZE, rankPage, (p) => {
+            rankPage = p;
+            renderRankView();
+            stockArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          })
+        );
+      }
     }
 
     // ── 업종별 뷰 ──
@@ -2283,11 +2375,13 @@
       favOnlyActive = active;
       favOnlyCheckbox.checked = active;
       favOnlyBtn.classList.toggle('active', active);
+      rankPage = 1;
       rerenderCurrentView();
     }
 
     rankViewBtn.addEventListener('click', () => {
       currentView = 'rank';
+      rankPage = 1;
       setActiveViewButton('rank');
       renderRankView();
     });
