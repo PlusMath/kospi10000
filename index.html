@@ -1,240 +1,405 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>주식을말하다의 KOSPI 분석</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
 
   <style>
+    :root {
+      --color-accent: oklch(0.47 0.14 258);
+      --color-accent-soft: oklch(0.47 0.14 258 / 0.09);
+      --color-up: oklch(0.56 0.19 25);
+      --color-down: oklch(0.55 0.16 240);
+      --color-star-active: oklch(0.72 0.16 80);
+      --color-star-inactive: oklch(0.82 0.008 90);
+      --color-bg: oklch(0.98 0.004 90);
+      --color-card-bg: oklch(1 0 0);
+      --color-border: oklch(0.9 0.006 90);
+      --color-text: oklch(0.22 0.02 260);
+      --color-text-secondary: oklch(0.52 0.02 260);
+      --radius-card: 12px;
+      --radius-badge: 7px;
+      --shadow-active-tab: 0 1px 3px oklch(0 0 0 / 0.08);
+    }
+
     * {
       box-sizing: border-box;
     }
 
     body {
-      margin: 100px;
-      font-family: Arial, 'Noto Sans KR', sans-serif;
-      background-color: #f4f6f8;
-      color: #222;
+      margin: 0;
+      font-family: 'Noto Sans KR', Arial, sans-serif;
+      background-color: var(--color-bg);
+      color: var(--color-text);
     }
 
     header {
-      padding: 32px 20px;
-      background-color: #f4f6f8;
-      color: rgb(0, 0, 0);
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 0 48px;
+      height: 72px;
+      background-color: var(--color-card-bg);
+      border-bottom: 1px solid var(--color-border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      flex-wrap: wrap;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-badge {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+      border-radius: 9px;
+      background: var(--color-accent);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 15px;
     }
 
     header h1 {
       margin: 0;
-      font-size: 32px;
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1.2;
     }
 
     header p {
-      margin: 10px 0 0;
-      color: #000000;
-      font-size: 16px;
+      margin: 2px 0 0;
+      color: var(--color-text-secondary);
+      font-size: 12px;
+      line-height: 1.2;
     }
 
     .market-switch {
       display: flex;
-      justify-content: center;
-      gap: 10px;
+      align-items: center;
+      gap: 12px;
       flex-wrap: wrap;
-      margin-top: 18px;
+      font-size: 14px;
+      font-weight: 600;
     }
 
     .market-switch-btn {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      border: 1px solid #d1d5db;
-      background-color: #ffffff;
-      color: #111827;
-      border-radius: 999px;
-      padding: 9px 18px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
+      border-radius: 8px;
+      padding: 8px 14px;
       text-decoration: none;
-      transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
-    }
-
-    .market-switch-btn:hover {
-      transform: translateY(-2px);
+      color: var(--color-text-secondary);
     }
 
     .market-switch-btn.active {
-      background-color: #111827;
-      color: #ffffff;
-      border-color: #111827;
+      background: var(--color-accent-soft);
+      color: var(--color-accent);
       cursor: default;
     }
 
-    .market-switch-btn.active:hover {
-      transform: none;
-    }
-
-    .market-switch-btn.soon {
-      opacity: 0.85;
+    .fav-count {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding-left: 16px;
+      border-left: 1px solid var(--color-border);
+      color: var(--color-star-active);
+      font-size: 14px;
+      font-weight: 700;
     }
 
     .page-wrap {
-      max-width: 1280px;
+      max-width: 1360px;
       margin: 0 auto;
-      padding: 28px 20px 60px;
+      padding: 40px 48px 64px;
     }
 
     .section-title {
-      margin: 0 0 16px;
-      font-size: 24px;
-      font-weight: 700;
-      text-align: center;
+      margin: 0 0 6px;
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin: 28px 0 36px;
+    }
+
+    .stat-card {
+      background: var(--color-card-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      padding: 22px 24px;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 800;
+    }
+
+    .stat-value.up { color: var(--color-up); }
+    .stat-value.dn { color: var(--color-down); }
+
+    .stat-unit {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
     }
 
     .view-toggle {
       display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 18px;
+      gap: 4px;
+      background: oklch(0.95 0.004 90);
+      padding: 4px;
+      border-radius: 10px;
     }
 
-    .view-btn,
-    .industry-nav-btn {
-      border: 1px solid #d1d5db;
-      background-color: #ffffff;
-      color: #111827;
-      border-radius: 999px;
-      padding: 10px 18px;
-      font-size: 15px;
-      font-weight: 700;
+    .view-btn {
+      border: none;
       cursor: pointer;
-      transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: inherit;
+      background: transparent;
+      color: var(--color-text-secondary);
     }
 
-    .view-btn:hover,
-    .industry-nav-btn:hover {
-      transform: translateY(-2px);
+    .view-btn.active {
+      background: var(--color-card-bg);
+      color: var(--color-accent);
+      box-shadow: var(--shadow-active-tab);
     }
 
-    .view-btn.active,
-    .industry-nav-btn.active {
-      background-color: #111827;
-      color: #ffffff;
-      border-color: #111827;
+    .fav-only-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .fav-only-btn {
+      display: none;
+      align-items: center;
+      gap: 5px;
+      border-radius: 9px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      border: 1px solid var(--color-border);
+      background: var(--color-card-bg);
+      color: var(--color-text-secondary);
+    }
+
+    .fav-only-btn.active {
+      border-color: var(--color-star-active);
+      background: oklch(0.72 0.16 80 / 0.12);
+      color: oklch(0.5 0.14 80);
     }
 
     .industry-nav {
       display: none;
-      justify-content: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin: 0 auto 32px;
-      padding: 14px 16px;
-      background-color: #ffffff;
-      border: 1px solid #e5e7eb;
-      border-radius: 18px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
-    .industry-nav.show {
-      display: flex;
-    }
-
-    .industry-nav-btn {
-      padding: 8px 14px;
-      font-size: 14px;
-    }
-
-    .stock-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 22px;
-    }
-
-    .stock-card {
-      background-color: white;
-      border: 1px solid #e5e7eb;
-      border-radius: 16px;
+    /* ── 순위별 뷰: table on desktop, stacked cards on mobile (same DOM) ── */
+    .rank-table {
+      background: var(--color-card-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
       overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .stock-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+    .rank-table-head,
+    .rank-row {
+      display: grid;
+      grid-template-columns: 44px minmax(140px, 1.6fr) 130px 100px 84px 108px 36px;
+      grid-template-areas: "rank name industry price change mcap star";
+      align-items: center;
+      gap: 8px 14px;
+      padding: 13px 20px;
     }
 
-    .stock-card a {
-      display: block;
-      width: 100%;
-      height: 100%;
-      color: inherit;
+    .rank-table-head {
+      background: oklch(0.97 0.004 90);
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      font-weight: 600;
+    }
+
+    .rank-row {
+      border-top: 1px solid var(--color-border);
+      cursor: pointer;
       text-decoration: none;
+      color: inherit;
     }
 
-    .stock-card img {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      object-fit: cover;
-      display: block;
-      background-color: #e5e7eb;
+    .rank-row:hover {
+      background: oklch(0.97 0.004 90);
     }
 
-    .stock-info {
-      padding: 14px 16px 18px;
-    }
+    .rr-rank { grid-area: rank; font-size: 14px; font-weight: 600; color: var(--color-text-secondary); }
+    .rr-name-group { display: contents; }
+    .rr-name { grid-area: name; font-size: 14px; font-weight: 700; }
+    .rr-name small { font-weight: 400; color: var(--color-text-secondary); font-size: 12px; margin-left: 4px; }
+    .rr-industry { grid-area: industry; }
+    .rr-price-group { display: contents; }
+    .rr-price { grid-area: price; font-size: 14px; font-weight: 600; text-align: right; }
+    .rr-change { grid-area: change; font-size: 14px; font-weight: 700; text-align: right; }
+    .rr-mcap { grid-area: mcap; font-size: 14px; color: var(--color-text-secondary); text-align: right; }
+    .rr-star { grid-area: star; text-align: center; }
 
-    .stock-rank {
+    .industry-badge {
       display: inline-block;
-      padding: 4px 8px;
-      margin-bottom: 10px;
-      border-radius: 999px;
-      background-color: #eef2ff;
-      color: #3730a3;
-      font-size: 13px;
-      font-weight: 700;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-accent);
+      background: var(--color-accent-soft);
+      padding: 4px 10px;
+      border-radius: var(--radius-badge);
     }
 
-    .stock-name {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 700;
+    .star-btn {
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 17px;
+      color: var(--color-star-inactive);
+      padding: 4px;
+      line-height: 1;
     }
 
-    .stock-code,
-    .stock-industry {
-      margin-top: 6px;
-      color: #6b7280;
-      font-size: 14px;
+    .star-btn.active {
+      color: var(--color-star-active);
     }
 
+    .up { color: var(--color-up); }
+    .dn { color: var(--color-down); }
+
+    /* ── 업종별 뷰 ── */
     .industry-section {
-      margin-bottom: 42px;
-      scroll-margin-top: 24px;
+      margin-bottom: 20px;
     }
 
     .industry-header {
       display: flex;
-      align-items: center;
+      align-items: baseline;
       justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 16px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #e5e7eb;
+      padding: 0 4px;
+      margin-bottom: 10px;
     }
 
     .industry-title {
       margin: 0;
-      font-size: 22px;
+      font-size: 15px;
       font-weight: 800;
     }
 
     .industry-count {
-      color: #6b7280;
+      color: var(--color-text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .sector-list {
+      background: var(--color-card-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+    }
+
+    .sector-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 20px;
+      border-top: 1px solid var(--color-border);
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .sector-row:first-child { border-top: none; }
+    .sector-row:hover { background: oklch(0.97 0.004 90); }
+
+    .sr-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .sr-name {
       font-size: 14px;
       font-weight: 700;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .sr-code {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      flex-shrink: 0;
+    }
+
+    .sr-right {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .sr-price {
+      font-size: 14px;
+      font-weight: 600;
+      width: 90px;
+      text-align: right;
+    }
+
+    .sr-change {
+      font-size: 14px;
+      font-weight: 700;
+      width: 70px;
+      text-align: right;
     }
 
     .daily-movers {
@@ -419,26 +584,152 @@
       font-size: 14px;
     }
 
-    @media (max-width: 600px) {
-      body {
-        margin: 20px;
+    @media (max-width: 768px) {
+      header {
+        padding: 0 16px;
+        height: 56px;
       }
 
       header h1 {
-        font-size: 24px;
+        font-size: 14px;
+      }
+
+      .logo-badge {
+        width: 28px;
+        height: 28px;
+        font-size: 13px;
+        border-radius: 8px;
+      }
+
+      .market-switch {
+        font-size: 12px;
+        gap: 6px;
+      }
+
+      .fav-count {
+        padding-left: 8px;
+        font-size: 12px;
       }
 
       .page-wrap {
-        padding: 22px 0 44px;
+        padding: 16px 14px 40px;
       }
 
-      .stock-grid {
-        grid-template-columns: 1fr;
+      .section-title {
+        font-size: 20px;
+      }
+
+      .stat-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin: 16px 0 20px;
+      }
+
+      .stat-card {
+        padding: 14px 16px;
+      }
+
+      .stat-label {
+        font-size: 11px;
+        margin-bottom: 6px;
+      }
+
+      .stat-value {
+        font-size: 22px;
+      }
+
+      .stat-unit {
+        font-size: 12px;
+      }
+
+      .view-toggle {
+        gap: 3px;
+        padding: 3px;
+      }
+
+      .view-btn {
+        padding: 7px 14px;
+        font-size: 13px;
+        border-radius: 7px;
+      }
+
+      .fav-only-label {
+        display: none;
+      }
+
+      .fav-only-btn {
+        display: inline-flex;
+      }
+
+      /* 순위별 뷰: 테이블 → 스택형 카드 (동일 DOM, 컬럼만 재배치) */
+      .rank-table-head {
+        display: none;
+      }
+
+      .rank-row {
+        grid-template-columns: 34px 1fr auto 32px;
+        grid-template-areas: "rank name price star";
+        padding: 12px 14px;
+        gap: 6px 10px;
+      }
+
+      .rr-name-group {
+        display: flex;
+        flex-direction: column;
+        grid-area: name;
+        gap: 3px;
+        min-width: 0;
+      }
+
+      .rr-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .rr-price-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        grid-area: price;
+        gap: 2px;
+      }
+
+      .rr-mcap {
+        display: none;
+      }
+
+      .rr-rank {
+        width: 26px;
+        height: 26px;
+        border-radius: 7px;
+        background: oklch(0.95 0.004 90);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
       }
 
       .industry-header {
-        align-items: flex-start;
-        flex-direction: column;
+        flex-direction: row;
+      }
+
+      .sector-row {
+        padding: 12px 14px;
+        gap: 10px;
+      }
+
+      .sr-right {
+        gap: 0;
+      }
+
+      .sr-price {
+        width: auto;
+        margin-right: 10px;
+      }
+
+      .sr-change {
+        width: 56px;
       }
 
       .daily-movers {
@@ -468,15 +759,43 @@
 
 <body>
   <header>
-    <h1>주식을말하다의 KOSPI 분석 홈페이지</h1>
-    <p>KOSPI Top 100 기업 분석 페이지</p>
+    <div class="header-brand">
+      <div class="logo-badge">주</div>
+      <div>
+        <h1>주식을말하다</h1>
+        <p>KOSPI 분석</p>
+      </div>
+    </div>
     <nav class="market-switch" aria-label="시장 선택">
       <span class="market-switch-btn active">🇰🇷 KOSPI Top 100</span>
       <a class="market-switch-btn" href="https://plusmath.github.io/us-top100/">🇺🇸 US Top 100</a>
+      <span class="fav-count">★ <span id="favCount">0</span></span>
     </nav>
   </header>
 
   <main class="page-wrap">
+    <h2 class="section-title" id="mainTitle">KOSPI Top 100</h2>
+    <p class="data-note" style="margin:0 0 0;text-align:left;max-width:none;">
+      기준: 매일경제 마켓 코스피 시가총액 순위 2026.05.13 15:32 기준.
+      KODEX, TIGER, ACE, RISE 등 ETF/ETN은 기업 분석 목적에 맞지 않아 제외하고, 일반 주식과 우선주 중심으로 100개를 정리했습니다. 각 종목 상세 페이지의 등락률을 기준으로 자동 분류합니다. 투자 권고가 아닙니다.
+    </p>
+
+    <div class="stat-grid" id="statGrid"></div>
+
+    <div class="toolbar">
+      <div class="view-toggle" aria-label="보기 방식 선택">
+        <button class="view-btn active" type="button" id="rankViewBtn">순위별 보기</button>
+        <button class="view-btn" type="button" id="industryViewBtn">업종별 보기</button>
+      </div>
+      <label class="fav-only-label">
+        <input type="checkbox" id="favOnlyCheckbox" />
+        즐겨찾기만 보기
+      </label>
+      <button class="fav-only-btn" type="button" id="favOnlyBtn">★ 즐겨찾기만</button>
+    </div>
+
+    <section id="stockArea"></section>
+
     <section class="daily-movers" aria-labelledby="dailyMoversTitle">
       <div class="daily-movers-header">
         <div>
@@ -507,22 +826,6 @@
         각 종목 상세 페이지에 표시된 Yahoo Finance 최근 종가와 전일 대비 등락률을 기준으로 매일 자동 분류합니다. 투자 권고가 아닙니다.
       </p>
     </section>
-
-    <h2 class="section-title" id="mainTitle">KOSPI Top 100</h2>
-
-    <p class="data-note">
-      기준: 매일경제 마켓 코스피 시가총액 순위 2026.05.13 15:32 기준. 
-      KODEX, TIGER, ACE, RISE 등 ETF/ETN은 기업 분석 목적에 맞지 않아 제외하고, 일반 주식과 우선주 중심으로 100개를 정리했습니다.
-    </p>
-
-    <div class="view-toggle" aria-label="보기 방식 선택">
-      <button class="view-btn active" type="button" id="rankViewBtn">순위별 보기</button>
-      <button class="view-btn" type="button" id="industryViewBtn">업종별 보기</button>
-    </div>
-
-    <nav class="industry-nav" id="industryNav" aria-label="업종별 바로가기"></nav>
-
-    <section id="stockArea"></section>
   </main>
 
   <footer>
@@ -567,6 +870,114 @@
       { name: "카카오페이", code: "377300", industry: "금융·은행·증권", close: "41,550원", change: -5.14, page: "stocks/093_377300.html" }
     ];
 
+    const stockLive = {
+      "005930": { price: 246000, change: 2.5 },
+      "000660": { price: 1668000, change: 5.77 },
+      "402340": { price: 1119000, change: 5.57 },
+      "005380": { price: 404500, change: 3.06 },
+      "373220": { price: 335500, change: 2.13 },
+      "329180": { price: 509000, change: 5.38 },
+      "034020": { price: 77000, change: 5.48 },
+      "009150": { price: 1356000, change: 14.43 },
+      "000270": { price: 133000, change: 2.62 },
+      "028260": { price: 347500, change: 7.75 },
+      "012450": { price: 1007000, change: 0.3 },
+      "207940": { price: 1491000, change: 1.02 },
+      "032830": { price: 294000, change: 5.76 },
+      "012330": { price: 503000, change: 4.47 },
+      "105560": { price: 170700, change: 1.13 },
+      "006400": { price: 429000, change: 2.26 },
+      "267260": { price: 772000, change: 7.82 },
+      "055550": { price: 103600, change: 1.27 },
+      "010120": { price: 212000, change: 7.61 },
+      "068270": { price: 190300, change: 2.42 },
+      "006800": { price: 35200, change: 3.38 },
+      "034730": { price: 562000, change: 8.49 },
+      "298040": { price: 2985000, change: 12.43 },
+      "042700": { price: 209000, change: 2.96 },
+      "005490": { price: 317000, change: 1.28 },
+      "042660": { price: 91900, change: 5.03 },
+      "086790": { price: 128600, change: 0.78 },
+      "009540": { price: 396000, change: 5.88 },
+      "035420": { price: 229000, change: 1.1 },
+      "010130": { price: 1095000, change: 4.89 },
+      "066570": { price: 179500, change: 8.46 },
+      "051910": { price: 255500, change: -0.39 },
+      "010140": { price: 22200, change: 2.54 },
+      "000150": { price: 1260000, change: -1.1 },
+      "015760": { price: 35700, change: 1.56 },
+      "267250": { price: 219000, change: 5.04 },
+      "064350": { price: 147700, change: 5.58 },
+      "316140": { price: 33350, change: 0.45 },
+      "017670": { price: 93000, change: 1.75 },
+      "003670": { price: 146200, change: 2.38 },
+      "000810": { price: 637000, change: 2.74 },
+      "096770": { price: 109200, change: -1.89 },
+      "086280": { price: 205500, change: 2.75 },
+      "272210": { price: 72400, change: 4.78 },
+      "033780": { price: 176000, change: 0.23 },
+      "079550": { price: 798000, change: -0.37 },
+      "307950": { price: 414500, change: 5.2 },
+      "035720": { price: 38150, change: 0.66 },
+      "011200": { price: 21100, change: -0.47 },
+      "000720": { price: 110100, change: 8.47 },
+      "138040": { price: 120400, change: 0.75 },
+      "011070": { price: 601000, change: 14.48 },
+      "003550": { price: 106800, change: 4.71 },
+      "024110": { price: 20200, change: -0.74 },
+      "006260": { price: 329000, change: 9.48 },
+      "047810": { price: 146500, change: 6.55 },
+      "278470": { price: 357500, change: -0.56 },
+      "030200": { price: 52500, change: 0.38 },
+      "071050": { price: 209500, change: 3.46 },
+      "018260": { price: 230500, change: 5.01 },
+      "259960": { price: 229000, change: -3.78 },
+      "010950": { price: 122500, change: -2.62 },
+      "047050": { price: 54400, change: 0.74 },
+      "0126Z0": { price: 389000, change: 0.78 },
+      "001440": { price: 28450, change: 11.57 },
+      "005940": { price: 28250, change: 1.44 },
+      "047040": { price: 16230, change: 6.78 },
+      "016360": { price: 97600, change: -1.01 },
+      "039490": { price: 292500, change: 2.99 },
+      "005830": { price: 155600, change: 0.52 },
+      "323410": { price: 21550, change: -1.37 },
+      "443060": { price: 193100, change: 4.43 },
+      "028050": { price: 49100, change: 2.83 },
+      "352820": { price: 181000, change: 0 },
+      "000880": { price: 83800, change: 0 },
+      "005387": { price: 204500, change: 3.23 },
+      "007660": { price: 84700, change: 6.41 },
+      "003230": { price: 1210000, change: -0.74 },
+      "003490": { price: 26900, change: 3.07 },
+      "062040": { price: 167200, change: 9.35 },
+      "267270": { price: 141900, change: 11.64 },
+      "000500": { price: 158900, change: 8.46 },
+      "000990": { price: 90000, change: 5.88 },
+      "029780": { price: 46550, change: 0 },
+      "326030": { price: 82000, change: 2.76 },
+      "180640": { price: 122500, change: 1.74 },
+      "009830": { price: 30150, change: 12.5 },
+      "138930": { price: 14940, change: -1.13 },
+      "161390": { price: 67700, change: 0 },
+      "064400": { price: 73300, change: 7.64 },
+      "034220": { price: 9800, change: 2.83 },
+      "175330": { price: 27800, change: 2.77 },
+      "353200": { price: 106300, change: 8.69 },
+      "090430": { price: 131300, change: -0.45 },
+      "377300": { price: 41550, change: -5.14 },
+      "066970": { price: 79800, change: 2.97 },
+      "271560": { price: 130300, change: -1.81 },
+      "000100": { price: 75100, change: 0.4 },
+      "241560": { price: 64300, change: 2.55 },
+      "021240": { price: 92800, change: -1.59 },
+      "078930": { price: 95000, change: -1.96 },
+      "036570": { price: 235000, change: -2.29 },
+      "103590": { price: 61100, change: 8.91 },
+      "032640": { price: 14920, change: -0.07 },
+      "004370": { price: 376500, change: 0 }
+    };
+
     const stocks = [
       {
             "rank": 1,
@@ -575,7 +986,8 @@
             "industry": "반도체·전자",
             "slug": "samsung-electronics",
             "image": "images/001_samsung-electronics.png",
-            "page": "stocks/001_005930.html"
+            "page": "stocks/001_005930.html",
+            "sharesOut": 5846278608
       },
       {
             "rank": 2,
@@ -584,7 +996,8 @@
             "industry": "반도체·전자",
             "slug": "sk-hynix",
             "image": "images/002_sk-hynix.png",
-            "page": "stocks/002_000660.html"
+            "page": "stocks/002_000660.html",
+            "sharesOut": 730492365
       },
       {
             "rank": 3,
@@ -593,7 +1006,8 @@
             "industry": "지주·투자회사",
             "slug": "sk-square",
             "image": "images/003_sk-square.png",
-            "page": "stocks/003_402340.html"
+            "page": "stocks/003_402340.html",
+            "sharesOut": 131958386
       },
       {
             "rank": 4,
@@ -602,7 +1016,8 @@
             "industry": "반도체·전자",
             "slug": "samsung-electronics-preferred",
             "image": "images/004_samsung-electronics-preferred.png",
-            "page": "stocks/001_005930.html"
+            "page": "stocks/001_005930.html",
+            "sharesOut": 802371203
       },
       {
             "rank": 5,
@@ -611,7 +1026,8 @@
             "industry": "자동차·부품",
             "slug": "hyundai-motor",
             "image": "images/005_hyundai-motor.png",
-            "page": "stocks/005_005380.html"
+            "page": "stocks/005_005380.html",
+            "sharesOut": 204757766
       },
       {
             "rank": 6,
@@ -620,7 +1036,8 @@
             "industry": "2차전지·전기차 소재",
             "slug": "lg-energy-solution",
             "image": "images/006_lg-energy-solution.png",
-            "page": "stocks/006_373220.html"
+            "page": "stocks/006_373220.html",
+            "sharesOut": 234000000
       },
       {
             "rank": 7,
@@ -629,7 +1046,8 @@
             "industry": "조선·해양",
             "slug": "hd-hyundai-heavy-industries",
             "image": "images/007_hd-hyundai-heavy-industries.png",
-            "page": "stocks/007_329180.html"
+            "page": "stocks/007_329180.html",
+            "sharesOut": 104961225
       },
       {
             "rank": 8,
@@ -638,7 +1056,8 @@
             "industry": "전력·기계·인프라",
             "slug": "doosan-enerbility",
             "image": "images/008_doosan-enerbility.png",
-            "page": "stocks/008_034020.html"
+            "page": "stocks/008_034020.html",
+            "sharesOut": 640561146
       },
       {
             "rank": 9,
@@ -647,7 +1066,8 @@
             "industry": "반도체·전자",
             "slug": "samsung-electro-mechanics",
             "image": "images/009_samsung-electro-mechanics.png",
-            "page": "stocks/009_009150.html"
+            "page": "stocks/009_009150.html",
+            "sharesOut": 74693696
       },
       {
             "rank": 10,
@@ -656,7 +1076,8 @@
             "industry": "자동차·부품",
             "slug": "kia",
             "image": "images/010_kia.png",
-            "page": "stocks/010_000270.html"
+            "page": "stocks/010_000270.html",
+            "sharesOut": 390412998
       },
       {
             "rank": 11,
@@ -665,7 +1086,8 @@
             "industry": "지주·복합기업",
             "slug": "samsung-ct",
             "image": "images/011_samsung-ct.png",
-            "page": "stocks/011_028260.html"
+            "page": "stocks/011_028260.html",
+            "sharesOut": 162167581
       },
       {
             "rank": 12,
@@ -674,7 +1096,8 @@
             "industry": "방산·항공우주",
             "slug": "hanwha-aerospace",
             "image": "images/012_hanwha-aerospace.png",
-            "page": "stocks/012_012450.html"
+            "page": "stocks/012_012450.html",
+            "sharesOut": 51563401
       },
       {
             "rank": 13,
@@ -683,7 +1106,8 @@
             "industry": "바이오·헬스케어",
             "slug": "samsung-biologics",
             "image": "images/013_samsung-biologics.png",
-            "page": "stocks/013_207940.html"
+            "page": "stocks/013_207940.html",
+            "sharesOut": 46290951
       },
       {
             "rank": 14,
@@ -692,7 +1116,8 @@
             "industry": "보험",
             "slug": "samsung-life",
             "image": "images/014_samsung-life.png",
-            "page": "stocks/014_032830.html"
+            "page": "stocks/014_032830.html",
+            "sharesOut": 200000000
       },
       {
             "rank": 15,
@@ -701,7 +1126,8 @@
             "industry": "자동차·부품",
             "slug": "hyundai-mobis",
             "image": "images/015_hyundai-mobis.png",
-            "page": "stocks/015_012330.html"
+            "page": "stocks/015_012330.html",
+            "sharesOut": 90732583
       },
       {
             "rank": 16,
@@ -710,7 +1136,8 @@
             "industry": "금융·은행·증권",
             "slug": "kb-financial",
             "image": "images/016_kb-financial.png",
-            "page": "stocks/016_105560.html"
+            "page": "stocks/016_105560.html",
+            "sharesOut": 354687734
       },
       {
             "rank": 17,
@@ -719,7 +1146,8 @@
             "industry": "2차전지·전기차 소재",
             "slug": "samsung-sdi",
             "image": "images/017_samsung-sdi.png",
-            "page": "stocks/017_006400.html"
+            "page": "stocks/017_006400.html",
+            "sharesOut": 80585530
       },
       {
             "rank": 18,
@@ -728,7 +1156,8 @@
             "industry": "전력·기계·인프라",
             "slug": "hd-hyundai-electric",
             "image": "images/018_hd-hyundai-electric.png",
-            "page": "stocks/018_267260.html"
+            "page": "stocks/018_267260.html",
+            "sharesOut": 36047135
       },
       {
             "rank": 19,
@@ -737,7 +1166,8 @@
             "industry": "금융·은행·증권",
             "slug": "shinhan-financial",
             "image": "images/019_shinhan-financial.png",
-            "page": "stocks/019_055550.html"
+            "page": "stocks/019_055550.html",
+            "sharesOut": 469450239
       },
       {
             "rank": 20,
@@ -746,7 +1176,8 @@
             "industry": "전력·기계·인프라",
             "slug": "ls-electric",
             "image": "images/020_ls-electric.png",
-            "page": "stocks/020_010120.html"
+            "page": "stocks/020_010120.html",
+            "sharesOut": 150000000
       },
       {
             "rank": 21,
@@ -755,7 +1186,8 @@
             "industry": "바이오·헬스케어",
             "slug": "celltrion",
             "image": "images/021_celltrion.png",
-            "page": "stocks/021_068270.html"
+            "page": "stocks/021_068270.html",
+            "sharesOut": 232553706
       },
       {
             "rank": 22,
@@ -764,7 +1196,8 @@
             "industry": "금융·은행·증권",
             "slug": "mirae-asset-securities",
             "image": "images/022_mirae-asset-securities.png",
-            "page": "stocks/022_006800.html"
+            "page": "stocks/022_006800.html",
+            "sharesOut": 559566880
       },
       {
             "rank": 23,
@@ -773,7 +1206,8 @@
             "industry": "지주·복합기업",
             "slug": "sk",
             "image": "images/023_sk.png",
-            "page": "stocks/023_034730.html"
+            "page": "stocks/023_034730.html",
+            "sharesOut": 72502703
       },
       {
             "rank": 24,
@@ -782,7 +1216,8 @@
             "industry": "전력·기계·인프라",
             "slug": "hyosung-heavy-industries",
             "image": "images/024_hyosung-heavy-industries.png",
-            "page": "stocks/024_298040.html"
+            "page": "stocks/024_298040.html",
+            "sharesOut": 9324548
       },
       {
             "rank": 25,
@@ -791,7 +1226,8 @@
             "industry": "반도체·전자",
             "slug": "hanmi-semiconductor",
             "image": "images/025_hanmi-semiconductor.png",
-            "page": "stocks/025_042700.html"
+            "page": "stocks/025_042700.html",
+            "sharesOut": 95312200
       },
       {
             "rank": 26,
@@ -800,7 +1236,8 @@
             "industry": "철강·비철금속·소재",
             "slug": "posco-holdings",
             "image": "images/026_posco-holdings.png",
-            "page": "stocks/026_005490.html"
+            "page": "stocks/026_005490.html",
+            "sharesOut": 79241527
       },
       {
             "rank": 27,
@@ -809,7 +1246,8 @@
             "industry": "조선·해양",
             "slug": "hanwha-ocean",
             "image": "images/027_hanwha-ocean.png",
-            "page": "stocks/027_042660.html"
+            "page": "stocks/027_042660.html",
+            "sharesOut": 306413394
       },
       {
             "rank": 28,
@@ -818,7 +1256,8 @@
             "industry": "금융·은행·증권",
             "slug": "hana-financial",
             "image": "images/028_hana-financial.png",
-            "page": "stocks/028_086790.html"
+            "page": "stocks/028_086790.html",
+            "sharesOut": 274367748
       },
       {
             "rank": 29,
@@ -827,7 +1266,8 @@
             "industry": "조선·해양",
             "slug": "hd-korea-shipbuilding",
             "image": "images/029_hd-korea-shipbuilding.png",
-            "page": "stocks/029_009540.html"
+            "page": "stocks/029_009540.html",
+            "sharesOut": 70773116
       },
       {
             "rank": 30,
@@ -836,7 +1276,8 @@
             "industry": "인터넷·플랫폼",
             "slug": "naver",
             "image": "images/030_naver.png",
-            "page": "stocks/030_035420.html"
+            "page": "stocks/030_035420.html",
+            "sharesOut": 156944242
       },
       {
             "rank": 31,
@@ -845,7 +1286,8 @@
             "industry": "철강·비철금속·소재",
             "slug": "korea-zinc",
             "image": "images/031_korea-zinc.png",
-            "page": "stocks/031_010130.html"
+            "page": "stocks/031_010130.html",
+            "sharesOut": 20872969
       },
       {
             "rank": 32,
@@ -854,7 +1296,8 @@
             "industry": "전자·가전",
             "slug": "lg-electronics",
             "image": "images/032_lg-electronics.png",
-            "page": "stocks/032_066570.html"
+            "page": "stocks/032_066570.html",
+            "sharesOut": 162884638
       },
       {
             "rank": 33,
@@ -863,7 +1306,8 @@
             "industry": "화학·정유·에너지",
             "slug": "lg-chem",
             "image": "images/033_lg-chem.png",
-            "page": "stocks/033_051910.html"
+            "page": "stocks/033_051910.html",
+            "sharesOut": 70592343
       },
       {
             "rank": 34,
@@ -872,7 +1316,8 @@
             "industry": "조선·해양",
             "slug": "samsung-heavy-industries",
             "image": "images/034_samsung-heavy-industries.png",
-            "page": "stocks/034_010140.html"
+            "page": "stocks/034_010140.html",
+            "sharesOut": 880000000
       },
       {
             "rank": 35,
@@ -881,7 +1326,8 @@
             "industry": "지주·복합기업",
             "slug": "doosan",
             "image": "images/035_doosan.png",
-            "page": "stocks/035_000150.html"
+            "page": "stocks/035_000150.html",
+            "sharesOut": 16193835
       },
       {
             "rank": 36,
@@ -890,7 +1336,8 @@
             "industry": "전력·기계·인프라",
             "slug": "korea-electric-power",
             "image": "images/036_korea-electric-power.png",
-            "page": "stocks/036_015760.html"
+            "page": "stocks/036_015760.html",
+            "sharesOut": 641964077
       },
       {
             "rank": 37,
@@ -899,7 +1346,8 @@
             "industry": "지주·복합기업",
             "slug": "hd-hyundai",
             "image": "images/037_hd-hyundai.png",
-            "page": "stocks/037_267250.html"
+            "page": "stocks/037_267250.html",
+            "sharesOut": 78993085
       },
       {
             "rank": 38,
@@ -908,7 +1356,8 @@
             "industry": "방산·항공우주",
             "slug": "hyundai-rotem",
             "image": "images/038_hyundai-rotem.png",
-            "page": "stocks/038_064350.html"
+            "page": "stocks/038_064350.html",
+            "sharesOut": 109142293
       },
       {
             "rank": 39,
@@ -917,7 +1366,8 @@
             "industry": "금융·은행·증권",
             "slug": "woori-financial",
             "image": "images/039_woori-financial.png",
-            "page": "stocks/039_316140.html"
+            "page": "stocks/039_316140.html",
+            "sharesOut": 728089682
       },
       {
             "rank": 40,
@@ -926,7 +1376,8 @@
             "industry": "통신",
             "slug": "sk-telecom",
             "image": "images/040_sk-telecom.png",
-            "page": "stocks/040_017670.html"
+            "page": "stocks/040_017670.html",
+            "sharesOut": 214790053
       },
       {
             "rank": 41,
@@ -935,7 +1386,8 @@
             "industry": "2차전지·전기차 소재",
             "slug": "posco-future-m",
             "image": "images/041_posco-future-m.png",
-            "page": "stocks/041_003670.html"
+            "page": "stocks/041_003670.html",
+            "sharesOut": 88946220
       },
       {
             "rank": 42,
@@ -944,7 +1396,8 @@
             "industry": "보험",
             "slug": "samsung-fire-marine",
             "image": "images/042_samsung-fire-marine.png",
-            "page": "stocks/042_000810.html"
+            "page": "stocks/042_000810.html",
+            "sharesOut": 44647473
       },
       {
             "rank": 43,
@@ -953,7 +1406,8 @@
             "industry": "화학·정유·에너지",
             "slug": "sk-innovation",
             "image": "images/043_sk-innovation.png",
-            "page": "stocks/043_096770.html"
+            "page": "stocks/043_096770.html",
+            "sharesOut": 169052788
       },
       {
             "rank": 44,
@@ -962,7 +1416,8 @@
             "industry": "물류·운송",
             "slug": "hyundai-glovis",
             "image": "images/044_hyundai-glovis.png",
-            "page": "stocks/044_086280.html"
+            "page": "stocks/044_086280.html",
+            "sharesOut": 75000000
       },
       {
             "rank": 45,
@@ -971,7 +1426,8 @@
             "industry": "방산·항공우주",
             "slug": "hanwha-systems",
             "image": "images/045_hanwha-systems.png",
-            "page": "stocks/045_272210.html"
+            "page": "stocks/045_272210.html",
+            "sharesOut": 188919389
       },
       {
             "rank": 46,
@@ -980,7 +1436,8 @@
             "industry": "소비재·식품·유통",
             "slug": "ktng",
             "image": "images/046_ktng.png",
-            "page": "stocks/046_033780.html"
+            "page": "stocks/046_033780.html",
+            "sharesOut": 103810456
       },
       {
             "rank": 47,
@@ -989,7 +1446,8 @@
             "industry": "방산·항공우주",
             "slug": "lig-defense-aerospace",
             "image": "images/047_lig-nex1.png",
-            "page": "stocks/047_079550.html"
+            "page": "stocks/047_079550.html",
+            "sharesOut": 22000000
       },
       {
             "rank": 48,
@@ -998,7 +1456,8 @@
             "industry": "IT서비스·SW",
             "slug": "hyundai-autoever",
             "image": "images/048_hyundai-autoever.png",
-            "page": "stocks/048_307950.html"
+            "page": "stocks/048_307950.html",
+            "sharesOut": 27423982
       },
       {
             "rank": 49,
@@ -1007,7 +1466,8 @@
             "industry": "인터넷·플랫폼",
             "slug": "kakao",
             "image": "images/049_kakao.png",
-            "page": "stocks/049_035720.html"
+            "page": "stocks/049_035720.html",
+            "sharesOut": 442981070
       },
       {
             "rank": 50,
@@ -1016,7 +1476,8 @@
             "industry": "물류·운송",
             "slug": "hmm",
             "image": "images/050_hmm.png",
-            "page": "stocks/050_011200.html"
+            "page": "stocks/050_011200.html",
+            "sharesOut": 943237970
       },
       {
             "rank": 51,
@@ -1025,7 +1486,8 @@
             "industry": "건설·인프라",
             "slug": "hyundai-engineering-construction",
             "image": "images/051_hyundai-engineering-construction.png",
-            "page": "stocks/051_000720.html"
+            "page": "stocks/051_000720.html",
+            "sharesOut": 111355765
       },
       {
             "rank": 52,
@@ -1034,7 +1496,8 @@
             "industry": "금융·은행·증권",
             "slug": "meritz-financial",
             "image": "images/052_meritz-financial.png",
-            "page": "stocks/052_138040.html"
+            "page": "stocks/052_138040.html",
+            "sharesOut": 167347273
       },
       {
             "rank": 53,
@@ -1043,7 +1506,8 @@
             "industry": "반도체·전자",
             "slug": "lg-innotek",
             "image": "images/053_lg-innotek.png",
-            "page": "stocks/053_011070.html"
+            "page": "stocks/053_011070.html",
+            "sharesOut": 23667107
       },
       {
             "rank": 54,
@@ -1052,7 +1516,8 @@
             "industry": "지주·복합기업",
             "slug": "lg-corp",
             "image": "images/054_lg-corp.png",
-            "page": "stocks/054_003550.html"
+            "page": "stocks/054_003550.html",
+            "sharesOut": 151192004
       },
       {
             "rank": 55,
@@ -1061,7 +1526,8 @@
             "industry": "금융·은행·증권",
             "slug": "ibk",
             "image": "images/055_ibk.png",
-            "page": "stocks/055_024110.html"
+            "page": "stocks/055_024110.html",
+            "sharesOut": 797425869
       },
       {
             "rank": 56,
@@ -1070,7 +1536,8 @@
             "industry": "지주·복합기업",
             "slug": "ls",
             "image": "images/056_ls.png",
-            "page": "stocks/056_006260.html"
+            "page": "stocks/056_006260.html",
+            "sharesOut": 31200000
       },
       {
             "rank": 57,
@@ -1079,7 +1546,8 @@
             "industry": "방산·항공우주",
             "slug": "korea-aerospace-industries",
             "image": "images/057_korea-aerospace-industries.png",
-            "page": "stocks/057_047810.html"
+            "page": "stocks/057_047810.html",
+            "sharesOut": 97475107
       },
       {
             "rank": 58,
@@ -1088,7 +1556,8 @@
             "industry": "생활·화장품",
             "slug": "apr",
             "image": "images/058_apr.png",
-            "page": "stocks/058_278470.html"
+            "page": "stocks/058_278470.html",
+            "sharesOut": 37438155
       },
       {
             "rank": 59,
@@ -1097,7 +1566,8 @@
             "industry": "통신",
             "slug": "kt",
             "image": "images/059_kt.png",
-            "page": "stocks/059_030200.html"
+            "page": "stocks/059_030200.html",
+            "sharesOut": 252021685
       },
       {
             "rank": 60,
@@ -1106,7 +1576,8 @@
             "industry": "금융·은행·증권",
             "slug": "korea-investment-holdings",
             "image": "images/060_korea-investment-holdings.png",
-            "page": "stocks/060_071050.html"
+            "page": "stocks/060_071050.html",
+            "sharesOut": 55725992
       },
       {
             "rank": 61,
@@ -1115,7 +1586,8 @@
             "industry": "IT서비스·SW",
             "slug": "samsung-sds",
             "image": "images/061_samsung-sds.png",
-            "page": "stocks/061_018260.html"
+            "page": "stocks/061_018260.html",
+            "sharesOut": 77377800
       },
       {
             "rank": 62,
@@ -1124,7 +1596,8 @@
             "industry": "게임·엔터테인먼트",
             "slug": "krafton",
             "image": "images/062_krafton.png",
-            "page": "stocks/062_259960.html"
+            "page": "stocks/062_259960.html",
+            "sharesOut": 46137833
       },
       {
             "rank": 63,
@@ -1133,7 +1606,8 @@
             "industry": "화학·정유·에너지",
             "slug": "s-oil",
             "image": "images/063_s-oil.png",
-            "page": "stocks/063_010950.html"
+            "page": "stocks/063_010950.html",
+            "sharesOut": 112582792
       },
       {
             "rank": 64,
@@ -1142,7 +1616,8 @@
             "industry": "상사·무역",
             "slug": "posco-international",
             "image": "images/064_posco-international.png",
-            "page": "stocks/064_047050.html"
+            "page": "stocks/064_047050.html",
+            "sharesOut": 175922788
       },
       {
             "rank": 65,
@@ -1151,7 +1626,8 @@
             "industry": "바이오·헬스케어",
             "slug": "samsung-epis-holdings",
             "image": "images/065_samsung-bioepis.png",
-            "page": "stocks/065_0126Z0.html"
+            "page": "stocks/065_0126Z0.html",
+            "sharesOut": 24883049
       },
       {
             "rank": 66,
@@ -1160,7 +1636,8 @@
             "industry": "전력·기계·인프라",
             "slug": "taihan-cable",
             "image": "images/066_taihan-cable.png",
-            "page": "stocks/066_001440.html"
+            "page": "stocks/066_001440.html",
+            "sharesOut": 195992596
       },
       {
             "rank": 67,
@@ -1169,7 +1646,8 @@
             "industry": "금융·은행·증권",
             "slug": "nh-investment-securities",
             "image": "images/067_nh-investment-securities.png",
-            "page": "stocks/067_005940.html"
+            "page": "stocks/067_005940.html",
+            "sharesOut": 369206105
       },
       {
             "rank": 68,
@@ -1178,7 +1656,8 @@
             "industry": "건설·인프라",
             "slug": "daewoo-enc",
             "image": "images/068_daewoo-enc.png",
-            "page": "stocks/068_047040.html"
+            "page": "stocks/068_047040.html",
+            "sharesOut": 410907638
       },
       {
             "rank": 69,
@@ -1187,7 +1666,8 @@
             "industry": "금융·은행·증권",
             "slug": "samsung-securities",
             "image": "images/069_samsung-securities.png",
-            "page": "stocks/069_016360.html"
+            "page": "stocks/069_016360.html",
+            "sharesOut": 89300000
       },
       {
             "rank": 70,
@@ -1196,7 +1676,8 @@
             "industry": "금융·은행·증권",
             "slug": "kiwoom-securities",
             "image": "images/070_kiwoom-securities.png",
-            "page": "stocks/070_039490.html"
+            "page": "stocks/070_039490.html",
+            "sharesOut": 26228316
       },
       {
             "rank": 71,
@@ -1205,7 +1686,8 @@
             "industry": "보험",
             "slug": "db-insurance",
             "image": "images/071_db-insurance.png",
-            "page": "stocks/071_005830.html"
+            "page": "stocks/071_005830.html",
+            "sharesOut": 65500349
       },
       {
             "rank": 72,
@@ -1214,7 +1696,8 @@
             "industry": "금융·은행·증권",
             "slug": "kakaobank",
             "image": "images/072_kakaobank.png",
-            "page": "stocks/072_323410.html"
+            "page": "stocks/072_323410.html",
+            "sharesOut": 477120437
       },
       {
             "rank": 73,
@@ -1223,7 +1706,8 @@
             "industry": "조선·해양",
             "slug": "hd-hyundai-marine-solution",
             "image": "images/073_hd-hyundai-marine-solution.png",
-            "page": "stocks/073_443060.html"
+            "page": "stocks/073_443060.html",
+            "sharesOut": 44833460
       },
       {
             "rank": 74,
@@ -1232,7 +1716,8 @@
             "industry": "건설·인프라",
             "slug": "samsung-ea",
             "image": "images/074_samsung-ea.png",
-            "page": "stocks/074_028050.html"
+            "page": "stocks/074_028050.html",
+            "sharesOut": 196000000
       },
       {
             "rank": 75,
@@ -1241,7 +1726,8 @@
             "industry": "게임·엔터테인먼트",
             "slug": "hybe",
             "image": "images/075_hybe.png",
-            "page": "stocks/075_352820.html"
+            "page": "stocks/075_352820.html",
+            "sharesOut": 43106836
       },
       {
             "rank": 76,
@@ -1250,7 +1736,8 @@
             "industry": "지주·복합기업",
             "slug": "hanwha",
             "image": "images/076_hanwha.png",
-            "page": "stocks/076_000880.html"
+            "page": "stocks/076_000880.html",
+            "sharesOut": 70507919
       },
       {
             "rank": 77,
@@ -1259,7 +1746,8 @@
             "industry": "자동차·부품",
             "slug": "hyundai-motor-preferred-2b",
             "image": "images/077_hyundai-motor-preferred-2b.png",
-            "page": "stocks/077_005387.html"
+            "page": "stocks/077_005387.html",
+            "sharesOut": 34963930
       },
       {
             "rank": 78,
@@ -1268,7 +1756,8 @@
             "industry": "반도체·전자",
             "slug": "isupetasys",
             "image": "images/078_isupetasys.png",
-            "page": "stocks/078_007660.html"
+            "page": "stocks/078_007660.html",
+            "sharesOut": 73409219
       },
       {
             "rank": 79,
@@ -1277,7 +1766,8 @@
             "industry": "소비재·식품·유통",
             "slug": "samyang-foods",
             "image": "images/079_samyang-foods.png",
-            "page": "stocks/079_003230.html"
+            "page": "stocks/079_003230.html",
+            "sharesOut": 7533015
       },
       {
             "rank": 80,
@@ -1286,7 +1776,8 @@
             "industry": "물류·운송",
             "slug": "korean-air",
             "image": "images/080_korean-air.png",
-            "page": "stocks/080_003490.html"
+            "page": "stocks/080_003490.html",
+            "sharesOut": 368220661
       },
       {
             "rank": 81,
@@ -1295,7 +1786,8 @@
             "industry": "전력·기계·인프라",
             "slug": "sanil-electric",
             "image": "images/081_sanil-electric.png",
-            "page": "stocks/081_062040.html"
+            "page": "stocks/081_062040.html",
+            "sharesOut": 30615850
       },
       {
             "rank": 82,
@@ -1304,7 +1796,8 @@
             "industry": "전력·기계·인프라",
             "slug": "hd-hyundai-construction-equipment",
             "image": "images/082_hd-hyundai-construction-equipment.png",
-            "page": "stocks/082_267270.html"
+            "page": "stocks/082_267270.html",
+            "sharesOut": 47921897
       },
       {
             "rank": 83,
@@ -1313,7 +1806,8 @@
             "industry": "전력·기계·인프라",
             "slug": "gaon-cable",
             "image": "images/083_gaon-cable.png",
-            "page": "stocks/083_000500.html"
+            "page": "stocks/083_000500.html",
+            "sharesOut": 29777607
       },
       {
             "rank": 104,
@@ -1322,7 +1816,8 @@
             "industry": "반도체·전자",
             "slug": "db-hitek",
             "image": "images/084_db-hitek.png",
-            "page": "stocks/084_000990.html"
+            "page": "stocks/084_000990.html",
+            "sharesOut": 43504588
       },
       {
             "rank": 85,
@@ -1331,7 +1826,8 @@
             "industry": "바이오·헬스케어",
             "slug": "sk-biopharmaceuticals",
             "image": "images/085_sk-biopharmaceuticals.png",
-            "page": "stocks/085_326030.html"
+            "page": "stocks/085_326030.html",
+            "sharesOut": 78313250
       },
       {
             "rank": 86,
@@ -1340,7 +1836,8 @@
             "industry": "지주·복합기업",
             "slug": "hanjin-kal",
             "image": "images/086_hanjin-kal.png",
-            "page": "stocks/086_180640.html"
+            "page": "stocks/086_180640.html",
+            "sharesOut": 66762279
       },
       {
             "rank": 103,
@@ -1349,7 +1846,8 @@
             "industry": "화학·정유·에너지",
             "slug": "hanwha-solutions",
             "image": "images/087_hanwha-solutions.png",
-            "page": "stocks/087_009830.html"
+            "page": "stocks/087_009830.html",
+            "sharesOut": 171892536
       },
       {
             "rank": 88,
@@ -1358,7 +1856,8 @@
             "industry": "자동차·부품",
             "slug": "hankook-tire-technology",
             "image": "images/088_hankook-tire-technology.png",
-            "page": "stocks/088_161390.html"
+            "page": "stocks/088_161390.html",
+            "sharesOut": 123875069
       },
       {
             "rank": 89,
@@ -1367,7 +1866,8 @@
             "industry": "IT서비스·SW",
             "slug": "lg-cns",
             "image": "images/089_lg-cns.png",
-            "page": "stocks/089_064400.html"
+            "page": "stocks/089_064400.html",
+            "sharesOut": 96885948
       },
       {
             "rank": 102,
@@ -1376,7 +1876,8 @@
             "industry": "반도체·전자",
             "slug": "lg-display",
             "image": "images/090_lg-display.png",
-            "page": "stocks/090_034220.html"
+            "page": "stocks/090_034220.html",
+            "sharesOut": 500000000
       },
       {
             "rank": 91,
@@ -1385,7 +1886,8 @@
             "industry": "반도체·전자",
             "slug": "daeduck-electronics",
             "image": "images/091_daeduck-electronics.png",
-            "page": "stocks/091_353200.html"
+            "page": "stocks/091_353200.html",
+            "sharesOut": 49416925
       },
       {
             "rank": 92,
@@ -1394,7 +1896,8 @@
             "industry": "생활·화장품",
             "slug": "amorepacific",
             "image": "images/092_amorepacific.png",
-            "page": "stocks/092_090430.html"
+            "page": "stocks/092_090430.html",
+            "sharesOut": 58492759
       },
       {
             "rank": 93,
@@ -1403,7 +1906,8 @@
             "industry": "금융·은행·증권",
             "slug": "kakao-pay",
             "image": "images/093_kakao-pay.png",
-            "page": "stocks/093_377300.html"
+            "page": "stocks/093_377300.html",
+            "sharesOut": 135270125
       },
       {
             "rank": 105,
@@ -1412,7 +1916,8 @@
             "industry": "2차전지·전기차 소재",
             "slug": "l-and-f",
             "image": "images/094_l-and-f.png",
-            "page": "stocks/094_066970.html"
+            "page": "stocks/094_066970.html",
+            "sharesOut": 40683260
       },
       {
             "rank": 95,
@@ -1421,7 +1926,8 @@
             "industry": "바이오·헬스케어",
             "slug": "yuhan",
             "image": "images/095_yuhan.png",
-            "page": "stocks/095_000100.html"
+            "page": "stocks/095_000100.html",
+            "sharesOut": 79647601
       },
       {
             "rank": 96,
@@ -1430,7 +1936,8 @@
             "industry": "전력·기계·인프라",
             "slug": "doosan-bobcat",
             "image": "images/096_doosan-bobcat.png",
-            "page": "stocks/096_241560.html"
+            "page": "stocks/096_241560.html",
+            "sharesOut": 95856065
       },
       {
             "rank": 97,
@@ -1439,7 +1946,8 @@
             "industry": "소비재·식품·유통",
             "slug": "coway",
             "image": "images/097_coway.png",
-            "page": "stocks/097_021240.html"
+            "page": "stocks/097_021240.html",
+            "sharesOut": 70767426
       },
       {
             "rank": 98,
@@ -1448,7 +1956,8 @@
             "industry": "지주·복합기업",
             "slug": "gs",
             "image": "images/098_gs.png",
-            "page": "stocks/098_078930.html"
+            "page": "stocks/098_078930.html",
+            "sharesOut": 92895495
       },
       {
             "rank": 106,
@@ -1457,7 +1966,8 @@
             "industry": "전력·기계·인프라",
             "slug": "iljin-electric",
             "image": "images/099_iljin-electric.png",
-            "page": "stocks/099_103590.html"
+            "page": "stocks/099_103590.html",
+            "sharesOut": 47685390
       },
       {
             "rank": 100,
@@ -1466,7 +1976,8 @@
             "industry": "통신",
             "slug": "lg-uplus",
             "image": "images/100_lg-uplus.png",
-            "page": "stocks/100_032640.html"
+            "page": "stocks/100_032640.html",
+            "sharesOut": 424427732
       },
       {
             "rank": 101,
@@ -1475,7 +1986,8 @@
             "industry": "소비재·식품·유통",
             "slug": "nong-sim",
             "image": "images/100_lg-uplus.png",
-            "page": "stocks/101_004370.html"
+            "page": "stocks/101_004370.html",
+            "sharesOut": 6082642
       },
       {
             "rank": 84,
@@ -1484,7 +1996,8 @@
             "industry": "금융·은행·증권",
             "slug": "samsung-card",
             "image": "images/084_samsung-card.png",
-            "page": "stocks/084_029780.html"
+            "page": "stocks/084_029780.html",
+            "sharesOut": 115858891
       },
       {
             "rank": 87,
@@ -1493,7 +2006,8 @@
             "industry": "금융·은행·증권",
             "slug": "bnk-financial-group",
             "image": "images/087_bnk-financial-group.png",
-            "page": "stocks/087_138930.html"
+            "page": "stocks/087_138930.html",
+            "sharesOut": 310327033
       },
       {
             "rank": 90,
@@ -1502,7 +2016,8 @@
             "industry": "금융·은행·증권",
             "slug": "jb-financial-group",
             "image": "images/090_jb-financial-group.png",
-            "page": "stocks/090_175330.html"
+            "page": "stocks/090_175330.html",
+            "sharesOut": 186521824
       },
       {
             "rank": 94,
@@ -1511,7 +2026,8 @@
             "industry": "소비재·식품·유통",
             "slug": "orion",
             "image": "images/094_orion.png",
-            "page": "stocks/094_271560.html"
+            "page": "stocks/094_271560.html",
+            "sharesOut": 39528788
       },
       {
             "rank": 99,
@@ -1520,7 +2036,8 @@
             "industry": "게임·엔터테인먼트",
             "slug": "nc",
             "image": "images/099_nc.png",
-            "page": "stocks/099_036570.html"
+            "page": "stocks/099_036570.html",
+            "sharesOut": 21544022
       }
 ].filter((s) => s.rank <= 100);
 
@@ -1554,7 +2071,233 @@
     const mainTitle = document.getElementById('mainTitle');
     const rankViewBtn = document.getElementById('rankViewBtn');
     const industryViewBtn = document.getElementById('industryViewBtn');
-    const industryNav = document.getElementById('industryNav');
+    const statGrid = document.getElementById('statGrid');
+    const favCountEl = document.getElementById('favCount');
+    const favOnlyCheckbox = document.getElementById('favOnlyCheckbox');
+    const favOnlyBtn = document.getElementById('favOnlyBtn');
+
+    // ── 즐겨찾기 (localStorage) ──
+    const FAV_KEY = 'kospi10000.favorites';
+    let favorites = new Set(JSON.parse(localStorage.getItem(FAV_KEY) || '[]'));
+    let currentView = 'rank';
+    let favOnlyActive = false;
+
+    function saveFavorites() {
+      localStorage.setItem(FAV_KEY, JSON.stringify([...favorites]));
+    }
+
+    function updateFavCount() {
+      favCountEl.textContent = favorites.size;
+    }
+
+    function toggleFavorite(code) {
+      favorites.has(code) ? favorites.delete(code) : favorites.add(code);
+      saveFavorites();
+      updateFavCount();
+      rerenderCurrentView();
+    }
+
+    // ── 포맷터 ──
+    function fmtWon(n) { return n.toLocaleString('ko-KR') + '원'; }
+    function fmtChange(pct) { return (pct >= 0 ? '+' : '') + pct.toFixed(2) + '%'; }
+    function fmtMcap(joWon) {
+      if (joWon == null) return '—';
+      return joWon.toFixed(1) + '조원';
+    }
+    function marketCapOf(stock) {
+      const live = stockLive[stock.code];
+      if (!live || !stock.sharesOut) return null;
+      return (live.price * stock.sharesOut) / 1e12;
+    }
+
+    function getVisibleIndustries() {
+      return industryOrder.filter((industry) =>
+        stocks.some((stock) => stock.industry === industry)
+      );
+    }
+
+    // ── 통계 카드 ──
+    function renderStatCards() {
+      const liveVals = Object.values(stockLive);
+      const upCount = liveVals.filter((v) => v.change >= 5).length;
+      const downCount = liveVals.filter((v) => v.change <= -5).length;
+      statGrid.innerHTML = `
+        <div class="stat-card">
+          <div class="stat-label">대상 종목</div>
+          <div class="stat-value">${stocks.length}<span class="stat-unit"> 개</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">해당 업종</div>
+          <div class="stat-value">${getVisibleIndustries().length}<span class="stat-unit"> 개</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">5% 이상 상승</div>
+          <div class="stat-value up">${upCount}<span class="stat-unit"> 개</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">5% 이상 하락</div>
+          <div class="stat-value dn">${downCount}<span class="stat-unit"> 개</span></div>
+        </div>
+      `;
+    }
+
+    // ── 순위별 뷰 ──
+    function createRankRow(stock) {
+      const row = document.createElement('div');
+      row.className = 'rank-row';
+      row.setAttribute('role', 'row');
+
+      const live = stockLive[stock.code];
+      const isFav = favorites.has(stock.code);
+      const mcap = marketCapOf(stock);
+      const hasChange = live && typeof live.change === 'number';
+
+      row.innerHTML = `
+        <div class="rr-rank" role="cell">${stock.rank}</div>
+        <div class="rr-name-group">
+          <div class="rr-name" role="cell">${stock.name}<small>${stock.code}</small></div>
+          <div role="cell"><span class="industry-badge">${stock.industry}</span></div>
+        </div>
+        <div class="rr-price-group">
+          <div class="rr-price" role="cell">${live ? fmtWon(live.price) : '—'}</div>
+          <div class="rr-change ${hasChange ? (live.change >= 0 ? 'up' : 'dn') : ''}" role="cell">${hasChange ? fmtChange(live.change) : '—'}</div>
+        </div>
+        <div class="rr-mcap" role="cell">${fmtMcap(mcap)}</div>
+        <div class="rr-star" role="cell"><button type="button" class="star-btn ${isFav ? 'active' : ''}" aria-label="즐겨찾기">${isFav ? '★' : '☆'}</button></div>
+      `;
+
+      row.addEventListener('click', () => { window.location.href = stock.page; });
+      row.querySelector('.star-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleFavorite(stock.code);
+      });
+
+      return row;
+    }
+
+    function renderRankView() {
+      stockArea.innerHTML = '';
+      mainTitle.textContent = 'KOSPI Top 100 - 순위별 보기';
+
+      const base = stocks.filter((s) => !favOnlyActive || favorites.has(s.code));
+
+      const table = document.createElement('div');
+      table.className = 'rank-table';
+      table.setAttribute('role', 'table');
+
+      const head = document.createElement('div');
+      head.className = 'rank-table-head';
+      head.setAttribute('role', 'row');
+      head.innerHTML = `
+        <div role="columnheader">순위</div>
+        <div role="columnheader">종목명</div>
+        <div role="columnheader">업종</div>
+        <div role="columnheader" style="text-align:right;">현재가</div>
+        <div role="columnheader" style="text-align:right;">등락률</div>
+        <div role="columnheader" style="text-align:right;">시가총액</div>
+        <div role="columnheader"></div>
+      `;
+      table.appendChild(head);
+
+      [...base]
+        .sort((a, b) => a.rank - b.rank)
+        .forEach((stock) => table.appendChild(createRankRow(stock)));
+
+      stockArea.appendChild(table);
+    }
+
+    // ── 업종별 뷰 ──
+    function createSectorRow(stock) {
+      const row = document.createElement('div');
+      row.className = 'sector-row';
+
+      const live = stockLive[stock.code];
+      const isFav = favorites.has(stock.code);
+      const hasChange = live && typeof live.change === 'number';
+
+      row.innerHTML = `
+        <div class="sr-left">
+          <button type="button" class="star-btn ${isFav ? 'active' : ''}" aria-label="즐겨찾기">${isFav ? '★' : '☆'}</button>
+          <div class="sr-name">${stock.name}</div>
+          <div class="sr-code">${stock.code}</div>
+        </div>
+        <div class="sr-right">
+          <div class="sr-price">${live ? fmtWon(live.price) : '—'}</div>
+          <div class="sr-change ${hasChange ? (live.change >= 0 ? 'up' : 'dn') : ''}">${hasChange ? fmtChange(live.change) : '—'}</div>
+        </div>
+      `;
+
+      row.addEventListener('click', () => { window.location.href = stock.page; });
+      row.querySelector('.star-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleFavorite(stock.code);
+      });
+
+      return row;
+    }
+
+    function renderSectorView() {
+      stockArea.innerHTML = '';
+      mainTitle.textContent = 'KOSPI Top 100 - 업종별 보기';
+
+      const base = stocks.filter((s) => !favOnlyActive || favorites.has(s.code));
+
+      getVisibleIndustries().forEach((industry) => {
+        const industryStocks = base
+          .filter((stock) => stock.industry === industry)
+          .sort((a, b) => a.rank - b.rank);
+
+        if (industryStocks.length === 0) return;
+
+        const section = document.createElement('section');
+        section.className = 'industry-section';
+
+        const header = document.createElement('div');
+        header.className = 'industry-header';
+        header.innerHTML = `
+          <h3 class="industry-title">${industry}</h3>
+          <span class="industry-count">${industryStocks.length}개 종목</span>
+        `;
+
+        const list = document.createElement('div');
+        list.className = 'sector-list';
+        industryStocks.forEach((stock) => list.appendChild(createSectorRow(stock)));
+
+        section.appendChild(header);
+        section.appendChild(list);
+        stockArea.appendChild(section);
+      });
+    }
+
+    // ── 탭 전환 / 즐겨찾기만 보기 ──
+    function setActiveViewButton(mode) {
+      rankViewBtn.classList.toggle('active', mode === 'rank');
+      industryViewBtn.classList.toggle('active', mode === 'industry');
+    }
+
+    function rerenderCurrentView() {
+      if (currentView === 'rank') { renderRankView(); } else { renderSectorView(); }
+    }
+
+    function setFavOnly(active) {
+      favOnlyActive = active;
+      favOnlyCheckbox.checked = active;
+      favOnlyBtn.classList.toggle('active', active);
+      rerenderCurrentView();
+    }
+
+    rankViewBtn.addEventListener('click', () => {
+      currentView = 'rank';
+      setActiveViewButton('rank');
+      renderRankView();
+    });
+    industryViewBtn.addEventListener('click', () => {
+      currentView = 'industry';
+      setActiveViewButton('industry');
+      renderSectorView();
+    });
+    favOnlyCheckbox.addEventListener('change', () => setFavOnly(favOnlyCheckbox.checked));
+    favOnlyBtn.addEventListener('click', () => setFavOnly(!favOnlyActive));
 
     function renderDailyMovers() {
       const container = document.getElementById('dailyMoverGroups');
@@ -1604,137 +2347,8 @@
         });
     }
 
-    function createStockCard(stock) {
-      const card = document.createElement('article');
-      card.className = 'stock-card';
-
-      card.innerHTML = `
-        <a href="${stock.page}">
-          <img src="${stock.image}" alt="${stock.name} 대표 이미지" loading="lazy">
-          <div class="stock-info">
-            <div class="stock-rank">KOSPI ${stock.rank}위</div>
-            <h3 class="stock-name">${stock.name}</h3>
-            <div class="stock-code">종목코드: ${stock.code}</div>
-            <div class="stock-industry">업종: ${stock.industry}</div>
-          </div>
-        </a>
-      `;
-
-      return card;
-    }
-
-    function setActiveViewButton(mode) {
-      rankViewBtn.classList.toggle('active', mode === 'rank');
-      industryViewBtn.classList.toggle('active', mode === 'industry');
-    }
-
-    function setActiveIndustryButton(selectedIndustry) {
-      document.querySelectorAll('.industry-nav-btn').forEach((button) => {
-        button.classList.toggle('active', button.dataset.industry === selectedIndustry);
-      });
-    }
-
-    function getVisibleIndustries() {
-      return industryOrder.filter((industry) =>
-        stocks.some((stock) => stock.industry === industry)
-      );
-    }
-
-    function renderIndustryNav() {
-      industryNav.innerHTML = '';
-
-      const allButton = document.createElement('button');
-      allButton.type = 'button';
-      allButton.className = 'industry-nav-btn active';
-      allButton.dataset.industry = '전체';
-      allButton.textContent = '전체';
-      allButton.addEventListener('click', () => {
-        setActiveIndustryButton('전체');
-        renderIndustrySections('전체');
-      });
-      industryNav.appendChild(allButton);
-
-      getVisibleIndustries().forEach((industry) => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'industry-nav-btn';
-        button.dataset.industry = industry;
-        button.textContent = industry;
-        button.addEventListener('click', () => {
-          setActiveIndustryButton(industry);
-          renderIndustrySections(industry);
-        });
-        industryNav.appendChild(button);
-      });
-    }
-
-    function renderRankView() {
-      stockArea.innerHTML = '';
-      mainTitle.textContent = 'KOSPI Top 100 - 순위별 보기';
-      setActiveViewButton('rank');
-      industryNav.classList.remove('show');
-
-      const grid = document.createElement('section');
-      grid.className = 'stock-grid';
-
-      [...stocks]
-        .sort((a, b) => a.rank - b.rank)
-        .forEach((stock) => {
-          grid.appendChild(createStockCard(stock));
-        });
-
-      stockArea.appendChild(grid);
-    }
-
-    function renderIndustrySections(selectedIndustry = '전체') {
-      stockArea.innerHTML = '';
-
-      const industriesToRender =
-        selectedIndustry === '전체' ? getVisibleIndustries() : [selectedIndustry];
-
-      industriesToRender.forEach((industry) => {
-        const industryStocks = stocks
-          .filter((stock) => stock.industry === industry)
-          .sort((a, b) => a.rank - b.rank);
-
-        if (industryStocks.length === 0) return;
-
-        const section = document.createElement('section');
-        section.className = 'industry-section';
-        section.id = `industry-${industry.replaceAll('·', '-').replaceAll(' ', '-')}`;
-
-        const header = document.createElement('div');
-        header.className = 'industry-header';
-        header.innerHTML = `
-          <h3 class="industry-title">${industry}</h3>
-          <span class="industry-count">${industryStocks.length}개 종목</span>
-        `;
-
-        const grid = document.createElement('div');
-        grid.className = 'stock-grid';
-
-        industryStocks.forEach((stock) => {
-          grid.appendChild(createStockCard(stock));
-        });
-
-        section.appendChild(header);
-        section.appendChild(grid);
-        stockArea.appendChild(section);
-      });
-    }
-
-    function renderIndustryView() {
-      mainTitle.textContent = 'KOSPI Top 100 - 업종별 보기';
-      setActiveViewButton('industry');
-      industryNav.classList.add('show');
-
-      renderIndustryNav();
-      renderIndustrySections('전체');
-    }
-
-    rankViewBtn.addEventListener('click', renderRankView);
-    industryViewBtn.addEventListener('click', renderIndustryView);
-
+    updateFavCount();
+    renderStatCards();
     renderDailyMovers();
     renderRankView();
   </script>
