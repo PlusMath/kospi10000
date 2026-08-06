@@ -1,450 +1,428 @@
 <link rel="stylesheet" href="../css/global.css">
 <script src="../js/chart-common.js"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
-.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:18px;font-variant-numeric:tabular-nums;}
-.sec{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:12px;}
-.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:14px;}
-.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;}
-.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px;text-align:center;}
-.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
-.mv{font-size:14px;font-weight:600;color:var(--color-text-primary);font-variant-numeric:tabular-nums;}
-.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
-.up{color:#1D9E75;}.dn{color:#D85A30;}
-.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
-.b-green{background:#EAF3DE;color:#3B6D11;}.b-amber{background:#FAEEDA;color:#854F0B;}
-.b-red{background:#FCEBEB;color:#A32D2D;}.b-blue{background:#E6F1FB;color:#185FA5;}
-.b-gray{background:#F1EFE8;color:#5F5E5A;}.b-lgc{background:#EEE8F5;color:#5B3A8E;}
-.sig{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
-.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
-.ir:last-child{border-bottom:none;}
-.il{color:var(--color-text-secondary);}.iv{font-weight:600;color:var(--color-text-primary);display:flex;align-items:center;gap:6px;font-variant-numeric:tabular-nums;}
-.src{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-tertiary);margin-left:4px;}
-.hl{background:#EAF3DE;border-left:3px solid #1D9E75;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
-.warn{background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
-.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
-.ev{font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;}
-.ev-1{background:#E6F1FB;color:#0C447C;}.ev-2{background:#EAF3DE;color:#27500A;}
-.ev-3{background:#F1EFE8;color:#444441;}.ev-4{background:#FAEEDA;color:#633806;}
-.ev-5{background:#FCEBEB;color:#791F1F;}
-.ind-row{display:flex;align-items:center;padding:8px 0;border-bottom:.5px solid var(--color-border-tertiary);gap:10px;}
-.ind-row:last-child{border-bottom:none;}
-.ind-nm{font-size:13px;font-weight:600;color:var(--color-text-primary);min-width:150px;}
-.ind-val{font-size:14px;font-weight:600;color:var(--color-text-primary);min-width:80px;text-align:right;font-variant-numeric:tabular-nums;}
-.bar-bg{background:var(--color-border-tertiary);border-radius:4px;height:7px;}
-.bar-f{border-radius:4px;height:7px;}
-.tl{position:relative;padding-left:28px;}
-.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--color-border-tertiary);border-radius:2px;}
-.tl-item{position:relative;margin-bottom:18px;}
-.tl-item:last-child{margin-bottom:0;}
-.tl-dot{position:absolute;left:-24px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid var(--color-background-primary);}
-.dot-big{background:#5B3A8E;}.dot-pos{background:#1D9E75;}
-.dot-neg{background:#D85A30;}.dot-neu{background:#888780;}
-.tl-date{font-size:11px;font-weight:600;color:var(--color-text-tertiary);margin-bottom:3px;}
-.tl-title{font-size:13px;font-weight:600;color:var(--color-text-primary);margin-bottom:3px;line-height:1.4;}
-.tl-body{font-size:12px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:5px;}
-.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;margin-right:4px;}
-.tag-big{background:#EEE8F5;color:#5B3A8E;}.tag-pos{background:#EAF3DE;color:#3B6D11;}
-.tag-neg{background:#FCEBEB;color:#791F1F;}.tag-neu{background:#F1EFE8;color:#444441;}
-button:focus-visible,a:focus-visible{outline:2px solid #5B3A8E;outline-offset:2px;}
+*{box-sizing:border-box;}
+:root{
+  --dp-accent:oklch(0.32 0.09 260);
+  --dp-accent-soft:oklch(0.32 0.09 260 / 0.06);
+  --dp-accent-soft2:oklch(0.32 0.09 260 / 0.14);
+  --dp-up:oklch(0.55 0.2 25);
+  --dp-down:oklch(0.52 0.14 250);
+  --dp-bg:oklch(0.99 0.002 90);
+  --dp-card:oklch(1 0 0);
+  --dp-border:oklch(0.91 0.005 90);
+  --dp-border2:oklch(0.94 0.004 90);
+  --dp-text:oklch(0.18 0.02 260);
+  --dp-text2:oklch(0.4 0.02 260);
+  --dp-text3:oklch(0.5 0.02 260);
+  --dp-text4:oklch(0.55 0.02 260);
+}
+body{background:var(--dp-bg);}
+.dp{font-family:'Noto Sans KR',Arial,sans-serif;color:var(--dp-text);max-width:800px;margin:0 auto;}
+.dp a{color:oklch(0.4 0.1 258);text-decoration:none;}
+.dp table{width:100%;border-collapse:collapse;}
+.dp-back{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:700;color:var(--dp-text3);margin-bottom:18px;}
+.dp-title-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
+.dp-h1{font-size:21px;font-weight:800;margin:0;}
+.dp-ticker{font-size:13px;color:var(--dp-text3);font-weight:600;}
+.dp-badge{font-size:12px;font-weight:700;color:var(--dp-accent);background:var(--dp-accent-soft2);padding:4px 10px;border-radius:6px;}
+.dp-price-row{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;flex-wrap:wrap;}
+.dp-price{font-size:42px;font-weight:800;letter-spacing:-0.01em;}
+.dp-chg{font-size:16px;font-weight:700;padding:5px 12px;border-radius:8px;background:oklch(0.55 0.2 25 / 0.1);color:var(--dp-up);}
+.dp-chg.dn{background:oklch(0.52 0.14 250 / 0.1);color:var(--dp-down);}
+.dp-date{font-size:13px;color:var(--dp-text4);}
+.dp-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--dp-border);border:1px solid var(--dp-border);border-radius:12px;overflow:hidden;margin-bottom:20px;}
+.dp-stat{background:var(--dp-card);padding:14px 16px;}
+.dp-stat-l{font-size:11px;color:var(--dp-text4);margin-bottom:4px;}
+.dp-stat-v{font-size:14px;font-weight:700;}
+.dp-summary{background:var(--dp-accent-soft);border:1px solid var(--dp-accent-soft2);border-radius:12px;padding:16px 18px;margin-bottom:28px;}
+.dp-summary-l{font-size:13px;font-weight:700;color:var(--dp-accent);margin-bottom:5px;}
+.dp-summary-b{font-size:13px;line-height:1.7;color:oklch(0.28 0.03 260);}
+.dp-openclose{display:flex;justify-content:flex-end;gap:10px;margin-bottom:10px;}
+.dp-openclose button{border:none;background:none;cursor:pointer;font-size:12.5px;font-weight:700;padding:0;font-family:inherit;}
+.dp-openclose .op{color:var(--dp-accent);}
+.dp-openclose .cl{color:var(--dp-text4);}
+.dp-sep{color:oklch(0.85 0.005 90);}
+.dp-acc{border:1px solid var(--dp-border);border-radius:12px;margin-bottom:12px;overflow:hidden;background:var(--dp-card);}
+.dp-acc-h{width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:none;border:none;cursor:pointer;font-family:inherit;text-align:left;}
+.dp-acc-h span:first-child{font-size:15px;font-weight:700;}
+.dp-acc-chev{font-size:13px;color:var(--dp-text4);transition:transform .15s;display:inline-block;}
+.dp-acc.open .dp-acc-chev{transform:rotate(180deg);}
+.dp-acc-body{display:none;padding:16px 20px 22px;border-top:1px solid var(--dp-border2);}
+.dp-acc.open .dp-acc-body{display:block;}
+.dp-row2{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--dp-border2);font-size:12.5px;}
+.dp-row2 .l{color:var(--dp-text2);}
+.dp-row2 .v{font-weight:700;}
+.dp-row2 .v.up{color:var(--dp-up);}
+.dp-g2{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:16px;}
+.dp-secl{font-size:12px;font-weight:700;color:var(--dp-text4);margin-bottom:8px;}
+.dp-tab-row{display:flex;gap:6px;margin-bottom:16px;}
+.dp-tab{flex:1;padding:9px 0;border-radius:8px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;border:1px solid var(--dp-border);background:var(--dp-card);color:var(--dp-text2);text-align:center;}
+.dp-tab.active{background:var(--dp-accent);border-color:var(--dp-accent);color:#fff;}
+.dp-seg3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+.dp-seg{background:oklch(0.97 0.004 90);border-radius:10px;padding:12px;}
+.dp-seg-t{font-size:12.5px;font-weight:700;margin-bottom:6px;}
+.dp-seg-d{font-size:11.5px;color:oklch(0.45 0.02 260);line-height:1.6;}
+.dp-eps-flow{display:flex;align-items:stretch;gap:8px;margin-bottom:16px;}
+.dp-eps-card{flex:1;text-align:center;background:oklch(0.97 0.004 90);border:1px solid var(--dp-border);border-radius:10px;padding:12px 8px;}
+.dp-eps-card.now{background:var(--dp-accent-soft);border-color:var(--dp-accent);}
+.dp-eps-y{font-size:10.5px;color:var(--dp-text3);margin-bottom:4px;}
+.dp-eps-v{font-size:17px;font-weight:800;}
+.dp-eps-n{font-size:10px;color:var(--dp-text4);margin-top:4px;}
+.dp-arrow{display:flex;align-items:center;font-size:18px;color:var(--dp-up);font-weight:700;}
+.dp-insight{background:var(--dp-accent-soft);border-radius:10px;padding:14px 16px;}
+.dp-insight-t{font-size:12.5px;font-weight:700;color:var(--dp-accent);margin-bottom:4px;}
+.dp-insight-b{font-size:12.5px;line-height:1.65;color:oklch(0.3 0.03 260);}
+.dp-share4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;}
+.dp-share{background:oklch(0.97 0.004 90);border-radius:10px;padding:12px;text-align:center;}
+.dp-share-l{font-size:11px;color:var(--dp-text3);margin-bottom:5px;}
+.dp-share-v{font-size:15px;font-weight:800;}
+.dp-share-s{font-size:10px;color:var(--dp-text4);margin-top:3px;}
+.dp-gauge{margin-bottom:14px;}
+.dp-gauge-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;}
+.dp-gauge-h span:first-child{font-size:13px;font-weight:700;}
+.dp-gauge-h span:last-child{font-size:14px;font-weight:800;}
+.dp-gauge-track{background:oklch(0.93 0.004 90);border-radius:5px;height:6px;margin-bottom:5px;}
+.dp-gauge-fill{background:var(--dp-accent);border-radius:5px;height:6px;}
+.dp-gauge-note{font-size:11.5px;color:var(--dp-text3);line-height:1.55;}
+.dp-tl{position:relative;padding-left:22px;}
+.dp-tl::before{content:'';position:absolute;left:5px;top:4px;bottom:4px;width:2px;background:var(--dp-border);border-radius:2px;}
+.dp-tl-item{position:relative;margin-bottom:18px;}
+.dp-tl-item:last-child{margin-bottom:0;}
+.dp-tl-dot{position:absolute;left:-21px;top:3px;width:10px;height:10px;border-radius:50%;background:var(--dp-accent);border:2px solid var(--dp-card);}
+.dp-tl-date{font-size:11px;font-weight:700;color:var(--dp-text4);margin-bottom:3px;}
+.dp-tl-title{font-size:13.5px;font-weight:700;margin-bottom:4px;line-height:1.4;}
+.dp-tl-body{font-size:12px;color:oklch(0.45 0.02 260);line-height:1.6;}
+.dp-thesis{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+.dp-thesis-t{font-size:13px;font-weight:700;margin-bottom:10px;}
+.dp-thesis-t.bull{color:var(--dp-up);}
+.dp-thesis-t.bear{color:var(--dp-down);}
+.dp-thesis-item{display:flex;gap:8px;padding:6px 0;font-size:12.5px;line-height:1.5;}
+.dp-thesis-item .dot{flex-shrink:0;}
+.dp-thesis-item.bull .dot{color:var(--dp-up);}
+.dp-thesis-item.bear .dot{color:var(--dp-down);}
+.dp-cons-th{text-align:left;font-size:11px;color:var(--dp-text4);font-weight:600;padding-bottom:8px;border-bottom:1px solid var(--dp-border);}
+.dp-cons-td{font-size:12.5px;padding:9px 0;border-bottom:1px solid var(--dp-border2);}
+.dp-cons-badge{font-size:11px;font-weight:600;padding:2px 9px;border-radius:999px;background:oklch(0.55 0.2 25 / 0.1);color:var(--dp-up);}
+.dp-cons-summary{display:flex;gap:20px;margin-top:14px;font-size:13px;}
+.dp-footer-note{font-size:11px;color:oklch(0.6 0.02 260);text-align:center;margin-top:20px;}
+@media (max-width:640px){
+  .dp-g2,.dp-thesis{grid-template-columns:1fr;gap:16px;}
+  .dp-stats{grid-template-columns:repeat(2,1fr);}
+  .dp-seg3{grid-template-columns:1fr;}
+  .dp-share4{grid-template-columns:repeat(2,1fr);}
+  .dp-price{font-size:32px;}
+  .dp-h1{font-size:16px;}
+}
 </style>
 
-<div style="padding:1rem 0;" class="box">
+<div class="dp" style="padding:1rem 0 2rem;">
 
-<div style="margin-bottom:12px;"><a href="../index.html" style="display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:700;color:var(--color-text-info);text-decoration:none;">← 홈으로</a></div>
+<a class="dp-back" href="../index.html">← 홈으로</a>
 
-<!-- 헤더 -->
-<div style="margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-  <h2>LG화학 (051910)</h2>
-  <span class="badge b-lgc">코스피 · 화학·정유·에너지</span>
-  <span class="badge b-gray">석유화학·전지소재·생명과학 사업 영위</span>
-  <span class="src">📄 OpenDART 공시 원문(Open API) + 📊 Yahoo Finance 시세</span>
-</div>
-<p class="sub">최근 종가 261,000원 (2026-08-06, 전일대비 +2.15%) · 52주 최고 437,500원 (26/05/08) · 52주 최저 224,000원 (26/07/29) · LC +16.52% · HC -40.34% · 시총 약 17.8조 (보통주 기준)</p>
-
-<!-- 핵심 지표 배너 -->
-<div style="background:#EEE8F5;border-left:3px solid #5B3A8E;border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:14px;">
-  <div style="font-size:12px;color:#5B3A8E;line-height:1.6;"><strong>🔑 LG화학 투자의 핵심:</strong> 2025년 연결 지배주주순이익이 <strong>-1조 8,194억 적자로 2년 연속 순손실</strong>(2024년 -6,909억)을 기록, 적자폭이 오히려 확대. 다만 <strong>영업이익 자체는 1조 1,809억으로 전년 대비 +35.0% 개선</strong>됐고, 별도(본사) 순이익은 1조 3,680억 흑자(+721.5%)로 연결과 별도 실적의 온도차가 뚜렷. 1Q26에도 영업손실(-497억)이 이어지는 가운데, 주가는 오늘(07/09) 52주 신저가(248,500원)를 기록하며 5월 고점 대비 -42.5% 하락.</div>
+<div class="dp-title-row">
+  <h1 class="dp-h1">LG화학</h1>
+  <span class="dp-ticker">051910</span>
+  <span class="dp-badge">코스피 · 화학·정유·에너지</span>
 </div>
 
-<div class="g4">
-  <div class="met"><div class="ml">최근 종가 (08/06)</div><div class="mv">261,000원</div><div class="ms up">+2.15% · 고점 대비 -40.3%</div></div>
-  <div class="met"><div class="ml">2025 연결 영업이익</div><div class="mv up">1조 1,809억</div><div class="ms">전년比 +35.0% · 본업 개선</div></div>
-  <div class="met"><div class="ml">2025 지배주주 순이익</div><div class="mv dn">-1조 8,194억</div><div class="ms">2년 연속 적자 · 적자 확대</div></div>
-  <div class="met"><div class="ml">1Q26 영업손익</div><div class="mv dn">-497억</div><div class="ms">적자 지속</div></div>
+<div class="dp-price-row">
+  <div class="dp-price">261,000원</div>
+  <div class="dp-chg">▲ +2.15%</div>
+  <div class="dp-date">2026.08.06 종가 기준</div>
+</div>
+
+<div class="dp-stats">
+  <div class="dp-stat"><div class="dp-stat-l">52주 최고</div><div class="dp-stat-v">437,500원</div></div>
+  <div class="dp-stat"><div class="dp-stat-l">52주 최저</div><div class="dp-stat-v">224,000원</div></div>
+  <div class="dp-stat"><div class="dp-stat-l">시가총액</div><div class="dp-stat-v">약 17.8조 (보통주)</div></div>
+  <div class="dp-stat"><div class="dp-stat-l">고점 대비</div><div class="dp-stat-v" style="color:var(--dp-down);">-40.34%</div></div>
+</div>
+
+<div class="dp-summary">
+  <div class="dp-summary-l">핵심 요약</div>
+  <div class="dp-summary-b">2025년 연결 지배주주순이익이 -1조 8,194억 적자로 2년 연속 순손실(2024년 -6,909억)을 기록, 적자폭이 오히려 확대됐다. 다만 영업이익 자체는 1조 1,809억으로 전년 대비 +35.0% 개선됐고, 별도(본사) 순이익은 1조 3,680억 흑자(+721.5%)로 연결과 별도 실적의 온도차가 뚜렷하다. 1Q26에도 영업손실(-497억)이 이어지는 가운데, 주가는 5월 고점(437,500원) 대비 -40.3% 하락하며 52주 신저가권에 근접.</div>
+</div>
+
+<div class="dp-openclose">
+  <button class="op" onclick="dpOpenAll()">모두 열기</button>
+  <span class="dp-sep">|</span>
+  <button class="cl" onclick="dpCloseAll()">모두 닫기</button>
 </div>
 
 <!-- 1. 기술적 분석 -->
-<div class="card">
-  <div class="sec">1. 기술적 분석 — 일봉 기준 (2025.08.06 ~ 2026.08.06, 243거래일)</div>
-  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;">
-    최고 437,500원 (26/05/08) → 최저 224,000원 (26/07/29) → 최근 종가 261,000원 (26/08/06) · LC +16.52% · HC -40.34%
-  </div>
-  <div id="lgcChartControls" class="kc-controls"></div>
-  <svg id="lgcSvg" viewBox="0 0 720 240" width="100%" style="display:block;margin-bottom:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:4px;"></svg>
+<div class="dp-acc" id="dpAcc-tech">
+  <button class="dp-acc-h" onclick="dpToggle('tech')"><span>1. 기술적 분석</span><span class="dp-acc-chev">▾</span></button>
+  <div class="dp-acc-body">
+    <div id="lgcChartControls" class="kc-controls"></div>
+    <svg id="lgcSvg" viewBox="0 0 720 240" width="100%" style="display:block;margin-bottom:16px;background:oklch(0.98 0.004 90);border-radius:10px;padding:4px;"></svg>
 
-  <div style="font-size:13px;font-weight:600;margin-bottom:8px;">📊 구간별 분석 <span class="src">📊 Yahoo Finance 일봉</span></div>
-  <div class="g4" style="font-size:11px;margin-bottom:12px;">
-    <div style="background:#F1EFE8;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#5F5E5A;font-weight:600;margin-bottom:3px;">25.07~09 — 박스권 등락</div>
-      <div style="color:#5F5E5A;line-height:1.6;">262,000~322,500원<br>뚜렷한 방향성 부재<br>거래량 저조<br>실적 부진 우려 반영</div>
-    </div>
-    <div style="background:#EEE8F5;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#5B3A8E;font-weight:600;margin-bottom:3px;">25.10~26.02 — 반복적 급등락</div>
-      <div style="color:#5B3A8E;line-height:1.6;">279,000→423,500→310,500→417,500원<br>수차례 급등 후 되돌림<br>기대와 실망의 반복<br>변동성 매우 큼</div>
-    </div>
-    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#854F0B;font-weight:600;margin-bottom:3px;">26.03~05 — 마지막 반등</div>
-      <div style="color:#854F0B;line-height:1.6;">299,000→437,500원<br>52주 신고가(05/08)<br>이후 즉시 조정 전환<br>고점 매물 부담</div>
-    </div>
-    <div style="background:#FCEBEB;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#A32D2D;font-weight:600;margin-bottom:3px;">26.06~07 — 지속적 붕괴</div>
-      <div style="color:#A32D2D;line-height:1.6;">381,000→251,500원<br>52주 신저가(07/09, 오늘)<br>고점 대비 -42.5%<br>완전 역배열 진행</div>
-    </div>
-  </div>
-
-  <div class="g2" style="margin-bottom:12px;">
-    <div>
-      <div style="font-size:13px;font-weight:600;margin-bottom:7px;">이동평균선 현황 (07/09 기준)</div>
-      <div class="ir"><span class="il">5일선 (266,000원)</span><span class="badge b-red">가격 하회</span></div>
-      <div class="ir"><span class="il">20일선 (303,125원)</span><span class="badge b-red">가격 크게 하회</span></div>
-      <div class="ir"><span class="il">60일선 (347,558원)</span><span class="badge b-red">가격 큰 폭 하회</span></div>
-      <div class="ir"><span class="il">120일선 (337,354원)</span><span class="badge b-red">가격 큰 폭 하회</span></div>
-      <div class="ir"><span class="il">배열</span><span class="badge b-red">완전 역배열 · 하락 추세 뚜렷</span></div>
-    </div>
-    <div>
-      <div style="font-size:13px;font-weight:600;margin-bottom:7px;">핵심 가격대</div>
-      <div class="ir"><span class="il">52주 최고 (신고가)</span><span style="font-weight:600;color:#5B3A8E;">437,500원 (26/05/08)</span></div>
-      <div class="ir"><span class="il">10~11월 매물대</span><span style="font-weight:600;color:#854F0B;">397,500~428,500원</span></div>
-      <div class="ir"><span class="il">최근 종가</span><span style="font-weight:600;color:var(--color-text-primary);">251,500원 (07/09)</span></div>
-      <div class="ir"><span class="il">52주 최저 (신저가)</span><span style="font-weight:600;color:#D85A30;">248,500원 (26/07/09, 오늘)</span></div>
-      <div class="ir"><span class="il">LC / HC</span><span style="font-weight:600;">+1.21% / -42.51%</span></div>
-    </div>
-  </div>
-
-  <div class="sig">
-    <span class="badge b-red">오늘(07/09) 52주 신저가 248,500원 경신</span>
-    <span class="badge b-red">5월 고점 대비 -42.5% · 5일~120일선 완전 역배열</span>
-    <span class="badge b-amber">1년간 반복된 급등락 후 결국 하방 이탈</span>
-    <span class="badge b-lgc">영업이익은 +35.0% 개선되었으나 순이익은 2년 연속 적자</span>
-  </div>
-</div>
-
-<!-- 2. 기본적 분석 탭 -->
-<div class="card">
-  <div class="sec">2. 기본적 분석 — 공시 원문 <span class="src">📄 사업보고서 제25기(2025) + 분기보고서 제26기 1Q(2026.03)</span></div>
-
-  <div style="display:flex;gap:8px;margin-bottom:14px;">
-    <button id="btnAnnual" onclick="switchTab('annual')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);border:1.5px solid #5B3A8E;background:#5B3A8E;color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;">
-      📄 사업보고서 <span style="font-size:11px;opacity:.85;font-weight:400;">제25기 · 2025년 연간</span>
-    </button>
-    <button id="btnQuarter" onclick="switchTab('quarter')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);border:1.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-secondary);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;">
-      📋 분기보고서 <span style="font-size:11px;opacity:.85;font-weight:400;">제26기 1분기 · 2026.03</span>
-    </button>
-  </div>
-
-  <!-- ══ 사업보고서 탭 ══ -->
-  <div id="tabAnnual">
-    <svg id="lgcAnnualChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:12px;"></svg>
-
-    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:6px;letter-spacing:.03em;">📊 연결 손익 요약 (단위: 억원 · 제25기 2025년)</div>
-    <div class="g2" style="margin-bottom:12px;">
+    <div class="dp-g2">
       <div>
-        <div class="ir"><span class="il">연결 매출액</span><span class="iv dn">45조 9,322억 (▼5.7%) <span class="ev ev-3">적정</span></span></div>
-        <div class="ir"><span class="il">연결 영업이익</span><span class="iv up">1조 1,809억 (▲35.0%) <span class="ev ev-2">양호</span></span></div>
-        <div class="ir"><span class="il">연결 당기순이익</span><span class="iv dn">-9,771억 (적자전환) <span class="ev ev-5">부진</span></span></div>
-        <div class="ir"><span class="il">지배주주 순이익</span><span class="iv dn">-1조 8,194억 (적자 확대) <span class="ev ev-5">부진</span></span></div>
-        <div class="ir"><span class="il">보통주 기본주당이익</span><span class="iv dn">-23,244원 (적자 확대) <span class="ev ev-5">부진</span></span></div>
+        <div class="dp-secl">이동평균선 현황 (07/09 기준)</div>
+        <div class="dp-row2"><span class="l">5일선 (266,000원)</span><span class="v" style="color:var(--dp-down);">가격 하회</span></div>
+        <div class="dp-row2"><span class="l">20일선 (303,125원)</span><span class="v" style="color:var(--dp-down);">가격 크게 하회</span></div>
+        <div class="dp-row2"><span class="l">60일선 (347,558원)</span><span class="v" style="color:var(--dp-down);">가격 큰 폭 하회</span></div>
+        <div class="dp-row2"><span class="l">120일선 (337,354원)</span><span class="v" style="color:var(--dp-down);">가격 큰 폭 하회</span></div>
       </div>
       <div>
-        <div class="ir"><span class="il">연결 자산총계</span><span class="iv">101조 617억 (▲7.7%) <span class="ev ev-3">적정</span></span></div>
-        <div class="ir"><span class="il">연결 자본총계</span><span class="iv">47조 1,055억 (▼1.9%) <span class="ev ev-3">적정</span></span></div>
-        <div class="ir"><span class="il">지배기업소유주지분</span><span class="iv">32조 8,456억 <span class="ev ev-3">적정</span></span></div>
-        <div class="ir"><span class="il">별도 순이익</span><span class="iv up">1조 3,680억 (▲721.5% 흑자) <span class="ev ev-2">양호</span></span></div>
-        <div class="ir"><span class="il">현금배당(보통주)</span><span class="iv up">DPS 2,000원 (전기比 2배) <span class="ev ev-3">적정</span></span></div>
+        <div class="dp-secl">핵심 가격대</div>
+        <div class="dp-row2"><span class="l">52주 최고 (신고가)</span><span class="v">437,500원 (26/05/08)</span></div>
+        <div class="dp-row2"><span class="l">10~11월 매물대</span><span class="v">397,500~428,500원</span></div>
+        <div class="dp-row2"><span class="l">최근 종가</span><span class="v">251,500원 (07/09)</span></div>
+        <div class="dp-row2"><span class="l">52주 최저 (신저가)</span><span class="v">248,500원 (26/07/09)</span></div>
       </div>
     </div>
 
-    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">🧪 LG화학 3대 사업부문</div>
-    <div class="g3" style="font-size:11px;margin-bottom:12px;">
-      <div style="background:#F1EFE8;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #5F5E5A;">
-        <div style="color:#5F5E5A;font-weight:600;margin-bottom:5px;">석유화학</div>
-        <div class="ir" style="font-size:11px;"><span class="il">핵심 매출원</span><span>NCC·합성수지 등</span></div>
-        <div class="ir" style="font-size:11px;"><span class="il">업황</span><span class="dn">글로벌 공급과잉 지속</span></div>
-        <div class="ir" style="font-size:11px;"><span class="il">2025년 흐름</span><span>수익성 저점 통과 시도</span></div>
-      </div>
-      <div style="background:#EEE8F5;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #5B3A8E;">
-        <div style="color:#5B3A8E;font-weight:600;margin-bottom:5px;">첨단소재(전지소재)</div>
-        <div class="ir" style="font-size:11px;"><span class="il">양극재 등</span><span>EV 배터리 핵심 소재</span></div>
-        <div class="ir" style="font-size:11px;"><span class="il">업황</span><span class="dn">EV 캐즘 영향 지속</span></div>
-        <div class="ir" style="font-size:11px;"><span class="il">역할</span><span>연결 손실의 핵심 요인 추정</span></div>
-      </div>
-      <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #1D9E75;">
-        <div style="color:#3B6D11;font-weight:600;margin-bottom:5px;">생명과학</div>
-        <div class="ir" style="font-size:11px;"><span class="il">바이오·제약</span><span>안정적 수익 기여</span></div>
-        <div class="ir" style="font-size:11px;"><span class="il">특징</span><span>상대적으로 낮은 변동성</span></div>
-        <div class="ir" style="font-size:11px;"><span class="il">역할</span><span>포트폴리오 다변화</span></div>
-      </div>
-    </div>
-
-    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">📉 지배주주순이익 3개년 추이 — 2년 연속 적자, 폭 확대</div>
-    <div style="display:flex;gap:8px;margin-bottom:14px;">
-      <div style="flex:1;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;text-align:center;">
-        <div style="font-size:10px;color:var(--color-text-secondary);margin-bottom:4px;">2023년</div>
-        <div style="font-size:18px;font-weight:700;color:var(--color-text-primary);">1조 3,378억</div>
-        <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:4px;">흑자 · EPS 17,086원</div>
-      </div>
-      <div style="display:flex;align-items:center;font-size:18px;color:#D85A30;font-weight:700;">→</div>
-      <div style="flex:1;background:#FCEBEB;border-radius:var(--border-radius-md);padding:10px;text-align:center;">
-        <div style="font-size:10px;color:#A32D2D;margin-bottom:4px;">2024년</div>
-        <div style="font-size:18px;font-weight:700;color:#D85A30;">-6,909억</div>
-        <div style="font-size:10px;color:#A32D2D;margin-top:4px;">적자전환 · EPS -8,826원</div>
-      </div>
-      <div style="display:flex;align-items:center;font-size:18px;color:#D85A30;font-weight:700;">→</div>
-      <div style="flex:1;background:#FCEBEB;border-radius:var(--border-radius-md);padding:10px;text-align:center;border:1.5px solid #D85A30;">
-        <div style="font-size:10px;color:#A32D2D;margin-bottom:4px;font-weight:600;">2025년 (제25기)</div>
-        <div style="font-size:18px;font-weight:700;color:#D85A30;">-1조 8,194억</div>
-        <div style="font-size:10px;color:#A32D2D;margin-top:4px;">적자 확대 · EPS -23,244원</div>
-      </div>
-    </div>
-
-    <div class="warn">
-      <div style="font-size:13px;font-weight:600;color:#854F0B;margin-bottom:4px;">💡 사업보고서 핵심 — 영업이익은 개선, 그러나 순손실은 오히려 확대</div>
-      <div style="font-size:12px;color:#633806;line-height:1.7;">영업이익이 8,749억(2024)→1조 1,809억(2025)으로 +35.0% 개선됐음에도, 지배주주순이익은 -6,909억(2024)에서 -1조 8,194억(2025)으로 적자폭이 오히려 확대. 이는 영업이익 대비 법인세비용차감전순이익이 -1조 7,804억으로 크게 낮아진 데서 비롯되며, 전지소재(양극재) 부문 등의 대규모 비용 인식이 반영된 것으로 추정. <strong>주목할 점은 별도(본사) 순이익이 1조 3,680억 흑자(전기比 +721.5%)로 뚜렷하다는 것</strong> — 손실이 특정 연결 자회사에 집중돼 있음을 시사.</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+      <span style="font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:999px;background:oklch(0.95 0.004 90);color:var(--dp-text2);">52주 신저가 248,500원 경신</span>
+      <span style="font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:999px;background:oklch(0.95 0.004 90);color:var(--dp-text2);">5월 고점 대비 -42.5% · 완전 역배열</span>
+      <span style="font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:999px;background:oklch(0.95 0.004 90);color:var(--dp-text2);">1년간 반복된 급등락 후 결국 하방 이탈</span>
+      <span style="font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:999px;background:oklch(0.95 0.004 90);color:var(--dp-text2);">영업이익 +35.0% 개선, 순이익은 2년 연속 적자</span>
     </div>
   </div>
+</div>
 
-  <!-- ══ 분기보고서 탭 ══ -->
-  <div id="tabQuarter" style="display:none;">
-    <svg id="lgcQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:12px;"></svg>
+<!-- 2. 기본적 분석 -->
+<div class="dp-acc" id="dpAcc-fund">
+  <button class="dp-acc-h" onclick="dpToggle('fund')"><span>2. 기본적 분석 — 공시 원문</span><span class="dp-acc-chev">▾</span></button>
+  <div class="dp-acc-body">
+    <div class="dp-tab-row">
+      <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">분기보고서 · 1Q26</button>
+    </div>
 
-    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:6px;letter-spacing:.03em;">📊 1Q26 연결 손익 요약 (단위: 억원 · 제26기 1분기)</div>
-    <div class="g2" style="margin-bottom:12px;">
+    <div id="dpFundAnnual">
+      <svg id="lgcAnnualChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:16px;"></svg>
+      <div class="dp-g2">
+        <div>
+          <div class="dp-row2"><span class="l">연결 매출액</span><span class="v" style="color:var(--dp-down);">45조 9,322억 (▼5.7%)</span></div>
+          <div class="dp-row2"><span class="l">연결 영업이익</span><span class="v up">1조 1,809억 (▲35.0%)</span></div>
+          <div class="dp-row2"><span class="l">연결 당기순이익</span><span class="v" style="color:var(--dp-down);">-9,771억 (적자전환)</span></div>
+          <div class="dp-row2"><span class="l">지배주주 순이익</span><span class="v" style="color:var(--dp-down);">-1조 8,194억 (적자 확대)</span></div>
+          <div class="dp-row2"><span class="l">보통주 기본주당이익</span><span class="v" style="color:var(--dp-down);">-23,244원 (적자 확대)</span></div>
+        </div>
+        <div>
+          <div class="dp-row2"><span class="l">연결 자산총계</span><span class="v">101조 617억 (▲7.7%)</span></div>
+          <div class="dp-row2"><span class="l">연결 자본총계</span><span class="v">47조 1,055억 (▼1.9%)</span></div>
+          <div class="dp-row2"><span class="l">지배기업소유주지분</span><span class="v">32조 8,456억</span></div>
+          <div class="dp-row2"><span class="l">별도 순이익</span><span class="v up">1조 3,680억 (▲721.5% 흑자)</span></div>
+          <div class="dp-row2"><span class="l">현금배당(보통주)</span><span class="v up">DPS 2,000원 (전기比 2배)</span></div>
+        </div>
+      </div>
+
+      <div class="dp-secl">사업부문</div>
+      <div class="dp-seg3">
+        <div class="dp-seg"><div class="dp-seg-t">석유화학</div><div class="dp-seg-d">NCC·합성수지 등 핵심 매출원. 글로벌 공급과잉 지속, 수익성 저점 통과 시도.</div></div>
+        <div class="dp-seg"><div class="dp-seg-t">첨단소재(전지소재)</div><div class="dp-seg-d">양극재 등 EV 배터리 핵심 소재. EV 캐즘 영향 지속, 연결 손실의 핵심 요인 추정.</div></div>
+        <div class="dp-seg"><div class="dp-seg-t">생명과학</div><div class="dp-seg-d">바이오·제약으로 안정적 수익 기여. 상대적으로 낮은 변동성으로 포트폴리오 다변화.</div></div>
+      </div>
+
+      <div class="dp-secl">지배주주순이익 3개년 추이</div>
+      <div class="dp-eps-flow">
+        <div class="dp-eps-card"><div class="dp-eps-y">2023년</div><div class="dp-eps-v">17,086원</div><div class="dp-eps-n">흑자 (EPS)</div></div>
+        <div class="dp-arrow">→</div>
+        <div class="dp-eps-card"><div class="dp-eps-y">2024년</div><div class="dp-eps-v">-8,826원</div><div class="dp-eps-n">적자전환</div></div>
+        <div class="dp-arrow">→</div>
+        <div class="dp-eps-card now"><div class="dp-eps-y">2025년</div><div class="dp-eps-v">-23,244원</div><div class="dp-eps-n">적자 확대</div></div>
+      </div>
+
+      <div class="dp-insight">
+        <div class="dp-insight-t">사업보고서 핵심</div>
+        <div class="dp-insight-b">영업이익이 8,749억(2024)→1조 1,809억(2025)으로 +35.0% 개선됐음에도, 지배주주순이익은 -6,909억(2024)에서 -1조 8,194억(2025)으로 적자폭이 오히려 확대. 전지소재(양극재) 부문 등의 대규모 비용 인식이 반영된 것으로 추정된다. 다만 별도(본사) 순이익은 1조 3,680억 흑자(+721.5%)로 뚜렷해, 손실이 특정 연결 자회사에 집중돼 있음을 시사.</div>
+      </div>
+    </div>
+
+    <div id="dpFundQuarter" style="display:none;">
+      <svg id="lgcQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:16px;"></svg>
+      <div class="dp-g2">
+        <div>
+          <div class="dp-row2"><span class="l">1Q26 연결 매출</span><span class="v">12조 2,468억</span></div>
+          <div class="dp-row2"><span class="l">1Q26 연결 영업손익</span><span class="v" style="color:var(--dp-down);">-497억 (적자 지속)</span></div>
+          <div class="dp-row2"><span class="l">1Q26 법인세차감전손익</span><span class="v" style="color:var(--dp-down);">-5,665억 (적자 확대)</span></div>
+          <div class="dp-row2"><span class="l">1Q26 연결 당기순손익</span><span class="v" style="color:var(--dp-down);">-7,819억</span></div>
+          <div class="dp-row2"><span class="l">1Q26 지배주주 순손익</span><span class="v" style="color:var(--dp-down);">-3,482억</span></div>
+        </div>
+        <div>
+          <div class="dp-row2"><span class="l">1Q26 보통주 EPS</span><span class="v" style="color:var(--dp-down);">-4,449원 (적자 지속)</span></div>
+          <div class="dp-row2"><span class="l">1Q26 비지배지분 순손익</span><span class="v" style="color:var(--dp-down);">-4,337억 (자회사도 적자)</span></div>
+          <div class="dp-row2"><span class="l">1Q26 연결 자산총계</span><span class="v">105조 6,629억 (▲4.6%)</span></div>
+          <div class="dp-row2"><span class="l">지배기업소유주지분</span><span class="v">34조 8,612억 (▲6.1%)</span></div>
+          <div class="dp-row2"><span class="l">연결 자본총계</span><span class="v">48조 909억 (▲2.1%)</span></div>
+        </div>
+      </div>
+      <div class="dp-insight">
+        <div class="dp-insight-t">분기보고서 핵심</div>
+        <div class="dp-insight-b">2025년 연간 영업이익은 흑자(+1조 1,809억)였으나 1Q26엔 다시 영업손실(-497억)로 돌아서, 실적 턴어라운드가 아직 뚜렷하지 않다. 영업손실(-497억)보다 법인세전손실(-5,665억)이 훨씬 큰 갭은 순금융비용과 기타영업외손익 부담 외 추가 요인이 있을 수 있다. 다만 지배기업소유주지분은 분기 만에 +6.1% 늘며(32.85조→34.86조) 자본 측면의 완충력은 유지되고 있다.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. 투자지표 및 밸류에이션 -->
+<div class="dp-acc" id="dpAcc-valuation">
+  <button class="dp-acc-h" onclick="dpToggle('valuation')"><span>3. 투자지표 및 밸류에이션</span><span class="dp-acc-chev">▾</span></button>
+  <div class="dp-acc-body">
+    <div class="dp-share4">
+      <div class="dp-share"><div class="dp-share-l">2025 EPS</div><div class="dp-share-v">-23,244원</div><div class="dp-share-s">2년 연속 적자</div></div>
+      <div class="dp-share"><div class="dp-share-l">1Q26 EPS</div><div class="dp-share-v">-4,449원</div><div class="dp-share-s">적자 지속</div></div>
+      <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">493,838원</div><div class="dp-share-s">지배지분 기준</div></div>
+      <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">2,000원</div><div class="dp-share-s">전기比 2배</div></div>
+    </div>
+
+    <div class="dp-gauge">
+      <div class="dp-gauge-h"><span>PBR</span><span>0.53x</span></div>
+      <div class="dp-gauge-track"><div class="dp-gauge-fill" style="width:36%;"></div></div>
+      <div class="dp-gauge-note">261,000÷493,838 · 장부가 대비 절반 수준의 극단적 저평가 구간. PER은 2년 연속 순손실로 산정 불가.</div>
+    </div>
+    <div class="dp-gauge">
+      <div class="dp-gauge-h"><span>배당수익률</span><span>0.77%</span></div>
+      <div class="dp-gauge-track"><div class="dp-gauge-fill" style="width:20%;"></div></div>
+      <div class="dp-gauge-note">DPS(보통주) 2,000원 ÷ 261,000원 · 적자에도 배당을 2배 늘려 유지 의지는 확인되나 절대 수익률은 낮음.</div>
+    </div>
+    <div class="dp-gauge">
+      <div class="dp-gauge-h"><span>HC 대비 (신고가 대비)</span><span>-42.5%</span></div>
+      <div class="dp-gauge-track"><div class="dp-gauge-fill" style="width:23%;"></div></div>
+      <div class="dp-gauge-note">437,500원(26/05/08) 대비 · 두 달 만에 큰 폭 하락, 52주 신저가권.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. 시계열 주요 이벤트 -->
+<div class="dp-acc" id="dpAcc-timeline">
+  <button class="dp-acc-h" onclick="dpToggle('timeline')"><span>4. 시계열 주요 이벤트</span><span class="dp-acc-chev">▾</span></button>
+  <div class="dp-acc-body">
+    <div class="dp-tl">
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2025.10 ~ 2026.02</div>
+        <div class="dp-tl-title">반복적 급등락 — 279,000→423,500→310,500→417,500원</div>
+        <div class="dp-tl-body">뚜렷한 실적 개선 없이 기대감과 실망이 반복되며 큰 폭의 급등락을 거듭. 10월과 2월 두 차례 급등했으나 매번 되돌림을 겪는 변동성 장세.</div>
+      </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.03.13 (사업보고서)</div>
+        <div class="dp-tl-title">2025년 실적 공시 — 지배주주순이익 -1조 8,194억, 2년 연속 적자</div>
+        <div class="dp-tl-body">영업이익은 +35.0% 개선됐으나 지배주주순이익 적자폭이 오히려 확대됐다는 상반된 실적 공시. 별도 순이익은 1조 3,680억 흑자로 연결과 큰 괴리를 보임.</div>
+      </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.05.08</div>
+        <div class="dp-tl-title">주가 437,500원 — 52주 신고가 · 실적 부진에도 마지막 반등</div>
+        <div class="dp-tl-body">3월 저점(288,000원대) 이후 반등하며 52주 신고가를 기록. 그러나 실적 펀더멘털과의 괴리로 이후 반등이 오래 지속되지 못함.</div>
+      </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.05.14 (분기보고서)</div>
+        <div class="dp-tl-title">1Q26 분기보고서 — 영업손실 -497억, 적자 지속 확인</div>
+        <div class="dp-tl-body">2025년 연간 흑자였던 영업손익이 1분기 만에 재차 적자로 전환. 법인세전손실은 -5,665억까지 확대되며 실적 턴어라운드가 아직 이르다는 점을 재확인.</div>
+      </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.07.09</div>
+        <div class="dp-tl-title">주가 251,500원 — 52주 신저가(248,500원) 당일 경신</div>
+        <div class="dp-tl-body">5월 고점 이후 두 달 만에 -42.5% 하락하며 연중 최저가를 새로 기록. 5일선~120일선 완전 역배열 상태로 단기 수급이 크게 악화된 국면.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 5. 투자 포인트 -->
+<div class="dp-acc" id="dpAcc-thesis">
+  <button class="dp-acc-h" onclick="dpToggle('thesis')"><span>5. 투자 포인트</span><span class="dp-acc-chev">▾</span></button>
+  <div class="dp-acc-body">
+    <div class="dp-thesis">
       <div>
-        <div class="ir"><span class="il">1Q26 연결 매출</span><span class="iv">12조 2,468억 <span class="ev ev-3">적정</span></span></div>
-        <div class="ir"><span class="il">1Q26 연결 영업손익</span><span class="iv dn">-497억 (적자 지속) <span class="ev ev-4">주의</span></span></div>
-        <div class="ir"><span class="il">1Q26 법인세차감전손익</span><span class="iv dn">-5,665억 (적자 확대) <span class="ev ev-5">부진</span></span></div>
-        <div class="ir"><span class="il">1Q26 연결 당기순손익</span><span class="iv dn">-7,819억 <span class="ev ev-5">부진</span></span></div>
-        <div class="ir"><span class="il">1Q26 지배주주 순손익</span><span class="iv dn">-3,482억 <span class="ev ev-5">부진</span></span></div>
+        <div class="dp-thesis-t bull">긍정 요인</div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>PBR 0.51x — 장부가 대비 절반 수준의 저평가</span></div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>별도(본사) 순이익 1.37조 흑자(+721.5%)</span></div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>2025년 영업이익 +35.0% 개선</span></div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>DPS 2배 증가(1,000→2,000원) · 배당 유지 의지</span></div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>지배기업소유주지분 분기 만에 +6.1%</span></div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>52주 저점(248,500) 근접 · 반등 시 여력</span></div>
       </div>
       <div>
-        <div class="ir"><span class="il">1Q26 보통주 기본EPS</span><span class="iv dn">-4,449원 (적자 지속) <span class="ev ev-5">부진</span></span></div>
-        <div class="ir"><span class="il">1Q26 비지배지분 순손익</span><span class="iv dn">-4,337억 (자회사도 적자) <span class="ev ev-5">부진</span></span></div>
-        <div class="ir"><span class="il">1Q26 연결 자산총계</span><span class="iv">105조 6,629억 (▲4.6% QoQ) <span class="ev ev-3">적정</span></span></div>
-        <div class="ir"><span class="il">지배기업소유주지분</span><span class="iv">34조 8,612억 (▲6.1% QoQ) <span class="ev ev-3">적정</span></span></div>
-        <div class="ir"><span class="il">연결 자본총계</span><span class="iv">48조 909억 (▲2.1% QoQ) <span class="ev ev-3">적정</span></span></div>
+        <div class="dp-thesis-t bear">리스크 요인</div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>지배주주순이익 2년 연속 적자, 폭 확대</span></div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>1Q26 영업손실(-497억) — 적자 탈출 미확인</span></div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>52주 신저가 · 완전 역배열</span></div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>PER 산정 불가 — 밸류에이션 기준 자체가 모호</span></div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>비지배지분도 적자(-4,337억) — 자회사 손실 지속</span></div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>석유화학 공급과잉·전지소재 수요 둔화</span></div>
       </div>
     </div>
+  </div>
+</div>
 
-    <div class="warn">
-      <div style="font-size:13px;font-weight:600;color:#854F0B;margin-bottom:5px;">🔑 영업손실(-497억)보다 법인세전손실(-5,665억)이 훨씬 큰 구조</div>
-      <div style="font-size:12px;color:#633806;line-height:1.7;">영업손실 자체는 -497억으로 크지 않았으나, 법인세비용차감전순손실은 -5,665억으로 갭이 -5,168억에 달함. 순금융비용(금융비용 1,401억-금융수익 1,189억=212억)과 기타영업외손익 순부담(-303억)이 일부 기여했으나, 그것만으로 전액 설명되지는 않아 관계기업 관련 손익 등 추가 요인이 있을 수 있음. <strong>비지배지분에 귀속되는 순손실도 -4,337억으로, 연결 자회사(전지소재 관련 법인 등)의 손실 규모가 지배기업 자체보다 오히려 큰 상태</strong>가 지속.</div>
-    </div>
-
-    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;margin-top:12px;">🏦 재무상태 변동 (2025.12 → 2026.03)</div>
-    <div class="g2" style="margin-bottom:12px;font-size:11px;">
-      <div>
-        <div class="ir" style="font-size:11px;"><span class="il">자산총계</span><span class="up">101.06조 → 105.66조 (+4.6%)</span></div>
-        <div class="ir" style="font-size:11px;"><span class="il">지배기업소유주지분</span><span class="up">32.85조 → 34.86조 (+6.1%)</span></div>
-        <div class="ir" style="font-size:11px;"><span class="il">1Q26 분기 EPS</span><span class="dn">-4,449원 (적자 지속)</span></div>
-      </div>
-      <div>
-        <div class="ir" style="font-size:11px;"><span class="il">자본총계</span><span class="up">47.11조 → 48.09조 (+2.1%)</span></div>
-        <div class="ir" style="font-size:11px;"><span class="il">비지배지분</span><span class="dn">14.26조 → 13.23조 (-7.2%)</span></div>
-        <div class="ir" style="font-size:11px;"><span class="il">1Q26 영업손익 추이</span><span class="dn">2025년 연간 흑자 → 1Q26 재차 적자</span></div>
-      </div>
-    </div>
-
-    <div class="warn">
-      <div style="font-size:13px;font-weight:600;color:#854F0B;margin-bottom:4px;">💡 분기보고서 핵심 — 적자 탈출은 아직 미확인, 다만 지배지분 자본은 견조</div>
-      <div style="font-size:12px;color:#633806;line-height:1.7;">2025년 연간 영업이익은 흑자(+1조 1,809억)였으나 1Q26엔 다시 영업손실(-497억)로 돌아서, 실적 턴어라운드가 아직 뚜렷하지 않은 상태. <strong>다만 지배기업소유주지분은 분기 만에 +6.1% 늘며(32.85조→34.86조) 자본 측면의 완충력은 유지</strong>되고 있어, 유동성·재무건전성 자체가 위협받는 상황은 아닌 것으로 판단됨. 향후 분기 실적에서 영업손익의 흑자 전환 여부가 핵심 관전 포인트.</div>
+<!-- 6. 애널리스트 컨센서스 -->
+<div class="dp-acc" id="dpAcc-consensus">
+  <button class="dp-acc-h" onclick="dpToggle('consensus')"><span>6. 애널리스트 컨센서스</span><span class="dp-acc-chev">▾</span></button>
+  <div class="dp-acc-body">
+    <table>
+      <thead>
+        <tr>
+          <th class="dp-cons-th">증권사</th>
+          <th class="dp-cons-th" style="text-align:right;">목표주가</th>
+          <th class="dp-cons-th" style="text-align:center;">의견</th>
+          <th class="dp-cons-th" style="text-align:right;">작성일</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="dp-cons-td">iM증권</td><td class="dp-cons-td" style="text-align:right;font-weight:700;">370,000원</td><td class="dp-cons-td" style="text-align:center;"><span class="dp-cons-badge">매수</span></td><td class="dp-cons-td" style="text-align:right;color:var(--dp-text4);">26.07.23</td></tr>
+        <tr><td class="dp-cons-td">유진투자증권</td><td class="dp-cons-td" style="text-align:right;font-weight:700;">500,000원</td><td class="dp-cons-td" style="text-align:center;"><span class="dp-cons-badge">매수</span></td><td class="dp-cons-td" style="text-align:right;color:var(--dp-text4);">26.05.06</td></tr>
+        <tr><td class="dp-cons-td">한화투자증권</td><td class="dp-cons-td" style="text-align:right;font-weight:700;">470,000원</td><td class="dp-cons-td" style="text-align:center;"><span class="dp-cons-badge">매수</span></td><td class="dp-cons-td" style="text-align:right;color:var(--dp-text4);">26.05.04</td></tr>
+        <tr><td class="dp-cons-td">하나증권</td><td class="dp-cons-td" style="text-align:right;font-weight:700;">360,000원</td><td class="dp-cons-td" style="text-align:center;"><span class="dp-cons-badge" style="background:oklch(0.85 0.1 80 / 0.3);color:#854F0B;">중립</span></td><td class="dp-cons-td" style="text-align:right;color:var(--dp-text4);">26.05.04</td></tr>
+        <tr><td class="dp-cons-td">미래에셋증권</td><td class="dp-cons-td" style="text-align:right;font-weight:700;">480,000원</td><td class="dp-cons-td" style="text-align:center;"><span class="dp-cons-badge">매수</span></td><td class="dp-cons-td" style="text-align:right;color:var(--dp-text4);">26.05.04</td></tr>
+      </tbody>
+    </table>
+    <div class="dp-cons-summary">
+      <div><span style="color:var(--dp-text3);">평균 목표주가</span> <strong>436,000원</strong></div>
+      <div><span style="color:var(--dp-text3);">현재가 대비</span> <strong style="color:var(--dp-up);">+87.5%</strong></div>
     </div>
   </div>
 </div>
 
-<!-- 3. 기본 투자지표 -->
-<div class="card">
-  <div class="sec">3. 기본 투자지표 (Per-Share) <span class="src">📄 분기보고서 원문 · 보통주 기준</span></div>
-  <div class="g4">
-    <div class="met"><div class="ml">EPS · 2025 연결</div><div class="mv dn">-23,244원</div><div class="ms">2년 연속 적자 · 폭 확대</div><div style="margin-top:5px;"><span class="ev ev-5">부진</span></div></div>
-    <div class="met"><div class="ml">1Q26 분기 EPS</div><div class="mv dn">-4,449원</div><div class="ms">적자 지속</div><div style="margin-top:5px;"><span class="ev ev-5">부진</span></div></div>
-    <div class="met"><div class="ml">BPS · 주당순자산</div><div class="mv">약 493,838원</div><div class="ms">지배지분 34.86조 ÷ 70.6백만주</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
-    <div class="met"><div class="ml">DPS · 주당배당금 (보통주,2025)</div><div class="mv">2,000원</div><div class="ms">전기比 2배 · 배당성향 산정불가(적자)</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
-  </div>
-</div>
-
-<!-- 4. 상대 투자지표 -->
-<div class="card">
-  <div class="sec">4. 상대 투자지표 — 최근 종가 251,500원 기준</div>
-
-  <div style="background:#FFF3E0;border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:12px;border-left:3px solid #EF9F27;">
-    <div style="font-size:12px;color:#854F0B;"><strong>⚠ 밸류에이션 해석 주의:</strong> 2024~2025년 2년 연속 순손실로 PER은 산정 불가능한 상태. <strong>① PBR 기준 자산가치 대비 밸류 ② 별도(본사) 흑자와 연결 적자의 괴리 ③ 영업손익의 분기별 흑자전환 여부</strong>를 중심으로 봐야 함.</div>
-  </div>
-
-  <div class="ind-row">
-    <div class="ind-nm">PER</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">2024~2025년 2년 연속 순손실로 PER 산정 불가<br><span style="color:var(--color-text-secondary);">순이익 흑자전환 시점부터 재평가 필요</span></div>
-    <div class="ind-val">N/A</div>
-    <div style="min-width:120px;flex:1;"><div class="bar-bg"><div class="bar-f" style="width:0%;background:#F1EFE8;"></div></div></div>
-    <span class="ev ev-3" style="min-width:58px;text-align:center;">산정불가</span>
-  </div>
-
-  <div class="ind-row"><div class="ind-nm">Forward PER</div><div style="flex:1;font-size:11px;color:var(--color-text-secondary);">1Q26 연환산 EPS 적자 지속<br><span style="color:#791F1F;">EPS 음수로 Forward PER 산출 불가</span></div><div class="ind-val">N/A</div><div style="min-width:120px;flex:1;"><div class="bar-bg"><div class="bar-f" style="width:0%;background:#FCEBEB;"></div></div></div><span class="ev ev-5" style="min-width:58px;text-align:center;">산출불가</span></div>
-
-  <div class="ind-row">
-    <div class="ind-nm">PBR</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">261,000÷493,838(지배주주BPS)<br><span style="color:#1D9E75;">PBR 0.51x — 장부가 대비 절반 수준의 극단적 저평가 구간</span></div>
-    <div class="ind-val">0.53x</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(0.3x)</span><span>적정(0.7x)</span><span>고(1.2x)</span></div><div class="bar-bg"><div class="bar-f" style="width:36%;background:#EAF3DE;"></div></div></div>
-    <span class="ev ev-1" style="min-width:58px;text-align:center;">1단계</span>
-  </div>
-
-  <div class="ind-row">
-    <div class="ind-nm">배당수익률</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">DPS(보통주) 2,000원 ÷ 현재가 261,000원<br><span style="color:var(--color-text-secondary);">0.80% — 적자에도 배당을 2배 늘려 유지 의지는 확인되나 절대 수익률은 낮음</span></div>
-    <div class="ind-val">0.77%</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>0%</span><span>2%</span><span>4%</span></div><div class="bar-bg"><div class="bar-f" style="width:20%;background:#F1EFE8;"></div></div></div>
-    <span class="ev ev-3" style="min-width:58px;text-align:center;">3단계</span>
-  </div>
-
-  <div class="ind-row">
-    <div class="ind-nm">HC / LC 수익률</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">고점(437,500, 05/08) 대비 및 신저가(248,500, 07/09) 대비 현재가<br><span style="color:#D85A30;">HC -42.51% — 두 달 만에 큰 폭 하락, 오늘 52주 신저가</span></div>
-    <div class="ind-val">-42.5%</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>-55%</span><span>-28%</span><span>0%</span></div><div class="bar-bg"><div class="bar-f" style="width:23%;background:#FCEBEB;"></div></div></div>
-    <span class="ev ev-5" style="min-width:58px;text-align:center;">5단계</span>
-  </div>
-</div>
-
-<!-- 5. 시계열 이벤트 -->
-<div class="card">
-  <div class="sec">5. 시계열 주요 이벤트 <span class="src">📄 OpenDART 공시 원문 + 📊 Yahoo Finance 일봉</span></div>
-
-  <div class="tl">
-    <div class="tl-item">
-      <div class="tl-dot dot-neu"></div>
-      <div class="tl-date">2025년 10월 ~ 2026년 02월</div>
-      <div class="tl-title">반복적 급등락 — 279,000→423,500→310,500→417,500원</div>
-      <div class="tl-body">뚜렷한 실적 개선 없이 기대감과 실망이 반복되며 큰 폭의 급등락을 거듭. 10월과 2월 두 차례 급등했으나 매번 되돌림을 겪는 변동성 장세.</div>
-      <span class="tag tag-neu">반복적 급등락</span><span class="tag tag-neu">높은 변동성</span>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-dot dot-neg"></div>
-      <div class="tl-date">2026년 03월 13일 (사업보고서)</div>
-      <div class="tl-title">2025년 실적 공시 — 지배주주순이익 -1조 8,194억, 2년 연속 적자</div>
-      <div class="tl-body">영업이익은 +35.0% 개선됐으나 지배주주순이익 적자폭이 오히려 확대됐다는 상반된 실적 공시. 별도 순이익은 1조 3,680억 흑자로 연결과 큰 괴리를 보임.</div>
-      <span class="tag tag-neg">2년 연속 적자</span><span class="tag tag-neu">영업이익은 개선</span>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-dot dot-big"></div>
-      <div class="tl-date">2026년 05월 08일</div>
-      <div class="tl-title">주가 437,500원 — 52주 신고가 · 실적 부진에도 마지막 반등</div>
-      <div class="tl-body">3월 저점(288,000원대) 이후 반등하며 52주 신고가를 기록. 그러나 실적 펀더멘털과의 괴리로 이후 반등이 오래 지속되지 못함.</div>
-      <span class="tag tag-big">52주 신고가</span><span class="tag tag-neu">펀더멘털과 괴리</span>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-dot dot-neg"></div>
-      <div class="tl-date">2026년 05월 14일 (분기보고서)</div>
-      <div class="tl-title">1Q26 분기보고서 — 영업손실 -497억, 적자 지속 확인</div>
-      <div class="tl-body">2025년 연간 흑자였던 영업손익이 1분기 만에 재차 적자로 전환. 법인세전손실은 -5,665억까지 확대되며 실적 턴어라운드가 아직 이르다는 점을 재확인.</div>
-      <span class="tag tag-neg">영업적자 지속</span><span class="tag tag-neg">1Q26 실적 공시</span>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-dot dot-neg"></div>
-      <div class="tl-date">2026년 07월 09일 (오늘)</div>
-      <div class="tl-title">주가 251,500원 — 52주 신저가(248,500원) 당일 경신</div>
-      <div class="tl-body">5월 고점 이후 두 달 만에 -42.5% 하락하며 연중 최저가를 새로 기록. 5일선~120일선 완전 역배열 상태로 단기 수급이 크게 악화된 국면.</div>
-      <span class="tag tag-neg">52주 신저가</span><span class="tag tag-neg">당일 기록</span>
-    </div>
-  </div>
-</div>
-
-<!-- 6. 투자 포인트 -->
-<div class="card">
-  <div class="sec">6. 2026년 핵심 투자 포인트</div>
-  <div class="g2">
-    <div>
-      <div style="font-size:13px;font-weight:600;margin-bottom:7px;color:#1D9E75;">긍정 요인 (Bull)</div>
-      <div class="ir"><span class="il">PBR 0.51x — 장부가 대비 절반 수준의 저평가</span><span class="badge b-green">밸류 매력</span></div>
-      <div class="ir"><span class="il">별도(본사) 순이익 1.37조 흑자(+721.5%)</span><span class="badge b-green">본사 실적 견조</span></div>
-      <div class="ir"><span class="il">2025년 영업이익 +35.0% 개선</span><span class="badge b-blue">본업 회복 조짐</span></div>
-      <div class="ir"><span class="il">DPS 2배 증가(1,000→2,000원) · 배당 유지 의지</span><span class="badge b-blue">주주환원 의지</span></div>
-      <div class="ir"><span class="il">지배기업소유주지분 분기 만에 +6.1%</span><span class="badge b-green">자본 완충력</span></div>
-      <div class="ir"><span class="il">52주 저점(248,500) 근접 · 반등 시 여력</span><span class="badge b-lgc">저점 매력</span></div>
-    </div>
-    <div>
-      <div style="font-size:13px;font-weight:600;margin-bottom:7px;color:#D85A30;">리스크 (Bear)</div>
-      <div class="ir"><span class="il">지배주주순이익 2년 연속 적자, 폭 확대</span><span class="badge b-red">순손실 지속</span></div>
-      <div class="ir"><span class="il">1Q26 영업손실(-497억) — 적자 탈출 미확인</span><span class="badge b-red">턴어라운드 불확실</span></div>
-      <div class="ir"><span class="il">오늘 52주 신저가 · 완전 역배열</span><span class="badge b-red">기술적 약세</span></div>
-      <div class="ir"><span class="il">PER 산정 불가 — 밸류에이션 기준 자체가 모호</span><span class="badge b-amber">밸류 불확실성</span></div>
-      <div class="ir"><span class="il">비지배지분도 적자(-4,337억) — 자회사 손실 지속</span><span class="badge b-amber">자회사 리스크</span></div>
-      <div class="ir"><span class="il">석유화학 공급과잉·전지소재 수요 둔화</span><span class="badge b-gray">업황 리스크</span></div>
-    </div>
-  </div>
-  <div class="ib">
-    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
-      <div><span style="color:var(--color-text-secondary);">시총:</span> <span style="font-weight:600;">~17.8조원 (보통주)</span></div>
-      <div><span style="color:var(--color-text-secondary);">1Q26 EPS:</span> <span class="dn" style="font-weight:600;">-4,449원 (적자 지속)</span></div>
-      <div><span style="color:var(--color-text-secondary);">BPS:</span> <span style="font-weight:600;">~493,838원 (PBR 0.51x)</span></div>
-      <div><span style="color:var(--color-text-secondary);">배당수익률:</span> <span style="font-weight:600;">0.80%</span></div>
-    </div>
-  </div>
-  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">⚠ 사업보고서(제25기) + 분기보고서(제26기 1Q) OpenDART 원문 + Yahoo Finance 일봉 기준 · 투자 권고가 아닙니다</div>
-</div>
-
-<!-- 7. 애널리스트 컨센서스 -->
-<div class="card">
-  <div class="sec">7. 애널리스트 컨센서스 — 증권사별 목표주가 (Naver Finance 리서치)</div>
-
-  <div style="display:grid;grid-template-columns:120px 90px 70px 70px;gap:4px 10px;font-size:11px;color:var(--color-text-tertiary);font-weight:600;padding:0 2px 6px;border-bottom:1px solid var(--color-border-tertiary);">
-    <div>증권사</div><div style="text-align:right;">목표주가</div><div>투자의견</div><div style="text-align:right;">작성일</div>
-  </div>
-  <div style="display:grid;grid-template-columns:120px 90px 70px 70px;gap:4px 10px;font-size:12.5px;padding:7px 2px;border-bottom:1px solid var(--color-border-tertiary);align-items:center;">
-    <div>iM증권</div><div style="text-align:right;font-weight:600;">370,000원</div><div><span class="badge b-green">매수</span></div><div style="text-align:right;color:var(--color-text-tertiary);">26.07.23</div>
-  </div>
-  <div style="display:grid;grid-template-columns:120px 90px 70px 70px;gap:4px 10px;font-size:12.5px;padding:7px 2px;border-bottom:1px solid var(--color-border-tertiary);align-items:center;">
-    <div>유진투자증권</div><div style="text-align:right;font-weight:600;">500,000원</div><div><span class="badge b-green">매수</span></div><div style="text-align:right;color:var(--color-text-tertiary);">26.05.06</div>
-  </div>
-  <div style="display:grid;grid-template-columns:120px 90px 70px 70px;gap:4px 10px;font-size:12.5px;padding:7px 2px;border-bottom:1px solid var(--color-border-tertiary);align-items:center;">
-    <div>한화투자증권</div><div style="text-align:right;font-weight:600;">470,000원</div><div><span class="badge b-green">매수</span></div><div style="text-align:right;color:var(--color-text-tertiary);">26.05.04</div>
-  </div>
-  <div style="display:grid;grid-template-columns:120px 90px 70px 70px;gap:4px 10px;font-size:12.5px;padding:7px 2px;border-bottom:1px solid var(--color-border-tertiary);align-items:center;">
-    <div>하나증권</div><div style="text-align:right;font-weight:600;">360,000원</div><div><span class="badge b-amber">중립</span></div><div style="text-align:right;color:var(--color-text-tertiary);">26.05.04</div>
-  </div>
-  <div style="display:grid;grid-template-columns:120px 90px 70px 70px;gap:4px 10px;font-size:12.5px;padding:7px 2px;border-bottom:1px solid var(--color-border-tertiary);align-items:center;">
-    <div>미래에셋증권</div><div style="text-align:right;font-weight:600;">480,000원</div><div><span class="badge b-green">매수</span></div><div style="text-align:right;color:var(--color-text-tertiary);">26.05.04</div>
-  </div>
-
-  <div class="ib" style="margin-top:10px;">
-    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
-      <div><span style="color:var(--color-text-secondary);">평균 목표주가:</span> <span style="font-weight:600;">436,000원 (5개 증권사)</span></div>
-      <div><span style="color:var(--color-text-secondary);">현재가 대비:</span> <span style="font-weight:600;color:#1D9E75;">+87.5%</span></div>
-    </div>
-  </div>
-
-  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">⚠ Naver Finance 증권사 리서치(브로커별 최신 1건, 2026-07-30 조회) 기준 · 목표주가는 각 리포트 발간 시점 기준이며 실시간 반영이 아닐 수 있음 · 투자 권고가 아닙니다</div>
-</div>
+<div class="dp-footer-note">OpenDART 공시 원문 + Yahoo Finance 시세 기준 · 투자 권고가 아닙니다</div>
 
 </div>
 
 <script>
-function switchTab(tab) {
-  const isA=tab==='annual';
-  document.getElementById('tabAnnual').style.display=isA?'':'none';
-  document.getElementById('tabQuarter').style.display=isA?'none':'';
-  const aS='flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:8px;font-size:13px;cursor:pointer;transition:all .15s;background:#5B3A8E;border:1.5px solid #5B3A8E;color:#fff;font-weight:600;';
-  const iS='flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:8px;font-size:13px;cursor:pointer;transition:all .15s;background:var(--color-background-secondary);border:1.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);font-weight:500;';
-  document.getElementById('btnAnnual').style.cssText=isA?aS:iS;
-  document.getElementById('btnQuarter').style.cssText=isA?iS:aS;
-  if(!isA && !window._qDrawn){ window._qDrawn=true; drawQtrChart(); }
+const SECTION_IDS = ['tech','fund','valuation','timeline','thesis','consensus'];
+let _dpTechDrawn = false, _dpAnnualDrawn = false, _dpQtrDrawn = false;
+
+function dpToggle(id) {
+  const el = document.getElementById('dpAcc-' + id);
+  const willOpen = !el.classList.contains('open');
+  el.classList.toggle('open', willOpen);
+  if (willOpen && id === 'tech' && !_dpTechDrawn) {
+    _dpTechDrawn = true;
+    renderCandleChart({svgId:'lgcSvg', controlsId:'lgcChartControls', data: data});
+  }
+  if (willOpen && id === 'fund' && !_dpAnnualDrawn) {
+    _dpAnnualDrawn = true;
+    drawAnnualChart();
+  }
+}
+function dpOpenAll() {
+  SECTION_IDS.forEach((id) => {
+    document.getElementById('dpAcc-' + id).classList.add('open');
+  });
+  if (!_dpTechDrawn) { _dpTechDrawn = true; renderCandleChart({svgId:'lgcSvg', controlsId:'lgcChartControls', data: data}); }
+  if (!_dpAnnualDrawn) { _dpAnnualDrawn = true; drawAnnualChart(); }
+}
+function dpCloseAll() {
+  SECTION_IDS.forEach((id) => {
+    document.getElementById('dpAcc-' + id).classList.remove('open');
+  });
+}
+
+function dpSetFundTab(tab) {
+  const isAnnual = tab === 'annual';
+  document.getElementById('dpFundAnnual').style.display = isAnnual ? '' : 'none';
+  document.getElementById('dpFundQuarter').style.display = isAnnual ? 'none' : '';
+  document.getElementById('dpFundAnnualBtn').classList.toggle('active', isAnnual);
+  document.getElementById('dpFundQuarterBtn').classList.toggle('active', !isAnnual);
+  if (!isAnnual && !_dpQtrDrawn) { _dpQtrDrawn = true; drawQtrChart(); }
 }
 
 function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
@@ -529,7 +507,6 @@ function drawQtrChart(){
     t2.textContent=lab; svg.appendChild(t2);
   });
 }
-drawAnnualChart();
 
 // ── SVG 캔들차트 (Yahoo Finance 일봉 실데이터) ────────────────────────
 const data=[
@@ -575,6 +552,4 @@ const data=[
 {d:'2026-07-27',o:26.25,h:26.6,l:25.65,c:26},{d:'2026-07-28',o:25.3,h:25.45,l:23.65,c:24.05},{d:'2026-07-29',o:24.45,h:25.1,l:22.4,c:23.25},{d:'2026-07-30',o:22.9,h:25.35,l:22.9,c:24.55},{d:'2026-07-31',o:25.25,h:26.25,l:24.1,c:25.8},{d:'2026-08-03',o:25.3,h:25.55,l:23.8,c:24.7},
 {d:'2026-08-04',o:24.95,h:25.75,l:24.45,c:25.65},{d:'2026-08-05',o:26.15,h:26.65,l:25.45,c:25.55},{d:'2026-08-06',o:25.5,h:26.25,l:25.2,c:26.1}
 ];
-
-renderCandleChart({svgId:'lgcSvg', controlsId:'lgcChartControls', data: data});
 </script>
