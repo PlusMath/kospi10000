@@ -1,452 +1,441 @@
-﻿<link rel="stylesheet" href="../css/global.css">
+<link rel="stylesheet" href="../css/global.css">
 <script src="../js/chart-common.js"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
-.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:18px;font-variant-numeric:tabular-nums;}
-.sec{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:12px;}
-.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:14px;}
-.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;}
-.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px;text-align:center;}
-.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
-.mv{font-size:14px;font-weight:600;color:var(--color-text-primary);font-variant-numeric:tabular-nums;}
-.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
-.up{color:#1D9E75;}.dn{color:#D85A30;}
-.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
-.b-green{background:#EAF3DE;color:#3B6D11;}.b-amber{background:#FAEEDA;color:#854F0B;}
-.b-red{background:#FCEBEB;color:#A32D2D;}.b-blue{background:#E6F1FB;color:#185FA5;}
-.b-gray{background:#F1EFE8;color:#5F5E5A;}.b-sks{background:#FBE4ED;color:#C2185B;}
-.sig{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
-.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
-.ir:last-child{border-bottom:none;}
-.il{color:var(--color-text-secondary);}.iv{font-weight:600;color:var(--color-text-primary);display:flex;align-items:center;gap:6px;font-variant-numeric:tabular-nums;}
-.src{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-tertiary);margin-left:4px;}
-.hl{background:#EAF3DE;border-left:3px solid #1D9E75;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
-.warn{background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
-.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
-.ev{font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;}
-.ev-1{background:#E6F1FB;color:#0C447C;}.ev-2{background:#EAF3DE;color:#27500A;}
-.ev-3{background:#F1EFE8;color:#444441;}.ev-4{background:#FAEEDA;color:#633806;}
-.ev-5{background:#FCEBEB;color:#791F1F;}
-.ind-row{display:flex;align-items:center;padding:8px 0;border-bottom:.5px solid var(--color-border-tertiary);gap:10px;}
-.ind-row:last-child{border-bottom:none;}
-.ind-nm{font-size:13px;font-weight:600;color:var(--color-text-primary);min-width:150px;}
-.ind-val{font-size:14px;font-weight:600;color:var(--color-text-primary);min-width:80px;text-align:right;font-variant-numeric:tabular-nums;}
-.bar-bg{background:var(--color-border-tertiary);border-radius:4px;height:7px;}
-.bar-f{border-radius:4px;height:7px;}
-.tl{position:relative;padding-left:28px;}
-.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--color-border-tertiary);border-radius:2px;}
-.tl-item{position:relative;margin-bottom:18px;}
-.tl-item:last-child{margin-bottom:0;}
-.tl-dot{position:absolute;left:-24px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid var(--color-background-primary);}
-.dot-big{background:#C2185B;}.dot-pos{background:#1D9E75;}
-.dot-neg{background:#D85A30;}.dot-neu{background:#888780;}
-.tl-date{font-size:11px;font-weight:600;color:var(--color-text-tertiary);margin-bottom:3px;}
-.tl-title{font-size:13px;font-weight:600;color:var(--color-text-primary);margin-bottom:3px;line-height:1.4;}
-.tl-body{font-size:12px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:5px;}
-.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;margin-right:4px;}
-.tag-big{background:#FBE4ED;color:#C2185B;}.tag-pos{background:#EAF3DE;color:#3B6D11;}
-.tag-neg{background:#FCEBEB;color:#791F1F;}.tag-neu{background:#F1EFE8;color:#444441;}
-.nav-visual{display:flex;height:32px;border-radius:6px;overflow:hidden;margin:10px 0;}
-button:focus-visible,a:focus-visible{outline:2px solid #C2185B;outline-offset:2px;}
+*{box-sizing:border-box;}
+:root{
+  --dp-accent:oklch(0.32 0.09 260);
+  --dp-accent-soft:oklch(0.32 0.09 260 / 0.06);
+  --dp-accent-soft2:oklch(0.32 0.09 260 / 0.14);
+  --dp-up:oklch(0.55 0.2 25);
+  --dp-down:oklch(0.52 0.14 250);
+  --dp-bg:oklch(0.99 0.002 90);
+  --dp-card:oklch(1 0 0);
+  --dp-border:oklch(0.91 0.005 90);
+  --dp-border2:oklch(0.94 0.004 90);
+  --dp-text:oklch(0.18 0.02 260);
+  --dp-text2:oklch(0.4 0.02 260);
+  --dp-text3:oklch(0.5 0.02 260);
+  --dp-text4:oklch(0.55 0.02 260);
+}
+body{background:var(--dp-bg);}
+.dp{font-family:'Noto Sans KR',Arial,sans-serif;color:var(--dp-text);max-width:800px;margin:0 auto;}
+.dp a{color:oklch(0.4 0.1 258);text-decoration:none;}
+.dp table{width:100%;border-collapse:collapse;}
+.dp-back{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:700;color:var(--dp-text3);margin-bottom:18px;}
+.dp-title-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
+.dp-h1{font-size:21px;font-weight:800;margin:0;}
+.dp-ticker{font-size:13px;color:var(--dp-text3);font-weight:600;}
+.dp-badge{font-size:12px;font-weight:700;color:var(--dp-accent);background:var(--dp-accent-soft2);padding:4px 10px;border-radius:6px;}
+.dp-price-row{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;flex-wrap:wrap;}
+.dp-price{font-size:42px;font-weight:800;letter-spacing:-0.01em;}
+.dp-chg{font-size:16px;font-weight:700;padding:5px 12px;border-radius:8px;background:oklch(0.55 0.2 25 / 0.1);color:var(--dp-up);}
+.dp-chg.dn{background:oklch(0.52 0.14 250 / 0.1);color:var(--dp-down);}
+.dp-date{font-size:13px;color:var(--dp-text4);}
+.dp-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--dp-border);border:1px solid var(--dp-border);border-radius:12px;overflow:hidden;margin-bottom:20px;}
+.dp-stat{background:var(--dp-card);padding:14px 16px;}
+.dp-stat-l{font-size:11px;color:var(--dp-text4);margin-bottom:4px;}
+.dp-stat-v{font-size:14px;font-weight:700;}
+.dp-summary{background:var(--dp-accent-soft);border:1px solid var(--dp-accent-soft2);border-radius:12px;padding:16px 18px;margin-bottom:28px;}
+.dp-summary-l{font-size:13px;font-weight:700;color:var(--dp-accent);margin-bottom:5px;}
+.dp-summary-b{font-size:13px;line-height:1.7;color:oklch(0.28 0.03 260);}
+.dp-openclose{display:flex;justify-content:flex-end;gap:10px;margin-bottom:10px;}
+.dp-openclose button{border:none;background:none;cursor:pointer;font-size:12.5px;font-weight:700;padding:0;font-family:inherit;}
+.dp-openclose .op{color:var(--dp-accent);}
+.dp-openclose .cl{color:var(--dp-text4);}
+.dp-sep{color:oklch(0.85 0.005 90);}
+.dp-acc{border:1px solid var(--dp-border);border-radius:12px;margin-bottom:12px;overflow:hidden;background:var(--dp-card);}
+.dp-acc-h{width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:none;border:none;cursor:pointer;font-family:inherit;text-align:left;}
+.dp-acc-h span:first-child{font-size:15px;font-weight:700;}
+.dp-acc-chev{font-size:13px;color:var(--dp-text4);transition:transform .15s;display:inline-block;}
+.dp-acc.open .dp-acc-chev{transform:rotate(180deg);}
+.dp-acc-body{display:none;padding:16px 20px 22px;border-top:1px solid var(--dp-border2);}
+.dp-acc.open .dp-acc-body{display:block;}
+.dp-row2{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--dp-border2);font-size:12.5px;}
+.dp-row2 .l{color:var(--dp-text2);}
+.dp-row2 .v{font-weight:700;}
+.dp-row2 .v.up{color:var(--dp-up);}
+.dp-g2{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:16px;}
+.dp-secl{font-size:12px;font-weight:700;color:var(--dp-text4);margin-bottom:8px;}
+.dp-tab-row{display:flex;gap:6px;margin-bottom:16px;}
+.dp-tab{flex:1;padding:9px 0;border-radius:8px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;border:1px solid var(--dp-border);background:var(--dp-card);color:var(--dp-text2);text-align:center;}
+.dp-tab.active{background:var(--dp-accent);border-color:var(--dp-accent);color:#fff;}
+.dp-seg3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+.dp-seg{background:oklch(0.97 0.004 90);border-radius:10px;padding:12px;}
+.dp-seg-t{font-size:12.5px;font-weight:700;margin-bottom:6px;}
+.dp-seg-d{font-size:11.5px;color:oklch(0.45 0.02 260);line-height:1.6;}
+.dp-eps-flow{display:flex;align-items:stretch;gap:8px;margin-bottom:16px;}
+.dp-eps-card{flex:1;text-align:center;background:oklch(0.97 0.004 90);border:1px solid var(--dp-border);border-radius:10px;padding:12px 8px;}
+.dp-eps-card.now{background:var(--dp-accent-soft);border-color:var(--dp-accent);}
+.dp-eps-y{font-size:10.5px;color:var(--dp-text3);margin-bottom:4px;}
+.dp-eps-v{font-size:17px;font-weight:800;}
+.dp-eps-n{font-size:10px;color:var(--dp-text4);margin-top:4px;}
+.dp-arrow{display:flex;align-items:center;font-size:18px;color:var(--dp-up);font-weight:700;}
+.dp-insight{background:var(--dp-accent-soft);border-radius:10px;padding:14px 16px;}
+.dp-insight-t{font-size:12.5px;font-weight:700;color:var(--dp-accent);margin-bottom:4px;}
+.dp-insight-b{font-size:12.5px;line-height:1.65;color:oklch(0.3 0.03 260);}
+.dp-share4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;}
+.dp-share{background:oklch(0.97 0.004 90);border-radius:10px;padding:12px;text-align:center;}
+.dp-share-l{font-size:11px;color:var(--dp-text3);margin-bottom:5px;}
+.dp-share-v{font-size:15px;font-weight:800;}
+.dp-share-s{font-size:10px;color:var(--dp-text4);margin-top:3px;}
+.dp-gauge{margin-bottom:14px;}
+.dp-gauge-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;}
+.dp-gauge-h span:first-child{font-size:13px;font-weight:700;}
+.dp-gauge-h span:last-child{font-size:14px;font-weight:800;}
+.dp-gauge-track{background:oklch(0.93 0.004 90);border-radius:5px;height:6px;margin-bottom:5px;}
+.dp-gauge-fill{background:var(--dp-accent);border-radius:5px;height:6px;}
+.dp-gauge-note{font-size:11.5px;color:var(--dp-text3);line-height:1.55;}
+.dp-tl{position:relative;padding-left:22px;}
+.dp-tl::before{content:'';position:absolute;left:5px;top:4px;bottom:4px;width:2px;background:var(--dp-border);border-radius:2px;}
+.dp-tl-item{position:relative;margin-bottom:18px;}
+.dp-tl-item:last-child{margin-bottom:0;}
+.dp-tl-dot{position:absolute;left:-21px;top:3px;width:10px;height:10px;border-radius:50%;background:var(--dp-accent);border:2px solid var(--dp-card);}
+.dp-tl-date{font-size:11px;font-weight:700;color:var(--dp-text4);margin-bottom:3px;}
+.dp-tl-title{font-size:13.5px;font-weight:700;margin-bottom:4px;line-height:1.4;}
+.dp-tl-body{font-size:12px;color:oklch(0.45 0.02 260);line-height:1.6;}
+.dp-thesis{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+.dp-thesis-t{font-size:13px;font-weight:700;margin-bottom:10px;}
+.dp-thesis-t.bull{color:var(--dp-up);}
+.dp-thesis-t.bear{color:var(--dp-down);}
+.dp-thesis-item{display:flex;gap:8px;padding:6px 0;font-size:12.5px;line-height:1.5;}
+.dp-thesis-item .dot{flex-shrink:0;}
+.dp-thesis-item.bull .dot{color:var(--dp-up);}
+.dp-thesis-item.bear .dot{color:var(--dp-down);}
+.dp-cons-th{text-align:left;font-size:11px;color:var(--dp-text4);font-weight:600;padding-bottom:8px;border-bottom:1px solid var(--dp-border);}
+.dp-cons-td{font-size:12.5px;padding:9px 0;border-bottom:1px solid var(--dp-border2);}
+.dp-cons-badge{font-size:11px;font-weight:600;padding:2px 9px;border-radius:999px;background:oklch(0.55 0.2 25 / 0.1);color:var(--dp-up);}
+.dp-cons-summary{display:flex;gap:20px;margin-top:14px;font-size:13px;}
+.dp-footer-note{font-size:11px;color:oklch(0.6 0.02 260);text-align:center;margin-top:20px;}
+@media (max-width:640px){
+  .dp-g2,.dp-thesis{grid-template-columns:1fr;gap:16px;}
+  .dp-stats{grid-template-columns:repeat(2,1fr);}
+  .dp-seg3{grid-template-columns:1fr;}
+  .dp-share4{grid-template-columns:repeat(2,1fr);}
+  .dp-price{font-size:32px;}
+  .dp-h1{font-size:16px;}
+}
 </style>
 
-<div style="padding:1rem 0;" class="box">
+<div class="dp" style="padding:1rem 0 2rem;">
 
-<div style="margin-bottom:12px;"><a href="../index.html" style="display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:700;color:var(--color-text-info);text-decoration:none;">← 홈으로</a></div>
+<a class="dp-back" href="../index.html">← 홈으로</a>
 
-<!-- 헤더 -->
-<div style="margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-  <h2>SK스퀘어 (402340)</h2>
-  <span class="badge b-sks">코스피 · 투자지주</span>
-  <span class="badge b-gray">SK하이닉스 지분 20.1% 보유</span>
-  <span class="src">📄 OpenDART 공시 원문(Open API) + 📊 Yahoo Finance 시세</span>
-</div>
-<p class="sub">최근 종가 1,119,000원 (2026-08-05, 전일대비 +5.57%) · 52주 최고 2,189,000원 (26/06/23) · 52주 최저 130,900원 (25/08/20) · LC +754.85% · HC -48.88% · 시총 약 157조 (보통주 유통 기준)</p>
-
-<!-- 핵심 지표 배너 -->
-<div style="background:#FBE4ED;border-left:3px solid #C2185B;border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:14px;">
-  <div style="font-size:12px;color:#C2185B;line-height:1.6;"><strong>🔑 SK스퀘어 투자의 핵심:</strong> SK스퀘어는 SK하이닉스 지분 20.1%를 보유한 순수 투자지주회사로, 실적의 대부분이 SK하이닉스 지분법이익(2025년 9조 440억)에서 나옴. SK하이닉스 주가 급등에 힘입어 SK스퀘어의 SK하이닉스 지분 시장가치는 <strong>약 270조원으로 SK스퀘어 자체 시총(157조원)의 1.7배</strong> — 지주회사 할인율 약 42%에 달함. 주가는 52주 저점(130,900원, 25/08/20)에서 6월 23일 2,189,000원 신고가까지 급등한 뒤 <strong>한 달여 만에 -45.64% 급락</strong>, 현재 1,190,000원. 별도(본사) 기준으로는 배당·관리비 구조상 2년 연속 순손실을 기록 중이며 배당은 지급하지 않고 있음.</div>
+<div class="dp-title-row">
+  <h1 class="dp-h1">SK스퀘어</h1>
+  <span class="dp-ticker">402340</span>
+  <span class="dp-badge">코스피 · 투자지주</span>
 </div>
 
-<div class="g4">
-  <div class="met"><div class="ml">최근 종가 (08/05)</div><div class="mv up">1,119,000원</div><div class="ms up">+5.57% · 고점 대비 -48.9%</div></div>
-  <div class="met"><div class="ml">2025 연결 영업이익</div><div class="mv up">8조 7,974억</div><div class="ms">전년比 +124.39%</div></div>
-  <div class="met"><div class="ml">2025 지배주주 순이익</div><div class="mv up">8조 8,241억</div><div class="ms">전년比 +137.59%</div></div>
-  <div class="met"><div class="ml">SK하이닉스 지분가치</div><div class="mv">약 270조원</div><div class="ms">SK스퀘어 시총의 1.7배</div></div>
+<div class="dp-price-row">
+  <div class="dp-price">1,119,000원</div>
+  <div class="dp-chg">▲ +5.57%</div>
+  <div class="dp-date">2026.08.05 종가 기준</div>
+</div>
+
+<div class="dp-stats">
+  <div class="dp-stat"><div class="dp-stat-l">52주 최고</div><div class="dp-stat-v">2,189,000원</div></div>
+  <div class="dp-stat"><div class="dp-stat-l">52주 최저</div><div class="dp-stat-v">130,900원</div></div>
+  <div class="dp-stat"><div class="dp-stat-l">시가총액</div><div class="dp-stat-v">157조</div></div>
+  <div class="dp-stat"><div class="dp-stat-l">고점 대비</div><div class="dp-stat-v" style="color:var(--dp-down);">-48.9%</div></div>
+</div>
+
+<div class="dp-summary">
+  <div class="dp-summary-l">핵심 요약</div>
+  <div class="dp-summary-b">SK하이닉스 지분 20.1%를 보유한 순수 투자지주회사로, 실적 대부분이 SK하이닉스 지분법이익(2025년 9조 440억)에서 발생. SK하이닉스 지분 시장가치는 약 270조원으로 SK스퀘어 자체 시총(157조)의 1.7배에 달해 지주회사 할인율 약 42%가 존재. 52주 저점(130,900원)에서 6월 신고가(2,189,000원)까지 급등한 뒤 급락, 현재 1,119,000원으로 신고가 대비 -48.9% 조정 국면. 별도(본사) 기준으로는 2년 연속 순손실이며 배당은 지급하지 않음.</div>
+</div>
+
+<div class="dp-openclose">
+  <button class="op" onclick="dpOpenAll()">모두 열기</button>
+  <span class="dp-sep">|</span>
+  <button class="cl" onclick="dpCloseAll()">모두 닫기</button>
 </div>
 
 <!-- 1. 기술적 분석 -->
-<div class="card">
-  <div class="sec">1. 기술적 분석 — 일봉 기준 (2025.08.05 ~ 2026.08.05, 243거래일)</div>
-  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;">
-    최저 130,900원 (25/08/20) → 최고 2,189,000원 (26/06/23) → 최근 종가 1,119,000원 (26/08/05) · LC +754.85% · HC -48.88%
-  </div>
-  <div id="sksChartControls" class="kc-controls"></div>
-  <svg id="sksSvg" viewBox="0 0 720 240" width="100%" style="display:block;margin-bottom:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:4px;"></svg>
+<div class="dp-acc" id="dpAcc-tech">
+  <button class="dp-acc-h" onclick="dpToggle('tech')"><span>1. 기술적 분석</span><span class="dp-acc-chev">▾</span></button>
+  <div class="dp-acc-body">
+    <div id="sksChartControls" class="kc-controls"></div>
+    <svg id="sksSvg" viewBox="0 0 720 240" width="100%" style="display:block;margin-bottom:16px;background:oklch(0.98 0.004 90);border-radius:10px;padding:4px;"></svg>
 
-  <div style="font-size:13px;font-weight:600;margin-bottom:8px;">📊 구간별 분석 <span class="src">📊 Yahoo Finance 일봉</span></div>
-  <div class="g4" style="font-size:11px;margin-bottom:12px;">
-    <div style="background:#F1EFE8;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#5F5E5A;font-weight:600;margin-bottom:3px;">25.07~08 — 저점권 형성</div>
-      <div style="color:#5F5E5A;line-height:1.6;">최저 130,900 (08/20)<br>130,900~181,300대 횡보<br>2개월간 바닥 다지기<br>SK하이닉스 동조화</div>
-    </div>
-    <div style="background:#FBE4ED;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#C2185B;font-weight:600;margin-bottom:3px;">25.09~26.02 — 지속 랠리</div>
-      <div style="color:#C2185B;line-height:1.6;">145,000→645,000원<br>6개월간 +345% 상승<br>SK하이닉스 지분가치 급증<br>거래량 급증</div>
-    </div>
-    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#854F0B;font-weight:600;margin-bottom:3px;">26.03~04 — 조정 후 재상승</div>
-      <div style="color:#854F0B;line-height:1.6;">642,000→462,500 (3월)<br>3월 단월 -27.3%<br>4월 508,000→841,000<br>+65.6% 재급등</div>
-    </div>
-    <div style="background:#FCEBEB;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#A32D2D;font-weight:600;margin-bottom:3px;">26.05~07 — 폭등 후 폭락</div>
-      <div style="color:#A32D2D;line-height:1.6;">901,000→2,189,000 (06/23)<br>6월 단월 +35.9%<br>7월 -30.4% 급락<br>현재 1,190,000원</div>
-    </div>
-  </div>
-
-  <div class="g2" style="margin-bottom:12px;">
-    <div>
-      <div style="font-size:13px;font-weight:600;margin-bottom:7px;">이동평균선 현황 (07/14 기준)</div>
-      <div class="ir"><span class="il">5일선 (1,271,400원)</span><span class="badge b-red">가격 소폭 하회</span></div>
-      <div class="ir"><span class="il">20일선 (1,585,600원)</span><span class="badge b-red">가격 큰 폭 하회</span></div>
-      <div class="ir"><span class="il">60일선 (1,245,333원)</span><span class="badge b-red">가격 소폭 하회</span></div>
-      <div class="ir"><span class="il">120일선 (895,042원)</span><span class="badge b-green">가격 크게 상회</span></div>
-      <div class="ir"><span class="il">배열</span><span class="badge b-amber">단기 급조정 · 중장기 상승추세 유지</span></div>
-    </div>
-    <div>
-      <div style="font-size:13px;font-weight:600;margin-bottom:7px;">핵심 가격대</div>
-      <div class="ir"><span class="il">52주 최고 (신고가)</span><span style="font-weight:600;color:#C2185B;">2,189,000원 (26/06/23)</span></div>
-      <div class="ir"><span class="il">7월 급락 저점</span><span style="font-weight:600;color:#D85A30;">1,086,000원 (07/14 장중)</span></div>
-      <div class="ir"><span class="il">최근 종가</span><span style="font-weight:600;color:var(--color-text-primary);">1,190,000원 (07/14)</span></div>
-      <div class="ir"><span class="il">52주 최저</span><span style="font-weight:600;">130,900원 (25/08/20)</span></div>
-      <div class="ir"><span class="il">LC / HC</span><span style="font-weight:600;">+809.09% / -45.64%</span></div>
-    </div>
-  </div>
-
-  <div class="sig">
-    <span class="badge b-red">신고가(06/23) 대비 -45.6% 급락 · 5~60일선 하회</span>
-    <span class="badge b-green">120일선 대비는 여전히 +33.0% 상회</span>
-    <span class="badge b-blue">52주 저점(130,900) 대비는 여전히 +809.1%</span>
-    <span class="badge b-sks">SK하이닉스 지분가치 대비 42% 할인 거래</span>
-  </div>
-</div>
-
-<!-- 2. 기본적 분석 탭 -->
-<div class="card">
-  <div class="sec">2. 기본적 분석 — 공시 원문 <span class="src">📄 사업보고서 제5기(2025) + 분기보고서 제6기 1Q(2026.03)</span></div>
-
-  <div style="display:flex;gap:8px;margin-bottom:14px;">
-    <button id="btnAnnual" onclick="switchTab('annual')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);border:1.5px solid #C2185B;background:#C2185B;color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;">
-      📄 사업보고서 <span style="font-size:11px;opacity:.85;font-weight:400;">제5기 · 2025년 연간</span>
-    </button>
-    <button id="btnQuarter" onclick="switchTab('quarter')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);border:1.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-secondary);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;">
-      📋 분기보고서 <span style="font-size:11px;opacity:.85;font-weight:400;">제6기 1분기 · 2026.03</span>
-    </button>
-  </div>
-
-  <!-- ══ 사업보고서 탭 ══ -->
-  <div id="tabAnnual">
-    <svg id="sksAnnualChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:12px;"></svg>
-
-    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:6px;letter-spacing:.03em;">📊 연결 손익 요약 (단위: 억원 · 제5기 2025년)</div>
-    <div class="g2" style="margin-bottom:12px;">
+    <div class="dp-g2">
       <div>
-        <div class="ir"><span class="il">연결 영업수익(매출)</span><span class="iv dn">1조 4,115억 (▼14.45%) <span class="ev ev-3">적정</span></span></div>
-        <div class="ir"><span class="il">연결 영업이익</span><span class="iv up">8조 7,974억 (▲124.39%) <span class="ev ev-5">매우높음</span></span></div>
-        <div class="ir"><span class="il">연결 당기순이익(전체)</span><span class="iv up">8조 8,187억 (▲141.57%) <span class="ev ev-5">매우높음</span></span></div>
-        <div class="ir"><span class="il">지배주주 순이익</span><span class="iv up">8조 8,241억 (▲137.59%) <span class="ev ev-5">매우높음</span></span></div>
-        <div class="ir"><span class="il">기본주당이익</span><span class="iv up">66,713원 (▲140.22%) <span class="ev ev-5">매우높음</span></span></div>
+        <div class="dp-secl">이동평균선 현황 (07/14 기준)</div>
+        <div class="dp-row2"><span class="l">5일선 (1,271,400원)</span><span class="v" style="color:var(--dp-down);">가격 소폭 하회</span></div>
+        <div class="dp-row2"><span class="l">20일선 (1,585,600원)</span><span class="v" style="color:var(--dp-down);">가격 큰 폭 하회</span></div>
+        <div class="dp-row2"><span class="l">60일선 (1,245,333원)</span><span class="v" style="color:var(--dp-down);">가격 소폭 하회</span></div>
+        <div class="dp-row2"><span class="l">120일선 (895,042원)</span><span class="v up">가격 크게 상회</span></div>
       </div>
       <div>
-        <div class="ir"><span class="il">연결 자산총계</span><span class="iv">30조 5,045억 (▲39.16%) <span class="ev ev-4">높음</span></span></div>
-        <div class="ir"><span class="il">연결 부채총계</span><span class="iv">2조 5,214억 (▲8.0%) <span class="ev ev-3">적정</span></span></div>
-        <div class="ir"><span class="il">연결 자본총계</span><span class="iv up">27조 9,832억 (▲42.88%) <span class="ev ev-5">매우높음</span></span></div>
-        <div class="ir"><span class="il">별도 순이익</span><span class="iv dn">-1,056억 (적자 지속) <span class="ev ev-4">주의</span></span></div>
-        <div class="ir"><span class="il">현금배당(보통주)</span><span class="iv">무배당 <span class="ev ev-4">주의</span></span></div>
+        <div class="dp-secl">핵심 가격대</div>
+        <div class="dp-row2"><span class="l">52주 최고 (신고가)</span><span class="v">2,189,000원 (06/23)</span></div>
+        <div class="dp-row2"><span class="l">7월 급락 저점</span><span class="v">1,086,000원 (07/14 장중)</span></div>
+        <div class="dp-row2"><span class="l">직전 종가</span><span class="v">1,190,000원 (07/14)</span></div>
+        <div class="dp-row2"><span class="l">52주 최저</span><span class="v">130,900원 (25/08/20)</span></div>
       </div>
     </div>
 
-    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">🏭 SK스퀘어 핵심 자산 구조</div>
-    <div class="g3" style="font-size:11px;margin-bottom:12px;">
-      <div style="background:#FBE4ED;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #C2185B;">
-        <div style="color:#C2185B;font-weight:600;margin-bottom:5px;">SK하이닉스 지분 (20.1%)</div>
-        <div class="ir" style="font-size:11px;"><span class="il">장부가액(2025년말)</span><span>3조 3,747억</span></div>
-        <div class="ir" style="font-size:11px;"><span class="il">시장가치(추정)</span><span class="up">약 270조원</span></div>
-        <div class="ir" style="font-size:11px;"><span class="il">역할</span><span>실적·주가의 절대적 동력</span></div>
-      </div>
-      <div style="background:#F1EFE8;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #5F5E5A;">
-        <div style="color:#5F5E5A;font-weight:600;margin-bottom:5px;">포트폴리오사(11번가·원스토어 등)</div>
-        <div class="ir" style="font-size:11px;"><span class="il">영업수익</span><span>1조 4,115억 (연결 매출 대부분)</span></div>
-        <div class="ir" style="font-size:11px;"><span class="il">역할</span><span>SK하이닉스 대비 이익 기여 미미</span></div>
-        <div class="ir" style="font-size:11px;"><span class="il">2025년 흐름</span><span class="dn">영업수익 -14.45%</span></div>
-      </div>
-      <div style="background:#F1EFE8;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #5F5E5A;">
-        <div style="color:#5F5E5A;font-weight:600;margin-bottom:5px;">별도(지주사 본체)</div>
-        <div class="ir" style="font-size:11px;"><span class="il">2025년 별도순이익</span><span class="dn">-1,056억</span></div>
-        <div class="ir" style="font-size:11px;"><span class="il">2024년 별도순이익</span><span class="dn">-1,796억</span></div>
-        <div class="ir" style="font-size:11px;"><span class="il">특징</span><span>2년 연속 적자, 무배당</span></div>
-      </div>
-    </div>
-
-    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">📈 지배주주순이익 3개년 추이 — 적자에서 사상 최대 흑자로</div>
-    <div style="display:flex;gap:8px;margin-bottom:14px;">
-      <div style="flex:1;background:#FCEBEB;border-radius:var(--border-radius-md);padding:10px;text-align:center;">
-        <div style="font-size:10px;color:#A32D2D;margin-bottom:4px;">2023년</div>
-        <div style="font-size:18px;font-weight:700;color:#D85A30;">-1조 2,870억</div>
-        <div style="font-size:10px;color:#A32D2D;margin-top:4px;">EPS -9,259원</div>
-      </div>
-      <div style="display:flex;align-items:center;font-size:18px;color:#1D9E75;font-weight:700;">→</div>
-      <div style="flex:1;background:#F1EFE8;border-radius:var(--border-radius-md);padding:10px;text-align:center;">
-        <div style="font-size:10px;color:#5F5E5A;margin-bottom:4px;">2024년</div>
-        <div style="font-size:18px;font-weight:700;color:var(--color-text-primary);">3조 7,140억</div>
-        <div style="font-size:10px;color:#5F5E5A;margin-top:4px;">EPS 27,772원 · 흑자전환</div>
-      </div>
-      <div style="display:flex;align-items:center;font-size:18px;color:#1D9E75;font-weight:700;">→</div>
-      <div style="flex:1;background:#EAF3DE;border-radius:var(--border-radius-md);padding:10px;text-align:center;border:1.5px solid #1D9E75;">
-        <div style="font-size:10px;color:#3B6D11;margin-bottom:4px;font-weight:600;">2025년 (제5기, 역대 최대)</div>
-        <div style="font-size:18px;font-weight:700;color:#1D9E75;">8조 8,241억</div>
-        <div style="font-size:10px;color:#3B6D11;margin-top:4px;">EPS 66,713원 · 전년比 +137.6%</div>
-      </div>
-    </div>
-
-    <div class="hl">
-      <div style="font-size:13px;font-weight:600;color:#3B6D11;margin-bottom:4px;">💡 사업보고서 핵심 — 실적은 사실상 SK하이닉스 지분법이익 그 자체</div>
-      <div style="font-size:12px;color:#1D9E75;line-height:1.7;">2025년 연결 영업수익(매출) 1조 4,115억에서 영업비용 1조 5,445억을 빼면 핵심 포트폴리오 사업 자체는 -1,330억의 영업손실. 여기에 순액 지분법손익 8조 9,304억(지분법이익 9조 440억 - 지분법손실 1,136억)이 더해져 최종 연결 영업이익 8조 7,974억이 산출되는 구조로, <strong>연결 영업이익의 실질은 거의 전부 SK하이닉스 지분법이익</strong>. 별도(지주사 본체) 기준으로는 2024년 -1,796억, 2025년 -1,056억으로 2년 연속 순손실이며 현금배당도 지급하지 않고 있어, 투자 매력은 전적으로 SK하이닉스 지분가치에 달려 있음.</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+      <span style="font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:999px;background:oklch(0.95 0.004 90);color:var(--dp-text2);">신고가(06/23) 대비 -45.6% 급락 · 5~60일선 하회</span>
+      <span style="font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:999px;background:oklch(0.95 0.004 90);color:var(--dp-text2);">120일선 대비는 여전히 +33.0% 상회</span>
+      <span style="font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:999px;background:oklch(0.95 0.004 90);color:var(--dp-text2);">52주 저점(130,900) 대비는 여전히 +809.1%</span>
+      <span style="font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:999px;background:oklch(0.95 0.004 90);color:var(--dp-text2);">SK하이닉스 지분가치 대비 42% 할인 거래</span>
     </div>
   </div>
+</div>
 
-  <!-- ══ 분기보고서 탭 ══ -->
-  <div id="tabQuarter" style="display:none;">
-    <svg id="sksQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:12px;"></svg>
+<!-- 2. 기본적 분석 -->
+<div class="dp-acc" id="dpAcc-fund">
+  <button class="dp-acc-h" onclick="dpToggle('fund')"><span>2. 기본적 분석 — 공시 원문</span><span class="dp-acc-chev">▾</span></button>
+  <div class="dp-acc-body">
+    <div class="dp-tab-row">
+      <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">분기보고서 · 1Q26</button>
+    </div>
 
-    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:6px;letter-spacing:.03em;">📊 1Q26 연결 손익 요약 (단위: 억원 · 제6기 1분기)</div>
-    <div class="g2" style="margin-bottom:12px;">
+    <div id="dpFundAnnual">
+      <svg id="sksAnnualChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:16px;"></svg>
+      <div class="dp-g2">
+        <div>
+          <div class="dp-row2"><span class="l">연결 영업수익(매출)</span><span class="v" style="color:var(--dp-down);">1조 4,115억 (▼14.45%)</span></div>
+          <div class="dp-row2"><span class="l">연결 영업이익</span><span class="v up">8조 7,974억 (▲124.39%)</span></div>
+          <div class="dp-row2"><span class="l">연결 당기순이익</span><span class="v up">8조 8,187억 (▲141.57%)</span></div>
+          <div class="dp-row2"><span class="l">지배주주 순이익</span><span class="v up">8조 8,241억 (▲137.59%)</span></div>
+          <div class="dp-row2"><span class="l">기본주당순이익</span><span class="v up">66,713원 (▲140.22%)</span></div>
+        </div>
+        <div>
+          <div class="dp-row2"><span class="l">연결 자산총계</span><span class="v">30조 5,045억 (▲39.16%)</span></div>
+          <div class="dp-row2"><span class="l">연결 부채총계</span><span class="v">2조 5,214억 (▲8.0%)</span></div>
+          <div class="dp-row2"><span class="l">연결 자본총계</span><span class="v up">27조 9,832억 (▲42.88%)</span></div>
+          <div class="dp-row2"><span class="l">별도 순이익</span><span class="v" style="color:var(--dp-down);">-1,056억 (적자 지속)</span></div>
+          <div class="dp-row2"><span class="l">현금배당(보통주)</span><span class="v">무배당</span></div>
+        </div>
+      </div>
+
+      <div class="dp-secl">사업부문</div>
+      <div class="dp-seg3">
+        <div class="dp-seg"><div class="dp-seg-t">SK하이닉스 지분 (20.1%)</div><div class="dp-seg-d">장부가액 3조 3,747억, 시장가치 약 270조원. 실적·주가의 절대적 동력.</div></div>
+        <div class="dp-seg"><div class="dp-seg-t">포트폴리오사 (11번가·원스토어 등)</div><div class="dp-seg-d">영업수익 1조 4,115억(연결 매출 대부분), 이익 기여는 미미. 2025년 영업수익 -14.45%.</div></div>
+        <div class="dp-seg"><div class="dp-seg-t">별도(지주사 본체)</div><div class="dp-seg-d">2024년 -1,796억, 2025년 -1,056억으로 2년 연속 적자, 무배당.</div></div>
+      </div>
+
+      <div class="dp-secl">EPS 3개년 추이</div>
+      <div class="dp-eps-flow">
+        <div class="dp-eps-card"><div class="dp-eps-y">2023년</div><div class="dp-eps-v">-9,259원</div><div class="dp-eps-n">적자</div></div>
+        <div class="dp-arrow">→</div>
+        <div class="dp-eps-card"><div class="dp-eps-y">2024년</div><div class="dp-eps-v">27,772원</div><div class="dp-eps-n">흑자전환</div></div>
+        <div class="dp-arrow">→</div>
+        <div class="dp-eps-card now"><div class="dp-eps-y">2025년</div><div class="dp-eps-v">66,713원</div><div class="dp-eps-n">▲140.22%</div></div>
+      </div>
+
+      <div class="dp-insight">
+        <div class="dp-insight-t">사업보고서 핵심</div>
+        <div class="dp-insight-b">2025년 핵심 포트폴리오 사업 자체는 -1,330억의 영업손실이나, 순액 지분법손익 8조 9,304억(지분법이익 9조 440억-지분법손실 1,136억)이 더해져 최종 연결 영업이익 8조 7,974억 산출 — 연결 영업이익의 실질은 거의 전부 SK하이닉스 지분법이익. 별도 기준으로는 2년 연속 순손실(2025년 -1,056억)이며 배당도 지급하지 않아, 투자 매력은 전적으로 SK하이닉스 지분가치에 달려 있음.</div>
+      </div>
+    </div>
+
+    <div id="dpFundQuarter" style="display:none;">
+      <svg id="sksQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:16px;"></svg>
+      <div class="dp-g2">
+        <div>
+          <div class="dp-row2"><span class="l">1Q26 연결 영업수익</span><span class="v">3,003억</span></div>
+          <div class="dp-row2"><span class="l">1Q26 연결 영업이익</span><span class="v up">8조 2,783억</span></div>
+          <div class="dp-row2"><span class="l">1Q26 법인세차감전이익</span><span class="v">8조 9,297억</span></div>
+          <div class="dp-row2"><span class="l">1Q26 연결 분기순이익</span><span class="v">8조 3,747억</span></div>
+          <div class="dp-row2"><span class="l">1Q26 지배주주 순이익</span><span class="v">8조 3,810억</span></div>
+        </div>
+        <div>
+          <div class="dp-row2"><span class="l">1Q26 보통주 EPS</span><span class="v">63,608원 (연환산 ~254,432원)</span></div>
+          <div class="dp-row2"><span class="l">1Q26 비지배지분 순이익</span><span class="v" style="color:var(--dp-down);">-62억</span></div>
+          <div class="dp-row2"><span class="l">1Q26 연결 자산총계</span><span class="v">38조 9,834억 (▲27.80%)</span></div>
+          <div class="dp-row2"><span class="l">연결 자본총계</span><span class="v up">36조 2,629억 (▲29.59%)</span></div>
+          <div class="dp-row2"><span class="l">지배기업소유주지분</span><span class="v up">36조 329억 (▲30.38%)</span></div>
+        </div>
+      </div>
+      <div class="dp-insight">
+        <div class="dp-insight-t">분기보고서 핵심</div>
+        <div class="dp-insight-b">관계기업및공동기업투자(SK하이닉스 지분)의 장부가액이 27조 2,445억(2025년말)→36조 806억(1Q26)으로 +32.4% 증가 — 지분율 변동이 아니라 SK하이닉스 자체 순이익 급증분이 반영된 결과. 이 장부가액조차 시가총액 기준 지분가치(약 270조)에는 크게 못 미쳐 지분법 회계와 실제 시장가치의 괴리가 매우 큼.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. 투자지표 및 밸류에이션 -->
+<div class="dp-acc" id="dpAcc-valuation">
+  <button class="dp-acc-h" onclick="dpToggle('valuation')"><span>3. 투자지표 및 밸류에이션</span><span class="dp-acc-chev">▾</span></button>
+  <div class="dp-acc-body">
+    <div class="dp-share4">
+      <div class="dp-share"><div class="dp-share-l">2025 EPS</div><div class="dp-share-v">66,713원</div><div class="dp-share-s">▲140.22%</div></div>
+      <div class="dp-share"><div class="dp-share-l">1Q26 EPS</div><div class="dp-share-v">63,608원</div><div class="dp-share-s">연환산 ~254,432원</div></div>
+      <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">209,230원</div><div class="dp-share-s">지배지분 기준</div></div>
+      <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">무배당</div><div class="dp-share-s">현금배당 미실시</div></div>
+    </div>
+
+    <div class="dp-gauge">
+      <div class="dp-gauge-h"><span>PER (2025 연결EPS)</span><span>16.77x</span></div>
+      <div class="dp-gauge-track"><div class="dp-gauge-fill" style="width:51%;"></div></div>
+      <div class="dp-gauge-note">1,119,000÷66,713 · Forward PER(1Q26 연환산 254,432원 ≈4.68x) 대비 높음 — SK하이닉스 이익 연동 착시 유의.</div>
+    </div>
+    <div class="dp-gauge">
+      <div class="dp-gauge-h"><span>Forward PER (1Q26 연환산)</span><span>4.40x</span></div>
+      <div class="dp-gauge-track"><div class="dp-gauge-fill" style="width:13%;"></div></div>
+      <div class="dp-gauge-note">1,119,000÷254,432(1Q26 연환산 EPS) · 트레일링 대비 73.8% 낮음 — 이익 성장 반영 시 저평가 부각 가능.</div>
+    </div>
+    <div class="dp-gauge">
+      <div class="dp-gauge-h"><span>PBR</span><span>5.35x</span></div>
+      <div class="dp-gauge-track"><div class="dp-gauge-fill" style="width:100%;"></div></div>
+      <div class="dp-gauge-note">1,119,000÷209,230(2025년말 지배주주BPS) · 1Q26 BPS(272,796원) 기준으로는 4.36x로 완화.</div>
+    </div>
+    <div class="dp-gauge">
+      <div class="dp-gauge-h"><span>SK하이닉스 지분가치 대비 할인율</span><span>-41.8%</span></div>
+      <div class="dp-gauge-track"><div class="dp-gauge-fill" style="width:30%;"></div></div>
+      <div class="dp-gauge-note">지분가치(약 270조) 대비 SK스퀘어 시총(157조) · 포트폴리오사 가치·순부채는 별도 미반영.</div>
+    </div>
+    <div class="dp-gauge">
+      <div class="dp-gauge-h"><span>HC 대비 (신고가 대비)</span><span>-48.9%</span></div>
+      <div class="dp-gauge-track"><div class="dp-gauge-fill" style="width:29%;"></div></div>
+      <div class="dp-gauge-note">고점(2,189,000, 06/23) 및 저점(130,900, 08/20) 대비 · HC -48.88%·LC +754.85%로 1년 내 극단적 진폭.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. 시계열 주요 이벤트 -->
+<div class="dp-acc" id="dpAcc-timeline">
+  <button class="dp-acc-h" onclick="dpToggle('timeline')"><span>4. 시계열 주요 이벤트</span><span class="dp-acc-chev">▾</span></button>
+  <div class="dp-acc-body">
+    <div class="dp-tl">
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2025.08.20</div>
+        <div class="dp-tl-title">주가 130,900원 — 52주 최저 · SK하이닉스 동조 랠리 시작</div>
+        <div class="dp-tl-body">SK하이닉스 저점(08/21)과 거의 같은 시점에 연중 최저점 형성. 이후 SK하이닉스 지분가치 급증에 연동되며 대세 상승 시작.</div>
+      </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2025.09 ~ 2026.02</div>
+        <div class="dp-tl-title">지속 랠리 — 145,000→645,000원 (6개월 +345%)</div>
+        <div class="dp-tl-body">SK하이닉스의 HBM 슈퍼사이클 랠리에 연동돼 6개월간 지속 상승. 지분법이익 급증 기대가 선반영된 구간.</div>
+      </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.03.17 (사업보고서)</div>
+        <div class="dp-tl-title">2025년 실적 공시 — 지배주주순이익 8조 8,241억, 사상 최대(+137.6%)</div>
+        <div class="dp-tl-body">SK하이닉스 지분법이익 9조 440억이 실적을 견인했음을 확인시켜준 공시. 별도 기준 -1,056억 순손실 지속도 함께 드러남. 같은 달 주가는 -27.3% 조정 국면과 겹침.</div>
+      </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.05.14 (분기보고서)</div>
+        <div class="dp-tl-title">1Q26 실적 공시 — 지배주주순이익 8조 3,810억, 관계기업투자 장부가액 급증</div>
+        <div class="dp-tl-body">SK하이닉스 지분법 장부가액이 분기 만에 +32.4% 증가한 36조 806억을 기록. 시가총액 기준 지분가치(약 270조)와의 괴리는 여전히 매우 큼.</div>
+      </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.06.23</div>
+        <div class="dp-tl-title">주가 2,189,000원 — 52주 신고가</div>
+        <div class="dp-tl-body">8월 저점 대비 큰 폭으로 폭등하며 연중 최고가 기록. SK하이닉스가 신고가를 기록하기 직전 SK스퀘어가 먼저 고점을 형성한 뒤 급락 전환.</div>
+      </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.07</div>
+        <div class="dp-tl-title">주가 1,190,000원 — 고점 대비 -45.6% 급락, SK하이닉스보다 더 큰 낙폭</div>
+        <div class="dp-tl-body">7월 한 달간 -30.4% 하락하며 같은 기간 SK하이닉스(-28.2%)보다 큰 조정폭을 기록, 지주회사 특유의 높은 베타가 재확인됨. 5~60일선을 모두 하회.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 5. 투자 포인트 -->
+<div class="dp-acc" id="dpAcc-thesis">
+  <button class="dp-acc-h" onclick="dpToggle('thesis')"><span>5. 투자 포인트</span><span class="dp-acc-chev">▾</span></button>
+  <div class="dp-acc-body">
+    <div class="dp-thesis">
       <div>
-        <div class="ir"><span class="il">1Q26 연결 영업수익</span><span class="iv">3,003억 <span class="ev ev-3">적정</span></span></div>
-        <div class="ir"><span class="il">1Q26 연결 영업이익</span><span class="iv up">8조 2,783억 <span class="ev ev-5">매우높음</span></span></div>
-        <div class="ir"><span class="il">1Q26 법인세차감전이익</span><span class="iv">8조 9,297억 <span class="ev ev-5">매우높음</span></span></div>
-        <div class="ir"><span class="il">1Q26 연결 분기순이익(전체)</span><span class="iv">8조 3,747억 <span class="ev ev-5">매우높음</span></span></div>
-        <div class="ir"><span class="il">1Q26 지배주주 순이익</span><span class="iv">8조 3,810억 <span class="ev ev-5">매우높음</span></span></div>
+        <div class="dp-thesis-t bull">긍정 요인</div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>SK하이닉스 지분가치 대비 -41.8% 할인 거래</span></div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>지배주주순이익 +137.59% 사상 최대</span></div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>1Q26 연환산 PER 4.68x — 이익 기준 저평가</span></div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>SK하이닉스 지분법 장부가액 분기 +32.4%</span></div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>52주 저점(130,900) 대비 여전히 +809.1%</span></div>
       </div>
       <div>
-        <div class="ir"><span class="il">1Q26 보통주 기본EPS</span><span class="iv">63,608원 (연환산 ~254,432원) <span class="ev ev-5">매우높음</span></span></div>
-        <div class="ir"><span class="il">1Q26 비지배지분 순이익</span><span class="iv dn">-62억 <span class="ev ev-3">적정</span></span></div>
-        <div class="ir"><span class="il">1Q26 연결 자산총계</span><span class="iv">38조 9,834억 (▲27.80% QoQ) <span class="ev ev-4">높음</span></span></div>
-        <div class="ir"><span class="il">연결 자본총계</span><span class="iv up">36조 2,629억 (▲29.59% QoQ) <span class="ev ev-5">매우높음</span></span></div>
-        <div class="ir"><span class="il">지배기업소유주지분</span><span class="iv up">36조 329억 (▲30.38% QoQ) <span class="ev ev-5">매우높음</span></span></div>
+        <div class="dp-thesis-t bear">리스크 요인</div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>신고가(2,189,000) 대비 -45.6% 급락</span></div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>실적이 사실상 SK하이닉스에 전적으로 연동</span></div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>별도 법인 2년 연속 순손실 · 무배당</span></div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>PBR 4.36x~5.69x — 여전히 부담스러운 수준</span></div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>7월 낙폭이 SK하이닉스보다 더 큼(고베타)</span></div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>포트폴리오사(11번가 등) 영업수익 -14.45%</span></div>
       </div>
     </div>
+  </div>
+</div>
 
-    <div style="background:#FBE4ED;border-left:3px solid #C2185B;border-radius:var(--border-radius-md);padding:12px 14px;margin-bottom:12px;">
-      <div style="font-size:12px;font-weight:600;color:#C2185B;margin-bottom:5px;">🔑 관계기업투자(SK하이닉스 지분) 장부가액이 분기 만에 +32.4% 급증</div>
-      <div style="font-size:12px;color:var(--color-text-primary);line-height:1.7;">1Q26 재무상태표상 관계기업및공동기업투자는 27조 2,445억(2025년말)→36조 806억(1Q26)으로 +32.4% 증가. <strong>이는 지분율 변동이 아니라 SK하이닉스 자체의 순이익 급증분이 지분법 장부가액에 그대로 반영</strong>된 결과. 다만 이 장부가액(36조 806억)조차 시가총액 기준 SK하이닉스 지분가치(약 270조원)에는 크게 못 미쳐, 지분법 회계상 평가와 실제 시장가치의 괴리가 매우 큼.</div>
-    </div>
-
-    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;margin-top:12px;">🏦 재무상태 변동 (2025.12 → 2026.03)</div>
-    <div class="g2" style="margin-bottom:12px;font-size:11px;">
-      <div>
-        <div class="ir" style="font-size:11px;"><span class="il">자산총계</span><span>30.50조 → 38.98조 (+27.80%)</span></div>
-        <div class="ir" style="font-size:11px;"><span class="il">지배기업소유주지분</span><span class="up">27.64조 → 36.03조 (+30.38%)</span></div>
-        <div class="ir" style="font-size:11px;"><span class="il">1Q26 분기 EPS</span><span>63,608원 (연환산 254,432원)</span></div>
-      </div>
-      <div>
-        <div class="ir" style="font-size:11px;"><span class="il">자본총계</span><span class="up">27.98조 → 36.26조 (+29.59%)</span></div>
-        <div class="ir" style="font-size:11px;"><span class="il">부채총계</span><span>2.52조 → 2.72조 (+7.87%)</span></div>
-        <div class="ir" style="font-size:11px;"><span class="il">1Q26 연환산 vs 2025 EPS</span><span class="up">254,432원 vs 66,713원 (+281.4%)</span></div>
-      </div>
-    </div>
-
-    <div class="hl">
-      <div style="font-size:13px;font-weight:600;color:#3B6D11;margin-bottom:4px;">💡 분기보고서 핵심 — 이익은 계속 SK하이닉스에 연동, 밸류에이션은 저렴해 보이는 착시 주의</div>
-      <div style="font-size:12px;color:#1D9E75;line-height:1.7;">1Q26 EPS 63,608원을 연환산하면 254,432원으로 2025년 연간 EPS(66,713원) 대비 +281.4%. 이 속도가 유지되면 연환산 PER은 4배대까지 낮아지지만, <strong>이는 SK하이닉스 실적·주가에 그대로 연동된 수치일 뿐 SK스퀘어 고유 사업의 개선을 의미하지 않음</strong>. 여전히 SK하이닉스 지분 시가(약 270조)가 SK스퀘어 시총(157조)을 크게 웃돌아 지주회사 할인이 상존하며, 별도 기준 적자·무배당 구조도 변함없음.</div>
+<!-- 6. 애널리스트 컨센서스 -->
+<div class="dp-acc" id="dpAcc-consensus">
+  <button class="dp-acc-h" onclick="dpToggle('consensus')"><span>6. 애널리스트 컨센서스</span><span class="dp-acc-chev">▾</span></button>
+  <div class="dp-acc-body">
+    <table>
+      <thead>
+        <tr>
+          <th class="dp-cons-th">증권사</th>
+          <th class="dp-cons-th" style="text-align:right;">목표주가</th>
+          <th class="dp-cons-th" style="text-align:center;">의견</th>
+          <th class="dp-cons-th" style="text-align:right;">작성일</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="dp-cons-td">대신증권</td><td class="dp-cons-td" style="text-align:right;font-weight:700;">2,100,000원</td><td class="dp-cons-td" style="text-align:center;"><span class="dp-cons-badge">매수</span></td><td class="dp-cons-td" style="text-align:right;color:var(--dp-text4);">26.07.13</td></tr>
+        <tr><td class="dp-cons-td">유안타증권</td><td class="dp-cons-td" style="text-align:right;font-weight:700;">2,100,000원</td><td class="dp-cons-td" style="text-align:center;"><span class="dp-cons-badge">매수</span></td><td class="dp-cons-td" style="text-align:right;color:var(--dp-text4);">26.07.07</td></tr>
+        <tr><td class="dp-cons-td">SK증권</td><td class="dp-cons-td" style="text-align:right;font-weight:700;">1,850,000원</td><td class="dp-cons-td" style="text-align:center;"><span class="dp-cons-badge">매수</span></td><td class="dp-cons-td" style="text-align:right;color:var(--dp-text4);">26.06.17</td></tr>
+      </tbody>
+    </table>
+    <div class="dp-cons-summary">
+      <div><span style="color:var(--dp-text3);">평균 목표주가</span> <strong>2,017,000원</strong></div>
+      <div><span style="color:var(--dp-text3);">현재가 대비</span> <strong style="color:var(--dp-up);">+137.3%</strong></div>
     </div>
   </div>
 </div>
 
-<!-- 3. 기본 투자지표 -->
-<div class="card">
-  <div class="sec">3. 기본 투자지표 (Per-Share) <span class="src">📄 분기보고서 원문 · 보통주 기준</span></div>
-  <div class="g4">
-    <div class="met"><div class="ml">EPS · 2025 연결</div><div class="mv up">66,713원</div><div class="ms">전년比 +140.22%</div><div style="margin-top:5px;"><span class="ev ev-5">매우높음</span></div></div>
-    <div class="met"><div class="ml">1Q26 분기 EPS</div><div class="mv">63,608원</div><div class="ms">연환산 ~254,432원</div><div style="margin-top:5px;"><span class="ev ev-5">매우높음</span></div></div>
-    <div class="met"><div class="ml">BPS · 주당순자산</div><div class="mv">약 209,230원</div><div class="ms">지배지분 27.64조 ÷ 1.32억주</div><div style="margin-top:5px;"><span class="ev ev-4">높음</span></div></div>
-    <div class="met"><div class="ml">DPS · 주당배당금</div><div class="mv">무배당</div><div class="ms">현금배당 미실시</div><div style="margin-top:5px;"><span class="ev ev-4">주의</span></div></div>
-  </div>
-</div>
-
-<!-- 4. 상대 투자지표 -->
-<div class="card">
-  <div class="sec">4. 상대 투자지표 — 최근 종가 1,190,000원 기준</div>
-
-  <div style="background:#FFF3E0;border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:12px;border-left:3px solid #EF9F27;">
-    <div style="font-size:12px;color:#854F0B;"><strong>⚠ 밸류에이션 해석 주의:</strong> PER·PBR을 그대로 보기보다 <strong>순자산가치(NAV) 대비 할인율</strong>이 더 핵심적인 지표. SK하이닉스 지분가치(약 270조)만으로 SK스퀘어 시총(157조)의 1.7배에 달해, <strong>① SK하이닉스 주가 변동 ② 지주사 할인율 확대·축소 ③ 별도 법인의 적자·무배당 지속 여부</strong>를 함께 봐야 함.</div>
-  </div>
-
-  <div class="ind-row">
-    <div class="ind-nm">PER (2025 연결EPS)</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">1,119,000÷66,713 · 지분법이익 급증 반영으로 낮은 배수<br><span style="color:#1D9E75;">Forward PER(1Q26 연환산 254,432원) ≈ 4.68x — SK하이닉스 이익 연동 착시 유의</span></div>
-    <div class="ind-val">16.77x</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(10x)</span><span>적정(20x)</span><span>고(35x)</span></div><div class="bar-bg"><div class="bar-f" style="width:51%;background:#EAF3DE;"></div></div></div>
-    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
-  </div>
-
-  <div class="ind-row"><div class="ind-nm">Forward PER</div><div style="flex:1;font-size:11px;color:var(--color-text-secondary);">1,119,000÷254,432(1Q26 연환산 EPS)<br><span style="color:#1D9E75;">트레일링 PER(16.77x) 대비 73.8% 낮음 — 이익 성장 반영 시 저평가 부각 가능</span></div><div class="ind-val">4.40x</div><div style="min-width:120px;flex:1;"><div class="bar-bg"><div class="bar-f" style="width:13%;background:#E6F1FB;"></div></div></div><span class="ev ev-1" style="min-width:58px;text-align:center;">1단계</span></div>
-
-  <div class="ind-row">
-    <div class="ind-nm">PBR</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">1,119,000÷209,230(2025년말 지배주주BPS)<br><span style="color:#D85A30;">1Q26 BPS(272,796원) 기준으로는 PBR 4.36x로 다소 완화</span></div>
-    <div class="ind-val">5.35x</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(1x)</span><span>적정(2x)</span><span>고(4x)</span></div><div class="bar-bg"><div class="bar-f" style="width:100%;background:#FCEBEB;"></div></div></div>
-    <span class="ev ev-5" style="min-width:58px;text-align:center;">5단계</span>
-  </div>
-
-  <div class="ind-row">
-    <div class="ind-nm">SK하이닉스 지분가치 대비 할인율</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">지분가치(약 270조) 대비 SK스퀘어 시총(157조)<br><span style="color:#D85A30;">약 -41.8% 할인 — 포트폴리오사 가치·순부채는 별도 미반영</span></div>
-    <div class="ind-val">-41.8%</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>-60%</span><span>-30%</span><span>0%</span></div><div class="bar-bg"><div class="bar-f" style="width:30%;background:#FCEBEB;"></div></div></div>
-    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
-  </div>
-
-  <div class="ind-row">
-    <div class="ind-nm">HC / LC 수익률</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">고점(2,189,000, 06/23) 및 저점(130,900, 08/20) 대비 현재가<br><span style="color:#D85A30;">HC -48.88% · LC +754.85% — 1년 내 극단적 진폭</span></div>
-    <div class="ind-val">-48.9%</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>-65%</span><span>-33%</span><span>0%</span></div><div class="bar-bg"><div class="bar-f" style="width:29%;background:#FCEBEB;"></div></div></div>
-    <span class="ev ev-5" style="min-width:58px;text-align:center;">5단계</span>
-  </div>
-</div>
-
-<!-- 5. 시계열 이벤트 -->
-<div class="card">
-  <div class="sec">5. 시계열 주요 이벤트 <span class="src">📄 OpenDART 공시 원문 + 📊 Yahoo Finance 일봉</span></div>
-
-  <div class="tl">
-    <div class="tl-item">
-      <div class="tl-dot dot-neg"></div>
-      <div class="tl-date">2025년 08월 20일</div>
-      <div class="tl-title">주가 130,900원 — 52주 최저 · SK하이닉스 동조 랠리 시작</div>
-      <div class="tl-body">SK하이닉스 저점(08/21)과 거의 같은 시점에 SK스퀘어도 연중 최저점 형성. 이후 SK하이닉스 지분가치 급증에 연동되며 대세 상승 시작.</div>
-      <span class="tag tag-neg">52주 최저</span><span class="tag tag-neu">LC 기준점</span>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-dot dot-pos"></div>
-      <div class="tl-date">2025년 09월 ~ 2026년 02월</div>
-      <div class="tl-title">지속 랠리 — 145,000→645,000원 (6개월 +345%)</div>
-      <div class="tl-body">SK하이닉스의 HBM 슈퍼사이클 랠리에 연동돼 SK스퀘어 주가도 6개월간 지속 상승. 지분법이익 급증 기대가 선반영된 구간.</div>
-      <span class="tag tag-pos">지속 랠리</span><span class="tag tag-pos">SK하이닉스 연동</span>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-dot dot-neu"></div>
-      <div class="tl-date">2026년 03월 17일 (사업보고서)</div>
-      <div class="tl-title">2025년 실적 공시 — 지배주주순이익 8조 8,241억, 사상 최대(전년比 +137.6%)</div>
-      <div class="tl-body">SK하이닉스 지분법이익 9조 440억이 실적을 견인했음을 확인시켜준 공시. 별도 기준으로는 -1,056억 순손실이 지속됨도 함께 드러남. 같은 달 주가는 -27.3% 조정 국면과 겹침.</div>
-      <span class="tag tag-neu">연간 실적 공시</span><span class="tag tag-pos">사상 최대 이익</span>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-dot dot-big"></div>
-      <div class="tl-date">2026년 06월 23일</div>
-      <div class="tl-title">주가 2,189,000원 — 52주 신고가 · 저점 대비 +1,573%</div>
-      <div class="tl-body">8월 저점 대비 16배 이상 폭등하며 연중 최고가 기록. SK하이닉스가 이틀 전(06/25) 자체 신고가를 기록하기 직전 SK스퀘어가 먼저 고점을 형성한 뒤 급락 전환.</div>
-      <span class="tag tag-big">52주 신고가</span><span class="tag tag-neg">즉시 급락</span>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-dot dot-neu"></div>
-      <div class="tl-date">2026년 05월 14일 (분기보고서)</div>
-      <div class="tl-title">1Q26 실적 공시 — 지배주주순이익 8조 3,810억, 관계기업투자 장부가액 급증</div>
-      <div class="tl-body">SK하이닉스 지분법 장부가액이 분기 만에 +32.4% 증가한 36조 806억을 기록. 다만 시가총액 기준 지분가치(약 270조)와의 괴리는 여전히 매우 큼.</div>
-      <span class="tag tag-neu">분기 실적 공시</span><span class="tag tag-pos">지분가치 급증</span>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-dot dot-neg"></div>
-      <div class="tl-date">2026년 07월</div>
-      <div class="tl-title">주가 1,190,000원 — 고점 대비 -45.6% 급락, SK하이닉스보다 더 큰 낙폭</div>
-      <div class="tl-body">7월 한 달간 -30.4% 하락하며 같은 기간 SK하이닉스(-28.2%)보다 더 큰 조정폭을 기록, 지주회사 특유의 높은 베타가 재확인됨. 5~60일선을 모두 하회.</div>
-      <span class="tag tag-neg">고점대비 -45.6%</span><span class="tag tag-neg">높은 변동성</span>
-    </div>
-  </div>
-</div>
-
-<!-- 6. 투자 포인트 -->
-<div class="card">
-  <div class="sec">6. 2026년 핵심 투자 포인트</div>
-  <div class="g2">
-    <div>
-      <div style="font-size:13px;font-weight:600;margin-bottom:7px;color:#1D9E75;">긍정 요인 (Bull)</div>
-      <div class="ir"><span class="il">SK하이닉스 지분가치 대비 -41.8% 할인 거래</span><span class="badge b-green">NAV 저평가</span></div>
-      <div class="ir"><span class="il">지배주주순이익 +137.59% 사상 최대</span><span class="badge b-green">실적 급성장</span></div>
-      <div class="ir"><span class="il">1Q26 연환산 PER 4.68x — 이익 기준 저평가</span><span class="badge b-blue">밸류 매력</span></div>
-      <div class="ir"><span class="il">SK하이닉스 지분법 장부가액 분기 +32.4%</span><span class="badge b-sks">자산가치 확대</span></div>
-      <div class="ir"><span class="il">52주 저점(130,900) 대비 여전히 +809.1%</span><span class="badge b-blue">중기 추세 유지</span></div>
-    </div>
-    <div>
-      <div style="font-size:13px;font-weight:600;margin-bottom:7px;color:#D85A30;">리스크 (Bear)</div>
-      <div class="ir"><span class="il">신고가(2,189,000) 대비 -45.6% 급락</span><span class="badge b-red">극심한 변동성</span></div>
-      <div class="ir"><span class="il">실적이 사실상 SK하이닉스에 전적으로 연동</span><span class="badge b-red">단일 자산 의존</span></div>
-      <div class="ir"><span class="il">별도 법인 2년 연속 순손실 · 무배당</span><span class="badge b-amber">배당 매력 없음</span></div>
-      <div class="ir"><span class="il">PBR 4.36x~5.69x — 여전히 부담스러운 수준</span><span class="badge b-amber">밸류 부담</span></div>
-      <div class="ir"><span class="il">7월 낙폭이 SK하이닉스보다 더 큼(고베타)</span><span class="badge b-gray">변동성 증폭</span></div>
-      <div class="ir"><span class="il">포트폴리오사(11번가 등) 영업수익 -14.45%</span><span class="badge b-gray">비핵심 사업 부진</span></div>
-    </div>
-  </div>
-  <div class="ib">
-    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
-      <div><span style="color:var(--color-text-secondary);">시총:</span> <span style="font-weight:600;">~157조원 (보통주 유통)</span></div>
-      <div><span style="color:var(--color-text-secondary);">1Q26 EPS:</span> <span style="font-weight:600;">63,608원 (연환산 ~254,432원)</span></div>
-      <div><span style="color:var(--color-text-secondary);">BPS:</span> <span style="font-weight:600;">~209,230원 (PBR 5.69x)</span></div>
-      <div><span style="color:var(--color-text-secondary);">배당수익률:</span> <span style="font-weight:600;">무배당</span></div>
-    </div>
-  </div>
-  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">⚠ 사업보고서(제5기) + 분기보고서(제6기 1Q) OpenDART 원문 + Yahoo Finance 일봉 기준 · 투자 권고가 아닙니다</div>
-</div>
-
-<!-- 7. 애널리스트 컨센서스 -->
-<div class="card">
-  <div class="sec">7. 애널리스트 컨센서스 — 증권사별 목표주가 (Naver Finance 리서치)</div>
-
-  <div style="display:grid;grid-template-columns:120px 90px 70px 70px;gap:4px 10px;font-size:11px;color:var(--color-text-tertiary);font-weight:600;padding:0 2px 6px;border-bottom:1px solid var(--color-border-tertiary);">
-    <div>증권사</div><div style="text-align:right;">목표주가</div><div>투자의견</div><div style="text-align:right;">작성일</div>
-  </div>
-  <div style="display:grid;grid-template-columns:120px 90px 70px 70px;gap:4px 10px;font-size:12.5px;padding:7px 2px;border-bottom:1px solid var(--color-border-tertiary);align-items:center;">
-    <div>대신증권</div><div style="text-align:right;font-weight:600;">2,100,000원</div><div><span class="badge b-green">매수</span></div><div style="text-align:right;color:var(--color-text-tertiary);">26.07.13</div>
-  </div>
-  <div style="display:grid;grid-template-columns:120px 90px 70px 70px;gap:4px 10px;font-size:12.5px;padding:7px 2px;border-bottom:1px solid var(--color-border-tertiary);align-items:center;">
-    <div>유안타증권</div><div style="text-align:right;font-weight:600;">2,100,000원</div><div><span class="badge b-green">매수</span></div><div style="text-align:right;color:var(--color-text-tertiary);">26.07.07</div>
-  </div>
-  <div style="display:grid;grid-template-columns:120px 90px 70px 70px;gap:4px 10px;font-size:12.5px;padding:7px 2px;border-bottom:1px solid var(--color-border-tertiary);align-items:center;">
-    <div>SK증권</div><div style="text-align:right;font-weight:600;">1,850,000원</div><div><span class="badge b-green">매수</span></div><div style="text-align:right;color:var(--color-text-tertiary);">26.06.17</div>
-  </div>
-
-  <div class="ib" style="margin-top:10px;">
-    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
-      <div><span style="color:var(--color-text-secondary);">평균 목표주가:</span> <span style="font-weight:600;">2,017,000원 (3개 증권사)</span></div>
-      <div><span style="color:var(--color-text-secondary);">현재가 대비:</span> <span style="font-weight:600;color:#1D9E75;">+137.3%</span></div>
-    </div>
-  </div>
-
-  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">⚠ Naver Finance 증권사 리서치(브로커별 최신 1건, 2026-07-30 조회) 기준 · 목표주가는 각 리포트 발간 시점 기준이며 실시간 반영이 아닐 수 있음 · 투자 권고가 아닙니다</div>
-</div>
+<div class="dp-footer-note">OpenDART 공시 원문 + Yahoo Finance 시세 기준 · 투자 권고가 아닙니다</div>
 
 </div>
 
 <script>
-function switchTab(tab) {
-  const isA=tab==='annual';
-  document.getElementById('tabAnnual').style.display=isA?'':'none';
-  document.getElementById('tabQuarter').style.display=isA?'none':'';
-  const aS='flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:8px;font-size:13px;cursor:pointer;transition:all .15s;background:#C2185B;border:1.5px solid #C2185B;color:#fff;font-weight:600;';
-  const iS='flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:8px;font-size:13px;cursor:pointer;transition:all .15s;background:var(--color-background-secondary);border:1.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);font-weight:500;';
-  document.getElementById('btnAnnual').style.cssText=isA?aS:iS;
-  document.getElementById('btnQuarter').style.cssText=isA?iS:aS;
-  if(!isA && !window._qDrawn){ window._qDrawn=true; drawQtrChart(); }
+const SECTION_IDS = ['tech','fund','valuation','timeline','thesis','consensus'];
+let _dpTechDrawn = false, _dpAnnualDrawn = false, _dpQtrDrawn = false;
+
+function dpToggle(id) {
+  const el = document.getElementById('dpAcc-' + id);
+  const willOpen = !el.classList.contains('open');
+  el.classList.toggle('open', willOpen);
+  if (willOpen && id === 'tech' && !_dpTechDrawn) {
+    _dpTechDrawn = true;
+    renderCandleChart({svgId:'sksSvg', controlsId:'sksChartControls', data: data});
+  }
+  if (willOpen && id === 'fund' && !_dpAnnualDrawn) {
+    _dpAnnualDrawn = true;
+    drawAnnualChart();
+  }
+}
+function dpOpenAll() {
+  SECTION_IDS.forEach((id) => {
+    document.getElementById('dpAcc-' + id).classList.add('open');
+  });
+  if (!_dpTechDrawn) { _dpTechDrawn = true; renderCandleChart({svgId:'sksSvg', controlsId:'sksChartControls', data: data}); }
+  if (!_dpAnnualDrawn) { _dpAnnualDrawn = true; drawAnnualChart(); }
+}
+function dpCloseAll() {
+  SECTION_IDS.forEach((id) => {
+    document.getElementById('dpAcc-' + id).classList.remove('open');
+  });
+}
+
+function dpSetFundTab(tab) {
+  const isAnnual = tab === 'annual';
+  document.getElementById('dpFundAnnual').style.display = isAnnual ? '' : 'none';
+  document.getElementById('dpFundQuarter').style.display = isAnnual ? 'none' : '';
+  document.getElementById('dpFundAnnualBtn').classList.toggle('active', isAnnual);
+  document.getElementById('dpFundQuarterBtn').classList.toggle('active', !isAnnual);
+  if (!isAnnual && !_dpQtrDrawn) { _dpQtrDrawn = true; drawQtrChart(); }
 }
 
 function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
@@ -469,7 +458,7 @@ function drawAnnualChart(){
   function py(v){ return pT+cH*(1-(v-minV)/(maxV-minV)); }
   [minV,0,maxV*0.4,maxV*0.8,maxV].forEach(v=>{
     const y=py(v);
-    svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:y,y2:y,stroke:cssVar('--color-border-tertiary'),'stroke-width':1}));
+    svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:y,y2:y,stroke:cssVar('--dp-border'),'stroke-width':1}));
   });
   const revCol='#8B93A0', oiCol='#C2185B', niCol='#1D9E75';
   const pts=[];
@@ -485,7 +474,7 @@ function drawAnnualChart(){
     t1.textContent=rev[i].toFixed(2)+'조'; svg.appendChild(t1);
     const t2=svgEl('text',{x:ox+barW/2,y:oi[i]<0?py(0)-4:oTop-4,'text-anchor':'middle','font-size':9,fill:oiCol,'font-weight':600});
     t2.textContent=oi[i].toFixed(2)+'조'; svg.appendChild(t2);
-    const t3=svgEl('text',{x:gx,y:H-6,'text-anchor':'middle','font-size':10,fill:cssVar('--color-text-secondary')});
+    const t3=svgEl('text',{x:gx,y:H-6,'text-anchor':'middle','font-size':10,fill:cssVar('--dp-text2')});
     t3.textContent=cat; svg.appendChild(t3);
     pts.push([gx, py(ni[i])]);
   });
@@ -499,7 +488,7 @@ function drawAnnualChart(){
   legend.forEach((l,i)=>{
     const lx=pL+i*90;
     svg.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
-    const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:cssVar('--color-text-secondary')});
+    const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:cssVar('--dp-text2')});
     t.textContent=l[1]; svg.appendChild(t);
   });
 }
@@ -518,63 +507,62 @@ function drawQtrChart(){
   [0,25,50,75,100].forEach(v=>{
     const val=v/100*maxV;
     const y=py(val);
-    svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:y,y2:y,stroke:cssVar('--color-border-tertiary'),'stroke-width':1}));
+    svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:y,y2:y,stroke:cssVar('--dp-border'),'stroke-width':1}));
   });
   labels.forEach((lab,i)=>{
     const gx=pL+i*groupW+groupW/2;
     const top=py(vals[i]);
     svg.appendChild(svgEl('rect',{x:gx-barW/2,y:top,width:barW,height:py(0)-top,fill:cols[i],rx:3}));
-    const t1=svgEl('text',{x:gx,y:top-6,'text-anchor':'middle','font-size':10,fill:cssVar('--color-text-primary'),'font-weight':600});
+    const t1=svgEl('text',{x:gx,y:top-6,'text-anchor':'middle','font-size':10,fill:cssVar('--dp-text'),'font-weight':600});
     t1.textContent=vals[i].toFixed(2)+'조'; svg.appendChild(t1);
-    const t2=svgEl('text',{x:gx,y:H-8,'text-anchor':'middle','font-size':9,fill:cssVar('--color-text-secondary')});
+    const t2=svgEl('text',{x:gx,y:H-8,'text-anchor':'middle','font-size':9,fill:cssVar('--dp-text2')});
     t2.textContent=lab; svg.appendChild(t2);
   });
 }
-drawAnnualChart();
 
 // -- SVG candlestick chart (Yahoo Finance daily, with dates for hover/period) --
 const data=[
-{d:'2025-08-05',o:14.3,h:14.64,l:14.18,c:14.35},{d:'2025-08-06',o:14.07,h:14.34,l:13.72,c:14.03},{d:'2025-08-07',o:13.99,h:14.19,l:13.61,c:14.19},{d:'2025-08-08',o:14.05,h:14.31,l:13.82,c:13.93},{d:'2025-08-11',o:14,h:14.29,l:13.82,c:14.2},{d:'2025-08-12',o:14.07,h:14.72,l:14.07,c:14.15},
-{d:'2025-08-13',o:14.43,h:14.62,l:14.21,c:14.46},{d:'2025-08-14',o:14.6,h:14.6,l:14.27,c:14.37},{d:'2025-08-18',o:14.22,h:14.23,l:13.67,c:13.76},{d:'2025-08-19',o:13.93,h:14.12,l:13.77,c:14.04},{d:'2025-08-20',o:14.1,h:14.13,l:13.09,c:13.71},{d:'2025-08-21',o:13.65,h:13.73,l:13.15,c:13.52},
-{d:'2025-08-22',o:13.51,h:13.78,l:13.38,c:13.52},{d:'2025-08-25',o:13.85,h:14.63,l:13.83,c:14.48},{d:'2025-08-26',o:14.33,h:14.34,l:14,c:14.12},{d:'2025-08-27',o:14.16,h:14.34,l:13.76,c:13.99},{d:'2025-08-28',o:13.89,h:15.3,l:13.81,c:14.96},{d:'2025-08-29',o:15.23,h:15.37,l:14.89,c:14.9},
-{d:'2025-09-01',o:14.5,h:14.9,l:14.28,c:14.5},{d:'2025-09-02',o:14.5,h:14.59,l:14.36,c:14.36},{d:'2025-09-03',o:14.36,h:14.55,l:14.15,c:14.39},{d:'2025-09-04',o:14.4,h:15.16,l:14.4,c:14.94},{d:'2025-09-05',o:15.14,h:15.5,l:15.14,c:15.28},{d:'2025-09-08',o:15.44,h:15.48,l:15.14,c:15.36},
-{d:'2025-09-09',o:15.5,h:16.34,l:15.45,c:16.2},{d:'2025-09-10',o:16.79,h:17.52,l:16.65,c:17.43},{d:'2025-09-11',o:17.79,h:18.21,l:17.6,c:18.21},{d:'2025-09-12',o:18.72,h:20,l:18.57,c:19.73},{d:'2025-09-15',o:19.72,h:20.1,l:19.12,c:20.05},{d:'2025-09-16',o:19.83,h:21.05,l:19.73,c:20.6},
-{d:'2025-09-17',o:20,h:20.7,l:19.95,c:20.05},{d:'2025-09-18',o:20.1,h:21,l:19.71,c:20.85},{d:'2025-09-22',o:21.6,h:21.8,l:20.95,c:21.55},{d:'2025-09-23',o:21.6,h:22.4,l:21.6,c:22},{d:'2025-09-24',o:22.05,h:22.5,l:21.2,c:21.75},{d:'2025-09-25',o:20.95,h:21.45,l:20.55,c:21.1},
-{d:'2025-09-26',o:20.35,h:20.8,l:19.49,c:19.53},{d:'2025-09-29',o:19.73,h:19.95,l:19.53,c:19.71},{d:'2025-09-30',o:19.62,h:20.4,l:19.6,c:20.15},{d:'2025-10-01',o:20.3,h:20.75,l:20.1,c:20.55},{d:'2025-10-02',o:21.8,h:24.85,l:21.75,c:24},{d:'2025-10-10',o:24.5,h:25.5,l:24.05,c:24.7},
-{d:'2025-10-13',o:23.8,h:24.9,l:23.5,c:24.55},{d:'2025-10-14',o:24.45,h:25.35,l:22.95,c:23.45},{d:'2025-10-15',o:23.85,h:24.6,l:23.65,c:24.35},{d:'2025-10-16',o:23.85,h:25.95,l:23.85,c:25.75},{d:'2025-10-17',o:25.35,h:26.7,l:25.05,c:25.75},{d:'2025-10-20',o:26.15,h:26.35,l:25,c:26.2},
-{d:'2025-10-21',o:26.65,h:26.85,l:25.05,c:25.6},{d:'2025-10-22',o:25.6,h:25.9,l:25.1,c:25.85},{d:'2025-10-23',o:25.05,h:25.85,l:24.25,c:25.3},{d:'2025-10-24',o:25.9,h:27.4,l:25.7,c:27.1},{d:'2025-10-27',o:28.45,h:29.5,l:28.25,c:29.15},{d:'2025-10-28',o:27.8,h:28.5,l:27,c:27.2},
-{d:'2025-10-29',o:27.4,h:28.2,l:26.65,c:27.5},{d:'2025-10-30',o:27.05,h:29.75,l:26.9,c:28.1},{d:'2025-10-31',o:27.4,h:28.35,l:25.15,c:26},{d:'2025-11-03',o:25.95,h:28.55,l:25,c:28.25},{d:'2025-11-04',o:27.85,h:28.25,l:26.55,c:27.4},{d:'2025-11-05',o:26.6,h:26.7,l:24.1,c:26},
-{d:'2025-11-06',o:26.6,h:27.9,l:25,c:27},{d:'2025-11-07',o:27,h:28.2,l:26.1,c:27.9},{d:'2025-11-10',o:28.25,h:30.25,l:27.9,c:29},{d:'2025-11-11',o:31.2,h:32.7,l:30.7,c:31.15},{d:'2025-11-12',o:31.5,h:32.45,l:30.85,c:32.25},{d:'2025-11-13',o:32.2,h:32.4,l:31.2,c:32.35},
-{d:'2025-11-14',o:29.9,h:30.45,l:28.95,c:29.1},{d:'2025-11-17',o:30,h:31.3,l:29.55,c:30.45},{d:'2025-11-18',o:29.2,h:29.85,l:28.15,c:28.35},{d:'2025-11-19',o:28.35,h:28.65,l:26.98,c:28.3},{d:'2025-11-20',o:30.05,h:31.1,l:29.25,c:29.35},{d:'2025-11-21',o:27.5,h:27.65,l:26.35,c:26.6},
-{d:'2025-11-24',o:27.25,h:28.4,l:26.55,c:27.6},{d:'2025-11-25',o:29.35,h:30.5,l:28.9,c:29.05},{d:'2025-11-26',o:29.4,h:29.5,l:28.5,c:29.1},{d:'2025-11-27',o:29.85,h:30.6,l:29.55,c:30.1},{d:'2025-11-28',o:30.45,h:30.55,l:29.5,c:29.8},{d:'2025-12-01',o:30.55,h:31,l:29.8,c:30.2},
-{d:'2025-12-02',o:30.85,h:31.3,l:30.1,c:30.85},{d:'2025-12-03',o:31,h:31.75,l:29.85,c:31.05},{d:'2025-12-04',o:30.45,h:31.25,l:29.3,c:31.25},{d:'2025-12-05',o:30.75,h:30.9,l:29.5,c:30.2},{d:'2025-12-08',o:30.15,h:32.25,l:29.9,c:32.2},{d:'2025-12-09',o:32.15,h:33,l:32,c:32.3},
-{d:'2025-12-10',o:32.5,h:33.3,l:31.8,c:32.4},{d:'2025-12-11',o:32.4,h:32.4,l:30.75,c:30.75},{d:'2025-12-12',o:31.05,h:31.7,l:30.4,c:30.8},{d:'2025-12-15',o:28.75,h:30,l:27.35,c:29.25},{d:'2025-12-16',o:28.5,h:29.35,l:28.1,c:28.1},{d:'2025-12-17',o:28.15,h:28.95,l:28,c:28.3},
-{d:'2025-12-18',o:27.8,h:29.6,l:27.35,c:29.05},{d:'2025-12-19',o:29.95,h:30,l:29.05,c:29.05},{d:'2025-12-22',o:30.3,h:31.8,l:30.05,c:31.5},{d:'2025-12-23',o:31.5,h:32,l:31.35,c:31.5},{d:'2025-12-24',o:31.5,h:32.3,l:31.25,c:32.1},{d:'2025-12-26',o:33.3,h:34.8,l:33,c:33.45},
-{d:'2025-12-29',o:34.55,h:35,l:34.05,c:34.6},{d:'2025-12-30',o:34.6,h:37,l:34,c:36.8},{d:'2026-01-02',o:36.85,h:39.2,l:36.45,c:39.2},{d:'2026-01-05',o:40.75,h:41.6,l:39.85,c:41.6},{d:'2026-01-06',o:40.95,h:43.45,l:40.25,c:43.2},{d:'2026-01-07',o:43.4,h:45.05,l:42.05,c:42.95},
-{d:'2026-01-08',o:42.5,h:44.6,l:42.05,c:43.05},{d:'2026-01-09',o:42.4,h:43.35,l:41.6,c:43.05},{d:'2026-01-12',o:43.65,h:44,l:41.85,c:42.75},{d:'2026-01-13',o:43.15,h:43.5,l:41.8,c:42.65},{d:'2026-01-14',o:43,h:43.7,l:42,c:43.55},{d:'2026-01-15',o:42.85,h:43.4,l:41.85,c:42.95},
-{d:'2026-01-16',o:43.05,h:45.2,l:42.45,c:44.65},{d:'2026-01-19',o:43.95,h:44.35,l:42.5,c:43.55},{d:'2026-01-20',o:43.1,h:43.9,l:42.4,c:42.7},{d:'2026-01-21',o:42.2,h:43.8,l:41.35,c:43},{d:'2026-01-22',o:43.05,h:46.6,l:43,c:44.65},{d:'2026-01-23',o:45.1,h:45.15,l:43.45,c:44.55},
-{d:'2026-01-26',o:44.25,h:44.7,l:43.5,c:44.1},{d:'2026-01-27',o:44.45,h:48.35,l:43.65,c:47.3},{d:'2026-01-28',o:48.2,h:50.7,l:47.65,c:50.4},{d:'2026-01-29',o:52.8,h:53.6,l:50,c:53.1},{d:'2026-01-30',o:52.4,h:58.1,l:52,c:57},{d:'2026-02-02',o:53.7,h:55.7,l:49.35,c:50.5},
-{d:'2026-02-03',o:54.2,h:54.9,l:52.2,c:54.6},{d:'2026-02-04',o:54.2,h:57.6,l:53.2,c:56.9},{d:'2026-02-05',o:52.3,h:56.1,l:52.3,c:53.4},{d:'2026-02-06',o:51,h:52.3,l:49.2,c:51.4},{d:'2026-02-09',o:54.8,h:57.7,l:54.3,c:56.3},{d:'2026-02-10',o:57,h:57.4,l:53.8,c:54.3},
-{d:'2026-02-11',o:54,h:54.2,l:52.3,c:53.2},{d:'2026-02-12',o:55.5,h:57,l:54.8,c:57},{d:'2026-02-13',o:56.5,h:58.6,l:55.7,c:55.8},{d:'2026-02-19',o:58.9,h:59,l:56.2,c:56.6},{d:'2026-02-20',o:56.6,h:58.5,l:54.7,c:58},{d:'2026-02-23',o:59,h:59.7,l:56.4,c:58},
-{d:'2026-02-24',o:57.7,h:63.4,l:57.2,c:61.7},{d:'2026-02-25',o:63,h:66,l:62.1,c:64.7},{d:'2026-02-26',o:65.9,h:68.1,l:64.8,c:67.9},{d:'2026-02-27',o:65.4,h:67.6,l:63.6,c:64.5},{d:'2026-03-03',o:64.2,h:64.3,l:57.8,c:58.1},{d:'2026-03-04',o:54.9,h:57.9,l:48.9,c:50.7},
-{d:'2026-03-05',o:58.3,h:59.4,l:55.4,c:56.6},{d:'2026-03-06',o:53.9,h:55.4,l:52.05,c:55.3},{d:'2026-03-09',o:49.85,h:51.2,l:48.55,c:50.9},{d:'2026-03-10',o:54.9,h:56.8,l:53.5,c:55.4},{d:'2026-03-11',o:57.5,h:59.3,l:55.7,c:56.5},{d:'2026-03-12',o:55,h:56.7,l:54.6,c:55.4},
-{d:'2026-03-13',o:53,h:54.4,l:51.7,c:53.4},{d:'2026-03-16',o:53.6,h:57.1,l:53.2,c:56.2},{d:'2026-03-17',o:58.9,h:60.8,l:58,c:58.7},{d:'2026-03-18',o:61.2,h:63.7,l:60.8,c:63},{d:'2026-03-19',o:60.6,h:62.7,l:60,c:61.1},{d:'2026-03-20',o:61.7,h:61.8,l:59.5,c:60.8},
-{d:'2026-03-23',o:56.4,h:57.1,l:53.6,c:55.7},{d:'2026-03-24',o:59.1,h:59.8,l:56.4,c:59.5},{d:'2026-03-25',o:61.4,h:63.3,l:60.2,c:60.5},{d:'2026-03-26',o:59.2,h:59.4,l:55.6,c:55.8},{d:'2026-03-27',o:52.8,h:54.9,l:52.1,c:54.4},{d:'2026-03-30',o:50.3,h:51.6,l:50,c:51},
-{d:'2026-03-31',o:47.35,h:48.8,l:46.25,c:46.65},{d:'2026-04-01',o:50.8,h:51.5,l:48.6,c:50.1},{d:'2026-04-02',o:51.4,h:52.2,l:46,c:46.95},{d:'2026-04-03',o:48.05,h:48.8,l:46.92,c:48.3},{d:'2026-04-06',o:48.2,h:49.7,l:48,c:48.7},{d:'2026-04-07',o:49.75,h:51.5,l:48.85,c:49.9},
-{d:'2026-04-08',o:55.8,h:58.7,l:55.3,c:57.8},{d:'2026-04-09',o:57.2,h:57.9,l:55.8,c:56},{d:'2026-04-10',o:58.2,h:59.3,l:56.5,c:56.8},{d:'2026-04-13',o:55.1,h:58.3,l:54.5,c:58},{d:'2026-04-14',o:60.2,h:64.9,l:59.7,c:64},{d:'2026-04-15',o:67.6,h:68.4,l:66.1,c:66.5},
-{d:'2026-04-16',o:67.8,h:69,l:66.4,c:69},{d:'2026-04-17',o:69.5,h:69.8,l:67.7,c:68.2},{d:'2026-04-20',o:69.9,h:72.5,l:69,c:70.1},{d:'2026-04-21',o:71.4,h:72.7,l:70.4,c:71.8},{d:'2026-04-22',o:71.1,h:72.2,l:69.4,c:72},{d:'2026-04-23',o:72.6,h:76.7,l:71.2,c:72.8},
-{d:'2026-04-24',o:73.5,h:74,l:71.8,c:72.5},{d:'2026-04-27',o:74.7,h:80.6,l:74.6,c:78.9},{d:'2026-04-28',o:81,h:84.2,l:79.7,c:81.1},{d:'2026-04-29',o:79.7,h:84.85,l:79.3,c:83},{d:'2026-04-30',o:84.5,h:87.7,l:84,c:84.1},{d:'2026-05-04',o:90.9,h:99.8,l:90.1,c:99.1},
-{d:'2026-05-06',o:110,h:114.9,l:104,c:108.9},{d:'2026-05-07',o:110.1,h:112.8,l:104.8,c:109.9},{d:'2026-05-08',o:104.8,h:110.6,l:104.7,c:109.8},{d:'2026-05-11',o:117.5,h:120.5,l:113,c:118.7},{d:'2026-05-12',o:122,h:123.1,l:109.9,c:112.6},{d:'2026-05-13',o:107.1,h:119.3,l:107.1,c:119},
-{d:'2026-05-14',o:118.3,h:120.8,l:114.7,c:117.1},{d:'2026-05-15',o:118.1,h:119,l:107.3,c:109.8},{d:'2026-05-18',o:108.7,h:110,l:98.3,c:109.3},{d:'2026-05-19',o:107.1,h:107.3,l:100.8,c:102},{d:'2026-05-20',o:106.4,h:106.4,l:99.1,c:102.9},{d:'2026-05-21',o:108,h:118.1,l:107.2,c:117.9},
-{d:'2026-05-22',o:118,h:119.8,l:114.8,c:118.5},{d:'2026-05-26',o:122,h:124.1,l:116.1,c:118.1},{d:'2026-05-27',o:129.8,h:133.7,l:126.4,c:127.6},{d:'2026-05-28',o:126.4,h:126.9,l:117.3,c:123.7},{d:'2026-05-29',o:126,h:127.6,l:121.7,c:123.3},{d:'2026-06-01',o:124.9,h:128.9,l:121,c:125.6},
-{d:'2026-06-02',o:128.1,h:137.5,l:121.2,c:134.6},{d:'2026-06-04',o:134.7,h:139.2,l:129.3,c:136.1},{d:'2026-06-05',o:133.2,h:133.4,l:122.5,c:125.8},{d:'2026-06-08',o:111,h:120,l:110.2,c:111.8},{d:'2026-06-09',o:117.3,h:127.3,l:114.6,c:126.9},{d:'2026-06-10',o:121,h:123.1,l:113.9,c:118.3},
-{d:'2026-06-11',o:112.4,h:123.4,l:107.5,c:122.8},{d:'2026-06-12',o:134.9,h:142.2,l:131.5,c:135.8},{d:'2026-06-15',o:143.9,h:144.4,l:135.5,c:141.3},{d:'2026-06-16',o:144,h:151,l:138,c:150.1},{d:'2026-06-17',o:153.4,h:161.2,l:152.7,c:159.6},{d:'2026-06-18',o:165.6,h:173.8,l:162.3,c:170},
-{d:'2026-06-19',o:181.9,h:189.1,l:172.4,c:178},{d:'2026-06-22',o:186,h:198.7,l:180,c:197},{d:'2026-06-23',o:197.2,h:218.9,l:183.2,c:183.2},{d:'2026-06-24',o:188.5,h:191,l:161.1,c:179.9},{d:'2026-06-25',o:195.3,h:199,l:182.3,c:189.9},{d:'2026-06-26',o:187,h:187,l:162.4,c:172},
-{d:'2026-06-29',o:167,h:170.2,l:157,c:164},{d:'2026-06-30',o:161.5,h:176.5,l:152.3,c:169.7},{d:'2026-07-01',o:170.9,h:179.2,l:159.5,c:175.7},{d:'2026-07-02',o:158.2,h:168.2,l:152.5,c:152.5},{d:'2026-07-03',o:153,h:160.3,l:140.7,c:158.9},{d:'2026-07-06',o:159.9,h:169.2,l:146.5,c:149.5},
-{d:'2026-07-07',o:144.6,h:150.2,l:128.7,c:135.6},{d:'2026-07-08',o:126.6,h:138,l:122.7,c:127},{d:'2026-07-09',o:132.3,h:138.5,l:125.8,c:132.7},{d:'2026-07-10',o:143.7,h:143.9,l:135.1,c:140.9},{d:'2026-07-13',o:140,h:140,l:115.4,c:116.1},{d:'2026-07-14',o:116.1,h:120.4,l:108.6,c:119},
-{d:'2026-07-15',o:134,h:143.9,l:131,c:138.2},{d:'2026-07-16',o:127.1,h:127.9,l:119.4,c:121.2},{d:'2026-07-20',o:112.7,h:123.9,l:111.6,c:117.7},{d:'2026-07-21',o:118.7,h:126.3,l:115.6,c:125.3},{d:'2026-07-22',o:139.6,h:140,l:122.3,c:123},{d:'2026-07-23',o:129.1,h:129.1,l:120,c:122.1},
-{d:'2026-07-24',o:120.2,h:120.3,l:110.4,c:110.9},{d:'2026-07-27',o:114,h:114,l:103.5,c:109.6},{d:'2026-07-28',o:100.7,h:101.8,l:91.6,c:92.5},{d:'2026-07-29',o:93.3,h:96.7,l:76.8,c:85},{d:'2026-07-30',o:82.6,h:87.2,l:77,c:79.9},{d:'2026-07-31',o:99.5,h:103.8,l:94.4,c:103.8},
-{d:'2026-08-03',o:107,h:107,l:99.2,c:102.5},{d:'2026-08-04',o:109.6,h:109.6,l:99.9,c:106},{d:'2026-08-05',o:114.3,h:115.7,l:110.5,c:111.9}
+{d:'2025-08-06',o:14.07,h:14.34,l:13.72,c:14.03},{d:'2025-08-07',o:13.99,h:14.19,l:13.61,c:14.19},{d:'2025-08-08',o:14.05,h:14.31,l:13.82,c:13.93},{d:'2025-08-11',o:14,h:14.29,l:13.82,c:14.2},{d:'2025-08-12',o:14.07,h:14.72,l:14.07,c:14.15},{d:'2025-08-13',o:14.43,h:14.62,l:14.21,c:14.46},
+{d:'2025-08-14',o:14.6,h:14.6,l:14.27,c:14.37},{d:'2025-08-18',o:14.22,h:14.23,l:13.67,c:13.76},{d:'2025-08-19',o:13.93,h:14.12,l:13.77,c:14.04},{d:'2025-08-20',o:14.1,h:14.13,l:13.09,c:13.71},{d:'2025-08-21',o:13.65,h:13.73,l:13.15,c:13.52},{d:'2025-08-22',o:13.51,h:13.78,l:13.38,c:13.52},
+{d:'2025-08-25',o:13.85,h:14.63,l:13.83,c:14.48},{d:'2025-08-26',o:14.33,h:14.34,l:14,c:14.12},{d:'2025-08-27',o:14.16,h:14.34,l:13.76,c:13.99},{d:'2025-08-28',o:13.89,h:15.3,l:13.81,c:14.96},{d:'2025-08-29',o:15.23,h:15.37,l:14.89,c:14.9},{d:'2025-09-01',o:14.5,h:14.9,l:14.28,c:14.5},
+{d:'2025-09-02',o:14.5,h:14.59,l:14.36,c:14.36},{d:'2025-09-03',o:14.36,h:14.55,l:14.15,c:14.39},{d:'2025-09-04',o:14.4,h:15.16,l:14.4,c:14.94},{d:'2025-09-05',o:15.14,h:15.5,l:15.14,c:15.28},{d:'2025-09-08',o:15.44,h:15.48,l:15.14,c:15.36},{d:'2025-09-09',o:15.5,h:16.34,l:15.45,c:16.2},
+{d:'2025-09-10',o:16.79,h:17.52,l:16.65,c:17.43},{d:'2025-09-11',o:17.79,h:18.21,l:17.6,c:18.21},{d:'2025-09-12',o:18.72,h:20,l:18.57,c:19.73},{d:'2025-09-15',o:19.72,h:20.1,l:19.12,c:20.05},{d:'2025-09-16',o:19.83,h:21.05,l:19.73,c:20.6},{d:'2025-09-17',o:20,h:20.7,l:19.95,c:20.05},
+{d:'2025-09-18',o:20.1,h:21,l:19.71,c:20.85},{d:'2025-09-22',o:21.6,h:21.8,l:20.95,c:21.55},{d:'2025-09-23',o:21.6,h:22.4,l:21.6,c:22},{d:'2025-09-24',o:22.05,h:22.5,l:21.2,c:21.75},{d:'2025-09-25',o:20.95,h:21.45,l:20.55,c:21.1},{d:'2025-09-26',o:20.35,h:20.8,l:19.49,c:19.53},
+{d:'2025-09-29',o:19.73,h:19.95,l:19.53,c:19.71},{d:'2025-09-30',o:19.62,h:20.4,l:19.6,c:20.15},{d:'2025-10-01',o:20.3,h:20.75,l:20.1,c:20.55},{d:'2025-10-02',o:21.8,h:24.85,l:21.75,c:24},{d:'2025-10-10',o:24.5,h:25.5,l:24.05,c:24.7},{d:'2025-10-13',o:23.8,h:24.9,l:23.5,c:24.55},
+{d:'2025-10-14',o:24.45,h:25.35,l:22.95,c:23.45},{d:'2025-10-15',o:23.85,h:24.6,l:23.65,c:24.35},{d:'2025-10-16',o:23.85,h:25.95,l:23.85,c:25.75},{d:'2025-10-17',o:25.35,h:26.7,l:25.05,c:25.75},{d:'2025-10-20',o:26.15,h:26.35,l:25,c:26.2},{d:'2025-10-21',o:26.65,h:26.85,l:25.05,c:25.6},
+{d:'2025-10-22',o:25.6,h:25.9,l:25.1,c:25.85},{d:'2025-10-23',o:25.05,h:25.85,l:24.25,c:25.3},{d:'2025-10-24',o:25.9,h:27.4,l:25.7,c:27.1},{d:'2025-10-27',o:28.45,h:29.5,l:28.25,c:29.15},{d:'2025-10-28',o:27.8,h:28.5,l:27,c:27.2},{d:'2025-10-29',o:27.4,h:28.2,l:26.65,c:27.5},
+{d:'2025-10-30',o:27.05,h:29.75,l:26.9,c:28.1},{d:'2025-10-31',o:27.4,h:28.35,l:25.15,c:26},{d:'2025-11-03',o:25.95,h:28.55,l:25,c:28.25},{d:'2025-11-04',o:27.85,h:28.25,l:26.55,c:27.4},{d:'2025-11-05',o:26.6,h:26.7,l:24.1,c:26},{d:'2025-11-06',o:26.6,h:27.9,l:25,c:27},
+{d:'2025-11-07',o:27,h:28.2,l:26.1,c:27.9},{d:'2025-11-10',o:28.25,h:30.25,l:27.9,c:29},{d:'2025-11-11',o:31.2,h:32.7,l:30.7,c:31.15},{d:'2025-11-12',o:31.5,h:32.45,l:30.85,c:32.25},{d:'2025-11-13',o:32.2,h:32.4,l:31.2,c:32.35},{d:'2025-11-14',o:29.9,h:30.45,l:28.95,c:29.1},
+{d:'2025-11-17',o:30,h:31.3,l:29.55,c:30.45},{d:'2025-11-18',o:29.2,h:29.85,l:28.15,c:28.35},{d:'2025-11-19',o:28.35,h:28.65,l:26.98,c:28.3},{d:'2025-11-20',o:30.05,h:31.1,l:29.25,c:29.35},{d:'2025-11-21',o:27.5,h:27.65,l:26.35,c:26.6},{d:'2025-11-24',o:27.25,h:28.4,l:26.55,c:27.6},
+{d:'2025-11-25',o:29.35,h:30.5,l:28.9,c:29.05},{d:'2025-11-26',o:29.4,h:29.5,l:28.5,c:29.1},{d:'2025-11-27',o:29.85,h:30.6,l:29.55,c:30.1},{d:'2025-11-28',o:30.45,h:30.55,l:29.5,c:29.8},{d:'2025-12-01',o:30.55,h:31,l:29.8,c:30.2},{d:'2025-12-02',o:30.85,h:31.3,l:30.1,c:30.85},
+{d:'2025-12-03',o:31,h:31.75,l:29.85,c:31.05},{d:'2025-12-04',o:30.45,h:31.25,l:29.3,c:31.25},{d:'2025-12-05',o:30.75,h:30.9,l:29.5,c:30.2},{d:'2025-12-08',o:30.15,h:32.25,l:29.9,c:32.2},{d:'2025-12-09',o:32.15,h:33,l:32,c:32.3},{d:'2025-12-10',o:32.5,h:33.3,l:31.8,c:32.4},
+{d:'2025-12-11',o:32.4,h:32.4,l:30.75,c:30.75},{d:'2025-12-12',o:31.05,h:31.7,l:30.4,c:30.8},{d:'2025-12-15',o:28.75,h:30,l:27.35,c:29.25},{d:'2025-12-16',o:28.5,h:29.35,l:28.1,c:28.1},{d:'2025-12-17',o:28.15,h:28.95,l:28,c:28.3},{d:'2025-12-18',o:27.8,h:29.6,l:27.35,c:29.05},
+{d:'2025-12-19',o:29.95,h:30,l:29.05,c:29.05},{d:'2025-12-22',o:30.3,h:31.8,l:30.05,c:31.5},{d:'2025-12-23',o:31.5,h:32,l:31.35,c:31.5},{d:'2025-12-24',o:31.5,h:32.3,l:31.25,c:32.1},{d:'2025-12-26',o:33.3,h:34.8,l:33,c:33.45},{d:'2025-12-29',o:34.55,h:35,l:34.05,c:34.6},
+{d:'2025-12-30',o:34.6,h:37,l:34,c:36.8},{d:'2026-01-02',o:36.85,h:39.2,l:36.45,c:39.2},{d:'2026-01-05',o:40.75,h:41.6,l:39.85,c:41.6},{d:'2026-01-06',o:40.95,h:43.45,l:40.25,c:43.2},{d:'2026-01-07',o:43.4,h:45.05,l:42.05,c:42.95},{d:'2026-01-08',o:42.5,h:44.6,l:42.05,c:43.05},
+{d:'2026-01-09',o:42.4,h:43.35,l:41.6,c:43.05},{d:'2026-01-12',o:43.65,h:44,l:41.85,c:42.75},{d:'2026-01-13',o:43.15,h:43.5,l:41.8,c:42.65},{d:'2026-01-14',o:43,h:43.7,l:42,c:43.55},{d:'2026-01-15',o:42.85,h:43.4,l:41.85,c:42.95},{d:'2026-01-16',o:43.05,h:45.2,l:42.45,c:44.65},
+{d:'2026-01-19',o:43.95,h:44.35,l:42.5,c:43.55},{d:'2026-01-20',o:43.1,h:43.9,l:42.4,c:42.7},{d:'2026-01-21',o:42.2,h:43.8,l:41.35,c:43},{d:'2026-01-22',o:43.05,h:46.6,l:43,c:44.65},{d:'2026-01-23',o:45.1,h:45.15,l:43.45,c:44.55},{d:'2026-01-26',o:44.25,h:44.7,l:43.5,c:44.1},
+{d:'2026-01-27',o:44.45,h:48.35,l:43.65,c:47.3},{d:'2026-01-28',o:48.2,h:50.7,l:47.65,c:50.4},{d:'2026-01-29',o:52.8,h:53.6,l:50,c:53.1},{d:'2026-01-30',o:52.4,h:58.1,l:52,c:57},{d:'2026-02-02',o:53.7,h:55.7,l:49.35,c:50.5},{d:'2026-02-03',o:54.2,h:54.9,l:52.2,c:54.6},
+{d:'2026-02-04',o:54.2,h:57.6,l:53.2,c:56.9},{d:'2026-02-05',o:52.3,h:56.1,l:52.3,c:53.4},{d:'2026-02-06',o:51,h:52.3,l:49.2,c:51.4},{d:'2026-02-09',o:54.8,h:57.7,l:54.3,c:56.3},{d:'2026-02-10',o:57,h:57.4,l:53.8,c:54.3},{d:'2026-02-11',o:54,h:54.2,l:52.3,c:53.2},
+{d:'2026-02-12',o:55.5,h:57,l:54.8,c:57},{d:'2026-02-13',o:56.5,h:58.6,l:55.7,c:55.8},{d:'2026-02-19',o:58.9,h:59,l:56.2,c:56.6},{d:'2026-02-20',o:56.6,h:58.5,l:54.7,c:58},{d:'2026-02-23',o:59,h:59.7,l:56.4,c:58},{d:'2026-02-24',o:57.7,h:63.4,l:57.2,c:61.7},
+{d:'2026-02-25',o:63,h:66,l:62.1,c:64.7},{d:'2026-02-26',o:65.9,h:68.1,l:64.8,c:67.9},{d:'2026-02-27',o:65.4,h:67.6,l:63.6,c:64.5},{d:'2026-03-03',o:64.2,h:64.3,l:57.8,c:58.1},{d:'2026-03-04',o:54.9,h:57.9,l:48.9,c:50.7},{d:'2026-03-05',o:58.3,h:59.4,l:55.4,c:56.6},
+{d:'2026-03-06',o:53.9,h:55.4,l:52.05,c:55.3},{d:'2026-03-09',o:49.85,h:51.2,l:48.55,c:50.9},{d:'2026-03-10',o:54.9,h:56.8,l:53.5,c:55.4},{d:'2026-03-11',o:57.5,h:59.3,l:55.7,c:56.5},{d:'2026-03-12',o:55,h:56.7,l:54.6,c:55.4},{d:'2026-03-13',o:53,h:54.4,l:51.7,c:53.4},
+{d:'2026-03-16',o:53.6,h:57.1,l:53.2,c:56.2},{d:'2026-03-17',o:58.9,h:60.8,l:58,c:58.7},{d:'2026-03-18',o:61.2,h:63.7,l:60.8,c:63},{d:'2026-03-19',o:60.6,h:62.7,l:60,c:61.1},{d:'2026-03-20',o:61.7,h:61.8,l:59.5,c:60.8},{d:'2026-03-23',o:56.4,h:57.1,l:53.6,c:55.7},
+{d:'2026-03-24',o:59.1,h:59.8,l:56.4,c:59.5},{d:'2026-03-25',o:61.4,h:63.3,l:60.2,c:60.5},{d:'2026-03-26',o:59.2,h:59.4,l:55.6,c:55.8},{d:'2026-03-27',o:52.8,h:54.9,l:52.1,c:54.4},{d:'2026-03-30',o:50.3,h:51.6,l:50,c:51},{d:'2026-03-31',o:47.35,h:48.8,l:46.25,c:46.65},
+{d:'2026-04-01',o:50.8,h:51.5,l:48.6,c:50.1},{d:'2026-04-02',o:51.4,h:52.2,l:46,c:46.95},{d:'2026-04-03',o:48.05,h:48.8,l:46.92,c:48.3},{d:'2026-04-06',o:48.2,h:49.7,l:48,c:48.7},{d:'2026-04-07',o:49.75,h:51.5,l:48.85,c:49.9},{d:'2026-04-08',o:55.8,h:58.7,l:55.3,c:57.8},
+{d:'2026-04-09',o:57.2,h:57.9,l:55.8,c:56},{d:'2026-04-10',o:58.2,h:59.3,l:56.5,c:56.8},{d:'2026-04-13',o:55.1,h:58.3,l:54.5,c:58},{d:'2026-04-14',o:60.2,h:64.9,l:59.7,c:64},{d:'2026-04-15',o:67.6,h:68.4,l:66.1,c:66.5},{d:'2026-04-16',o:67.8,h:69,l:66.4,c:69},
+{d:'2026-04-17',o:69.5,h:69.8,l:67.7,c:68.2},{d:'2026-04-20',o:69.9,h:72.5,l:69,c:70.1},{d:'2026-04-21',o:71.4,h:72.7,l:70.4,c:71.8},{d:'2026-04-22',o:71.1,h:72.2,l:69.4,c:72},{d:'2026-04-23',o:72.6,h:76.7,l:71.2,c:72.8},{d:'2026-04-24',o:73.5,h:74,l:71.8,c:72.5},
+{d:'2026-04-27',o:74.7,h:80.6,l:74.6,c:78.9},{d:'2026-04-28',o:81,h:84.2,l:79.7,c:81.1},{d:'2026-04-29',o:79.7,h:84.85,l:79.3,c:83},{d:'2026-04-30',o:84.5,h:87.7,l:84,c:84.1},{d:'2026-05-04',o:90.9,h:99.8,l:90.1,c:99.1},{d:'2026-05-06',o:110,h:114.9,l:104,c:108.9},
+{d:'2026-05-07',o:110.1,h:112.8,l:104.8,c:109.9},{d:'2026-05-08',o:104.8,h:110.6,l:104.7,c:109.8},{d:'2026-05-11',o:117.5,h:120.5,l:113,c:118.7},{d:'2026-05-12',o:122,h:123.1,l:109.9,c:112.6},{d:'2026-05-13',o:107.1,h:119.3,l:107.1,c:119},{d:'2026-05-14',o:118.3,h:120.8,l:114.7,c:117.1},
+{d:'2026-05-15',o:118.1,h:119,l:107.3,c:109.8},{d:'2026-05-18',o:108.7,h:110,l:98.3,c:109.3},{d:'2026-05-19',o:107.1,h:107.3,l:100.8,c:102},{d:'2026-05-20',o:106.4,h:106.4,l:99.1,c:102.9},{d:'2026-05-21',o:108,h:118.1,l:107.2,c:117.9},{d:'2026-05-22',o:118,h:119.8,l:114.8,c:118.5},
+{d:'2026-05-26',o:122,h:124.1,l:116.1,c:118.1},{d:'2026-05-27',o:129.8,h:133.7,l:126.4,c:127.6},{d:'2026-05-28',o:126.4,h:126.9,l:117.3,c:123.7},{d:'2026-05-29',o:126,h:127.6,l:121.7,c:123.3},{d:'2026-06-01',o:124.9,h:128.9,l:121,c:125.6},{d:'2026-06-02',o:128.1,h:137.5,l:121.2,c:134.6},
+{d:'2026-06-04',o:134.7,h:139.2,l:129.3,c:136.1},{d:'2026-06-05',o:133.2,h:133.4,l:122.5,c:125.8},{d:'2026-06-08',o:111,h:120,l:110.2,c:111.8},{d:'2026-06-09',o:117.3,h:127.3,l:114.6,c:126.9},{d:'2026-06-10',o:121,h:123.1,l:113.9,c:118.3},{d:'2026-06-11',o:112.4,h:123.4,l:107.5,c:122.8},
+{d:'2026-06-12',o:134.9,h:142.2,l:131.5,c:135.8},{d:'2026-06-15',o:143.9,h:144.4,l:135.5,c:141.3},{d:'2026-06-16',o:144,h:151,l:138,c:150.1},{d:'2026-06-17',o:153.4,h:161.2,l:152.7,c:159.6},{d:'2026-06-18',o:165.6,h:173.8,l:162.3,c:170},{d:'2026-06-19',o:181.9,h:189.1,l:172.4,c:178},
+{d:'2026-06-22',o:186,h:198.7,l:180,c:197},{d:'2026-06-23',o:197.2,h:218.9,l:183.2,c:183.2},{d:'2026-06-24',o:188.5,h:191,l:161.1,c:179.9},{d:'2026-06-25',o:195.3,h:199,l:182.3,c:189.9},{d:'2026-06-26',o:187,h:187,l:162.4,c:172},{d:'2026-06-29',o:167,h:170.2,l:157,c:164},
+{d:'2026-06-30',o:161.5,h:176.5,l:152.3,c:169.7},{d:'2026-07-01',o:170.9,h:179.2,l:159.5,c:175.7},{d:'2026-07-02',o:158.2,h:168.2,l:152.5,c:152.5},{d:'2026-07-03',o:153,h:160.3,l:140.7,c:158.9},{d:'2026-07-06',o:159.9,h:169.2,l:146.5,c:149.5},{d:'2026-07-07',o:144.6,h:150.2,l:128.7,c:135.6},
+{d:'2026-07-08',o:126.6,h:138,l:122.7,c:127},{d:'2026-07-09',o:132.3,h:138.5,l:125.8,c:132.7},{d:'2026-07-10',o:143.7,h:143.9,l:135.1,c:140.9},{d:'2026-07-13',o:140,h:140,l:115.4,c:116.1},{d:'2026-07-14',o:116.1,h:120.4,l:108.6,c:119},{d:'2026-07-15',o:134,h:143.9,l:131,c:138.2},
+{d:'2026-07-16',o:127.1,h:127.9,l:119.4,c:121.2},{d:'2026-07-20',o:112.7,h:123.9,l:111.6,c:117.7},{d:'2026-07-21',o:118.7,h:126.3,l:115.6,c:125.3},{d:'2026-07-22',o:139.6,h:140,l:122.3,c:123},{d:'2026-07-23',o:129.1,h:129.1,l:120,c:122.1},{d:'2026-07-24',o:120.2,h:120.3,l:110.4,c:110.9},
+{d:'2026-07-27',o:114,h:114,l:103.5,c:109.6},{d:'2026-07-28',o:100.7,h:101.8,l:91.6,c:92.5},{d:'2026-07-29',o:93.3,h:96.7,l:76.8,c:85},{d:'2026-07-30',o:82.6,h:87.2,l:77,c:79.9},{d:'2026-07-31',o:99.5,h:103.8,l:94.4,c:103.8},{d:'2026-08-03',o:107,h:107,l:99.2,c:102.5},
+{d:'2026-08-04',o:109.6,h:109.6,l:99.9,c:106},{d:'2026-08-05',o:114.3,h:115.7,l:110.5,c:111.9},{d:'2026-08-06',o:108.8,h:108.8,l:96.8,c:97}
 ];
 
 renderCandleChart({svgId:'sksSvg', controlsId:'sksChartControls', data: data});
