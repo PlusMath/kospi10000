@@ -2200,6 +2200,23 @@
       return (live.price * stock.sharesOut) / 1e12;
     }
 
+    // 시가총액(marketCapOf) 내림차순으로 매긴 실시간 순위. 라이브 시총이 없는 종목은
+    // 뒤로 밀리되, 서로간에는 정적 rank(초기 선정 기준)로 정렬해 순서가 흔들리지 않게 함.
+    function computeLiveRanks() {
+      const withCap = stocks.map((s) => ({ code: s.code, cap: marketCapOf(s), staticRank: s.rank }));
+      withCap.sort((a, b) => {
+        if (a.cap != null && b.cap != null) return b.cap - a.cap;
+        if (a.cap != null) return -1;
+        if (b.cap != null) return 1;
+        return a.staticRank - b.staticRank;
+      });
+      const map = new Map();
+      withCap.forEach((item, i) => map.set(item.code, i + 1));
+      return map;
+    }
+    const liveRanks = computeLiveRanks();
+    function rankOf(stock) { return liveRanks.get(stock.code) ?? stock.rank; }
+
     function getVisibleIndustries() {
       return industryOrder.filter((industry) =>
         stocks.some((stock) => stock.industry === industry)
@@ -2243,7 +2260,7 @@
       const hasChange = live && typeof live.change === 'number';
 
       row.innerHTML = `
-        <div class="rr-rank" role="cell">${stock.rank}</div>
+        <div class="rr-rank" role="cell">${rankOf(stock)}</div>
         <div class="rr-name-group">
           <div class="rr-name" role="cell">${stock.name}<small>${stock.code}</small></div>
           <div role="cell"><span class="industry-badge">${stock.industry}</span></div>
@@ -2301,7 +2318,7 @@
 
       const base = [...stocks]
         .filter((s) => !favOnlyActive || favorites.has(s.code))
-        .sort((a, b) => a.rank - b.rank);
+        .sort((a, b) => rankOf(a) - rankOf(b));
 
       const totalPages = Math.max(1, Math.ceil(base.length / RANK_PAGE_SIZE));
       if (rankPage > totalPages) rankPage = totalPages;
@@ -2380,7 +2397,7 @@
       getVisibleIndustries().forEach((industry) => {
         const industryStocks = base
           .filter((stock) => stock.industry === industry)
-          .sort((a, b) => a.rank - b.rank);
+          .sort((a, b) => rankOf(a) - rankOf(b));
 
         if (industryStocks.length === 0) return;
 
