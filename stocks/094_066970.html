@@ -1,434 +1,430 @@
 <link rel="stylesheet" href="../css/global.css">
 <script src="../js/chart-common.js"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
-.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:18px;font-variant-numeric:tabular-nums;}
-.sec{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:12px;}
-.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:14px;}
-.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;}
-.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px;text-align:center;}
-.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
-.mv{font-size:14px;font-weight:600;color:var(--color-text-primary);font-variant-numeric:tabular-nums;}
-.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
-.up{color:#1D9E75;}.dn{color:#D85A30;}
-.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
-.b-green{background:#EAF3DE;color:#3B6D11;}.b-amber{background:#FAEEDA;color:#854F0B;}
-.b-red{background:#FCEBEB;color:#A32D2D;}.b-blue{background:#E6F1FB;color:#185FA5;}
-.b-gray{background:#F1EFE8;color:#5F5E5A;}.b-lnf{background:#E3EEFB;color:#1B4F91;}
-.sig{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
-.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
-.ir:last-child{border-bottom:none;}
-.il{color:var(--color-text-secondary);}.iv{font-weight:600;color:var(--color-text-primary);display:flex;align-items:center;gap:6px;font-variant-numeric:tabular-nums;}
-.src{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-tertiary);margin-left:4px;}
-.hl{background:#EAF3DE;border-left:3px solid #1D9E75;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
-.warn{background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
-.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
-.ev{font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;}
-.ev-1{background:#E6F1FB;color:#0C447C;}.ev-2{background:#EAF3DE;color:#27500A;}
-.ev-3{background:#F1EFE8;color:#444441;}.ev-4{background:#FAEEDA;color:#633806;}
-.ev-5{background:#FCEBEB;color:#791F1F;}
-.ind-row{display:flex;align-items:center;padding:8px 0;border-bottom:.5px solid var(--color-border-tertiary);gap:10px;}
-.ind-row:last-child{border-bottom:none;}
-.ind-nm{font-size:13px;font-weight:600;color:var(--color-text-primary);min-width:150px;}
-.ind-val{font-size:14px;font-weight:600;color:var(--color-text-primary);min-width:80px;text-align:right;font-variant-numeric:tabular-nums;}
-.bar-bg{background:var(--color-border-tertiary);border-radius:4px;height:7px;}
-.bar-f{border-radius:4px;height:7px;}
-.tl{position:relative;padding-left:28px;}
-.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--color-border-tertiary);border-radius:2px;}
-.tl-item{position:relative;margin-bottom:18px;}
-.tl-item:last-child{margin-bottom:0;}
-.tl-dot{position:absolute;left:-24px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid var(--color-background-primary);}
-.dot-big{background:#1B4F91;}.dot-pos{background:#1D9E75;}
-.dot-neg{background:#D85A30;}.dot-neu{background:#888780;}
-.tl-date{font-size:11px;font-weight:600;color:var(--color-text-tertiary);margin-bottom:3px;}
-.tl-title{font-size:13px;font-weight:600;color:var(--color-text-primary);margin-bottom:3px;line-height:1.4;}
-.tl-body{font-size:12px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:5px;}
-.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;margin-right:4px;}
-.tag-big{background:#E3EEFB;color:#1B4F91;}.tag-pos{background:#EAF3DE;color:#3B6D11;}
-.tag-neg{background:#FCEBEB;color:#791F1F;}.tag-neu{background:#F1EFE8;color:#444441;}
-button:focus-visible,a:focus-visible{outline:2px solid #1B4F91;outline-offset:2px;}
+*{box-sizing:border-box;}
+:root{
+  --dp-accent:oklch(0.32 0.09 260);
+  --dp-accent-soft:oklch(0.32 0.09 260 / 0.06);
+  --dp-accent-soft2:oklch(0.32 0.09 260 / 0.14);
+  --dp-up:oklch(0.55 0.2 25);
+  --dp-down:oklch(0.52 0.14 250);
+  --dp-bg:oklch(0.99 0.002 90);
+  --dp-card:oklch(1 0 0);
+  --dp-border:oklch(0.91 0.005 90);
+  --dp-border2:oklch(0.94 0.004 90);
+  --dp-text:oklch(0.18 0.02 260);
+  --dp-text2:oklch(0.4 0.02 260);
+  --dp-text3:oklch(0.5 0.02 260);
+  --dp-text4:oklch(0.55 0.02 260);
+}
+body{background:var(--dp-bg);}
+.dp{font-family:'Noto Sans KR',Arial,sans-serif;color:var(--dp-text);max-width:800px;margin:0 auto;}
+.dp a{color:oklch(0.4 0.1 258);text-decoration:none;}
+.dp table{width:100%;border-collapse:collapse;}
+.dp-back{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:700;color:var(--dp-text3);margin-bottom:18px;}
+.dp-title-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
+.dp-h1{font-size:21px;font-weight:800;margin:0;}
+.dp-ticker{font-size:13px;color:var(--dp-text3);font-weight:600;}
+.dp-badge{font-size:12px;font-weight:700;color:var(--dp-accent);background:var(--dp-accent-soft2);padding:4px 10px;border-radius:6px;}
+.dp-price-row{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;flex-wrap:wrap;}
+.dp-price{font-size:42px;font-weight:800;letter-spacing:-0.01em;}
+.dp-chg{font-size:16px;font-weight:700;padding:5px 12px;border-radius:8px;background:oklch(0.55 0.2 25 / 0.1);color:var(--dp-up);}
+.dp-chg.dn{background:oklch(0.52 0.14 250 / 0.1);color:var(--dp-down);}
+.dp-date{font-size:13px;color:var(--dp-text4);}
+.dp-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--dp-border);border:1px solid var(--dp-border);border-radius:12px;overflow:hidden;margin-bottom:20px;}
+.dp-stat{background:var(--dp-card);padding:14px 16px;}
+.dp-stat-l{font-size:11px;color:var(--dp-text4);margin-bottom:4px;}
+.dp-stat-v{font-size:14px;font-weight:700;}
+.dp-summary{background:var(--dp-accent-soft);border:1px solid var(--dp-accent-soft2);border-radius:12px;padding:16px 18px;margin-bottom:28px;}
+.dp-summary-l{font-size:13px;font-weight:700;color:var(--dp-accent);margin-bottom:5px;}
+.dp-summary-b{font-size:13px;line-height:1.7;color:oklch(0.28 0.03 260);}
+.dp-openclose{display:flex;justify-content:flex-end;gap:10px;margin-bottom:10px;}
+.dp-openclose button{border:none;background:none;cursor:pointer;font-size:12.5px;font-weight:700;padding:0;font-family:inherit;}
+.dp-openclose .op{color:var(--dp-accent);}
+.dp-openclose .cl{color:var(--dp-text4);}
+.dp-sep{color:oklch(0.85 0.005 90);}
+.dp-acc{border:1px solid var(--dp-border);border-radius:12px;margin-bottom:12px;overflow:hidden;background:var(--dp-card);}
+.dp-acc-h{width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:none;border:none;cursor:pointer;font-family:inherit;text-align:left;}
+.dp-acc-h span:first-child{font-size:15px;font-weight:700;}
+.dp-acc-chev{font-size:13px;color:var(--dp-text4);transition:transform .15s;display:inline-block;}
+.dp-acc.open .dp-acc-chev{transform:rotate(180deg);}
+.dp-acc-body{display:none;padding:16px 20px 22px;border-top:1px solid var(--dp-border2);}
+.dp-acc.open .dp-acc-body{display:block;}
+.dp-row2{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--dp-border2);font-size:12.5px;}
+.dp-row2 .l{color:var(--dp-text2);}
+.dp-row2 .v{font-weight:700;}
+.dp-row2 .v.up{color:var(--dp-up);}
+.dp-g2{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:16px;}
+.dp-secl{font-size:12px;font-weight:700;color:var(--dp-text4);margin-bottom:8px;}
+.dp-tab-row{display:flex;gap:6px;margin-bottom:16px;}
+.dp-tab{flex:1;padding:9px 0;border-radius:8px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;border:1px solid var(--dp-border);background:var(--dp-card);color:var(--dp-text2);text-align:center;}
+.dp-tab.active{background:var(--dp-accent);border-color:var(--dp-accent);color:#fff;}
+.dp-seg3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+.dp-seg{background:oklch(0.97 0.004 90);border-radius:10px;padding:12px;}
+.dp-seg-t{font-size:12.5px;font-weight:700;margin-bottom:6px;}
+.dp-seg-d{font-size:11.5px;color:oklch(0.45 0.02 260);line-height:1.6;}
+.dp-eps-flow{display:flex;align-items:stretch;gap:8px;margin-bottom:16px;}
+.dp-eps-card{flex:1;text-align:center;background:oklch(0.97 0.004 90);border:1px solid var(--dp-border);border-radius:10px;padding:12px 8px;}
+.dp-eps-card.now{background:var(--dp-accent-soft);border-color:var(--dp-accent);}
+.dp-eps-y{font-size:10.5px;color:var(--dp-text3);margin-bottom:4px;}
+.dp-eps-v{font-size:17px;font-weight:800;}
+.dp-eps-n{font-size:10px;color:var(--dp-text4);margin-top:4px;}
+.dp-arrow{display:flex;align-items:center;font-size:18px;color:var(--dp-up);font-weight:700;}
+.dp-insight{background:var(--dp-accent-soft);border-radius:10px;padding:14px 16px;}
+.dp-insight-t{font-size:12.5px;font-weight:700;color:var(--dp-accent);margin-bottom:4px;}
+.dp-insight-b{font-size:12.5px;line-height:1.65;color:oklch(0.3 0.03 260);}
+.dp-share4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;}
+.dp-share{background:oklch(0.97 0.004 90);border-radius:10px;padding:12px;text-align:center;}
+.dp-share-l{font-size:11px;color:var(--dp-text3);margin-bottom:5px;}
+.dp-share-v{font-size:15px;font-weight:800;}
+.dp-share-s{font-size:10px;color:var(--dp-text4);margin-top:3px;}
+.dp-gauge{margin-bottom:14px;}
+.dp-gauge-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;}
+.dp-gauge-h span:first-child{font-size:13px;font-weight:700;}
+.dp-gauge-h span:last-child{font-size:14px;font-weight:800;}
+.dp-gauge-track{background:oklch(0.93 0.004 90);border-radius:5px;height:6px;margin-bottom:5px;}
+.dp-gauge-fill{background:var(--dp-accent);border-radius:5px;height:6px;}
+.dp-gauge-note{font-size:11.5px;color:var(--dp-text3);line-height:1.55;}
+.dp-tl{position:relative;padding-left:22px;}
+.dp-tl::before{content:'';position:absolute;left:5px;top:4px;bottom:4px;width:2px;background:var(--dp-border);border-radius:2px;}
+.dp-tl-item{position:relative;margin-bottom:18px;}
+.dp-tl-item:last-child{margin-bottom:0;}
+.dp-tl-dot{position:absolute;left:-21px;top:3px;width:10px;height:10px;border-radius:50%;background:var(--dp-accent);border:2px solid var(--dp-card);}
+.dp-tl-date{font-size:11px;font-weight:700;color:var(--dp-text4);margin-bottom:3px;}
+.dp-tl-title{font-size:13.5px;font-weight:700;margin-bottom:4px;line-height:1.4;}
+.dp-tl-body{font-size:12px;color:oklch(0.45 0.02 260);line-height:1.6;}
+.dp-thesis{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+.dp-thesis-t{font-size:13px;font-weight:700;margin-bottom:10px;}
+.dp-thesis-t.bull{color:var(--dp-up);}
+.dp-thesis-t.bear{color:var(--dp-down);}
+.dp-thesis-item{display:flex;gap:8px;padding:6px 0;font-size:12.5px;line-height:1.5;}
+.dp-thesis-item .dot{flex-shrink:0;}
+.dp-thesis-item.bull .dot{color:var(--dp-up);}
+.dp-thesis-item.bear .dot{color:var(--dp-down);}
+.dp-cons-th{text-align:left;font-size:11px;color:var(--dp-text4);font-weight:600;padding-bottom:8px;border-bottom:1px solid var(--dp-border);}
+.dp-cons-td{font-size:12.5px;padding:9px 0;border-bottom:1px solid var(--dp-border2);}
+.dp-cons-badge{font-size:11px;font-weight:600;padding:2px 9px;border-radius:999px;background:oklch(0.55 0.2 25 / 0.1);color:var(--dp-up);}
+.dp-cons-summary{display:flex;gap:20px;margin-top:14px;font-size:13px;}
+.dp-footer-note{font-size:11px;color:oklch(0.6 0.02 260);text-align:center;margin-top:20px;}
+@media (max-width:640px){
+  .dp-g2,.dp-thesis{grid-template-columns:1fr;gap:16px;}
+  .dp-stats{grid-template-columns:repeat(2,1fr);}
+  .dp-seg3{grid-template-columns:1fr;}
+  .dp-share4{grid-template-columns:repeat(2,1fr);}
+  .dp-price{font-size:32px;}
+  .dp-h1{font-size:16px;}
+}
 </style>
 
-<div style="padding:1rem 0;" class="box">
+<div class="dp" style="padding:1rem 0 2rem;">
 
-<div style="margin-bottom:12px;"><a href="../index.html" style="display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:700;color:var(--color-text-info);text-decoration:none;">← 홈으로</a></div>
+<a class="dp-back" href="../index.html">← 홈으로</a>
 
-<!-- 헤더 -->
-<div style="margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-  <h2>엘앤에프 (066970)</h2>
-  <span class="badge b-lnf">코스피 · 2차전지 양극재(NCM/NCMA)</span>
-  <span class="badge b-gray">고니켈 양극재 · LFP 신규 진출 · 하이리튬이온배터리(CB/EB) 파생상품 리스크</span>
-  <span class="src">📄 OpenDART 공시 원문(Open API) + 📊 Yahoo Finance 시세</span>
-</div>
-<p class="sub">최근 종가 90,200원 (2026-08-07, 전일대비 +13.03%) · 52주 최고 225,000원 (26/05/04) · 52주 최저 59,200원 (25/09/05) · LC +52.36% · HC -59.91%</p>
-
-<!-- 핵심 지표 배너 -->
-<div style="background:#E3EEFB;border-left:3px solid #1B4F91;border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:14px;">
-  <div style="font-size:12px;color:#1B4F91;line-height:1.6;"><strong>🔑 엘앤에프 투자의 핵심:</strong> EV 캐즘(수요 정체)으로 7개 분기 연속 영업손실을 겪은 후, 2025년 영업손실이 -1,568억원으로 전년(-5,587억원) 대비 크게 축소됐고 <strong>1분기26에는 매출 +102.7%, 영업이익이 흑자전환(1,172.6억원)</strong>하며 완연한 턴어라운드 조짐을 보이는 중. 다만 2025년 순손실은 오히려 -5,347억원으로 확대됐는데, 이는 실적 악화가 아니라 <strong>전환사채·교환사채 등 주가연계채권의 파생상품평가손실(약 2,758억원, 자기주가 상승에 따른 회계상 손실)</strong> 때문. 주가는 배터리 업황 회복 기대감에 52주 최저(59,200원, 25/09/05) 대비 최대 +280%(52주 신고가 225,000원, 26/05/04)까지 폭등했다가, 이후 밸류 부담과 리튬가격 재하락 우려로 -63.2% 조정.</div>
+<div class="dp-title-row">
+  <h1 class="dp-h1">엘앤에프</h1>
+  <span class="dp-ticker">066970</span>
+  <span class="dp-badge">코스피 · 2차전지 양극재(NCM/NCMA)</span>
 </div>
 
-<div class="g4">
-  <div class="met"><div class="ml">최근 종가 (08/07)</div><div class="mv dn">90,200원</div><div class="ms dn">+13.03% · 고점 대비 -59.9%</div></div>
-  <div class="met"><div class="ml">2025 매출액</div><div class="mv up">2조 1,549억</div><div class="ms up">+13.0% (업황 회복 전환)</div></div>
-  <div class="met"><div class="ml">2025 영업손실</div><div class="mv up">-1,568억</div><div class="ms up">전년比 손실 71.9% 축소</div></div>
-  <div class="met"><div class="ml">1Q26 영업이익</div><div class="mv up">1,172.6억</div><div class="ms up">흑자전환 (전년동기 -1,402.5억)</div></div>
+<div class="dp-price-row">
+  <div class="dp-price">90,200원</div>
+  <div class="dp-chg">▲ +13.03%</div>
+  <div class="dp-date">2026.08.07 종가 기준</div>
+</div>
+
+<div class="dp-stats">
+  <div class="dp-stat"><div class="dp-stat-l">52주 최고</div><div class="dp-stat-v">225,000원</div></div>
+  <div class="dp-stat"><div class="dp-stat-l">52주 최저</div><div class="dp-stat-v">59,200원</div></div>
+  <div class="dp-stat"><div class="dp-stat-l">시가총액</div><div class="dp-stat-v">약 3.19조</div></div>
+  <div class="dp-stat"><div class="dp-stat-l">고점 대비</div><div class="dp-stat-v" style="color:var(--dp-down);">-59.9%</div></div>
+</div>
+
+<div class="dp-summary">
+  <div class="dp-summary-l">핵심 요약</div>
+  <div class="dp-summary-b">EV 캐즘(수요 정체)으로 7개 분기 연속 영업손실을 겪은 후, 2025년 영업손실이 -1,568억원으로 전년(-5,587억원) 대비 크게 축소됐고 1Q26에는 매출 +102.7%, 영업이익이 흑자전환(1,172.6억원)하며 완연한 턴어라운드 조짐. 다만 2025년 순손실은 오히려 -5,347억원으로 확대됐는데, 이는 전환사채·교환사채 등 주가연계채권의 파생상품평가손실(약 2,758억원, 자기주가 상승에 따른 회계상 손실) 때문. 주가는 배터리 업황 회복 기대감에 52주 최저(59,200원) 대비 최대 +280%(52주 신고가 225,000원)까지 폭등했다가, 이후 밸류 부담과 리튬가격 재하락 우려로 -63.2% 조정.</div>
+</div>
+
+<div class="dp-openclose">
+  <button class="op" onclick="dpOpenAll()">모두 열기</button>
+  <span class="dp-sep">|</span>
+  <button class="cl" onclick="dpCloseAll()">모두 닫기</button>
 </div>
 
 <!-- 1. 기술적 분석 -->
-<div class="card">
-  <div class="sec">1. 기술적 분석 — 일봉 기준 (2025.08.07 ~ 2026.08.07, 243거래일)</div>
-  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;">
-    최고 225,000원 (26/05/04) → 최저 59,200원 (25/09/05) → 최근 종가 90,200원 (26/08/07) · LC +52.36% · HC -59.91%
-  </div>
-  <div id="lnfChartControls" class="kc-controls"></div>
-  <svg id="lnfSvg" viewBox="0 0 720 240" width="100%" style="display:block;margin-bottom:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:4px;"></svg>
+<div class="dp-acc" id="dpAcc-tech">
+  <button class="dp-acc-h" onclick="dpToggle('tech')"><span>1. 기술적 분석</span><span class="dp-acc-chev">▾</span></button>
+  <div class="dp-acc-body">
+    <div id="lnfChartControls" class="kc-controls"></div>
+    <svg id="lnfSvg" viewBox="0 0 720 240" width="100%" style="display:block;margin-bottom:16px;background:oklch(0.98 0.004 90);border-radius:10px;padding:4px;"></svg>
 
-  <div style="font-size:13px;font-weight:600;margin-bottom:8px;">📊 구간별 분석 <span class="src">📊 Yahoo Finance 일봉</span></div>
-  <div class="g4" style="font-size:11px;margin-bottom:12px;">
-    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:var(--color-text-primary);font-weight:600;margin-bottom:3px;">25.07~25.09 — 저점 형성</div>
-      <div style="color:var(--color-text-secondary);line-height:1.6;">EV 캐즘 여파 지속<br>9/5 52주 최저(59,200원)</div>
-    </div>
-    <div style="background:#E3EEFB;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#1B4F91;font-weight:600;margin-bottom:3px;">25.10~26.05 — K배터리 대세 상승</div>
-      <div style="color:#1B4F91;line-height:1.6;">리튬가 반등, ESS 수요 급증<br>1Q26 실적 서프라이즈(4/30)<br>목표가 상향 랠리<br>5/4 52주 신고가(225,000원)</div>
-    </div>
-    <div style="background:#FCEBEB;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#A32D2D;font-weight:600;margin-bottom:3px;">26.06 — 업종 전반 조정</div>
-      <div style="color:#A32D2D;line-height:1.6;">에코프로비엠 유상증자 쇼크<br>(6/29, 1.2조원 20%할인)<br>배터리 소재株 동반 급락</div>
-    </div>
-    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:var(--color-text-primary);font-weight:600;margin-bottom:3px;">26.07 — 밸류 부담 재부각</div>
-      <div style="color:var(--color-text-secondary);line-height:1.6;">7/14 목표가 하향(-10.6%)<br>탄산리튬價 재하락 우려<br>8만원대 안착 시도</div>
-    </div>
-  </div>
-
-  <div class="g2" style="margin-bottom:12px;">
-    <div>
-      <div style="font-size:13px;font-weight:600;margin-bottom:7px;">이동평균선 현황 (07/21 기준)</div>
-      <div class="ir"><span class="il">5일선 (88,860원)</span><span class="badge b-red">가격 하회</span></div>
-      <div class="ir"><span class="il">20일선 (100,825원)</span><span class="badge b-red">가격 큰 폭 하회</span></div>
-      <div class="ir"><span class="il">60일선 (142,897원)</span><span class="badge b-red">가격 큰 폭 하회</span></div>
-      <div class="ir"><span class="il">120일선 (138,739원)</span><span class="badge b-red">가격 큰 폭 하회</span></div>
-      <div class="ir"><span class="il">배열</span><span class="badge b-red">전 구간 데드크로스 · 급등 후 급락 조정</span></div>
-    </div>
-    <div>
-      <div style="font-size:13px;font-weight:600;margin-bottom:7px;">핵심 가격대</div>
-      <div class="ir"><span class="il">52주 최고 (신고가)</span><span style="font-weight:600;color:#1B4F91;">225,000원 (26/05/04)</span></div>
-      <div class="ir"><span class="il">52주 최저</span><span style="font-weight:600;color:#D85A30;">59,200원 (25/09/05)</span></div>
-      <div class="ir"><span class="il">최근 종가</span><span style="font-weight:600;color:var(--color-text-primary);">82,800원 (07/21)</span></div>
-      <div class="ir"><span class="il">저점 대비 상승폭</span><span style="font-weight:600;color:#1D9E75;">+39.9%</span></div>
-      <div class="ir"><span class="il">LC / HC</span><span style="font-weight:600;">+39.86% / -63.20%</span></div>
-    </div>
-  </div>
-
-  <div class="sig">
-    <span class="badge b-red">신고가(26/05/04) 대비 -63.2% 급락</span>
-    <span class="badge b-green">52주 저점(25/09/05) 대비 +39.9% 상승</span>
-    <span class="badge b-lnf">1Q26 실적 턴어라운드 vs 밸류·업종 조정</span>
-  </div>
-</div>
-
-<!-- 2. 기본적 분석 탭 -->
-<div class="card">
-  <div class="sec">2. 기본적 분석 — 공시 원문 <span class="src">📄 사업보고서(2025) + 분기보고서 1Q(2026.03)</span></div>
-
-  <div class="warn" style="margin-bottom:14px;">
-    <div style="font-size:12px;font-weight:600;color:#854F0B;margin-bottom:4px;">⚠️ 2025년 순손실 확대는 영업 악화가 아니라 전환사채 파생상품평가손실 때문</div>
-    <div style="font-size:12px;color:#854F0B;line-height:1.7;">2025년 영업손실은 -1,568억원으로 전년(-5,587억원) 대비 크게 축소됐음에도, 당기순손실은 오히려 -5,347억원으로 확대됐습니다. 이는 엘앤에프가 발행한 전환사채(CB)·교환사채(EB)·신주인수권부사채(BW)에 내재된 콜옵션의 공정가치가 <strong>2025년 중 자사주가 상승(행사가 약 52,000원 대비 연말 종가 약 95,200원)</strong>하면서 크게 늘어나, 이를 부채로 재평가하는 과정에서 약 2,758억원(자기자본의 38.1%에 해당)의 회계상 평가손실이 발생했기 때문입니다. 실제 현금 유출이 없는 비현금성 손실이며, 부채비율은 약 358%까지 상승했습니다.</div>
-  </div>
-
-  <div style="display:flex;gap:8px;margin-bottom:14px;">
-    <button id="btnAnnual" onclick="switchTab('annual')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);border:1.5px solid #1B4F91;background:#1B4F91;color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;">
-      📄 사업보고서 <span style="font-size:11px;opacity:.85;font-weight:400;">2025년 연간</span>
-    </button>
-    <button id="btnQuarter" onclick="switchTab('quarter')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:var(--border-radius-md);border:1.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-secondary);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;">
-      📋 분기보고서 <span style="font-size:11px;opacity:.85;font-weight:400;">1분기 · 2026.03</span>
-    </button>
-  </div>
-
-  <!-- ══ 사업보고서 탭 ══ -->
-  <div id="tabAnnual">
-    <svg id="lnfAnnualChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:12px;"></svg>
-
-    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:6px;letter-spacing:.03em;">📊 연결 손익 요약 (단위: 억원 · 2025년)</div>
-    <div class="g2" style="margin-bottom:12px;">
+    <div class="dp-g2">
       <div>
-        <div class="ir"><span class="il">연결 매출액</span><span class="iv up">2조 1,549억 (▲13.0%) <span class="ev ev-2">양호</span></span></div>
-        <div class="ir"><span class="il">연결 영업손실</span><span class="iv up">-1,568억 (손실 71.9%↓) <span class="ev ev-2">개선</span></span></div>
-        <div class="ir"><span class="il">연결 당기순손실</span><span class="iv dn">-5,347억 (파생손실 반영) <span class="ev ev-4">주의</span></span></div>
-        <div class="ir"><span class="il">부채비율</span><span class="iv dn">약 365% (부채 2.46조/자본 6,731억) <span class="ev ev-5">위험</span></span></div>
+        <div class="dp-secl">이동평균선 현황 (07/21 기준)</div>
+        <div class="dp-row2"><span class="l">5일선 (88,860원)</span><span class="v" style="color:var(--dp-down);">가격 하회</span></div>
+        <div class="dp-row2"><span class="l">20일선 (100,825원)</span><span class="v" style="color:var(--dp-down);">가격 큰 폭 하회</span></div>
+        <div class="dp-row2"><span class="l">60일선 (142,897원)</span><span class="v" style="color:var(--dp-down);">가격 큰 폭 하회</span></div>
+        <div class="dp-row2"><span class="l">120일선 (138,739원)</span><span class="v" style="color:var(--dp-down);">가격 큰 폭 하회</span></div>
       </div>
       <div>
-        <div class="ir"><span class="il">누적 결손금</span><span class="iv dn">-758억 <span class="ev ev-4">주의</span></span></div>
-        <div class="ir"><span class="il">기본주당순손실</span><span class="iv dn">-15,508원 (전년 -11,266원) <span class="ev ev-4">주의</span></span></div>
-        <div class="ir"><span class="il">지배지분 자기자본</span><span class="iv">6,731억 <span class="ev ev-3">참고</span></span></div>
-        <div class="ir"><span class="il">현금배당</span><span class="iv">미실시 (적자 지속) <span class="ev ev-3">해당없음</span></span></div>
+        <div class="dp-secl">핵심 가격대</div>
+        <div class="dp-row2"><span class="l">52주 최고 (신고가)</span><span class="v">225,000원 (26/05/04)</span></div>
+        <div class="dp-row2"><span class="l">저점 대비 상승폭</span><span class="v up">+39.9%</span></div>
+        <div class="dp-row2"><span class="l">최근 종가</span><span class="v">82,800원 (07/21)</span></div>
+        <div class="dp-row2"><span class="l">52주 최저</span><span class="v">59,200원 (25/09/05)</span></div>
       </div>
     </div>
 
-    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">🔋 업황·주가 급등락의 핵심 배경</div>
-    <div class="g3" style="font-size:11px;margin-bottom:12px;">
-      <div style="background:#E3EEFB;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #1B4F91;">
-        <div style="color:#1B4F91;font-weight:600;margin-bottom:5px;">K배터리 업황 반등</div>
-        <div class="ir" style="font-size:11px;"><span class="il">리튬가 반등</span><span>재고평가손실 환입</span></div>
-        <div class="ir" style="font-size:11px;"><span class="il">美 ESS 수요</span><span>세액공제 기반 발주 급증</span></div>
-      </div>
-      <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #1D9E75;">
-        <div style="color:#3B6D11;font-weight:600;margin-bottom:5px;">1Q26 실적 서프라이즈</div>
-        <div class="ir" style="font-size:11px;"><span class="il">매출</span><span>+102.7% YoY</span></div>
-        <div class="ir" style="font-size:11px;"><span class="il">영업이익</span><span>컨센서스 대비 +93%</span></div>
-      </div>
-      <div style="background:#FCEBEB;border-radius:var(--border-radius-md);padding:10px;border-left:3px solid #D85A30;">
-        <div style="color:#791F1F;font-weight:600;margin-bottom:5px;">밸류·수급 리스크</div>
-        <div class="ir" style="font-size:11px;"><span class="il">동종업계 유상증자</span><span>에코프로비엠 쇼크</span></div>
-        <div class="ir" style="font-size:11px;"><span class="il">탄산리튬價</span><span>1Q말→2Q말 소폭 하락</span></div>
-      </div>
-    </div>
-
-    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">📈 매출·영업손익 3개년 추이 — EV 캐즘 저점을 지나 회복 국면 진입</div>
-    <div style="display:flex;gap:8px;margin-bottom:14px;">
-      <div style="flex:1;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;text-align:center;">
-        <div style="font-size:10px;color:var(--color-text-secondary);margin-bottom:4px;">2023년</div>
-        <div style="font-size:15px;font-weight:700;color:#D85A30;">영업손실 222.3억</div>
-        <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:4px;">매출 4조 6,441억</div>
-      </div>
-      <div style="display:flex;align-items:center;font-size:18px;color:#D85A30;font-weight:700;">→</div>
-      <div style="flex:1;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;text-align:center;">
-        <div style="font-size:10px;color:var(--color-text-secondary);margin-bottom:4px;">2024년</div>
-        <div style="font-size:15px;font-weight:700;color:#D85A30;">영업손실 558.7억</div>
-        <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:4px;">매출 1조 9,075억(-58.9%)</div>
-      </div>
-      <div style="display:flex;align-items:center;font-size:18px;color:#1D9E75;font-weight:700;">→</div>
-      <div style="flex:1;background:#1D9E75;border-radius:var(--border-radius-md);padding:10px;text-align:center;border:1.5px solid #1D9E75;">
-        <div style="font-size:10px;color:#fff;margin-bottom:4px;font-weight:600;">2025년</div>
-        <div style="font-size:15px;font-weight:700;color:#fff;">영업손실 156.8억</div>
-        <div style="font-size:10px;color:#fff;margin-top:4px;">손실 71.9%↓ · 매출 +13.0%</div>
-      </div>
-    </div>
-
-    <div class="hl">
-      <div style="font-size:13px;font-weight:600;color:#3B6D11;margin-bottom:4px;">💡 사업보고서 핵심 — 영업 체력은 뚜렷한 회복, 재무 리스크는 여전</div>
-      <div style="font-size:12px;color:#3B6D11;line-height:1.7;">2년 연속 대규모 영업손실을 겪었던 엘앤에프는 2025년 손실 폭을 큰 폭으로 줄였고, 1분기26에는 완전한 영업흑자로 전환하며 EV 캐즘 저점을 지났다는 신호를 보이고 있습니다. 다만 높은 부채비율(약 365%)과 주가연계채권의 파생상품평가손실 변동성은 향후에도 순이익 변동성을 키우는 요인으로 남아있어, 영업이익 개선 추세와 별개로 재무 리스크를 지속 점검할 필요가 있습니다.</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+      <span style="font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:999px;background:oklch(0.95 0.004 90);color:var(--dp-text2);">신고가(26/05/04) 대비 -63.2% 급락</span>
+      <span style="font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:999px;background:oklch(0.95 0.004 90);color:var(--dp-text2);">52주 저점(25/09/05) 대비 +39.9% 상승</span>
+      <span style="font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:999px;background:oklch(0.95 0.004 90);color:var(--dp-text2);">1Q26 실적 턴어라운드 vs 밸류·업종 조정</span>
+      <span style="font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:999px;background:oklch(0.95 0.004 90);color:var(--dp-text2);">전 구간 데드크로스 · 급등 후 급락 조정</span>
     </div>
   </div>
+</div>
 
-  <!-- ══ 분기보고서 탭 ══ -->
-  <div id="tabQuarter" style="display:none;">
-    <svg id="lnfQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:12px;"></svg>
+<!-- 2. 기본적 분석 -->
+<div class="dp-acc" id="dpAcc-fund">
+  <button class="dp-acc-h" onclick="dpToggle('fund')"><span>2. 기본적 분석 — 공시 원문</span><span class="dp-acc-chev">▾</span></button>
+  <div class="dp-acc-body">
+    <div class="dp-tab-row">
+      <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">분기보고서 · 1Q26</button>
+    </div>
 
-    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:6px;letter-spacing:.03em;">📊 1Q26 연결 손익 요약 (단위: 억원 · 1분기)</div>
-    <div class="g2" style="margin-bottom:12px;">
+    <div id="dpFundAnnual">
+      <svg id="lnfAnnualChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:16px;"></svg>
+      <div class="dp-g2">
+        <div>
+          <div class="dp-row2"><span class="l">연결 매출액</span><span class="v up">2조 1,549억 (▲13.0%)</span></div>
+          <div class="dp-row2"><span class="l">연결 영업손실</span><span class="v up">-1,568억 (손실 71.9%↓)</span></div>
+          <div class="dp-row2"><span class="l">연결 당기순손실</span><span class="v" style="color:var(--dp-down);">-5,347억 (파생손실 반영)</span></div>
+          <div class="dp-row2"><span class="l">부채비율</span><span class="v" style="color:var(--dp-down);">약 365% (부채 2.46조/자본 6,731억)</span></div>
+        </div>
+        <div>
+          <div class="dp-row2"><span class="l">누적 결손금</span><span class="v" style="color:var(--dp-down);">-758억</span></div>
+          <div class="dp-row2"><span class="l">기본주당순손실</span><span class="v" style="color:var(--dp-down);">-15,508원 (전년 -11,266원)</span></div>
+          <div class="dp-row2"><span class="l">지배지분 자기자본</span><span class="v">6,731억</span></div>
+          <div class="dp-row2"><span class="l">현금배당</span><span class="v">미실시 (적자 지속)</span></div>
+        </div>
+      </div>
+
+      <div class="dp-secl">업황·주가 급등락의 핵심 배경</div>
+      <div class="dp-seg3">
+        <div class="dp-seg"><div class="dp-seg-t">K배터리 업황 반등</div><div class="dp-seg-d">리튬가 반등에 따른 재고평가손실 환입, 美 ESS 수요 세액공제 기반 발주 급증.</div></div>
+        <div class="dp-seg"><div class="dp-seg-t">1Q26 실적 서프라이즈</div><div class="dp-seg-d">매출 +102.7% YoY, 영업이익 컨센서스 대비 +93%.</div></div>
+        <div class="dp-seg"><div class="dp-seg-t">밸류·수급 리스크</div><div class="dp-seg-d">동종업계 유상증자(에코프로비엠 쇼크), 탄산리튬價 1Q말→2Q말 소폭 하락.</div></div>
+      </div>
+
+      <div class="dp-secl">영업손익 3개년 추이</div>
+      <div class="dp-eps-flow">
+        <div class="dp-eps-card"><div class="dp-eps-y">2023년</div><div class="dp-eps-v">-222.3억</div><div class="dp-eps-n">매출 4조 6,441억</div></div>
+        <div class="dp-arrow" style="color:var(--dp-down);">→</div>
+        <div class="dp-eps-card"><div class="dp-eps-y">2024년</div><div class="dp-eps-v">-558.7억</div><div class="dp-eps-n">매출 -58.9%</div></div>
+        <div class="dp-arrow">→</div>
+        <div class="dp-eps-card now"><div class="dp-eps-y">2025년</div><div class="dp-eps-v">-156.8억</div><div class="dp-eps-n">손실 71.9%↓</div></div>
+      </div>
+
+      <div class="dp-insight">
+        <div class="dp-insight-t">사업보고서 핵심</div>
+        <div class="dp-insight-b">2년 연속 대규모 영업손실을 겪었던 엘앤에프는 2025년 손실 폭을 큰 폭으로 줄였고, 1분기26에는 완전한 영업흑자로 전환하며 EV 캐즘 저점을 지났다는 신호를 보이고 있음. 다만 높은 부채비율(약 365%)과 파생상품평가손실 변동성은 향후에도 순이익 변동성을 키우는 요인.</div>
+      </div>
+    </div>
+
+    <div id="dpFundQuarter" style="display:none;">
+      <svg id="lnfQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:16px;"></svg>
+      <div class="dp-g2">
+        <div>
+          <div class="dp-row2"><span class="l">1Q26 연결 매출액</span><span class="v up">7,396억 (▲102.7%)</span></div>
+          <div class="dp-row2"><span class="l">1Q26 연결 영업이익</span><span class="v up">1,172.6억 (흑자전환)</span></div>
+          <div class="dp-row2"><span class="l">1Q26 영업이익률</span><span class="v">15.85% (1,172.6÷7,396)</span></div>
+        </div>
+        <div>
+          <div class="dp-row2"><span class="l">1Q26 당기순손실</span><span class="v up">-653.1억 (손실 41.3%↓)</span></div>
+          <div class="dp-row2"><span class="l">1Q26 기본EPS</span><span class="v up">-1,686원 (전년 동기 -3,305원)</span></div>
+          <div class="dp-row2"><span class="l">부채비율(2025말)</span><span class="v" style="color:var(--dp-down);">약 365%</span></div>
+        </div>
+      </div>
+      <div class="dp-insight">
+        <div class="dp-insight-t">분기보고서 핵심</div>
+        <div class="dp-insight-b">1분기26 매출이 전년 동기 대비 두 배 이상(+102.7%) 급증하고 영업이익이 흑자전환한 것은 컨센서스 대비 +93% 서프라이즈로, NCMA95 등 고니켈 양극재 출하량이 사상 최대치를 기록한 결과. 삼성SDI를 LFP 첫 고객사로 확보하는 등 다각화도 진행 중이나, 순손실은 여전히 지속되고 있어 완전한 이익 정상화까지는 시간이 더 필요.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. 투자지표 및 밸류에이션 -->
+<div class="dp-acc" id="dpAcc-valuation">
+  <button class="dp-acc-h" onclick="dpToggle('valuation')"><span>3. 투자지표 및 밸류에이션</span><span class="dp-acc-chev">▾</span></button>
+  <div class="dp-acc-body">
+    <div class="dp-share4">
+      <div class="dp-share"><div class="dp-share-l">2025 EPS</div><div class="dp-share-v">-15,508원</div><div class="dp-share-s">적자 지속</div></div>
+      <div class="dp-share"><div class="dp-share-l">1Q26 EPS</div><div class="dp-share-v">-1,686원</div><div class="dp-share-s">손실폭 49.0%↓</div></div>
+      <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">17,482원</div><div class="dp-share-s">지배지분 기준</div></div>
+      <div class="dp-share"><div class="dp-share-l">배당</div><div class="dp-share-v">미실시</div><div class="dp-share-s">적자 지속</div></div>
+    </div>
+
+    <div class="dp-gauge">
+      <div class="dp-gauge-h"><span>PER</span><span>N/A</span></div>
+      <div class="dp-gauge-track"><div class="dp-gauge-fill" style="width:0%;"></div></div>
+      <div class="dp-gauge-note">2025년·1Q26 모두 순손실 지속 · EPS 음수로 PER 산출 불가.</div>
+    </div>
+    <div class="dp-gauge">
+      <div class="dp-gauge-h"><span>Forward PER</span><span>N/A</span></div>
+      <div class="dp-gauge-track"><div class="dp-gauge-fill" style="width:0%;"></div></div>
+      <div class="dp-gauge-note">1Q26 연환산 EPS도 적자 지속으로 산출 불가.</div>
+    </div>
+    <div class="dp-gauge">
+      <div class="dp-gauge-h"><span>PBR</span><span>5.16x</span></div>
+      <div class="dp-gauge-track"><div class="dp-gauge-fill" style="width:58%;"></div></div>
+      <div class="dp-gauge-note">90,200÷17,482 · 순자산 대비 상당한 프리미엄, 이익 정상화 기대를 선반영한 높은 수준.</div>
+    </div>
+    <div class="dp-gauge">
+      <div class="dp-gauge-h"><span>배당수익률</span><span>0%</span></div>
+      <div class="dp-gauge-track"><div class="dp-gauge-fill" style="width:0%;"></div></div>
+      <div class="dp-gauge-note">적자 지속으로 배당 미실시 · 해당사항 없음.</div>
+    </div>
+    <div class="dp-gauge">
+      <div class="dp-gauge-h"><span>HC 대비 (신고가 대비)</span><span>-59.9%</span></div>
+      <div class="dp-gauge-track"><div class="dp-gauge-fill" style="width:12%;"></div></div>
+      <div class="dp-gauge-note">225,000원(26/05/04) 대비 · 저점 대비는 +52.36%로 하방 지지력은 확인된 상태.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. 시계열 주요 이벤트 -->
+<div class="dp-acc" id="dpAcc-timeline">
+  <button class="dp-acc-h" onclick="dpToggle('timeline')"><span>4. 시계열 주요 이벤트</span><span class="dp-acc-chev">▾</span></button>
+  <div class="dp-acc-body">
+    <div class="dp-tl">
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2025.12.29</div>
+        <div class="dp-tl-title">테슬라 공급계약 축소 공시 — 단기 급락(-9.8%)</div>
+        <div class="dp-tl-body">고니켈 양극재 공급계약 규모가 기존 약 3.8조원에서 대폭 축소됐다는 공시가 나오며 주가가 105,600→95,200원으로 급락. 다만 이후 업황 개선 기대감 속 주가는 재차 반등.</div>
+      </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.04.30</div>
+        <div class="dp-tl-title">1분기26 실적 서프라이즈 — 매출 2배, 영업흑자 전환</div>
+        <div class="dp-tl-body">매출 7,396억원(+102.7% YoY), 영업이익 1,172.6억원(컨센서스 대비 +93%)으로 어닝서프라이즈를 기록했으나, 이미 기대감이 선반영되며 발표 당일 주가는 오히려 -6.65% 하락(208,000→195,100원).</div>
+      </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.05.04 ~ 05</div>
+        <div class="dp-tl-title">52주 신고가(225,000원) — 목표주가 대폭 상향</div>
+        <div class="dp-tl-body">미래에셋증권이 목표주가를 18만원→30만원으로, 하나증권도 27.3만원으로 상향하는 등 고니켈 사업가치와 삼성SDI向 LFP 신규 진출 가치를 반영한 목표가 랠리 속 분석기간 최고가(225,000원)를 기록.</div>
+      </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.06.29</div>
+        <div class="dp-tl-title">에코프로비엠 유상증자 쇼크 — 배터리 소재株 동반 급락</div>
+        <div class="dp-tl-body">동종업계 에코프로비엠이 인도네시아 니켈 제련소 지분 인수 등을 위해 약 1.2조원 규모 유상증자(20% 할인)를 발표하며 희석 우려가 부각, 배터리 소재 업종 전반이 조정받는 가운데 엘앤에프도 동반 하락(107,000→98,900원).</div>
+      </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.07.14</div>
+        <div class="dp-tl-title">목표주가 하향 — 탄산리튬價 재하락 우려로 -10.6% 급락</div>
+        <div class="dp-tl-body">NH투자증권이 목표주가를 16만원(-16%)으로 하향하고 2분기 영업이익을 컨센서스(502억원) 대비 낮은 275억원으로 전망하며, 탄산리튬 가격이 1분기말 kg당 약 22달러에서 2분기말 약 21달러로 하락해 판가·마진 압박이 우려된다고 지적. 주가는 103,800원에서 90,800원까지 급락.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 5. 투자 포인트 -->
+<div class="dp-acc" id="dpAcc-thesis">
+  <button class="dp-acc-h" onclick="dpToggle('thesis')"><span>5. 투자 포인트</span><span class="dp-acc-chev">▾</span></button>
+  <div class="dp-acc-body">
+    <div class="dp-thesis">
       <div>
-        <div class="ir"><span class="il">1Q26 연결 매출액</span><span class="iv up">7,396억 (▲102.7% YoY) <span class="ev ev-1">우수</span></span></div>
-        <div class="ir"><span class="il">1Q26 연결 영업이익</span><span class="iv up">1,172.6억 (흑자전환) <span class="ev ev-1">우수</span></span></div>
+        <div class="dp-thesis-t bull">긍정 요인</div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>1Q26 영업흑자 전환, 매출 +102.7% 급증</span></div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>고니켈(NCMA95) 출하 확대, 삼성SDI向 LFP 신규 진출</span></div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>美 ESS 수요 급증 등 배터리 업황 회복 사이클 진입</span></div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>52주 저점(25/09/05) 대비 +39.9% 상승, 하방 지지력 확인</span></div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>2025년 영업손실 71.9% 축소, 개선 추세 뚜렷</span></div>
       </div>
       <div>
-        <div class="ir"><span class="il">1Q26 당기순손실</span><span class="iv up">-653.1억 (손실 41.3%↓) <span class="ev ev-2">개선</span></span></div>
-        <div class="ir"><span class="il">1Q26 기본EPS</span><span class="iv up">-1,686원 (전년 동기 -3,305원) <span class="ev ev-2">개선</span></span></div>
-      </div>
-    </div>
-
-    <div style="background:#E3EEFB;border-left:3px solid #1B4F91;border-radius:var(--border-radius-md);padding:12px 14px;margin-bottom:12px;">
-      <div style="font-size:12px;font-weight:600;color:#1B4F91;margin-bottom:5px;">🔑 고니켈 양극재 출하 확대가 실적 개선의 핵심 동력</div>
-      <div style="font-size:12px;color:var(--color-text-primary);line-height:1.7;">1분기26 매출이 전년 동기 대비 두 배 이상(+102.7%) 급증하고 영업이익이 흑자전환한 것은 컨센서스(약 607억원)를 크게 상회(+93%)한 서프라이즈로, NCMA95 등 고니켈 양극재 출하량이 사상 최대치를 기록한 데 힘입은 결과입니다. 삼성SDI를 LFP 양극재 첫 고객사로 확보하는 등 포트폴리오 다각화도 진행 중이나, 순손실은 여전히 지속되고 있어 완전한 이익 정상화까지는 시간이 더 필요합니다.</div>
-    </div>
-
-    <div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:8px;letter-spacing:.03em;">🏦 수익성 지표</div>
-    <div class="g2" style="margin-bottom:12px;font-size:11px;">
-      <div>
-        <div class="ir" style="font-size:11px;"><span class="il">1Q26 영업이익률</span><span>15.85% (1,172.6억÷7,396억)</span></div>
-        <div class="ir" style="font-size:11px;"><span class="il">1Q25 영업이익률</span><span>-38.44% (손실, 참고용)</span></div>
-      </div>
-      <div>
-        <div class="ir" style="font-size:11px;"><span class="il">1Q26 순손실률</span><span>-8.83% (여전히 적자)</span></div>
-        <div class="ir" style="font-size:11px;"><span class="il">부채비율(2025말)</span><span>약 365% — 높은 재무 레버리지</span></div>
+        <div class="dp-thesis-t bear">리스크 요인</div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>부채비율 약 365%, 전환사채·교환사채 관련 파생손실 변동성</span></div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>52주 고점(26/05/04) 대비 -63.2%, 테마 급등 후 대폭 조정</span></div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>탄산리튬 가격 재하락 시 판가·마진 압박 우려</span></div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>주요 고객사(테슬라 등) 공급계약 변동 리스크</span></div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>2년 연속 적자, 누적 결손금 잔존, PER 산출 불가</span></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- 3. 기본 투자지표 -->
-<div class="card">
-  <div class="sec">3. 기본 투자지표 (Per-Share) <span class="src">📄 분기보고서 원문</span></div>
-  <div class="g4">
-    <div class="met"><div class="ml">EPS · 2025</div><div class="mv dn">-15,508원</div><div class="ms">적자 지속 (전년 -11,266원)</div><div style="margin-top:5px;"><span class="ev ev-4">주의</span></div></div>
-    <div class="met"><div class="ml">1Q26 분기 EPS</div><div class="mv dn">-1,686원</div><div class="ms">손실 폭 49.0%↓ (전년 -3,305원)</div><div style="margin-top:5px;"><span class="ev ev-2">개선</span></div></div>
-    <div class="met"><div class="ml">BPS · 주당순자산</div><div class="mv">약 17,482원</div><div class="ms">지배지분 6,731억 ÷ 3,850만주</div><div style="margin-top:5px;"><span class="ev ev-3">참고</span></div></div>
-    <div class="met"><div class="ml">배당</div><div class="mv dn">미실시</div><div class="ms">적자 지속으로 배당 여력 없음</div><div style="margin-top:5px;"><span class="ev ev-4">해당없음</span></div></div>
-  </div>
-</div>
-
-<!-- 4. 상대 투자지표 -->
-<div class="card">
-  <div class="sec">4. 상대 투자지표 — 최근 종가 82,800원 기준</div>
-
-  <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:12px;border-left:3px solid #EF9F27;">
-    <div style="font-size:12px;color:#854F0B;"><strong>💡 밸류에이션 해석:</strong> 순손실 지속으로 PER 산출이 불가하며, PBR 4.74배는 순자산 대비 상당한 프리미엄으로 향후 이익 정상화에 대한 시장 기대가 반영된 수준. <strong>① 1Q26 영업흑자 전환의 지속 여부 ② 탄산리튬 가격 방향성 ③ 전환사채·교환사채 관련 파생상품평가손익 변동성 ④ 높은 부채비율의 재무 리스크</strong>가 핵심 변수.</div>
-  </div>
-
-  <div class="ind-row">
-    <div class="ind-nm">PER</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">2025년·1Q26 모두 순손실 지속<br><span style="color:#791F1F;">EPS 음수로 PER 산출 불가</span></div>
-    <div class="ind-val">N/A</div>
-    <div style="min-width:120px;flex:1;"><div class="bar-bg"><div class="bar-f" style="width:0%;background:#FCEBEB;"></div></div></div>
-    <span class="ev ev-5" style="min-width:58px;text-align:center;">산출불가</span>
-  </div>
-
-  <div class="ind-row"><div class="ind-nm">Forward PER</div><div style="flex:1;font-size:11px;color:var(--color-text-secondary);">1Q26 연환산 EPS 적자 지속<br><span style="color:#791F1F;">EPS 음수로 Forward PER 산출 불가</span></div><div class="ind-val">N/A</div><div style="min-width:120px;flex:1;"><div class="bar-bg"><div class="bar-f" style="width:0%;background:#FCEBEB;"></div></div></div><span class="ev ev-5" style="min-width:58px;text-align:center;">산출불가</span></div>
-
-  <div class="ind-row">
-    <div class="ind-nm">PBR</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">90,200÷17,482(BPS)<br><span style="color:#854F0B;">PBR 4.74x — 이익 정상화 기대를 선반영한 높은 수준</span></div>
-    <div class="ind-val">5.16x</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(2x)</span><span>적정(4x)</span><span>고(7x)</span></div><div class="bar-bg"><div class="bar-f" style="width:58%;background:#FAEEDA;"></div></div></div>
-    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
-  </div>
-
-  <div class="ind-row">
-    <div class="ind-nm">배당수익률</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">적자 지속으로 배당 미실시<br><span style="color:#5F5E5A;">해당사항 없음</span></div>
-    <div class="ind-val">0%</div>
-    <div style="min-width:120px;flex:1;"><div class="bar-bg"><div class="bar-f" style="width:0%;background:#F1EFE8;"></div></div></div>
-    <span class="ev ev-3" style="min-width:58px;text-align:center;">해당없음</span>
-  </div>
-
-  <div class="ind-row">
-    <div class="ind-nm">HC / LC 수익률</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">고점(225,000, 26/05/04) 및 저점(59,200, 25/09/05) 대비 현재가<br><span style="color:#791F1F;">HC -59.91% — 급등 후 3분의 2 가까이 반납, LC +52.36%</span></div>
-    <div class="ind-val">-59.9%</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>-70%</span><span>-35%</span><span>0%</span></div><div class="bar-bg"><div class="bar-f" style="width:12%;background:#FCEBEB;"></div></div></div>
-    <span class="ev ev-5" style="min-width:58px;text-align:center;">5단계</span>
-  </div>
-</div>
-
-<!-- 5. 시계열 이벤트 -->
-<div class="card">
-  <div class="sec">5. 시계열 주요 이벤트 <span class="src">📄 OpenDART 공시 원문 + 📊 Yahoo Finance 일봉 + 언론보도</span></div>
-
-  <div class="tl">
-    <div class="tl-item">
-      <div class="tl-dot dot-neg"></div>
-      <div class="tl-date">2025년 12월 29일</div>
-      <div class="tl-title">테슬라 공급계약 축소 공시 — 단기 급락(-9.8%)</div>
-      <div class="tl-body">고니켈 양극재 공급계약 규모가 기존 약 3.8조원에서 약 973만원 수준으로 대폭 축소됐다는 공시가 나오며 주가가 105,600→95,200원으로 급락. 다만 이후 업황 개선 기대감 속 주가는 재차 반등.</div>
-      <span class="tag tag-neg">계약 축소</span>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-dot dot-big"></div>
-      <div class="tl-date">2026년 04월 30일</div>
-      <div class="tl-title">1분기26 실적 서프라이즈 — 매출 2배, 영업흑자 전환</div>
-      <div class="tl-body">매출 7,396억원(+102.7% YoY), 영업이익 1,172.6억원(컨센서스 대비 +93%)으로 어닝서프라이즈를 기록했으나, 이미 기대감이 선반영되며 발표 당일 주가는 오히려 -6.65% 하락(208,000→195,100원).</div>
-      <span class="tag tag-pos">실적 서프라이즈</span><span class="tag tag-neg">재료소진 하락</span>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-dot dot-big"></div>
-      <div class="tl-date">2026년 05월 04일~05일</div>
-      <div class="tl-title">52주 신고가(225,000원) — 목표주가 대폭 상향</div>
-      <div class="tl-body">미래에셋증권이 목표주가를 18만원→30만원으로, 하나증권도 27.3만원으로 상향하는 등 고니켈 사업가치와 삼성SDI向 LFP 신규 진출 가치를 반영한 목표가 랠리 속 분석기간 최고가(225,000원)를 기록.</div>
-      <span class="tag tag-big">52주 신고가</span><span class="tag tag-pos">목표가 상향</span>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-dot dot-neg"></div>
-      <div class="tl-date">2026년 06월 29일</div>
-      <div class="tl-title">에코프로비엠 유상증자 쇼크 — 배터리 소재株 동반 급락</div>
-      <div class="tl-body">동종업계 에코프로비엠이 인도네시아 니켈 제련소 지분 인수 등을 위해 약 1.2조원 규모 유상증자(20% 할인)를 발표하며 희석 우려가 부각, 배터리 소재 업종 전반이 조정받는 가운데 엘앤에프도 동반 하락(107,000→98,900원, 6/26 저점 이후 재차 급락).</div>
-      <span class="tag tag-neg">업종 쇼크</span><span class="tag tag-neg">희석 우려</span>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-dot dot-neg"></div>
-      <div class="tl-date">2026년 07월 14일</div>
-      <div class="tl-title">목표주가 하향 — 탄산리튬價 재하락 우려로 -10.6% 급락</div>
-      <div class="tl-body">NH투자증권이 목표주가를 16만원(-16%)으로 하향하고 2분기 영업이익을 컨센서스(502억원) 대비 낮은 275억원으로 전망하며, 탄산리튬 가격이 1분기말 kg당 약 22달러에서 2분기말 약 21달러로 하락해 판가·마진 압박이 우려된다고 지적. 주가는 103,800원에서 90,800원까지 급락.</div>
-      <span class="tag tag-neg">목표가 하향</span><span class="tag tag-neg">리튬가 하락</span>
+<!-- 6. 애널리스트 컨센서스 -->
+<div class="dp-acc" id="dpAcc-consensus">
+  <button class="dp-acc-h" onclick="dpToggle('consensus')"><span>6. 애널리스트 컨센서스</span><span class="dp-acc-chev">▾</span></button>
+  <div class="dp-acc-body">
+    <table>
+      <thead>
+        <tr>
+          <th class="dp-cons-th">증권사</th>
+          <th class="dp-cons-th" style="text-align:right;">목표주가</th>
+          <th class="dp-cons-th" style="text-align:center;">의견</th>
+          <th class="dp-cons-th" style="text-align:right;">작성일</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="dp-cons-td">iM증권</td><td class="dp-cons-td" style="text-align:right;font-weight:700;">250,000원</td><td class="dp-cons-td" style="text-align:center;"><span class="dp-cons-badge">매수</span></td><td class="dp-cons-td" style="text-align:right;color:var(--dp-text4);">26.05.11</td></tr>
+        <tr><td class="dp-cons-td">하나증권</td><td class="dp-cons-td" style="text-align:right;font-weight:700;">273,000원</td><td class="dp-cons-td" style="text-align:center;"><span class="dp-cons-badge">매수</span></td><td class="dp-cons-td" style="text-align:right;color:var(--dp-text4);">26.05.06</td></tr>
+        <tr><td class="dp-cons-td">한화투자증권</td><td class="dp-cons-td" style="text-align:right;font-weight:700;">240,000원</td><td class="dp-cons-td" style="text-align:center;"><span class="dp-cons-badge">매수</span></td><td class="dp-cons-td" style="text-align:right;color:var(--dp-text4);">26.05.04</td></tr>
+        <tr><td class="dp-cons-td">DS투자증권</td><td class="dp-cons-td" style="text-align:right;font-weight:700;">350,000원</td><td class="dp-cons-td" style="text-align:center;"><span class="dp-cons-badge">매수</span></td><td class="dp-cons-td" style="text-align:right;color:var(--dp-text4);">26.05.04</td></tr>
+        <tr><td class="dp-cons-td">교보증권</td><td class="dp-cons-td" style="text-align:right;font-weight:700;">280,000원</td><td class="dp-cons-td" style="text-align:center;"><span class="dp-cons-badge">매수</span></td><td class="dp-cons-td" style="text-align:right;color:var(--dp-text4);">26.05.04</td></tr>
+      </tbody>
+    </table>
+    <div class="dp-cons-summary">
+      <div><span style="color:var(--dp-text3);">평균 목표주가</span> <strong>279,000원 (5개 증권사)</strong></div>
+      <div><span style="color:var(--dp-text3);">현재가 대비</span> <strong style="color:var(--dp-up);">+325.3%</strong></div>
     </div>
   </div>
 </div>
 
-<!-- 6. 투자 포인트 -->
-<div class="card">
-  <div class="sec">6. 2026년 핵심 투자 포인트</div>
-  <div class="g2">
-    <div>
-      <div style="font-size:13px;font-weight:600;margin-bottom:7px;color:#1D9E75;">긍정 요인 (Bull)</div>
-      <div class="ir"><span class="il">1Q26 영업흑자 전환, 매출 +102.7% 급증</span><span class="badge b-green">실적 턴어라운드</span></div>
-      <div class="ir"><span class="il">고니켈(NCMA95) 출하 확대, 삼성SDI向 LFP 신규 진출</span><span class="badge b-lnf">포트폴리오 다각화</span></div>
-      <div class="ir"><span class="il">美 ESS 수요 급증 등 배터리 업황 회복 사이클 진입</span><span class="badge b-blue">업황 회복</span></div>
-      <div class="ir"><span class="il">52주 저점(25/09/05) 대비 +39.9% 상승, 하방 지지력 확인</span><span class="badge b-blue">저점권 확인</span></div>
-      <div class="ir"><span class="il">2025년 영업손실 71.9% 축소, 개선 추세 뚜렷</span><span class="badge b-green">손실 축소 추세</span></div>
-    </div>
-    <div>
-      <div style="font-size:13px;font-weight:600;margin-bottom:7px;color:#D85A30;">리스크 (Bear)</div>
-      <div class="ir"><span class="il">부채비율 약 365%, 전환사채·교환사채 관련 파생손실 변동성</span><span class="badge b-red">재무 레버리지 위험</span></div>
-      <div class="ir"><span class="il">52주 고점(26/05/04) 대비 -63.2%, 테마 급등 후 대폭 조정</span><span class="badge b-red">가격 변동성</span></div>
-      <div class="ir"><span class="il">탄산리튬 가격 재하락 시 판가·마진 압박 우려</span><span class="badge b-amber">원자재價 변동성</span></div>
-      <div class="ir"><span class="il">주요 고객사(테슬라 등) 공급계약 변동 리스크</span><span class="badge b-amber">고객 집중 리스크</span></div>
-      <div class="ir"><span class="il">2년 연속 적자, 누적 결손금 잔존, PER 산출 불가</span><span class="badge b-gray">재무구조 미정상화</span></div>
-    </div>
-  </div>
-  <div class="ib">
-    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
-      <div><span style="color:var(--color-text-secondary);">시총:</span> <span style="font-weight:600;">~3.19조원</span></div>
-      <div><span style="color:var(--color-text-secondary);">2025 EPS:</span> <span style="font-weight:600;">-15,508원 (PER 산출불가)</span></div>
-      <div><span style="color:var(--color-text-secondary);">BPS:</span> <span style="font-weight:600;">~17,482원 (PBR 4.74x)</span></div>
-      <div><span style="color:var(--color-text-secondary);">부채비율:</span> <span style="font-weight:600;">약 365%</span></div>
-    </div>
-  </div>
-  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">⚠ 사업보고서(2025) + 분기보고서(1Q26) OpenDART 원문 + Yahoo Finance 일봉 기준 · 투자 권고가 아닙니다</div>
-</div>
-
-<!-- 7. 애널리스트 컨센서스 -->
-<div class="card">
-  <div class="sec">7. 애널리스트 컨센서스 — 증권사별 목표주가 (Naver Finance 리서치)</div>
-
-  <div style="display:grid;grid-template-columns:120px 90px 70px 70px;gap:4px 10px;font-size:11px;color:var(--color-text-tertiary);font-weight:600;padding:0 2px 6px;border-bottom:1px solid var(--color-border-tertiary);">
-    <div>증권사</div><div style="text-align:right;">목표주가</div><div>투자의견</div><div style="text-align:right;">작성일</div>
-  </div>
-  <div style="display:grid;grid-template-columns:120px 90px 70px 70px;gap:4px 10px;font-size:12.5px;padding:7px 2px;border-bottom:1px solid var(--color-border-tertiary);align-items:center;">
-    <div>iM증권</div><div style="text-align:right;font-weight:600;">250,000원</div><div><span class="badge b-green">매수</span></div><div style="text-align:right;color:var(--color-text-tertiary);">26.05.11</div>
-  </div>
-  <div style="display:grid;grid-template-columns:120px 90px 70px 70px;gap:4px 10px;font-size:12.5px;padding:7px 2px;border-bottom:1px solid var(--color-border-tertiary);align-items:center;">
-    <div>하나증권</div><div style="text-align:right;font-weight:600;">273,000원</div><div><span class="badge b-green">매수</span></div><div style="text-align:right;color:var(--color-text-tertiary);">26.05.06</div>
-  </div>
-  <div style="display:grid;grid-template-columns:120px 90px 70px 70px;gap:4px 10px;font-size:12.5px;padding:7px 2px;border-bottom:1px solid var(--color-border-tertiary);align-items:center;">
-    <div>한화투자증권</div><div style="text-align:right;font-weight:600;">240,000원</div><div><span class="badge b-green">매수</span></div><div style="text-align:right;color:var(--color-text-tertiary);">26.05.04</div>
-  </div>
-  <div style="display:grid;grid-template-columns:120px 90px 70px 70px;gap:4px 10px;font-size:12.5px;padding:7px 2px;border-bottom:1px solid var(--color-border-tertiary);align-items:center;">
-    <div>DS투자증권</div><div style="text-align:right;font-weight:600;">350,000원</div><div><span class="badge b-green">매수</span></div><div style="text-align:right;color:var(--color-text-tertiary);">26.05.04</div>
-  </div>
-  <div style="display:grid;grid-template-columns:120px 90px 70px 70px;gap:4px 10px;font-size:12.5px;padding:7px 2px;border-bottom:1px solid var(--color-border-tertiary);align-items:center;">
-    <div>교보증권</div><div style="text-align:right;font-weight:600;">280,000원</div><div><span class="badge b-green">매수</span></div><div style="text-align:right;color:var(--color-text-tertiary);">26.05.04</div>
-  </div>
-
-  <div class="ib" style="margin-top:10px;">
-    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
-      <div><span style="color:var(--color-text-secondary);">평균 목표주가:</span> <span style="font-weight:600;">279,000원 (5개 증권사)</span></div>
-      <div><span style="color:var(--color-text-secondary);">현재가 대비:</span> <span style="font-weight:600;color:#1D9E75;">+325.3%</span></div>
-    </div>
-  </div>
-
-  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">⚠ Naver Finance 증권사 리서치(브로커별 최신 1건, 2026-07-30 조회) 기준 · 목표주가는 각 리포트 발간 시점 기준이며 실시간 반영이 아닐 수 있음 · 투자 권고가 아닙니다</div>
-</div>
+<div class="dp-footer-note">OpenDART 공시 원문 + Yahoo Finance 시세 기준 · 투자 권고가 아닙니다</div>
 
 </div>
 
 <script>
-function switchTab(tab) {
-  const isA=tab==='annual';
-  document.getElementById('tabAnnual').style.display=isA?'':'none';
-  document.getElementById('tabQuarter').style.display=isA?'none':'';
-  const aS='flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:8px;font-size:13px;cursor:pointer;transition:all .15s;background:#1B4F91;border:1.5px solid #1B4F91;color:#fff;font-weight:600;';
-  const iS='flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 0;border-radius:8px;font-size:13px;cursor:pointer;transition:all .15s;background:var(--color-background-secondary);border:1.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);font-weight:500;';
-  document.getElementById('btnAnnual').style.cssText=isA?aS:iS;
-  document.getElementById('btnQuarter').style.cssText=isA?iS:aS;
-  if(!isA && !window._qDrawn){ window._qDrawn=true; drawQtrChart(); }
+const SECTION_IDS = ['tech','fund','valuation','timeline','thesis','consensus'];
+let _dpTechDrawn = false, _dpAnnualDrawn = false, _dpQtrDrawn = false;
+
+function dpToggle(id) {
+  const el = document.getElementById('dpAcc-' + id);
+  const willOpen = !el.classList.contains('open');
+  el.classList.toggle('open', willOpen);
+  if (willOpen && id === 'tech' && !_dpTechDrawn) {
+    _dpTechDrawn = true;
+    renderCandleChart({svgId:'lnfSvg', controlsId:'lnfChartControls', data: data});
+  }
+  if (willOpen && id === 'fund' && !_dpAnnualDrawn) {
+    _dpAnnualDrawn = true;
+    drawAnnualChart();
+  }
+}
+function dpOpenAll() {
+  SECTION_IDS.forEach((id) => {
+    document.getElementById('dpAcc-' + id).classList.add('open');
+  });
+  if (!_dpTechDrawn) { _dpTechDrawn = true; renderCandleChart({svgId:'lnfSvg', controlsId:'lnfChartControls', data: data}); }
+  if (!_dpAnnualDrawn) { _dpAnnualDrawn = true; drawAnnualChart(); }
+}
+function dpCloseAll() {
+  SECTION_IDS.forEach((id) => {
+    document.getElementById('dpAcc-' + id).classList.remove('open');
+  });
+}
+
+function dpSetFundTab(tab) {
+  const isAnnual = tab === 'annual';
+  document.getElementById('dpFundAnnual').style.display = isAnnual ? '' : 'none';
+  document.getElementById('dpFundQuarter').style.display = isAnnual ? 'none' : '';
+  document.getElementById('dpFundAnnualBtn').classList.toggle('active', isAnnual);
+  document.getElementById('dpFundQuarterBtn').classList.toggle('active', !isAnnual);
+  if (!isAnnual && !_dpQtrDrawn) { _dpQtrDrawn = true; drawQtrChart(); }
 }
 
 function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
@@ -449,7 +445,7 @@ function drawAnnualChart(){
   const minV=Math.min(...oi)*1.3;
   function py(v){ return pT+cH*(1-(v-minV)/(maxV-minV)); }
   const zeroY=py(0);
-  svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:zeroY,y2:zeroY,stroke:cssVar('--color-border-tertiary'),'stroke-width':1}));
+  svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:zeroY,y2:zeroY,stroke:cssVar('--dp-border'),'stroke-width':1}));
   const revCol='#8B93A0', oiCol='#1B4F91';
   cats.forEach((cat,i)=>{
     const gx=pL+i*(cW/cats.length)+(cW/cats.length)/2;
@@ -464,14 +460,14 @@ function drawAnnualChart(){
     t1.textContent=Math.round(rev[i])+'억'; svg.appendChild(t1);
     const t2=svgEl('text',{x:ox+barW/2,y:oi[i]>=0?oTop-4:oBot+12,'text-anchor':'middle','font-size':9,fill:col,'font-weight':600});
     t2.textContent=Math.round(oi[i])+'억'; svg.appendChild(t2);
-    const t3=svgEl('text',{x:gx,y:H-6,'text-anchor':'middle','font-size':10,fill:cssVar('--color-text-secondary')});
+    const t3=svgEl('text',{x:gx,y:H-6,'text-anchor':'middle','font-size':10,fill:cssVar('--dp-text3')});
     t3.textContent=cat; svg.appendChild(t3);
   });
   const legend=[[revCol,'매출액'],[oiCol,'영업이익(손실)']];
   legend.forEach((l,i)=>{
     const lx=pL+i*90;
     svg.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
-    const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:cssVar('--color-text-secondary')});
+    const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:cssVar('--dp-text3')});
     t.textContent=l[1]; svg.appendChild(t);
   });
 }
@@ -486,7 +482,7 @@ function drawQtrChart(){
   const maxV=Math.max(...vals)*1.15;
   const minV=Math.min(...vals)*1.15;
   function py(v){ return pT+cH*(1-(v-minV)/(maxV-minV)); }
-  svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:py(0),y2:py(0),stroke:cssVar('--color-border-tertiary'),'stroke-width':1}));
+  svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:py(0),y2:py(0),stroke:cssVar('--dp-border'),'stroke-width':1}));
   labels.forEach((lab,i)=>{
     const gx=pL+i*(cW/labels.length)+(cW/labels.length)/2;
     const barW=(cW/labels.length)*0.5;
@@ -494,11 +490,10 @@ function drawQtrChart(){
     svg.appendChild(svgEl('rect',{x:gx-barW/2,y:top,width:barW,height:Math.max(bot-top,1),fill:cols[i],rx:3}));
     const t1=svgEl('text',{x:gx,y:vals[i]>=0?top-6:bot+14,'text-anchor':'middle','font-size':10,fill:cols[i],'font-weight':600});
     t1.textContent=Math.round(vals[i])+'억'; svg.appendChild(t1);
-    const t2=svgEl('text',{x:gx,y:H-8,'text-anchor':'middle','font-size':9,fill:cssVar('--color-text-secondary')});
+    const t2=svgEl('text',{x:gx,y:H-8,'text-anchor':'middle','font-size':9,fill:cssVar('--dp-text3')});
     t2.textContent=lab; svg.appendChild(t2);
   });
 }
-drawAnnualChart();
 
 // ── SVG 캔들차트 (Yahoo Finance 일봉 실데이터) ────────────────────────
 const data=[
@@ -544,6 +539,4 @@ const data=[
 {d:'2026-07-28',o:7.57,h:7.7,l:7,c:7.16},{d:'2026-07-29',o:7.18,h:7.33,l:6.3,c:6.56},{d:'2026-07-30',o:6.34,h:7.04,l:6.34,c:6.7},{d:'2026-07-31',o:7.09,h:7.35,l:6.86,c:7.33},{d:'2026-08-03',o:7.18,h:7.48,l:6.98,c:7.27},{d:'2026-08-04',o:7.49,h:7.9,l:7.45,c:7.75},
 {d:'2026-08-05',o:8.17,h:8.21,l:7.9,c:7.98},{d:'2026-08-06',o:8.08,h:8.32,l:7.7,c:7.98},{d:'2026-08-07',o:8.55,h:9.76,l:8.3,c:9.02}
 ];
-
-renderCandleChart({svgId:'lnfSvg', controlsId:'lnfChartControls', data: data});
 </script>
