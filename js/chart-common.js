@@ -1,9 +1,48 @@
+// 차트를 화면 전체 너비로 크게 보여주는 오버레이 — 모바일에서 좁은 폭에 눌린 캔들/글씨를
+// 뷰포트 전체 폭으로 확대해서 보기 위함. wrap(.kc-chart-wrap)과 controls(.kc-controls)를
+// 그대로 옮겨서(재렌더링 없이) 보여주고, 닫으면 원래 위치로 복원.
+function openChartFullscreen(wrap, controls) {
+  if (document.querySelector('.kc-fullscreen-overlay')) return;
+  const parent = wrap.parentNode;
+  const beforeNode = wrap.nextSibling;
+  const expandBtn = wrap.querySelector('.kc-expand-btn');
+
+  const overlay = document.createElement('div');
+  overlay.className = 'kc-fullscreen-overlay';
+  const closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = 'kc-fullscreen-close';
+  closeBtn.setAttribute('aria-label', '닫기');
+  closeBtn.textContent = '✕';
+  overlay.appendChild(closeBtn);
+
+  if (expandBtn) expandBtn.style.display = 'none';
+  if (controls) overlay.appendChild(controls);
+  overlay.appendChild(wrap);
+  document.body.appendChild(overlay);
+  document.body.classList.add('kc-fullscreen-open');
+
+  function close() {
+    if (controls) parent.insertBefore(controls, beforeNode);
+    parent.insertBefore(wrap, beforeNode);
+    if (expandBtn) expandBtn.style.display = '';
+    overlay.remove();
+    document.body.classList.remove('kc-fullscreen-open');
+    document.removeEventListener('keydown', onKey);
+  }
+  function onKey(e) { if (e.key === 'Escape') close(); }
+  document.addEventListener('keydown', onKey);
+  closeBtn.addEventListener('click', close);
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+}
+
 // 공통 캔들차트 렌더러 — 기간 전환(1개월/3개월/6개월/1년) + 마우스 호버 툴팁
 // data: [{d:'YYYY-MM-DD', o,h,l,c}, ...] (오름차순, 만원 단위), 외부 CDN 없이 순수 SVG로 렌더링
 function renderCandleChart(cfg) {
   const svg = document.getElementById(cfg.svgId);
   if (!svg) return;
   const data = cfg.data;
+  const controls = cfg.controlsId ? document.getElementById(cfg.controlsId) : null;
   const W = 720, H = 240, pL = 64, pR = 12, pT = 14, pB = 24;
   const cW = W - pL - pR, cH = H - pT - pB;
 
@@ -34,6 +73,16 @@ function renderCandleChart(cfg) {
     tip = document.createElement('div');
     tip.className = 'kc-tooltip';
     wrap.appendChild(tip);
+  }
+  let expandBtn = wrap.querySelector('.kc-expand-btn');
+  if (!expandBtn) {
+    expandBtn = document.createElement('button');
+    expandBtn.type = 'button';
+    expandBtn.className = 'kc-expand-btn';
+    expandBtn.setAttribute('aria-label', '차트 크게 보기');
+    expandBtn.textContent = '⤢ 크게 보기';
+    expandBtn.addEventListener('click', function () { openChartFullscreen(wrap, controls); });
+    wrap.appendChild(expandBtn);
   }
 
   function render(periodDays) {
@@ -155,7 +204,6 @@ function renderCandleChart(cfg) {
     });
   }
 
-  const controls = cfg.controlsId ? document.getElementById(cfg.controlsId) : null;
   if (controls) {
     const periods = [['1개월', 21], ['3개월', 63], ['6개월', 126], ['1년', 9999]];
     controls.innerHTML = '';
