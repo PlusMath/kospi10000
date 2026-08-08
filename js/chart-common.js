@@ -1,6 +1,8 @@
 // 차트를 화면 전체 너비로 크게 보여주는 오버레이 — 모바일에서 좁은 폭에 눌린 캔들/글씨를
 // 뷰포트 전체 폭으로 확대해서 보기 위함. wrap(.kc-chart-wrap)과 controls(.kc-controls)를
 // 그대로 옮겨서(재렌더링 없이) 보여주고, 닫으면 원래 위치로 복원.
+// 지원되는 브라우저(주로 안드로이드 크롬 계열)에서는 전체화면 + 가로모드 강제 전환도 시도.
+// iOS Safari는 정책상 자동 가로 회전을 지원하지 않아 실패해도 조용히 무시하고 세로로 그대로 표시.
 function openChartFullscreen(wrap, controls) {
   if (document.querySelector('.kc-fullscreen-overlay')) return;
   const parent = wrap.parentNode;
@@ -22,16 +24,38 @@ function openChartFullscreen(wrap, controls) {
   document.body.appendChild(overlay);
   document.body.classList.add('kc-fullscreen-open');
 
+  const reqFullscreen = overlay.requestFullscreen || overlay.webkitRequestFullscreen;
+  if (reqFullscreen) {
+    Promise.resolve(reqFullscreen.call(overlay)).then(function () {
+      if (screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock('landscape').catch(function () {});
+      }
+    }).catch(function () {});
+  }
+
+  let closed = false;
   function close() {
+    if (closed) return;
+    closed = true;
+    if (screen.orientation && screen.orientation.unlock) {
+      try { screen.orientation.unlock(); } catch (e) {}
+    }
+    const exitFullscreen = document.exitFullscreen || document.webkitExitFullscreen;
+    if (exitFullscreen && (document.fullscreenElement || document.webkitFullscreenElement)) {
+      Promise.resolve(exitFullscreen.call(document)).catch(function () {});
+    }
     if (controls) parent.insertBefore(controls, beforeNode);
     parent.insertBefore(wrap, beforeNode);
     if (expandBtn) expandBtn.style.display = '';
     overlay.remove();
     document.body.classList.remove('kc-fullscreen-open');
     document.removeEventListener('keydown', onKey);
+    document.removeEventListener('fullscreenchange', onFsChange);
   }
   function onKey(e) { if (e.key === 'Escape') close(); }
+  function onFsChange() { if (!document.fullscreenElement) close(); }
   document.addEventListener('keydown', onKey);
+  document.addEventListener('fullscreenchange', onFsChange);
   closeBtn.addEventListener('click', close);
   overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
 }
