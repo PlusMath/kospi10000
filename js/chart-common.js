@@ -1,3 +1,26 @@
+// 임의의 SVG(연간/분기 막대그래프 등, 캔들차트 전용 로직이 필요 없는 단순 차트)에
+// "크게 보기" 버튼을 붙여주는 범용 헬퍼. 각 종목 파일의 drawAnnualChart()/drawQtrChart()
+// 끝에서 자기 자신의 svg 변수를 넘겨 호출한다. 캔들차트(renderCandleChart)는 자체적으로
+// 이 로직을 내장하고 있어 별도 호출이 필요 없음.
+function addChartExpandButton(svg) {
+  if (!svg) return;
+  let wrap = svg.closest('.kc-chart-wrap');
+  if (!wrap) {
+    wrap = document.createElement('div');
+    wrap.className = 'kc-chart-wrap';
+    svg.parentNode.insertBefore(wrap, svg);
+    wrap.appendChild(svg);
+  }
+  if (wrap.querySelector('.kc-expand-btn')) return;
+  const expandBtn = document.createElement('button');
+  expandBtn.type = 'button';
+  expandBtn.className = 'kc-expand-btn';
+  expandBtn.setAttribute('aria-label', '차트 크게 보기');
+  expandBtn.textContent = '⤢ 크게 보기';
+  expandBtn.addEventListener('click', function () { openChartFullscreen(wrap, null); });
+  wrap.appendChild(expandBtn);
+}
+
 // 차트를 화면 전체 너비로 크게 보여주는 오버레이 — 모바일에서 좁은 폭에 눌린 캔들/글씨를
 // 뷰포트 전체 폭으로 확대해서 보기 위함. wrap(.kc-chart-wrap)과 controls(.kc-controls)를
 // 그대로 옮겨서(재렌더링 없이) 보여주고, 닫으면 원래 위치로 복원.
