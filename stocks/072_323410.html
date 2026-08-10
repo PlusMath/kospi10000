@@ -85,7 +85,7 @@ body{background:var(--dp-bg);}
 .dp-gauge-h span:last-child{font-size:14px;font-weight:800;}
 .dp-gauge-track{background:oklch(0.93 0.004 90);border-radius:5px;height:6px;margin-bottom:5px;}
 .dp-gauge-fill{background:var(--dp-accent);border-radius:5px;height:6px;}
-.dp-gauge-note{font-size:11.5px;color:var(--dp-text3);line-height:1.55;}.dp-gauge-scale{display:flex;justify-content:space-between;font-size:9px;color:var(--dp-text4);margin-bottom:3px;}.dp-gauge-fill.tier-low{background:var(--dp-down);}.dp-gauge-fill.tier-mid{background:oklch(0.78 0.008 90);}.dp-gauge-fill.tier-high{background:var(--dp-up);}.dp-peercmp{background:oklch(0.97 0.004 90);border-radius:10px;padding:12px 14px;margin-bottom:14px;}.dp-peercmp-h{font-size:11px;font-weight:700;color:var(--dp-text3);margin-bottom:10px;}.dp-peercmp-row{display:grid;grid-template-columns:74px 1fr 54px;align-items:center;gap:8px;margin-bottom:7px;}.dp-peercmp-row:last-child{margin-bottom:0;}.dp-peercmp-name{font-size:11.5px;color:var(--dp-text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.dp-peercmp-row.self .dp-peercmp-name{font-weight:800;color:var(--dp-text);}.dp-peercmp-track{background:oklch(0.91 0.004 90);border-radius:5px;height:6px;}.dp-peercmp-fill{background:var(--dp-text4);border-radius:5px;height:6px;}.dp-peercmp-row.self .dp-peercmp-fill{background:var(--dp-accent);}.dp-peercmp-val{font-size:11.5px;font-weight:700;text-align:right;}.dp-peercmp-row.self .dp-peercmp-val{color:var(--dp-accent);}
+.dp-gauge-note{font-size:11.5px;color:var(--dp-text3);line-height:1.55;}.dp-gauge-row{display:flex;align-items:center;gap:14px;}.dp-gauge-label{flex:0 0 118px;min-width:0;}.dp-gauge-nm{font-size:13px;font-weight:700;margin-bottom:3px;}.dp-gauge-val{font-size:14px;font-weight:800;}.dp-gauge-note{flex:1;min-width:0;}.dp-gauge-bar{flex:0 0 130px;min-width:0;}.dp-gauge-scale{display:flex;justify-content:space-between;font-size:9px;color:var(--dp-text4);margin-bottom:3px;}.dp-gauge-fill.tier-low{background:var(--dp-down);}.dp-gauge-fill.tier-mid{background:oklch(0.78 0.008 90);}.dp-gauge-fill.tier-high{background:var(--dp-up);}.dp-peercmp{background:oklch(0.97 0.004 90);border-radius:10px;padding:12px 14px;margin-bottom:14px;}.dp-peercmp-h{font-size:11px;font-weight:700;color:var(--dp-text3);margin-bottom:10px;}.dp-peercmp-row{display:grid;grid-template-columns:74px 1fr 54px;align-items:center;gap:8px;margin-bottom:7px;}.dp-peercmp-row:last-child{margin-bottom:0;}.dp-peercmp-name{font-size:11.5px;color:var(--dp-text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.dp-peercmp-row.self .dp-peercmp-name{font-weight:800;color:var(--dp-text);}.dp-peercmp-track{background:oklch(0.91 0.004 90);border-radius:5px;height:6px;}.dp-peercmp-fill{background:var(--dp-text4);border-radius:5px;height:6px;}.dp-peercmp-row.self .dp-peercmp-fill{background:var(--dp-accent);}.dp-peercmp-val{font-size:11.5px;font-weight:700;text-align:right;}.dp-peercmp-row.self .dp-peercmp-val{color:var(--dp-accent);}
 .dp-tl{position:relative;padding-left:22px;}
 .dp-tl::before{content:'';position:absolute;left:5px;top:4px;bottom:4px;width:2px;background:var(--dp-border);border-radius:2px;}
 .dp-tl-item{position:relative;margin-bottom:18px;}
@@ -141,7 +141,7 @@ body{background:var(--dp-bg);}
   .dp-share-s{font-size:11.5px;}
   .dp-gauge-h span:first-child{font-size:14.5px;}
   .dp-gauge-h span:last-child{font-size:15.5px;}
-  .dp-gauge-note{font-size:13.5px;}.dp-gauge-scale{font-size:11px;}.dp-peercmp-h{font-size:13px;}.dp-peercmp-row{grid-template-columns:92px 1fr 62px;}.dp-peercmp-name{font-size:13px;}.dp-peercmp-val{font-size:13px;}
+  .dp-gauge-note{font-size:13.5px;}.dp-gauge-row{flex-wrap:wrap;gap:8px;}.dp-gauge-label{flex:1 1 100%;display:flex;justify-content:space-between;align-items:baseline;}.dp-gauge-note{flex:1 1 100%;}.dp-gauge-bar{flex:1 1 100%;}.dp-gauge-scale{font-size:11px;}.dp-peercmp-h{font-size:13px;}.dp-peercmp-row{grid-template-columns:92px 1fr 62px;}.dp-peercmp-name{font-size:13px;}.dp-peercmp-val{font-size:13px;}
   .dp-tl-date{font-size:12.5px;}
   .dp-tl-title{font-size:15px;}
   .dp-tl-body{font-size:14px;}
@@ -306,10 +306,14 @@ body{background:var(--dp-bg);}
     </div>
 
     <div class="dp-gauge">
-      <div class="dp-gauge-h"><span>PER (2025 EPS)</span><span>21.83x</span></div>
-      <div class="dp-gauge-scale"><span>저(10x)</span><span>적정(20x)</span><span>고(35x)</span></div>
-      <div class="dp-gauge-track"><div class="dp-gauge-fill tier-mid" style="width:47%;"></div></div>
-      <div class="dp-gauge-note">22,000÷1,008 · 업종 평균 PER 9.12x 대비 +139.4% 고평가 (업종 내 16개 종목 비교).</div>
+      <div class="dp-gauge-row">
+        <div class="dp-gauge-label"><div class="dp-gauge-nm">PER (2025 EPS)</div><div class="dp-gauge-val">21.83x</div></div>
+        <div class="dp-gauge-note">22,000÷1,008 · 업종 평균 PER 9.12x 대비 +139.4% 고평가 (업종 내 16개 종목 비교).</div>
+        <div class="dp-gauge-bar">
+          <div class="dp-gauge-scale"><span>저(10x)</span><span>적정(20x)</span><span>고(35x)</span></div>
+          <div class="dp-gauge-track"><div class="dp-gauge-fill tier-mid" style="width:47%;"></div></div>
+        </div>
+      </div>
     </div>
     <!-- dp-peercmp:start -->
     <div class="dp-peercmp">
@@ -342,22 +346,34 @@ body{background:var(--dp-bg);}
     </div>
     <!-- dp-peercmp:end -->
     <div class="dp-gauge">
-      <div class="dp-gauge-h"><span>Forward PER (1Q26 연환산)</span><span>13.99x</span></div>
-      <div class="dp-gauge-scale"><span>저(10x)</span><span>적정(20x)</span><span>고(35x)</span></div>
-      <div class="dp-gauge-track"><div class="dp-gauge-fill tier-mid" style="width:16%;"></div></div>
-      <div class="dp-gauge-note">22,000÷1,572(1Q26 연환산 EPS) · 트레일링 대비 35.7% 낮아 저평가 부각 가능.</div>
+      <div class="dp-gauge-row">
+        <div class="dp-gauge-label"><div class="dp-gauge-nm">Forward PER (1Q26 연환산)</div><div class="dp-gauge-val">13.99x</div></div>
+        <div class="dp-gauge-note">22,000÷1,572(1Q26 연환산 EPS) · 트레일링 대비 35.7% 낮아 저평가 부각 가능.</div>
+        <div class="dp-gauge-bar">
+          <div class="dp-gauge-scale"><span>저(10x)</span><span>적정(20x)</span><span>고(35x)</span></div>
+          <div class="dp-gauge-track"><div class="dp-gauge-fill tier-mid" style="width:16%;"></div></div>
+        </div>
+      </div>
     </div>
     <div class="dp-gauge">
-      <div class="dp-gauge-h"><span>PBR</span><span>1.55x</span></div>
-      <div class="dp-gauge-scale"><span>저(1x)</span><span>적정(2x)</span><span>고(4x)</span></div>
-      <div class="dp-gauge-track"><div class="dp-gauge-fill tier-mid" style="width:18%;"></div></div>
-      <div class="dp-gauge-note">22,000÷14,166 · 업종 평균 PBR 0.96x 대비 +62.1% 고평가 (업종 내 16개 종목 비교).</div>
+      <div class="dp-gauge-row">
+        <div class="dp-gauge-label"><div class="dp-gauge-nm">PBR</div><div class="dp-gauge-val">1.55x</div></div>
+        <div class="dp-gauge-note">22,000÷14,166 · 업종 평균 PBR 0.96x 대비 +62.1% 고평가 (업종 내 16개 종목 비교).</div>
+        <div class="dp-gauge-bar">
+          <div class="dp-gauge-scale"><span>저(1x)</span><span>적정(2x)</span><span>고(4x)</span></div>
+          <div class="dp-gauge-track"><div class="dp-gauge-fill tier-mid" style="width:18%;"></div></div>
+        </div>
+      </div>
     </div>
     <div class="dp-gauge">
-      <div class="dp-gauge-h"><span>배당수익률</span><span>2.09%</span></div>
-      <div class="dp-gauge-scale"><span>0%</span><span>2%</span><span>4%</span></div>
-      <div class="dp-gauge-track"><div class="dp-gauge-fill tier-mid" style="width:52%;"></div></div>
-      <div class="dp-gauge-note">DPS 460원 ÷ 22,000원 · 2.04% — 시중은행 대비 낮은 인컴 매력.</div>
+      <div class="dp-gauge-row">
+        <div class="dp-gauge-label"><div class="dp-gauge-nm">배당수익률</div><div class="dp-gauge-val">2.09%</div></div>
+        <div class="dp-gauge-note">DPS 460원 ÷ 22,000원 · 2.04% — 시중은행 대비 낮은 인컴 매력.</div>
+        <div class="dp-gauge-bar">
+          <div class="dp-gauge-scale"><span>0%</span><span>2%</span><span>4%</span></div>
+          <div class="dp-gauge-track"><div class="dp-gauge-fill tier-mid" style="width:52%;"></div></div>
+        </div>
+      </div>
     </div>
     <div class="dp-gauge">
       <div class="dp-gauge-h"><span>HC 대비 (신고가 대비)</span><span>-26.8%</span></div>
