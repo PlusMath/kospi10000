@@ -275,13 +275,13 @@ body{background:var(--dp-bg);}
     </div>
 
     <div id="dpFundQuarter" style="display:none;">
-      <svg id="lgQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:16px;"></svg>
+      <svg id="lgQtrChart" viewBox="0 0 680 210" width="100%" style="display:block;margin-bottom:16px;"></svg>
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1Q26 매출 및 지분법손익</span><span class="v">1조 8,006억</span></div>
-          <div class="dp-row2"><span class="l">1Q26 영업이익</span><span class="v">4,138억</span></div>
-          <div class="dp-row2"><span class="l">1Q26 법인세차감전이익</span><span class="v">4,427억</span></div>
-          <div class="dp-row2"><span class="l">1Q26 지배주주 순이익</span><span class="v">3,398억</span></div>
+          <div class="dp-row2"><span class="l">1Q26 매출 및 지분법손익</span><span class="v">1조 8,006억 (전년동기比 ▼7.0%)</span></div>
+          <div class="dp-row2"><span class="l">1Q26 영업이익</span><span class="v">4,138억 (전년동기比 ▼35.1%)</span></div>
+          <div class="dp-row2"><span class="l">1Q26 법인세차감전이익</span><span class="v">4,427억 (전년동기比 ▼33.3%)</span></div>
+          <div class="dp-row2"><span class="l">1Q26 지배주주 순이익</span><span class="v">3,398억 (전년동기比 ▼41.4%)</span></div>
         </div>
         <div>
           <div class="dp-row2"><span class="l">1Q26 보통주 EPS</span><span class="v">2,203원 (연환산 ~8,812원)</span></div>
@@ -774,28 +774,45 @@ function drawAnnualChart(){
 
 function drawQtrChart(){
   const svg=document.getElementById('lgQtrChart');
-  const W=680,H=190,pL=44,pR=20,pT=20,pB=30;
+  const W=680,H=210,pL=44,pR=20,pT=30,pB=34;
   const cW=W-pL-pR,cH=H-pT-pB;
-  const labels=['1Q26 매출·지분법손익','1Q26 영업이익','1Q26 법인세전','1Q26 지배주주순이익'];
-  const vals=[1.80,0.41,0.44,0.34];
-  const cols=['#8B93A0','#C8102E','#C8102E','#1D9E75'];
-  const maxV=vals[0]*1.15;
+  const labels=['매출·지분법손익','영업이익','법인세전','지배주주순이익'];
+  const valsPrev=[1.9361,0.638,0.664,0.5803];
+  const valsCurr=[1.8006,0.4138,0.4427,0.3398];
+  const growth=['-7.0%','-35.1%','-33.3%','-41.4%'];
+  const cols=['#8B93A0','#1428A0','#1428A0','#1D9E75'];
+  const prevCol='#C7CBD1';
+  const maxV=Math.max(...valsCurr,...valsPrev)*1.2;
   const groupW=cW/labels.length;
-  const barW=groupW*0.5;
+  const barW=groupW*0.28;
+  const gap=groupW*0.06;
   function py(v){ return pT+cH*(1-v/maxV); }
   [0,25,50,75,100].forEach(v=>{
     const val=v/100*maxV;
     const y=py(val);
-    svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:y,y2:y,stroke:cssVar('--color-border-tertiary'),'stroke-width':1}));
+    svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:y,y2:y,stroke:'oklch(0.91 0.005 90)','stroke-width':1}));
   });
   labels.forEach((lab,i)=>{
     const gx=pL+i*groupW+groupW/2;
-    const top=py(vals[i]);
-    svg.appendChild(svgEl('rect',{x:gx-barW/2,y:top,width:barW,height:py(0)-top,fill:cols[i],rx:3}));
-    const t1=svgEl('text',{x:gx,y:top-6,'text-anchor':'middle','font-size':10,fill:cssVar('--color-text-primary'),'font-weight':600});
-    t1.textContent=vals[i].toFixed(2)+'조'; svg.appendChild(t1);
-    const t2=svgEl('text',{x:gx,y:H-8,'text-anchor':'middle','font-size':9,fill:cssVar('--color-text-secondary')});
-    t2.textContent=lab; svg.appendChild(t2);
+    const px=gx-gap/2-barW,cx=gx+gap/2;
+    const pTop=py(valsPrev[i]),cTop=py(valsCurr[i]);
+    svg.appendChild(svgEl('rect',{x:px,y:pTop,width:barW,height:py(0)-pTop,fill:prevCol,rx:2}));
+    svg.appendChild(svgEl('rect',{x:cx,y:cTop,width:barW,height:py(0)-cTop,fill:cols[i],rx:2}));
+    const t1=svgEl('text',{x:px+barW/2,y:pTop-4,'text-anchor':'middle','font-size':8,fill:'oklch(0.55 0.02 260)'});
+    t1.textContent=valsPrev[i].toFixed(1)+'조'; svg.appendChild(t1);
+    const t2=svgEl('text',{x:cx+barW/2,y:cTop-14,'text-anchor':'middle','font-size':8.5,fill:'oklch(0.2 0.02 260)','font-weight':700});
+    t2.textContent=valsCurr[i].toFixed(1)+'조'; svg.appendChild(t2);
+    const t3=svgEl('text',{x:cx+barW/2,y:cTop-4,'text-anchor':'middle','font-size':8,fill:'#1D9E75','font-weight':700});
+    t3.textContent=growth[i]; svg.appendChild(t3);
+    const t4=svgEl('text',{x:gx,y:H-10,'text-anchor':'middle','font-size':9,fill:'oklch(0.5 0.02 260)'});
+    t4.textContent=lab; svg.appendChild(t4);
+  });
+  const legend=[[prevCol,'1Q25'],['#1428A0','1Q26']];
+  legend.forEach((l,i)=>{
+    const lx=pL+i*56;
+    svg.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
+    const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:'oklch(0.5 0.02 260)'});
+    t.textContent=l[1]; svg.appendChild(t);
   });
   addChartExpandButton(svg);
 }
