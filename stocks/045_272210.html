@@ -279,7 +279,7 @@ body{background:var(--dp-bg);}
     </div>
 
     <div id="dpFundQuarter" style="display:none;">
-      <svg id="hsQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:16px;"></svg>
+      <svg id="hsQtrChart" viewBox="0 0 680 210" width="100%" style="display:block;margin-bottom:16px;"></svg>
       <div class="dp-g2">
         <div>
           <div class="dp-row2"><span class="l">1Q26 연결 매출액</span><span class="v">8,071억 (전년동기比 ▲17.0%)</span></div>
@@ -697,28 +697,46 @@ function drawAnnualChart(){
 
 function drawQtrChart(){
   const svg=document.getElementById('hsQtrChart');
-  const W=680,H=190,pL=44,pR=20,pT=20,pB=30;
+  const W=680,H=210,pL=44,pR=20,pT=30,pB=34;
   const cW=W-pL-pR,cH=H-pT-pB;
-  const labels=['1Q26 매출액','1Q26 영업이익','1Q26 법인세전','1Q26 분기순손실','1Q26 지배주주순손실'];
-  const vals=[0.81,0.03,-0.12,-0.10,-0.06];
-  const cols=['#8B93A0','#D9622B','#D85A30','#D85A30','#D85A30'];
-  const maxAbs=Math.max(...vals.map(v=>Math.abs(v)))*1.2;
+  const labels=['매출액','영업이익','법인세전','분기순손실','지배주주순손실'];
+  const valsPrev=[6901.0071,581.6435,392.7158,409.6985,378.349];
+  const valsCurr=[8071.0,343.0,-1157.0,-958.0,-550.0];
+  const growth=['+17.0%','-41.0%','적자전환','적자전환','적자전환'];
+  const cols=['#8B93A0','#1428A0','#1428A0','#1D9E75','#1D9E75'];
+  const prevCol='#C7CBD1';
+  const maxV=Math.max(0,...valsCurr,...valsPrev)*1.15;
+  const minV=Math.min(0,...valsCurr,...valsPrev)*1.15;
+  const range=(maxV-minV)||1;
   const groupW=cW/labels.length;
-  const barW=groupW*0.5;
-  const zeroY=pT+cH*0.55;
-  function py(v){ return zeroY - (v/maxAbs)*(cH*0.45); }
+  const barW=groupW*0.28;
+  const gap=groupW*0.06;
+  function py(v){ return pT+cH*(maxV-v)/range; }
+  const zeroY=py(0);
+  svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:zeroY,y2:zeroY,stroke:'oklch(0.85 0.005 90)','stroke-width':1}));
   labels.forEach((lab,i)=>{
     const gx=pL+i*groupW+groupW/2;
-    const val=vals[i];
-    const top=val>=0?py(val):zeroY;
-    const h=Math.abs(py(val)-zeroY);
-    svg.appendChild(svgEl('rect',{x:gx-barW/2,y:top,width:barW,height:Math.max(h,2),fill:cols[i],rx:3}));
-    const t1=svgEl('text',{x:gx,y:(val>=0?top-6:top+h+14),'text-anchor':'middle','font-size':10,fill:cssVar('--color-text-primary'),'font-weight':600});
-    t1.textContent=(val*10000).toFixed(0)+'억'; svg.appendChild(t1);
-    const t2=svgEl('text',{x:gx,y:H-8,'text-anchor':'middle','font-size':9,fill:cssVar('--color-text-secondary')});
-    t2.textContent=lab; svg.appendChild(t2);
+    const px=gx-gap/2-barW,cx=gx+gap/2;
+    const pTop=py(Math.max(valsPrev[i],0)),pBot=py(Math.min(valsPrev[i],0));
+    const cTop=py(Math.max(valsCurr[i],0)),cBot=py(Math.min(valsCurr[i],0));
+    svg.appendChild(svgEl('rect',{x:px,y:pTop,width:barW,height:Math.max(pBot-pTop,1),fill:prevCol,rx:2}));
+    svg.appendChild(svgEl('rect',{x:cx,y:cTop,width:barW,height:Math.max(cBot-cTop,1),fill:cols[i],rx:2}));
+    const t1=svgEl('text',{x:px+barW/2,y:valsPrev[i]>=0?pTop-4:pBot+12,'text-anchor':'middle','font-size':8,fill:'oklch(0.55 0.02 260)'});
+    t1.textContent=valsPrev[i].toFixed(0)+'억'; svg.appendChild(t1);
+    const t2=svgEl('text',{x:cx+barW/2,y:valsCurr[i]>=0?cTop-14:cBot+26,'text-anchor':'middle','font-size':8.5,fill:'oklch(0.2 0.02 260)','font-weight':700});
+    t2.textContent=valsCurr[i].toFixed(0)+'억'; svg.appendChild(t2);
+    const t3=svgEl('text',{x:cx+barW/2,y:valsCurr[i]>=0?cTop-4:cBot+12,'text-anchor':'middle','font-size':8,fill:'#1D9E75','font-weight':700});
+    t3.textContent=growth[i]; svg.appendChild(t3);
+    const t4=svgEl('text',{x:gx,y:H-10,'text-anchor':'middle','font-size':9,fill:'oklch(0.5 0.02 260)'});
+    t4.textContent=lab; svg.appendChild(t4);
   });
-  svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:zeroY,y2:zeroY,stroke:cssVar('--color-border-tertiary'),'stroke-width':1}));
+  const legend=[[prevCol,'1Q25'],['#1428A0','1Q26']];
+  legend.forEach((l,i)=>{
+    const lx=pL+i*56;
+    svg.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
+    const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:'oklch(0.5 0.02 260)'});
+    t.textContent=l[1]; svg.appendChild(t);
+  });
   addChartExpandButton(svg);
 }
 
