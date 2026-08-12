@@ -163,6 +163,119 @@
     .stat-value.up { color: var(--color-up); }
     .stat-value.dn { color: var(--color-down); }
 
+    .stat-card.clickable {
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+
+    .stat-card.clickable:hover {
+      border-color: var(--color-accent);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: oklch(0 0 0 / 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-card {
+      background: var(--color-card-bg);
+      border-radius: var(--radius-card);
+      max-width: 480px;
+      width: 100%;
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 20px 60px oklch(0 0 0 / 0.3);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--color-border);
+      flex-shrink: 0;
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .modal-close {
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 20px;
+      color: var(--color-text-secondary);
+      line-height: 1;
+      padding: 4px;
+      font-family: inherit;
+    }
+
+    .modal-body {
+      overflow-y: auto;
+      padding: 8px 0;
+    }
+
+    .modal-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .modal-row:hover {
+      background: oklch(0.97 0.004 90);
+    }
+
+    .modal-row-name {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .modal-row-name small {
+      font-weight: 400;
+      color: var(--color-text-secondary);
+      font-size: 12px;
+      margin-left: 4px;
+    }
+
+    .modal-row-right {
+      text-align: right;
+    }
+
+    .modal-row-price {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .modal-row-change {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .modal-empty {
+      padding: 30px 20px;
+      text-align: center;
+      color: var(--color-text-secondary);
+      font-size: 13px;
+    }
+
     .stat-unit {
       font-size: 15px;
       font-weight: 600;
@@ -834,6 +947,17 @@
         margin-bottom: 6px;
       }
 
+      .modal-backdrop {
+        padding: 0;
+        align-items: flex-end;
+      }
+
+      .modal-card {
+        max-width: none;
+        max-height: 75vh;
+        border-radius: var(--radius-card) var(--radius-card) 0 0;
+      }
+
       .stat-value {
         font-size: 22px;
       }
@@ -1027,6 +1151,16 @@
     </p>
 
     <div class="stat-grid" id="statGrid"></div>
+
+    <div class="modal-backdrop" id="moverModalBackdrop">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title" id="moverModalTitle"></div>
+          <button type="button" class="modal-close" id="moverModalClose" aria-label="닫기">✕</button>
+        </div>
+        <div class="modal-body" id="moverModalBody"></div>
+      </div>
+    </div>
 
     <div class="toolbar">
       <div class="view-toggle" aria-label="보기 방식 선택">
@@ -2431,6 +2565,10 @@
     const favOnlyCheckbox = document.getElementById('favOnlyCheckbox');
     const favOnlyBtn = document.getElementById('favOnlyBtn');
     const stockSearchInput = document.getElementById('stockSearchInput');
+    const moverModalBackdrop = document.getElementById('moverModalBackdrop');
+    const moverModalTitle = document.getElementById('moverModalTitle');
+    const moverModalBody = document.getElementById('moverModalBody');
+    const moverModalClose = document.getElementById('moverModalClose');
 
     // ── 즐겨찾기 (localStorage) ──
     const FAV_KEY = 'kospi10000.favorites';
@@ -2516,10 +2654,19 @@
     }
 
     // ── 통계 카드 ──
+    // "대상 종목" 카드와 같은 모집단(top 100, stocks[])을 기준으로 세어야 카드 숫자와
+    // 클릭 시 뜨는 팝업 목록의 개수가 항상 일치한다(stockLive 자체는 top100 밖 종목도
+    // 포함할 수 있어 그걸 그대로 세면 숫자가 안 맞을 수 있음).
+    function getMovers(direction) {
+      return stocks
+        .map((s) => ({ stock: s, live: stockLive[s.code] }))
+        .filter((x) => x.live && typeof x.live.change === 'number' && (direction === 'up' ? x.live.change >= 5 : x.live.change <= -5))
+        .sort((a, b) => (direction === 'up' ? b.live.change - a.live.change : a.live.change - b.live.change));
+    }
+
     function renderStatCards() {
-      const liveVals = Object.values(stockLive);
-      const upCount = liveVals.filter((v) => v.change >= 5).length;
-      const downCount = liveVals.filter((v) => v.change <= -5).length;
+      const upCount = getMovers('up').length;
+      const downCount = getMovers('down').length;
       statGrid.innerHTML = `
         <div class="stat-card">
           <div class="stat-label">대상 종목</div>
@@ -2529,16 +2676,52 @@
           <div class="stat-label">해당 업종</div>
           <div class="stat-value">${getVisibleIndustries().length}<span class="stat-unit"> 개</span></div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card clickable" id="statUpCard">
           <div class="stat-label">5% 이상 상승</div>
           <div class="stat-value up">${upCount}<span class="stat-unit"> 개</span></div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card clickable" id="statDownCard">
           <div class="stat-label">5% 이상 하락</div>
           <div class="stat-value dn">${downCount}<span class="stat-unit"> 개</span></div>
         </div>
       `;
+      document.getElementById('statUpCard').addEventListener('click', () => openMoverModal('up'));
+      document.getElementById('statDownCard').addEventListener('click', () => openMoverModal('down'));
     }
+
+    // ── 5%+ 변동 종목 팝업 ──
+    function openMoverModal(direction) {
+      const matches = getMovers(direction);
+      moverModalTitle.textContent = (direction === 'up' ? '5% 이상 상승' : '5% 이상 하락') + ` (${matches.length}개)`;
+
+      if (matches.length === 0) {
+        moverModalBody.innerHTML = '<div class="modal-empty">해당하는 종목이 없습니다.</div>';
+      } else {
+        moverModalBody.innerHTML = matches.map(({ stock, live }) => `
+          <a class="modal-row" href="${stock.page}">
+            <div class="modal-row-name">${stock.name}<small>${stock.code}</small></div>
+            <div class="modal-row-right">
+              <div class="modal-row-price">${fmtWon(live.price)}</div>
+              <div class="modal-row-change ${live.change >= 0 ? 'up' : 'dn'}">${fmtChange(live.change)}</div>
+            </div>
+          </a>
+        `).join('');
+      }
+
+      moverModalBackdrop.classList.add('open');
+    }
+
+    function closeMoverModal() {
+      moverModalBackdrop.classList.remove('open');
+    }
+
+    moverModalClose.addEventListener('click', closeMoverModal);
+    moverModalBackdrop.addEventListener('click', (e) => {
+      if (e.target === moverModalBackdrop) closeMoverModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMoverModal();
+    });
 
     // ── 순위별 뷰 ──
     function createRankRow(stock) {
