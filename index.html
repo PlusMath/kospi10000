@@ -351,6 +351,62 @@
     .up { color: var(--color-up); }
     .dn { color: var(--color-down); }
 
+    /* ── 매력도별 뷰: 순위별 뷰와 동일 그리드, 시가총액 칸을 매력도 점수로 교체 ── */
+    .score-table-head,
+    .score-row {
+      display: grid;
+      grid-template-columns: 44px minmax(140px, 1.6fr) 130px 100px 84px 132px 36px;
+      grid-template-areas: "rank name industry price change score star";
+      align-items: center;
+      gap: 8px 14px;
+      padding: 13px 20px;
+    }
+
+    .score-table-head {
+      background: oklch(0.97 0.004 90);
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      font-weight: 600;
+    }
+
+    .score-row {
+      border-top: 1px solid var(--color-border);
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .score-row:hover {
+      background: oklch(0.97 0.004 90);
+    }
+
+    .sr2-rank { grid-area: rank; font-size: 14px; font-weight: 600; color: var(--color-text-secondary); }
+    .sr2-name { grid-area: name; font-size: 14px; font-weight: 700; }
+    .sr2-name small { font-weight: 400; color: var(--color-text-secondary); font-size: 12px; margin-left: 4px; }
+    .sr2-price { grid-area: price; font-size: 14px; font-weight: 600; text-align: right; }
+    .sr2-change { grid-area: change; font-size: 14px; font-weight: 700; text-align: right; }
+    .sr2-star { grid-area: star; text-align: center; }
+
+    .score-badge-group { grid-area: score; display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+    .score-badge-num { font-size: 14px; font-weight: 800; }
+    .score-badge-grade {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .score-badge-grade.tier-cheap { background: var(--color-up-soft, oklch(0.55 0.2 25 / 0.12)); color: var(--color-up); }
+    .score-badge-grade.tier-mid { background: oklch(0.7 0.01 90 / 0.18); color: var(--color-text-secondary); }
+    .score-badge-grade.tier-expensive { background: var(--color-down-soft, oklch(0.52 0.14 250 / 0.12)); color: var(--color-down); }
+
+    .score-view-note {
+      font-size: 12.5px;
+      color: var(--color-text-secondary);
+      padding: 12px 20px;
+      text-align: center;
+    }
+
     /* ── 업종별 뷰 ── */
     .industry-section {
       margin-bottom: 20px;
@@ -813,6 +869,39 @@
         font-size: 12px;
       }
 
+      /* 매력도별 뷰: 순위별 뷰와 동일한 축소 패턴, 가격 대신 점수를 우측에 유지 */
+      .score-table-head {
+        display: none;
+      }
+
+      .score-row {
+        grid-template-columns: 34px 1fr auto 32px;
+        grid-template-areas: "rank name score star";
+        padding: 12px 14px;
+        gap: 6px 10px;
+      }
+
+      .sr2-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .sr2-price, .sr2-change {
+        display: none;
+      }
+
+      .sr2-rank {
+        width: 26px;
+        height: 26px;
+        border-radius: 7px;
+        background: oklch(0.95 0.004 90);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+      }
+
       .industry-header {
         flex-direction: row;
       }
@@ -889,6 +978,7 @@
       <div class="view-toggle" aria-label="보기 방식 선택">
         <button class="view-btn active" type="button" id="rankViewBtn">순위별 보기</button>
         <button class="view-btn" type="button" id="industryViewBtn">업종별 보기</button>
+        <button class="view-btn" type="button" id="scoreViewBtn">매력도별 보기</button>
       </div>
       <label class="fav-only-label">
         <input type="checkbox" id="favOnlyCheckbox" />
@@ -914,11 +1004,11 @@
       <div class="mover-summary" aria-label="변동 종목 요약">
         <div class="mover-summary-card">
           <span class="mover-summary-label">대상 종목</span>
-          <strong class="mover-summary-value">8개</strong>
+          <strong class="mover-summary-value">14개</strong>
         </div>
         <div class="mover-summary-card">
           <span class="mover-summary-label">해당 업종</span>
-          <strong class="mover-summary-value">7개</strong>
+          <strong class="mover-summary-value">9개</strong>
         </div>
         <div class="mover-summary-card">
           <span class="mover-summary-label">5% 이상 하락</span>
@@ -940,123 +1030,129 @@
 
   <script>
     const dailyMovers = [
-      { name: "일진전기", code: "103590", industry: "전력·기계·인프라", close: "72,300원", change: 16.99, page: "stocks/099_103590.html" },
-      { name: "LG전자", code: "066570", industry: "전자·가전", close: "200,000원", change: 10.07, page: "stocks/032_066570.html" },
+      { name: "일진전기", code: "103590", industry: "전력·기계·인프라", close: "73,200원", change: 18.45, page: "stocks/099_103590.html" },
+      { name: "LG전자", code: "066570", industry: "전자·가전", close: "204,000원", change: 12.27, page: "stocks/032_066570.html" },
+      { name: "LG이노텍", code: "011070", industry: "반도체·전자", close: "602,000원", change: 9.65, page: "stocks/053_011070.html" },
+      { name: "SK스퀘어", code: "402340", industry: "지주·투자회사", close: "1,033,000원", change: 9.31, page: "stocks/003_402340.html" },
+      { name: "두산", code: "000150", industry: "지주·복합기업", close: "1,268,000원", change: 7.73, page: "stocks/035_000150.html" },
       { name: "한국타이어앤테크놀로지", code: "161390", industry: "자동차·부품", close: "70,300원", change: 7.33, page: "stocks/088_161390.html" },
-      { name: "SK스퀘어", code: "402340", industry: "지주·투자회사", close: "1,003,000원", change: 6.14, page: "stocks/003_402340.html" },
-      { name: "에이피알", code: "278470", industry: "생활·화장품", close: "408,500원", change: 5.97, page: "stocks/058_278470.html" },
-      { name: "삼성SDI", code: "006400", industry: "2차전지·전기차 소재", close: "486,500원", change: 5.88, page: "stocks/017_006400.html" },
-      { name: "두산", code: "000150", industry: "지주·복합기업", close: "1,241,000원", change: 5.44, page: "stocks/035_000150.html" },
-      { name: "GS", code: "078930", industry: "지주·복합기업", close: "102,600원", change: 5.23, page: "stocks/098_078930.html" }
+      { name: "삼성전자", code: "005930", industry: "반도체·전자", close: "255,750원", change: 6.78, page: "stocks/001_005930.html" },
+      { name: "삼성SDI", code: "006400", industry: "2차전지·전기차 소재", close: "489,500원", change: 6.53, page: "stocks/017_006400.html" },
+      { name: "한화에어로스페이스", code: "012450", industry: "방산·항공우주", close: "1,164,000원", change: 6.01, page: "stocks/012_012450.html" },
+      { name: "한국항공우주", code: "047810", industry: "방산·항공우주", close: "143,200원", change: 5.68, page: "stocks/057_047810.html" },
+      { name: "HD현대일렉트릭", code: "267260", industry: "전력·기계·인프라", close: "781,000원", change: 5.68, page: "stocks/018_267260.html" },
+      { name: "삼성전기", code: "009150", industry: "반도체·전자", close: "1,333,000원", change: 5.63, page: "stocks/009_009150.html" },
+      { name: "SK하이닉스", code: "000660", industry: "반도체·전자", close: "1,500,000원", change: 5.26, page: "stocks/002_000660.html" },
+      { name: "삼성생명", code: "032830", industry: "보험", close: "304,500원", change: 5.18, page: "stocks/014_032830.html" }
     ];
 
     const stockLive = {
-      "005930": { price: 248500, change: 3.76 },
-      "000660": { price: 1448000, change: 1.61 },
-      "402340": { price: 1003000, change: 6.14 },
-      "005935": { price: 183600, change: 1.89 },
-      "005380": { price: 407500, change: 1.12 },
-      "373220": { price: 367000, change: 3.53 },
-      "329180": { price: 492000, change: -2.19 },
-      "034020": { price: 79700, change: 2.31 },
-      "009150": { price: 1296000, change: 2.69 },
-      "000270": { price: 136200, change: 1.41 },
-      "028260": { price: 355000, change: 3.05 },
-      "012450": { price: 1134000, change: 3.28 },
-      "207940": { price: 1608000, change: -0.06 },
-      "032830": { price: 301500, change: 4.15 },
-      "012330": { price: 494000, change: -0.3 },
-      "105560": { price: 168600, change: 1.2 },
-      "006400": { price: 486500, change: 5.88 },
-      "267260": { price: 765000, change: 3.52 },
-      "055550": { price: 106100, change: 1.53 },
-      "010120": { price: 207000, change: 1.97 },
-      "068270": { price: 207000, change: -1.66 },
-      "006800": { price: 36150, change: 1.83 },
-      "034730": { price: 532000, change: 1.53 },
-      "298040": { price: 2891000, change: 2.12 },
-      "042700": { price: 214000, change: 0.47 },
-      "005490": { price: 328500, change: 0.61 },
-      "042660": { price: 89600, change: 0.67 },
-      "086790": { price: 130700, change: 2.35 },
-      "009540": { price: 383500, change: -3.64 },
-      "035420": { price: 217000, change: 1.4 },
-      "010130": { price: 1216000, change: -1.06 },
-      "066570": { price: 200000, change: 10.07 },
-      "051910": { price: 280000, change: 2.19 },
-      "010140": { price: 22050, change: 1.15 },
-      "000150": { price: 1241000, change: 5.44 },
-      "015760": { price: 36100, change: 2.56 },
-      "267250": { price: 225500, change: 0.45 },
-      "064350": { price: 144000, change: 1.84 },
-      "316140": { price: 33900, change: 0.3 },
-      "017670": { price: 88400, change: 2.79 },
-      "003670": { price: 160900, change: 2.55 },
-      "000810": { price: 650000, change: 1.4 },
-      "096770": { price: 128200, change: 3.3 },
-      "086280": { price: 201000, change: -0.25 },
-      "272210": { price: 73800, change: 1.23 },
-      "033780": { price: 181600, change: 0.94 },
-      "079550": { price: 757000, change: -0.39 },
-      "307950": { price: 427000, change: -1.27 },
-      "035720": { price: 40350, change: -0.86 },
-      "011200": { price: 21500, change: -0.69 },
-      "000720": { price: 113900, change: 1.42 },
-      "138040": { price: 125000, change: 0.97 },
-      "011070": { price: 574500, change: 4.64 },
-      "003550": { price: 110600, change: 2.12 },
-      "024110": { price: 20350, change: 0.99 },
-      "006260": { price: 330000, change: 2.33 },
-      "047810": { price: 137700, change: 1.62 },
-      "278470": { price: 408500, change: 5.97 },
-      "030200": { price: 53300, change: 0.95 },
+      "005930": { price: 255750, change: 6.78 },
+      "000660": { price: 1500000, change: 5.26 },
+      "402340": { price: 1033000, change: 9.31 },
+      "005935": { price: 186000, change: 3.22 },
+      "005380": { price: 409000, change: 1.49 },
+      "373220": { price: 361000, change: 1.83 },
+      "329180": { price: 497500, change: -1.09 },
+      "034020": { price: 81000, change: 3.98 },
+      "009150": { price: 1333000, change: 5.63 },
+      "000270": { price: 136000, change: 1.27 },
+      "028260": { price: 360500, change: 4.64 },
+      "012450": { price: 1164000, change: 6.01 },
+      "207940": { price: 1551000, change: -3.6 },
+      "032830": { price: 304500, change: 5.18 },
+      "012330": { price: 501000, change: 1.11 },
+      "105560": { price: 166500, change: -0.06 },
+      "006400": { price: 489500, change: 6.53 },
+      "267260": { price: 781000, change: 5.68 },
+      "055550": { price: 104200, change: -0.29 },
+      "010120": { price: 210500, change: 3.69 },
+      "068270": { price: 201000, change: -4.51 },
+      "006800": { price: 36550, change: 2.96 },
+      "034730": { price: 545000, change: 4.01 },
+      "298040": { price: 2903000, change: 2.54 },
+      "042700": { price: 217000, change: 1.88 },
+      "005490": { price: 324000, change: -0.77 },
+      "042660": { price: 90100, change: 1.24 },
+      "086790": { price: 128300, change: 0.47 },
+      "009540": { price: 380000, change: -4.52 },
+      "035420": { price: 216000, change: 0.93 },
+      "010130": { price: 1225000, change: -0.33 },
+      "066570": { price: 204000, change: 12.27 },
+      "051910": { price: 276000, change: 0.73 },
+      "010140": { price: 21850, change: 0.23 },
+      "000150": { price: 1268000, change: 7.73 },
+      "015760": { price: 35550, change: 0.99 },
+      "267250": { price: 230500, change: 2.67 },
+      "064350": { price: 146500, change: 3.61 },
+      "316140": { price: 33100, change: -2.07 },
+      "017670": { price: 88100, change: 2.44 },
+      "003670": { price: 160600, change: 2.36 },
+      "000810": { price: 630000, change: -1.72 },
+      "096770": { price: 123100, change: -0.81 },
+      "086280": { price: 199900, change: -0.79 },
+      "272210": { price: 76100, change: 4.39 },
+      "033780": { price: 176900, change: -1.67 },
+      "079550": { price: 791000, change: 4.08 },
+      "307950": { price: 432000, change: -0.12 },
+      "035720": { price: 39650, change: -2.58 },
+      "011200": { price: 21250, change: -1.85 },
+      "000720": { price: 114400, change: 1.87 },
+      "138040": { price: 119200, change: -3.72 },
+      "011070": { price: 602000, change: 9.65 },
+      "003550": { price: 109500, change: 1.11 },
+      "024110": { price: 20150, change: 0 },
+      "006260": { price: 338500, change: 4.96 },
+      "047810": { price: 143200, change: 5.68 },
+      "278470": { price: 396000, change: 2.72 },
+      "030200": { price: 52800, change: 0 },
       "071050": { price: 200500, change: 1.21 },
       "018260": { price: 235500, change: -0.63 },
-      "259960": { price: 239500, change: -1.84 },
-      "010950": { price: 147600, change: 4.24 },
-      "047050": { price: 56500, change: 0.71 },
-      "0126Z0": { price: 419500, change: -1.64 },
-      "001440": { price: 29300, change: 3.53 },
-      "005940": { price: 28600, change: 0.88 },
-      "047040": { price: 17620, change: 1.73 },
-      "016360": { price: 93700, change: 1.08 },
-      "039490": { price: 302000, change: 0.67 },
-      "005830": { price: 166200, change: 1.03 },
-      "323410": { price: 22450, change: 1.13 },
-      "443060": { price: 200500, change: 0.25 },
-      "028050": { price: 49300, change: 0.72 },
-      "352820": { price: 179200, change: -0.61 },
+      "259960": { price: 234500, change: -3.89 },
+      "010950": { price: 142100, change: 0.35 },
+      "047050": { price: 55800, change: -0.53 },
+      "0126Z0": { price: 411000, change: -3.63 },
+      "001440": { price: 29700, change: 4.95 },
+      "005940": { price: 28550, change: 0.71 },
+      "047040": { price: 18090, change: 4.45 },
+      "016360": { price: 93100, change: 0.43 },
+      "039490": { price: 300000, change: 0 },
+      "005830": { price: 159500, change: -3.04 },
+      "323410": { price: 21850, change: -1.58 },
+      "443060": { price: 200000, change: 0 },
+      "028050": { price: 49400, change: 0.92 },
+      "352820": { price: 179500, change: -0.44 },
       "000880": { price: 83800, change: 0 },
-      "005387": { price: 200500, change: 0.55 },
-      "007660": { price: 88900, change: 1.25 },
-      "003230": { price: 1227000, change: -2.15 },
-      "003490": { price: 26750, change: 0.38 },
-      "062040": { price: 191600, change: 3.74 },
-      "267270": { price: 141000, change: -0.7 },
-      "000500": { price: 160400, change: 2.04 },
-      "000990": { price: 92000, change: -1.29 },
-      "029780": { price: 47450, change: 0.42 },
-      "326030": { price: 89000, change: -1.66 },
-      "180640": { price: 121900, change: 3.39 },
-      "009830": { price: 35950, change: -1.1 },
-      "138930": { price: 14870, change: -0.2 },
+      "005387": { price: 199200, change: -0.1 },
+      "007660": { price: 90600, change: 3.19 },
+      "003230": { price: 1200000, change: -4.31 },
+      "003490": { price: 26550, change: -0.38 },
+      "062040": { price: 190200, change: 2.98 },
+      "267270": { price: 138200, change: -2.68 },
+      "000500": { price: 162400, change: 3.31 },
+      "000990": { price: 95400, change: 2.36 },
+      "029780": { price: 47100, change: -0.32 },
+      "326030": { price: 88500, change: -2.21 },
+      "180640": { price: 118400, change: 0.42 },
+      "009830": { price: 35900, change: -1.24 },
+      "138930": { price: 14710, change: -1.28 },
       "161390": { price: 70300, change: 7.33 },
-      "064400": { price: 77500, change: 2.51 },
-      "034220": { price: 10170, change: 2.31 },
-      "175330": { price: 29250, change: 1.74 },
-      "353200": { price: 105800, change: 1.05 },
-      "090430": { price: 140700, change: 2.48 },
-      "377300": { price: 45100, change: 0.45 },
-      "066970": { price: 103100, change: 4.67 },
-      "271560": { price: 134300, change: -1.25 },
-      "000100": { price: 84750, change: -0.99 },
-      "241560": { price: 63600, change: -0.31 },
-      "021240": { price: 98100, change: 0.51 },
-      "078930": { price: 102600, change: 5.23 },
-      "036570": { price: 247000, change: -3.33 },
-      "103590": { price: 72300, change: 16.99 },
-      "032640": { price: 15250, change: -2.18 },
-      "004370": { price: 393500, change: -0.51 },
+      "064400": { price: 77400, change: 2.38 },
+      "034220": { price: 10160, change: 2.21 },
+      "175330": { price: 28050, change: -2.43 },
+      "353200": { price: 107400, change: 2.58 },
+      "090430": { price: 136100, change: -0.87 },
+      "377300": { price: 44300, change: -1.34 },
+      "066970": { price: 100800, change: 2.34 },
+      "271560": { price: 132700, change: -2.43 },
+      "000100": { price: 83600, change: -2.34 },
+      "241560": { price: 63700, change: -0.16 },
+      "021240": { price: 95600, change: -2.05 },
+      "078930": { price: 101200, change: 3.79 },
+      "036570": { price: 248000, change: -2.94 },
+      "103590": { price: 73200, change: 18.45 },
+      "032640": { price: 14920, change: -4.3 },
+      "004370": { price: 392000, change: -0.88 },
       "192650": { price: 5260, change: 1.54 }
     };
 
@@ -1069,7 +1165,8 @@
             "slug": "samsung-electronics",
             "image": "images/001_samsung-electronics.png",
             "page": "stocks/001_005930.html",
-            "sharesOut": 5846278608
+            "sharesOut": 5846278608,
+            "vscore": 67
       },
       {
             "rank": 2,
@@ -1079,7 +1176,8 @@
             "slug": "sk-hynix",
             "image": "images/002_sk-hynix.png",
             "page": "stocks/002_000660.html",
-            "sharesOut": 730492365
+            "sharesOut": 730492365,
+            "vscore": 71
       },
       {
             "rank": 3,
@@ -1089,7 +1187,8 @@
             "slug": "sk-square",
             "image": "images/003_sk-square.png",
             "page": "stocks/003_402340.html",
-            "sharesOut": 131958386
+            "sharesOut": 131958386,
+            "vscore": 76
       },
       {
             "rank": 4,
@@ -1099,7 +1198,8 @@
             "slug": "samsung-electronics-preferred",
             "image": "images/004_samsung-electronics-preferred.png",
             "page": "stocks/004_005935.html",
-            "sharesOut": 802371203
+            "sharesOut": 802371203,
+            "vscore": 77
       },
       {
             "rank": 5,
@@ -1109,7 +1209,8 @@
             "slug": "hyundai-motor",
             "image": "images/005_hyundai-motor.png",
             "page": "stocks/005_005380.html",
-            "sharesOut": 204757766
+            "sharesOut": 204757766,
+            "vscore": 31
       },
       {
             "rank": 6,
@@ -1119,7 +1220,8 @@
             "slug": "lg-energy-solution",
             "image": "images/006_lg-energy-solution.png",
             "page": "stocks/006_373220.html",
-            "sharesOut": 234000000
+            "sharesOut": 234000000,
+            "vscore": null
       },
       {
             "rank": 7,
@@ -1129,7 +1231,8 @@
             "slug": "hd-hyundai-heavy-industries",
             "image": "images/007_hd-hyundai-heavy-industries.png",
             "page": "stocks/007_329180.html",
-            "sharesOut": 104961225
+            "sharesOut": 104961225,
+            "vscore": 56
       },
       {
             "rank": 8,
@@ -1139,7 +1242,8 @@
             "slug": "doosan-enerbility",
             "image": "images/008_doosan-enerbility.png",
             "page": "stocks/008_034020.html",
-            "sharesOut": 640561146
+            "sharesOut": 640561146,
+            "vscore": 34
       },
       {
             "rank": 9,
@@ -1149,7 +1253,8 @@
             "slug": "samsung-electro-mechanics",
             "image": "images/009_samsung-electro-mechanics.png",
             "page": "stocks/009_009150.html",
-            "sharesOut": 74693696
+            "sharesOut": 74693696,
+            "vscore": 24
       },
       {
             "rank": 10,
@@ -1159,7 +1264,8 @@
             "slug": "kia",
             "image": "images/010_kia.png",
             "page": "stocks/010_000270.html",
-            "sharesOut": 390412998
+            "sharesOut": 390412998,
+            "vscore": 60
       },
       {
             "rank": 11,
@@ -1169,7 +1275,8 @@
             "slug": "samsung-ct",
             "image": "images/011_samsung-ct.png",
             "page": "stocks/011_028260.html",
-            "sharesOut": 162167581
+            "sharesOut": 162167581,
+            "vscore": 48
       },
       {
             "rank": 12,
@@ -1179,7 +1286,8 @@
             "slug": "hanwha-aerospace",
             "image": "images/012_hanwha-aerospace.png",
             "page": "stocks/012_012450.html",
-            "sharesOut": 51563401
+            "sharesOut": 51563401,
+            "vscore": 56
       },
       {
             "rank": 13,
@@ -1189,7 +1297,8 @@
             "slug": "samsung-biologics",
             "image": "images/013_samsung-biologics.png",
             "page": "stocks/013_207940.html",
-            "sharesOut": 46290951
+            "sharesOut": 46290951,
+            "vscore": 12
       },
       {
             "rank": 14,
@@ -1199,7 +1308,8 @@
             "slug": "samsung-life",
             "image": "images/014_samsung-life.png",
             "page": "stocks/014_032830.html",
-            "sharesOut": 200000000
+            "sharesOut": 200000000,
+            "vscore": 20
       },
       {
             "rank": 15,
@@ -1209,7 +1319,8 @@
             "slug": "hyundai-mobis",
             "image": "images/015_hyundai-mobis.png",
             "page": "stocks/015_012330.html",
-            "sharesOut": 90732583
+            "sharesOut": 90732583,
+            "vscore": 29
       },
       {
             "rank": 16,
@@ -1219,7 +1330,8 @@
             "slug": "kb-financial",
             "image": "images/016_kb-financial.png",
             "page": "stocks/016_105560.html",
-            "sharesOut": 354687734
+            "sharesOut": 354687734,
+            "vscore": 39
       },
       {
             "rank": 17,
@@ -1229,7 +1341,8 @@
             "slug": "samsung-sdi",
             "image": "images/017_samsung-sdi.png",
             "page": "stocks/017_006400.html",
-            "sharesOut": 80585530
+            "sharesOut": 80585530,
+            "vscore": null
       },
       {
             "rank": 18,
@@ -1239,7 +1352,8 @@
             "slug": "hd-hyundai-electric",
             "image": "images/018_hd-hyundai-electric.png",
             "page": "stocks/018_267260.html",
-            "sharesOut": 36047135
+            "sharesOut": 36047135,
+            "vscore": 53
       },
       {
             "rank": 19,
@@ -1249,7 +1363,8 @@
             "slug": "shinhan-financial",
             "image": "images/019_shinhan-financial.png",
             "page": "stocks/019_055550.html",
-            "sharesOut": 469450239
+            "sharesOut": 469450239,
+            "vscore": 37
       },
       {
             "rank": 20,
@@ -1259,7 +1374,8 @@
             "slug": "ls-electric",
             "image": "images/020_ls-electric.png",
             "page": "stocks/020_010120.html",
-            "sharesOut": 150000000
+            "sharesOut": 150000000,
+            "vscore": 60
       },
       {
             "rank": 21,
@@ -1269,7 +1385,8 @@
             "slug": "celltrion",
             "image": "images/021_celltrion.png",
             "page": "stocks/021_068270.html",
-            "sharesOut": 232553706
+            "sharesOut": 232553706,
+            "vscore": 39
       },
       {
             "rank": 22,
@@ -1279,7 +1396,8 @@
             "slug": "mirae-asset-securities",
             "image": "images/022_mirae-asset-securities.png",
             "page": "stocks/022_006800.html",
-            "sharesOut": 559566880
+            "sharesOut": 559566880,
+            "vscore": 35
       },
       {
             "rank": 23,
@@ -1289,7 +1407,8 @@
             "slug": "sk",
             "image": "images/023_sk.png",
             "page": "stocks/023_034730.html",
-            "sharesOut": 72502703
+            "sharesOut": 72502703,
+            "vscore": 51
       },
       {
             "rank": 24,
@@ -1299,7 +1418,8 @@
             "slug": "hyosung-heavy-industries",
             "image": "images/024_hyosung-heavy-industries.png",
             "page": "stocks/024_298040.html",
-            "sharesOut": 9324548
+            "sharesOut": 9324548,
+            "vscore": 35
       },
       {
             "rank": 25,
@@ -1309,7 +1429,8 @@
             "slug": "hanmi-semiconductor",
             "image": "images/025_hanmi-semiconductor.png",
             "page": "stocks/025_042700.html",
-            "sharesOut": 95312200
+            "sharesOut": 95312200,
+            "vscore": 34
       },
       {
             "rank": 26,
@@ -1319,7 +1440,8 @@
             "slug": "posco-holdings",
             "image": "images/026_posco-holdings.png",
             "page": "stocks/026_005490.html",
-            "sharesOut": 79241527
+            "sharesOut": 79241527,
+            "vscore": 100
       },
       {
             "rank": 27,
@@ -1329,7 +1451,8 @@
             "slug": "hanwha-ocean",
             "image": "images/027_hanwha-ocean.png",
             "page": "stocks/027_042660.html",
-            "sharesOut": 306413394
+            "sharesOut": 306413394,
+            "vscore": 73
       },
       {
             "rank": 28,
@@ -1339,7 +1462,8 @@
             "slug": "hana-financial",
             "image": "images/028_hana-financial.png",
             "page": "stocks/028_086790.html",
-            "sharesOut": 274367748
+            "sharesOut": 274367748,
+            "vscore": 50
       },
       {
             "rank": 29,
@@ -1349,7 +1473,8 @@
             "slug": "hd-korea-shipbuilding",
             "image": "images/029_hd-korea-shipbuilding.png",
             "page": "stocks/029_009540.html",
-            "sharesOut": 70773116
+            "sharesOut": 70773116,
+            "vscore": 74
       },
       {
             "rank": 30,
@@ -1359,7 +1484,8 @@
             "slug": "naver",
             "image": "images/030_naver.png",
             "page": "stocks/030_035420.html",
-            "sharesOut": 156944242
+            "sharesOut": 156944242,
+            "vscore": 76
       },
       {
             "rank": 31,
@@ -1369,7 +1495,8 @@
             "slug": "korea-zinc",
             "image": "images/031_korea-zinc.png",
             "page": "stocks/031_010130.html",
-            "sharesOut": 20872969
+            "sharesOut": 20872969,
+            "vscore": 49
       },
       {
             "rank": 32,
@@ -1379,7 +1506,8 @@
             "slug": "lg-electronics",
             "image": "images/032_lg-electronics.png",
             "page": "stocks/032_066570.html",
-            "sharesOut": 162884638
+            "sharesOut": 162884638,
+            "vscore": 47
       },
       {
             "rank": 33,
@@ -1389,7 +1517,8 @@
             "slug": "lg-chem",
             "image": "images/033_lg-chem.png",
             "page": "stocks/033_051910.html",
-            "sharesOut": 70592343
+            "sharesOut": 70592343,
+            "vscore": null
       },
       {
             "rank": 34,
@@ -1399,7 +1528,8 @@
             "slug": "samsung-heavy-industries",
             "image": "images/034_samsung-heavy-industries.png",
             "page": "stocks/034_010140.html",
-            "sharesOut": 880000000
+            "sharesOut": 880000000,
+            "vscore": 24
       },
       {
             "rank": 35,
@@ -1409,7 +1539,8 @@
             "slug": "doosan",
             "image": "images/035_doosan.png",
             "page": "stocks/035_000150.html",
-            "sharesOut": 16193835
+            "sharesOut": 16193835,
+            "vscore": 14
       },
       {
             "rank": 36,
@@ -1419,7 +1550,8 @@
             "slug": "korea-electric-power",
             "image": "images/036_korea-electric-power.png",
             "page": "stocks/036_015760.html",
-            "sharesOut": 641964077
+            "sharesOut": 641964077,
+            "vscore": 83
       },
       {
             "rank": 37,
@@ -1429,7 +1561,8 @@
             "slug": "hd-hyundai",
             "image": "images/037_hd-hyundai.png",
             "page": "stocks/037_267250.html",
-            "sharesOut": 78993085
+            "sharesOut": 78993085,
+            "vscore": 62
       },
       {
             "rank": 38,
@@ -1439,7 +1572,8 @@
             "slug": "hyundai-rotem",
             "image": "images/038_hyundai-rotem.png",
             "page": "stocks/038_064350.html",
-            "sharesOut": 109142293
+            "sharesOut": 109142293,
+            "vscore": 81
       },
       {
             "rank": 39,
@@ -1449,7 +1583,8 @@
             "slug": "woori-financial",
             "image": "images/039_woori-financial.png",
             "page": "stocks/039_316140.html",
-            "sharesOut": 728089682
+            "sharesOut": 728089682,
+            "vscore": 64
       },
       {
             "rank": 40,
@@ -1459,7 +1594,8 @@
             "slug": "sk-telecom",
             "image": "images/040_sk-telecom.png",
             "page": "stocks/040_017670.html",
-            "sharesOut": 214790053
+            "sharesOut": 214790053,
+            "vscore": 0
       },
       {
             "rank": 41,
@@ -1469,7 +1605,8 @@
             "slug": "posco-future-m",
             "image": "images/041_posco-future-m.png",
             "page": "stocks/041_003670.html",
-            "sharesOut": 88946220
+            "sharesOut": 88946220,
+            "vscore": null
       },
       {
             "rank": 42,
@@ -1479,7 +1616,8 @@
             "slug": "samsung-fire-marine",
             "image": "images/042_samsung-fire-marine.png",
             "page": "stocks/042_000810.html",
-            "sharesOut": 44647473
+            "sharesOut": 44647473,
+            "vscore": null
       },
       {
             "rank": 43,
@@ -1489,7 +1627,8 @@
             "slug": "sk-innovation",
             "image": "images/043_sk-innovation.png",
             "page": "stocks/043_096770.html",
-            "sharesOut": 169052788
+            "sharesOut": 169052788,
+            "vscore": null
       },
       {
             "rank": 44,
@@ -1499,7 +1638,8 @@
             "slug": "hyundai-glovis",
             "image": "images/044_hyundai-glovis.png",
             "page": "stocks/044_086280.html",
-            "sharesOut": 75000000
+            "sharesOut": 75000000,
+            "vscore": 64
       },
       {
             "rank": 45,
@@ -1509,7 +1649,8 @@
             "slug": "hanwha-systems",
             "image": "images/045_hanwha-systems.png",
             "page": "stocks/045_272210.html",
-            "sharesOut": 188919389
+            "sharesOut": 188919389,
+            "vscore": 91
       },
       {
             "rank": 46,
@@ -1519,7 +1660,8 @@
             "slug": "ktng",
             "image": "images/046_ktng.png",
             "page": "stocks/046_033780.html",
-            "sharesOut": 103810456
+            "sharesOut": 103810456,
+            "vscore": 25
       },
       {
             "rank": 47,
@@ -1529,7 +1671,8 @@
             "slug": "lig-defense-aerospace",
             "image": "images/047_lig-nex1.png",
             "page": "stocks/047_079550.html",
-            "sharesOut": 22000000
+            "sharesOut": 22000000,
+            "vscore": 25
       },
       {
             "rank": 48,
@@ -1539,7 +1682,8 @@
             "slug": "hyundai-autoever",
             "image": "images/048_hyundai-autoever.png",
             "page": "stocks/048_307950.html",
-            "sharesOut": 27423982
+            "sharesOut": 27423982,
+            "vscore": 9
       },
       {
             "rank": 49,
@@ -1549,7 +1693,8 @@
             "slug": "kakao",
             "image": "images/049_kakao.png",
             "page": "stocks/049_035720.html",
-            "sharesOut": 442981070
+            "sharesOut": 442981070,
+            "vscore": 7
       },
       {
             "rank": 50,
@@ -1559,7 +1704,8 @@
             "slug": "hmm",
             "image": "images/050_hmm.png",
             "page": "stocks/050_011200.html",
-            "sharesOut": 943237970
+            "sharesOut": 943237970,
+            "vscore": 77
       },
       {
             "rank": 51,
@@ -1569,7 +1715,8 @@
             "slug": "hyundai-engineering-construction",
             "image": "images/051_hyundai-engineering-construction.png",
             "page": "stocks/051_000720.html",
-            "sharesOut": 111355765
+            "sharesOut": 111355765,
+            "vscore": 47
       },
       {
             "rank": 52,
@@ -1579,7 +1726,8 @@
             "slug": "meritz-financial",
             "image": "images/052_meritz-financial.png",
             "page": "stocks/052_138040.html",
-            "sharesOut": 167347273
+            "sharesOut": 167347273,
+            "vscore": 45
       },
       {
             "rank": 53,
@@ -1589,7 +1737,8 @@
             "slug": "lg-innotek",
             "image": "images/053_lg-innotek.png",
             "page": "stocks/053_011070.html",
-            "sharesOut": 23667107
+            "sharesOut": 23667107,
+            "vscore": 32
       },
       {
             "rank": 54,
@@ -1599,7 +1748,8 @@
             "slug": "lg-corp",
             "image": "images/054_lg-corp.png",
             "page": "stocks/054_003550.html",
-            "sharesOut": 151192004
+            "sharesOut": 151192004,
+            "vscore": 64
       },
       {
             "rank": 55,
@@ -1609,7 +1759,8 @@
             "slug": "ibk",
             "image": "images/055_ibk.png",
             "page": "stocks/055_024110.html",
-            "sharesOut": 797425869
+            "sharesOut": 797425869,
+            "vscore": 75
       },
       {
             "rank": 56,
@@ -1619,7 +1770,8 @@
             "slug": "ls",
             "image": "images/056_ls.png",
             "page": "stocks/056_006260.html",
-            "sharesOut": 31200000
+            "sharesOut": 31200000,
+            "vscore": 29
       },
       {
             "rank": 57,
@@ -1629,7 +1781,8 @@
             "slug": "korea-aerospace-industries",
             "image": "images/057_korea-aerospace-industries.png",
             "page": "stocks/057_047810.html",
-            "sharesOut": 97475107
+            "sharesOut": 97475107,
+            "vscore": 6
       },
       {
             "rank": 58,
@@ -1639,7 +1792,8 @@
             "slug": "apr",
             "image": "images/058_apr.png",
             "page": "stocks/058_278470.html",
-            "sharesOut": 37438155
+            "sharesOut": 37438155,
+            "vscore": null
       },
       {
             "rank": 59,
@@ -1649,7 +1803,8 @@
             "slug": "kt",
             "image": "images/059_kt.png",
             "page": "stocks/059_030200.html",
-            "sharesOut": 252021685
+            "sharesOut": 252021685,
+            "vscore": 100
       },
       {
             "rank": 60,
@@ -1659,7 +1814,8 @@
             "slug": "korea-investment-holdings",
             "image": "images/060_korea-investment-holdings.png",
             "page": "stocks/060_071050.html",
-            "sharesOut": 55725992
+            "sharesOut": 55725992,
+            "vscore": 81
       },
       {
             "rank": 61,
@@ -1669,7 +1825,8 @@
             "slug": "samsung-sds",
             "image": "images/061_samsung-sds.png",
             "page": "stocks/061_018260.html",
-            "sharesOut": 77377800
+            "sharesOut": 77377800,
+            "vscore": 59
       },
       {
             "rank": 62,
@@ -1679,7 +1836,8 @@
             "slug": "krafton",
             "image": "images/062_krafton.png",
             "page": "stocks/062_259960.html",
-            "sharesOut": 46137833
+            "sharesOut": 46137833,
+            "vscore": 75
       },
       {
             "rank": 63,
@@ -1689,7 +1847,8 @@
             "slug": "s-oil",
             "image": "images/063_s-oil.png",
             "page": "stocks/063_010950.html",
-            "sharesOut": 112582792
+            "sharesOut": 112582792,
+            "vscore": 25
       },
       {
             "rank": 64,
@@ -1699,7 +1858,8 @@
             "slug": "posco-international",
             "image": "images/064_posco-international.png",
             "page": "stocks/064_047050.html",
-            "sharesOut": 175922788
+            "sharesOut": 175922788,
+            "vscore": 34
       },
       {
             "rank": 65,
@@ -1709,7 +1869,8 @@
             "slug": "samsung-epis-holdings",
             "image": "images/065_samsung-bioepis.png",
             "page": "stocks/065_0126Z0.html",
-            "sharesOut": 24883049
+            "sharesOut": 24883049,
+            "vscore": null
       },
       {
             "rank": 66,
@@ -1719,7 +1880,8 @@
             "slug": "taihan-cable",
             "image": "images/066_taihan-cable.png",
             "page": "stocks/066_001440.html",
-            "sharesOut": 195992596
+            "sharesOut": 195992596,
+            "vscore": 27
       },
       {
             "rank": 67,
@@ -1729,7 +1891,8 @@
             "slug": "nh-investment-securities",
             "image": "images/067_nh-investment-securities.png",
             "page": "stocks/067_005940.html",
-            "sharesOut": 369206105
+            "sharesOut": 369206105,
+            "vscore": 52
       },
       {
             "rank": 68,
@@ -1739,7 +1902,8 @@
             "slug": "daewoo-enc",
             "image": "images/068_daewoo-enc.png",
             "page": "stocks/068_047040.html",
-            "sharesOut": 410907638
+            "sharesOut": 410907638,
+            "vscore": null
       },
       {
             "rank": 69,
@@ -1749,7 +1913,8 @@
             "slug": "samsung-securities",
             "image": "images/069_samsung-securities.png",
             "page": "stocks/069_016360.html",
-            "sharesOut": 89300000
+            "sharesOut": 89300000,
+            "vscore": 61
       },
       {
             "rank": 70,
@@ -1759,7 +1924,8 @@
             "slug": "kiwoom-securities",
             "image": "images/070_kiwoom-securities.png",
             "page": "stocks/070_039490.html",
-            "sharesOut": 26228316
+            "sharesOut": 26228316,
+            "vscore": 57
       },
       {
             "rank": 71,
@@ -1769,7 +1935,8 @@
             "slug": "db-insurance",
             "image": "images/071_db-insurance.png",
             "page": "stocks/071_005830.html",
-            "sharesOut": 65500349
+            "sharesOut": 65500349,
+            "vscore": 63
       },
       {
             "rank": 72,
@@ -1779,7 +1946,8 @@
             "slug": "kakaobank",
             "image": "images/072_kakaobank.png",
             "page": "stocks/072_323410.html",
-            "sharesOut": 477120437
+            "sharesOut": 477120437,
+            "vscore": 22
       },
       {
             "rank": 73,
@@ -1789,7 +1957,8 @@
             "slug": "hd-hyundai-marine-solution",
             "image": "images/073_hd-hyundai-marine-solution.png",
             "page": "stocks/073_443060.html",
-            "sharesOut": 44833460
+            "sharesOut": 44833460,
+            "vscore": 23
       },
       {
             "rank": 74,
@@ -1799,7 +1968,8 @@
             "slug": "samsung-ea",
             "image": "images/074_samsung-ea.png",
             "page": "stocks/074_028050.html",
-            "sharesOut": 196000000
+            "sharesOut": 196000000,
+            "vscore": 72
       },
       {
             "rank": 75,
@@ -1809,7 +1979,8 @@
             "slug": "hybe",
             "image": "images/075_hybe.png",
             "page": "stocks/075_352820.html",
-            "sharesOut": 43106836
+            "sharesOut": 43106836,
+            "vscore": 12
       },
       {
             "rank": 76,
@@ -1819,7 +1990,8 @@
             "slug": "hanwha",
             "image": "images/076_hanwha.png",
             "page": "stocks/076_000880.html",
-            "sharesOut": 70507919
+            "sharesOut": 70507919,
+            "vscore": 51
       },
       {
             "rank": 77,
@@ -1829,7 +2001,8 @@
             "slug": "hyundai-motor-preferred-2b",
             "image": "images/077_hyundai-motor-preferred-2b.png",
             "page": "stocks/077_005387.html",
-            "sharesOut": 34963930
+            "sharesOut": 34963930,
+            "vscore": 79
       },
       {
             "rank": 78,
@@ -1839,7 +2012,8 @@
             "slug": "isupetasys",
             "image": "images/078_isupetasys.png",
             "page": "stocks/078_007660.html",
-            "sharesOut": 73409219
+            "sharesOut": 73409219,
+            "vscore": 45
       },
       {
             "rank": 79,
@@ -1849,7 +2023,8 @@
             "slug": "samyang-foods",
             "image": "images/079_samyang-foods.png",
             "page": "stocks/079_003230.html",
-            "sharesOut": 7533015
+            "sharesOut": 7533015,
+            "vscore": null
       },
       {
             "rank": 80,
@@ -1859,7 +2034,8 @@
             "slug": "korean-air",
             "image": "images/080_korean-air.png",
             "page": "stocks/080_003490.html",
-            "sharesOut": 368220661
+            "sharesOut": 368220661,
+            "vscore": 29
       },
       {
             "rank": 81,
@@ -1869,7 +2045,8 @@
             "slug": "sanil-electric",
             "image": "images/081_sanil-electric.png",
             "page": "stocks/081_062040.html",
-            "sharesOut": 30615850
+            "sharesOut": 30615850,
+            "vscore": 51
       },
       {
             "rank": 82,
@@ -1879,7 +2056,8 @@
             "slug": "hd-hyundai-construction-equipment",
             "image": "images/082_hd-hyundai-construction-equipment.png",
             "page": "stocks/082_267270.html",
-            "sharesOut": 47921897
+            "sharesOut": 47921897,
+            "vscore": null
       },
       {
             "rank": 83,
@@ -1889,7 +2067,8 @@
             "slug": "gaon-cable",
             "image": "images/083_gaon-cable.png",
             "page": "stocks/083_000500.html",
-            "sharesOut": 29777607
+            "sharesOut": 29777607,
+            "vscore": 31
       },
       {
             "rank": 104,
@@ -1899,7 +2078,8 @@
             "slug": "db-hitek",
             "image": "images/084_db-hitek.png",
             "page": "stocks/084_000990.html",
-            "sharesOut": 43504588
+            "sharesOut": 43504588,
+            "vscore": 74
       },
       {
             "rank": 85,
@@ -1909,7 +2089,8 @@
             "slug": "sk-biopharmaceuticals",
             "image": "images/085_sk-biopharmaceuticals.png",
             "page": "stocks/085_326030.html",
-            "sharesOut": 78313250
+            "sharesOut": 78313250,
+            "vscore": 75
       },
       {
             "rank": 86,
@@ -1919,7 +2100,8 @@
             "slug": "hanjin-kal",
             "image": "images/086_hanjin-kal.png",
             "page": "stocks/086_180640.html",
-            "sharesOut": 66762279
+            "sharesOut": 66762279,
+            "vscore": 17
       },
       {
             "rank": 103,
@@ -1929,7 +2111,8 @@
             "slug": "hanwha-solutions",
             "image": "images/087_hanwha-solutions.png",
             "page": "stocks/087_009830.html",
-            "sharesOut": 171892536
+            "sharesOut": 171892536,
+            "vscore": 42
       },
       {
             "rank": 88,
@@ -1939,7 +2122,8 @@
             "slug": "hankook-tire-technology",
             "image": "images/088_hankook-tire-technology.png",
             "page": "stocks/088_161390.html",
-            "sharesOut": 123875069
+            "sharesOut": 123875069,
+            "vscore": 86
       },
       {
             "rank": 89,
@@ -1949,7 +2133,8 @@
             "slug": "lg-cns",
             "image": "images/089_lg-cns.png",
             "page": "stocks/089_064400.html",
-            "sharesOut": 96885948
+            "sharesOut": 96885948,
+            "vscore": 82
       },
       {
             "rank": 102,
@@ -1959,7 +2144,8 @@
             "slug": "lg-display",
             "image": "images/090_lg-display.png",
             "page": "stocks/090_034220.html",
-            "sharesOut": 500000000
+            "sharesOut": 500000000,
+            "vscore": 62
       },
       {
             "rank": 91,
@@ -1969,7 +2155,8 @@
             "slug": "daeduck-electronics",
             "image": "images/091_daeduck-electronics.png",
             "page": "stocks/091_353200.html",
-            "sharesOut": 49416925
+            "sharesOut": 49416925,
+            "vscore": 41
       },
       {
             "rank": 92,
@@ -1979,7 +2166,8 @@
             "slug": "amorepacific",
             "image": "images/092_amorepacific.png",
             "page": "stocks/092_090430.html",
-            "sharesOut": 58492759
+            "sharesOut": 58492759,
+            "vscore": null
       },
       {
             "rank": 93,
@@ -1989,7 +2177,8 @@
             "slug": "kakao-pay",
             "image": "images/093_kakao-pay.png",
             "page": "stocks/093_377300.html",
-            "sharesOut": 135270125
+            "sharesOut": 135270125,
+            "vscore": 20
       },
       {
             "rank": 105,
@@ -1999,7 +2188,8 @@
             "slug": "l-and-f",
             "image": "images/094_l-and-f.png",
             "page": "stocks/094_066970.html",
-            "sharesOut": 40683260
+            "sharesOut": 40683260,
+            "vscore": null
       },
       {
             "rank": 95,
@@ -2009,7 +2199,8 @@
             "slug": "yuhan",
             "image": "images/095_yuhan.png",
             "page": "stocks/095_000100.html",
-            "sharesOut": 79647601
+            "sharesOut": 79647601,
+            "vscore": null
       },
       {
             "rank": 96,
@@ -2019,7 +2210,8 @@
             "slug": "doosan-bobcat",
             "image": "images/096_doosan-bobcat.png",
             "page": "stocks/096_241560.html",
-            "sharesOut": 95856065
+            "sharesOut": 95856065,
+            "vscore": 52
       },
       {
             "rank": 97,
@@ -2029,7 +2221,8 @@
             "slug": "coway",
             "image": "images/097_coway.png",
             "page": "stocks/097_021240.html",
-            "sharesOut": 70767426
+            "sharesOut": 70767426,
+            "vscore": 58
       },
       {
             "rank": 98,
@@ -2039,7 +2232,8 @@
             "slug": "gs",
             "image": "images/098_gs.png",
             "page": "stocks/098_078930.html",
-            "sharesOut": 92895495
+            "sharesOut": 92895495,
+            "vscore": 91
       },
       {
             "rank": 106,
@@ -2049,7 +2243,8 @@
             "slug": "iljin-electric",
             "image": "images/099_iljin-electric.png",
             "page": "stocks/099_103590.html",
-            "sharesOut": 47685390
+            "sharesOut": 47685390,
+            "vscore": 51
       },
       {
             "rank": 100,
@@ -2059,7 +2254,8 @@
             "slug": "lg-uplus",
             "image": "images/100_lg-uplus.png",
             "page": "stocks/100_032640.html",
-            "sharesOut": 424427732
+            "sharesOut": 424427732,
+            "vscore": 50
       },
       {
             "rank": 101,
@@ -2069,7 +2265,8 @@
             "slug": "nong-sim",
             "image": "images/100_lg-uplus.png",
             "page": "stocks/101_004370.html",
-            "sharesOut": 6082642
+            "sharesOut": 6082642,
+            "vscore": null
       },
       {
             "rank": 84,
@@ -2079,7 +2276,8 @@
             "slug": "samsung-card",
             "image": "images/084_samsung-card.png",
             "page": "stocks/084_029780.html",
-            "sharesOut": 115858891
+            "sharesOut": 115858891,
+            "vscore": 58
       },
       {
             "rank": 87,
@@ -2089,7 +2287,8 @@
             "slug": "bnk-financial-group",
             "image": "images/087_bnk-financial-group.png",
             "page": "stocks/087_138930.html",
-            "sharesOut": 310327033
+            "sharesOut": 310327033,
+            "vscore": 84
       },
       {
             "rank": 90,
@@ -2099,7 +2298,8 @@
             "slug": "jb-financial-group",
             "image": "images/090_jb-financial-group.png",
             "page": "stocks/090_175330.html",
-            "sharesOut": 186521824
+            "sharesOut": 186521824,
+            "vscore": 55
       },
       {
             "rank": 94,
@@ -2109,7 +2309,8 @@
             "slug": "orion",
             "image": "images/094_orion.png",
             "page": "stocks/094_271560.html",
-            "sharesOut": 39528788
+            "sharesOut": 39528788,
+            "vscore": 67
       },
       {
             "rank": 99,
@@ -2119,7 +2320,8 @@
             "slug": "nc",
             "image": "images/099_nc.png",
             "page": "stocks/099_036570.html",
-            "sharesOut": 21544022
+            "sharesOut": 21544022,
+            "vscore": 65
       },
       {
             "rank": 107,
@@ -2129,7 +2331,8 @@
             "slug": "dreamtech",
             "image": "images/107_dreamtech.png",
             "page": "stocks/107_192650.html",
-            "sharesOut": 68890041
+            "sharesOut": 68890041,
+            "vscore": 47
       }
 ].filter((s) => s.rank <= 100);
 
@@ -2163,6 +2366,7 @@
     const mainTitle = document.getElementById('mainTitle');
     const rankViewBtn = document.getElementById('rankViewBtn');
     const industryViewBtn = document.getElementById('industryViewBtn');
+    const scoreViewBtn = document.getElementById('scoreViewBtn');
     const statGrid = document.getElementById('statGrid');
     const favCountEl = document.getElementById('favCount');
     const favOnlyCheckbox = document.getElementById('favOnlyCheckbox');
@@ -2174,6 +2378,7 @@
     let currentView = 'rank';
     let favOnlyActive = false;
     let rankPage = 1;
+    let scorePage = 1;
     const RANK_PAGE_SIZE = 10;
 
     function saveFavorites() {
@@ -2197,6 +2402,14 @@
     function fmtMcap(joWon) {
       if (joWon == null) return '—';
       return joWon.toFixed(1) + '조원';
+    }
+    // 종목 상세 페이지의 Get-DpVscoreGrade와 동일한 등급 경계.
+    function vscoreGrade(score) {
+      if (score >= 80) return { label: '매우 저평가', tier: 'tier-cheap' };
+      if (score >= 70) return { label: '저평가', tier: 'tier-cheap' };
+      if (score >= 60) return { label: '다소 저평가', tier: 'tier-cheap' };
+      if (score >= 40) return { label: '적정 범위', tier: 'tier-mid' };
+      return { label: '고평가·위험', tier: 'tier-expensive' };
     }
     function marketCapOf(stock) {
       const live = stockLive[stock.code];
@@ -2425,14 +2638,103 @@
       });
     }
 
+    // ── 매력도별 뷰 ──
+    function createScoreRow(stock, displayRank) {
+      const row = document.createElement('div');
+      row.className = 'score-row';
+      row.setAttribute('role', 'row');
+
+      const live = stockLive[stock.code];
+      const isFav = favorites.has(stock.code);
+      const hasChange = live && typeof live.change === 'number';
+      const grade = vscoreGrade(stock.vscore);
+
+      row.innerHTML = `
+        <div class="sr2-rank" role="cell">${displayRank}</div>
+        <div class="sr2-name" role="cell">${stock.name}<small>${stock.code}</small></div>
+        <div class="sr2-price" role="cell">${live ? fmtWon(live.price) : '—'}</div>
+        <div class="sr2-change ${hasChange ? (live.change >= 0 ? 'up' : 'dn') : ''}" role="cell">${hasChange ? fmtChange(live.change) : '—'}</div>
+        <div class="score-badge-group" role="cell">
+          <span class="score-badge-num">${stock.vscore}<span style="font-weight:400;color:var(--color-text-secondary);">/100</span></span>
+          <span class="score-badge-grade ${grade.tier}">${grade.label}</span>
+        </div>
+        <div class="sr2-star" role="cell"><button type="button" class="star-btn ${isFav ? 'active' : ''}" aria-label="즐겨찾기">${isFav ? '★' : '☆'}</button></div>
+      `;
+
+      row.addEventListener('click', () => { window.location.href = stock.page; });
+      row.querySelector('.star-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleFavorite(stock.code);
+      });
+
+      return row;
+    }
+
+    function renderScoreView() {
+      stockArea.innerHTML = '';
+      mainTitle.textContent = 'KOSPI Top 100 - 매력도별 보기';
+
+      const scored = [...stocks]
+        .filter((s) => !favOnlyActive || favorites.has(s.code))
+        .filter((s) => s.vscore != null)
+        .sort((a, b) => b.vscore - a.vscore);
+      const unscored = stocks.filter((s) => !favOnlyActive || favorites.has(s.code)).filter((s) => s.vscore == null).length;
+
+      const totalPages = Math.max(1, Math.ceil(scored.length / RANK_PAGE_SIZE));
+      if (scorePage > totalPages) scorePage = totalPages;
+      const start = (scorePage - 1) * RANK_PAGE_SIZE;
+      const pageItems = scored.slice(start, start + RANK_PAGE_SIZE);
+
+      const table = document.createElement('div');
+      table.className = 'rank-table';
+      table.setAttribute('role', 'table');
+
+      const head = document.createElement('div');
+      head.className = 'score-table-head';
+      head.setAttribute('role', 'row');
+      head.innerHTML = `
+        <div role="columnheader">순위</div>
+        <div role="columnheader">종목명</div>
+        <div role="columnheader" style="text-align:right;">현재가</div>
+        <div role="columnheader" style="text-align:right;">등락률</div>
+        <div role="columnheader" style="text-align:right;white-space:nowrap;">매력도 점수</div>
+        <div role="columnheader"></div>
+      `;
+      table.appendChild(head);
+
+      pageItems.forEach((stock, i) => table.appendChild(createScoreRow(stock, start + i + 1)));
+
+      stockArea.appendChild(table);
+
+      if (scored.length > 0) {
+        stockArea.appendChild(
+          createPagination(scored.length, RANK_PAGE_SIZE, scorePage, (p) => {
+            scorePage = p;
+            renderScoreView();
+            stockArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          })
+        );
+      }
+
+      const note = document.createElement('p');
+      note.className = 'score-view-note';
+      note.textContent = `밸류에이션 매력도 점수(1차 버전, 업종 내 상대순위 기준)는 업종 내 비교 가능한 지표가 3개 이상인 종목만 계산됩니다. ` +
+        (unscored > 0 ? `점수가 계산되지 않은 ${unscored}개 종목은 이 목록에서 제외됩니다.` : '') +
+        ' 저평가가 곧 주가 상승을 의미하지는 않으며, 투자 권고가 아닙니다.';
+      stockArea.appendChild(note);
+    }
+
     // ── 탭 전환 / 즐겨찾기만 보기 ──
     function setActiveViewButton(mode) {
       rankViewBtn.classList.toggle('active', mode === 'rank');
       industryViewBtn.classList.toggle('active', mode === 'industry');
+      scoreViewBtn.classList.toggle('active', mode === 'score');
     }
 
     function rerenderCurrentView() {
-      if (currentView === 'rank') { renderRankView(); } else { renderSectorView(); }
+      if (currentView === 'rank') { renderRankView(); }
+      else if (currentView === 'score') { renderScoreView(); }
+      else { renderSectorView(); }
     }
 
     function setFavOnly(active) {
@@ -2440,6 +2742,7 @@
       favOnlyCheckbox.checked = active;
       favOnlyBtn.classList.toggle('active', active);
       rankPage = 1;
+      scorePage = 1;
       rerenderCurrentView();
     }
 
@@ -2453,6 +2756,12 @@
       currentView = 'industry';
       setActiveViewButton('industry');
       renderSectorView();
+    });
+    scoreViewBtn.addEventListener('click', () => {
+      currentView = 'score';
+      scorePage = 1;
+      setActiveViewButton('score');
+      renderScoreView();
     });
     favOnlyCheckbox.addEventListener('change', () => setFavOnly(favOnlyCheckbox.checked));
     favOnlyBtn.addEventListener('click', () => setFavOnly(!favOnlyActive));
