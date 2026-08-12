@@ -204,6 +204,47 @@
       box-shadow: var(--shadow-active-tab);
     }
 
+    .toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .stock-search {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .stock-search-icon {
+      position: absolute;
+      left: 11px;
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      pointer-events: none;
+    }
+
+    .stock-search-input {
+      width: 200px;
+      padding: 9px 12px 9px 32px;
+      border: 1px solid var(--color-border);
+      border-radius: 9px;
+      background: var(--color-card-bg);
+      color: var(--color-text-primary);
+      font-size: 13px;
+      font-family: inherit;
+    }
+
+    .stock-search-input::placeholder {
+      color: var(--color-text-secondary);
+    }
+
+    .stock-search-input:focus {
+      outline: none;
+      border-color: var(--color-accent);
+    }
+
     .fav-only-label {
       display: flex;
       align-items: center;
@@ -820,6 +861,19 @@
         display: inline-flex;
       }
 
+      .toolbar-right {
+        gap: 8px;
+        width: 100%;
+      }
+
+      .stock-search {
+        flex: 1;
+      }
+
+      .stock-search-input {
+        width: 100%;
+      }
+
       /* 순위별 뷰: 테이블 → 스택형 카드 (동일 DOM, 컬럼만 재배치) */
       .rank-table-head {
         display: none;
@@ -980,11 +1034,17 @@
         <button class="view-btn" type="button" id="industryViewBtn">업종별 보기</button>
         <button class="view-btn" type="button" id="scoreViewBtn">매력도별 보기</button>
       </div>
-      <label class="fav-only-label">
-        <input type="checkbox" id="favOnlyCheckbox" />
-        즐겨찾기만 보기
-      </label>
-      <button class="fav-only-btn" type="button" id="favOnlyBtn">★ 즐겨찾기만</button>
+      <div class="toolbar-right">
+        <div class="stock-search">
+          <span class="stock-search-icon">🔍</span>
+          <input type="search" class="stock-search-input" id="stockSearchInput" placeholder="종목명 또는 코드 검색" aria-label="종목 검색" />
+        </div>
+        <label class="fav-only-label">
+          <input type="checkbox" id="favOnlyCheckbox" />
+          즐겨찾기만 보기
+        </label>
+        <button class="fav-only-btn" type="button" id="favOnlyBtn">★ 즐겨찾기만</button>
+      </div>
     </div>
 
     <section id="stockArea"></section>
@@ -2370,6 +2430,7 @@
     const favCountEl = document.getElementById('favCount');
     const favOnlyCheckbox = document.getElementById('favOnlyCheckbox');
     const favOnlyBtn = document.getElementById('favOnlyBtn');
+    const stockSearchInput = document.getElementById('stockSearchInput');
 
     // ── 즐겨찾기 (localStorage) ──
     const FAV_KEY = 'kospi10000.favorites';
@@ -2378,7 +2439,22 @@
     let favOnlyActive = false;
     let rankPage = 1;
     let scorePage = 1;
+    let searchQuery = '';
     const RANK_PAGE_SIZE = 10;
+
+    function matchesSearch(stock) {
+      if (!searchQuery) return true;
+      return stock.name.toLowerCase().includes(searchQuery) || stock.code.includes(searchQuery);
+    }
+
+    function createEmptyState() {
+      const el = document.createElement('p');
+      el.className = 'score-view-note';
+      el.textContent = searchQuery
+        ? `"${stockSearchInput.value}"에 해당하는 종목이 없습니다.`
+        : '조건에 해당하는 종목이 없습니다.';
+      return el;
+    }
 
     function saveFavorites() {
       localStorage.setItem(FAV_KEY, JSON.stringify([...favorites]));
@@ -2534,7 +2610,13 @@
 
       const base = [...stocks]
         .filter((s) => !favOnlyActive || favorites.has(s.code))
+        .filter(matchesSearch)
         .sort((a, b) => rankOf(a) - rankOf(b));
+
+      if (base.length === 0) {
+        stockArea.appendChild(createEmptyState());
+        return;
+      }
 
       const totalPages = Math.max(1, Math.ceil(base.length / RANK_PAGE_SIZE));
       if (rankPage > totalPages) rankPage = totalPages;
@@ -2608,7 +2690,12 @@
       stockArea.innerHTML = '';
       mainTitle.textContent = 'KOSPI Top 100 - 업종별 보기';
 
-      const base = stocks.filter((s) => !favOnlyActive || favorites.has(s.code));
+      const base = stocks.filter((s) => !favOnlyActive || favorites.has(s.code)).filter(matchesSearch);
+
+      if (base.length === 0) {
+        stockArea.appendChild(createEmptyState());
+        return;
+      }
 
       getVisibleIndustries().forEach((industry) => {
         const industryStocks = base
@@ -2675,9 +2762,15 @@
 
       const scored = [...stocks]
         .filter((s) => !favOnlyActive || favorites.has(s.code))
+        .filter(matchesSearch)
         .filter((s) => s.vscore != null)
         .sort((a, b) => b.vscore - a.vscore);
-      const unscored = stocks.filter((s) => !favOnlyActive || favorites.has(s.code)).filter((s) => s.vscore == null).length;
+      const unscored = stocks.filter((s) => !favOnlyActive || favorites.has(s.code)).filter(matchesSearch).filter((s) => s.vscore == null).length;
+
+      if (scored.length === 0) {
+        stockArea.appendChild(createEmptyState());
+        return;
+      }
 
       const totalPages = Math.max(1, Math.ceil(scored.length / RANK_PAGE_SIZE));
       if (scorePage > totalPages) scorePage = totalPages;
@@ -2764,6 +2857,13 @@
     });
     favOnlyCheckbox.addEventListener('change', () => setFavOnly(favOnlyCheckbox.checked));
     favOnlyBtn.addEventListener('click', () => setFavOnly(!favOnlyActive));
+
+    stockSearchInput.addEventListener('input', () => {
+      searchQuery = stockSearchInput.value.trim().toLowerCase();
+      rankPage = 1;
+      scorePage = 1;
+      rerenderCurrentView();
+    });
 
     function renderDailyMovers() {
       const container = document.getElementById('dailyMoverGroups');
