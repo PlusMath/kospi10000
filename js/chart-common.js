@@ -83,6 +83,59 @@ function openChartFullscreen(wrap, controls) {
   overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
 }
 
+// "7. Daily 주요 뉴스" 날짜별 아카이브 뷰어 — PlusMath/finnews의 날짜 선택 UI를 종목
+// 페이지에 맞게 이식. data/news/{code}.json을 fetch로 한 번만 읽어 캐시해두고,
+// <select> 날짜 변경 시 재요청 없이 즉시 다시 그린다. 종목 파일 자체는 정적이라
+// 매일 갱신되는 아카이브 JSON만 새로 받아오면 페이지 코드 수정 없이 최신 상태 반영.
+function initDpNews(code) {
+  const select = document.getElementById('dpNewsDateSelect');
+  const holder = document.getElementById('dpNewsBody');
+  const toolbar = document.getElementById('dpNewsToolbar');
+  if (!select || !holder) return;
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  function fmtDateLabel(dateStr) {
+    const d = new Date(dateStr + 'T00:00:00+09:00');
+    const days = ['일', '월', '화', '수', '목', '금', '토'];
+    return `${d.getFullYear()}.${d.getMonth() + 1}.${d.getDate()} (${days[d.getDay()]})`;
+  }
+  function render(archive, dateKey) {
+    const items = archive[dateKey] || [];
+    if (items.length === 0) {
+      holder.innerHTML = '<p class="dp-news-empty">이 날짜에는 관련 뉴스가 없습니다.</p>';
+      return;
+    }
+    holder.innerHTML = '<div class="dp-news-list">' + items.map(n => `
+      <a class="dp-news-item" href="${esc(n.link)}" target="_blank" rel="noopener">
+        <div class="dp-news-title">${esc(n.title)}</div>
+        <div class="dp-news-meta"><span class="dp-news-source">${esc(n.source)}</span><span class="dp-news-time">${esc(n.time)}</span></div>
+      </a>
+    `).join('') + '</div>';
+  }
+
+  fetch(`../data/news/${code}.json`)
+    .then(res => { if (!res.ok) throw new Error('no data'); return res.json(); })
+    .then(archive => {
+      const dateKeys = Object.keys(archive).sort().reverse();
+      if (dateKeys.length === 0) {
+        holder.innerHTML = '<p class="dp-news-empty">최근 뉴스 데이터가 없습니다.</p>';
+        if (toolbar) toolbar.style.display = 'none';
+        return;
+      }
+      select.innerHTML = dateKeys.map(k => `<option value="${esc(k)}">${esc(fmtDateLabel(k))}</option>`).join('');
+      select.value = dateKeys[0];
+      if (dateKeys.length === 1 && toolbar) toolbar.style.display = 'none';
+      select.addEventListener('change', () => render(archive, select.value));
+      render(archive, dateKeys[0]);
+    })
+    .catch(() => {
+      holder.innerHTML = '<p class="dp-news-empty">뉴스 데이터를 불러오지 못했습니다.</p>';
+      if (toolbar) toolbar.style.display = 'none';
+    });
+}
+
 // 공통 캔들차트 렌더러 — 기간 전환(1개월/3개월/6개월/1년) + 마우스 호버 툴팁
 // data: [{d:'YYYY-MM-DD', o,h,l,c}, ...] (오름차순, 만원 단위), 외부 CDN 없이 순수 SVG로 렌더링
 function renderCandleChart(cfg) {
