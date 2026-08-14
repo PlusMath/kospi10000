@@ -126,7 +126,6 @@ function initDpNews(code) {
       }
       select.innerHTML = dateKeys.map(k => `<option value="${esc(k)}">${esc(fmtDateLabel(k))}</option>`).join('');
       select.value = dateKeys[0];
-      if (dateKeys.length === 1 && toolbar) toolbar.style.display = 'none';
       select.addEventListener('change', () => render(archive, select.value));
       render(archive, dateKeys[0]);
     })
