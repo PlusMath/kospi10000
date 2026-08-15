@@ -969,6 +969,7 @@
       .view-toggle {
         gap: 3px;
         padding: 3px;
+        flex-wrap: wrap;
       }
 
       .view-btn {
@@ -1167,6 +1168,7 @@
         <button class="view-btn active" type="button" id="rankViewBtn">순위별 보기</button>
         <button class="view-btn" type="button" id="industryViewBtn">업종별 보기</button>
         <button class="view-btn" type="button" id="scoreViewBtn">매력도별 보기</button>
+        <button class="view-btn" type="button" id="tscoreViewBtn">기술적 매력도순</button>
       </div>
       <div class="toolbar-right">
         <div class="stock-search">
@@ -2564,6 +2566,7 @@
     const rankViewBtn = document.getElementById('rankViewBtn');
     const industryViewBtn = document.getElementById('industryViewBtn');
     const scoreViewBtn = document.getElementById('scoreViewBtn');
+    const tscoreViewBtn = document.getElementById('tscoreViewBtn');
     const statGrid = document.getElementById('statGrid');
     const favCountEl = document.getElementById('favCount');
     const favOnlyCheckbox = document.getElementById('favOnlyCheckbox');
@@ -2581,8 +2584,43 @@
     let favOnlyActive = false;
     let rankPage = 1;
     let scorePage = 1;
+    let tscorePage = 1;
     let searchQuery = '';
     const RANK_PAGE_SIZE = 10;
+
+    // ── 기술적 매력도(technical_score.json, PowerShell 자동화와 무관한 별도 Python
+    //     배치가 매일 갱신) — vscore와 달리 stocks 배열에 미리 없어 최초 탭 클릭 시
+    //     한 번만 fetch해 메모리에 캐시해둔다. ──
+    let technicalScoreData = null;
+    let technicalScoreLoadPromise = null;
+    function loadTechnicalScoreData() {
+      if (technicalScoreData) return Promise.resolve(technicalScoreData);
+      if (technicalScoreLoadPromise) return technicalScoreLoadPromise;
+      technicalScoreLoadPromise = fetch('data/technical_score.json')
+        .then((res) => { if (!res.ok) throw new Error('no data'); return res.json(); })
+        .then((data) => { technicalScoreData = data; return data; })
+        .catch(() => { technicalScoreData = {}; return technicalScoreData; });
+      return technicalScoreLoadPromise;
+    }
+    // 종목 상세 페이지의 scoring.classify_grade와 동일한 등급 문자열 → 색상 티어.
+    function tscoreGradeTier(grade) {
+      if (grade === '최상급 진입 후보' || grade === '기술적 매력 우수') return 'tier-cheap';
+      if (grade === '관심 종목' || grade === '추세 양호·진입 위치 불리') return 'tier-mid';
+      return 'tier-expensive';
+    }
+    // vscore 등급(2~5자)에 맞춰진 좁은 배지 칸에 그대로 넣기엔 기술적 매력도 등급
+    // 문자열이 너무 길어(예: "추세 양호·진입 위치 불리" 11자) 넘쳐 옆 칸과 겹치는
+    // 문제가 있어, 홈 목록 전용 축약 라벨을 별도로 둔다(상세페이지 카드는 원문 그대로 표시).
+    function tscoreShortGrade(grade) {
+      const map = {
+        '최상급 진입 후보': '최상급',
+        '기술적 매력 우수': '매력 우수',
+        '관심 종목': '관심 종목',
+        '추세 양호·진입 위치 불리': '진입 불리',
+        '기술적 부적격': '부적격',
+      };
+      return map[grade] || grade;
+    }
 
     function matchesSearch(stock) {
       if (!searchQuery) return true;
@@ -3003,16 +3041,122 @@
       stockArea.appendChild(note);
     }
 
+    // ── 기술적 매력도순 뷰 ──
+    function createTscoreRow(stock, displayRank, scoreEntry) {
+      const row = document.createElement('div');
+      row.className = 'score-row';
+      row.setAttribute('role', 'row');
+
+      const live = stockLive[stock.code];
+      const isFav = favorites.has(stock.code);
+      const hasChange = live && typeof live.change === 'number';
+      const tier = tscoreGradeTier(scoreEntry.grade);
+
+      row.innerHTML = `
+        <div class="sr2-rank" role="cell">${displayRank}</div>
+        <div class="sr2-name" role="cell">${stock.name}<small>${stock.code}</small></div>
+        <div class="sr2-price" role="cell">${live ? fmtWon(live.price) : '—'}</div>
+        <div class="sr2-change ${hasChange ? (live.change >= 0 ? 'up' : 'dn') : ''}" role="cell">${hasChange ? fmtChange(live.change) : '—'}</div>
+        <div class="score-badge-group" role="cell">
+          <span class="score-badge-num">${scoreEntry.technical_score}<span style="font-weight:400;color:var(--color-text-secondary);">/100</span></span>
+          <span class="score-badge-grade ${tier}">${tscoreShortGrade(scoreEntry.grade)}</span>
+        </div>
+        <div class="sr2-star" role="cell"><button type="button" class="star-btn ${isFav ? 'active' : ''}" aria-label="즐겨찾기">${isFav ? '★' : '☆'}</button></div>
+      `;
+
+      row.addEventListener('click', () => { window.location.href = stock.page; });
+      row.querySelector('.star-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleFavorite(stock.code);
+      });
+
+      return row;
+    }
+
+    function renderTscoreView() {
+      stockArea.innerHTML = '';
+      mainTitle.textContent = 'KOSPI Top 100';
+
+      if (!technicalScoreData) {
+        const loading = document.createElement('p');
+        loading.className = 'score-view-note';
+        loading.textContent = '기술적 매력도 데이터를 불러오는 중...';
+        stockArea.appendChild(loading);
+        loadTechnicalScoreData().then(() => {
+          if (currentView === 'tscore') renderTscoreView();
+        });
+        return;
+      }
+
+      const scored = [...stocks]
+        .filter((s) => !favOnlyActive || favorites.has(s.code))
+        .filter(matchesSearch)
+        .map((s) => ({ stock: s, entry: technicalScoreData[s.code] }))
+        .filter(({ entry }) => entry && entry.data_status === 'ok' && entry.technical_score != null)
+        .sort((a, b) => b.entry.technical_score - a.entry.technical_score);
+      const unscored = stocks.filter((s) => !favOnlyActive || favorites.has(s.code)).filter(matchesSearch).length - scored.length;
+
+      if (scored.length === 0) {
+        stockArea.appendChild(createEmptyState());
+        return;
+      }
+
+      const totalPages = Math.max(1, Math.ceil(scored.length / RANK_PAGE_SIZE));
+      if (tscorePage > totalPages) tscorePage = totalPages;
+      const start = (tscorePage - 1) * RANK_PAGE_SIZE;
+      const pageItems = scored.slice(start, start + RANK_PAGE_SIZE);
+
+      const table = document.createElement('div');
+      table.className = 'rank-table';
+      table.setAttribute('role', 'table');
+
+      const head = document.createElement('div');
+      head.className = 'score-table-head';
+      head.setAttribute('role', 'row');
+      head.innerHTML = `
+        <div role="columnheader">순위</div>
+        <div role="columnheader">종목명</div>
+        <div role="columnheader" style="text-align:right;">현재가</div>
+        <div role="columnheader" style="text-align:right;">등락률</div>
+        <div role="columnheader" style="text-align:right;white-space:nowrap;">기술적 매력도</div>
+        <div role="columnheader"></div>
+      `;
+      table.appendChild(head);
+
+      pageItems.forEach(({ stock, entry }, i) => table.appendChild(createTscoreRow(stock, start + i + 1, entry)));
+
+      stockArea.appendChild(table);
+
+      if (scored.length > 0) {
+        stockArea.appendChild(
+          createPagination(scored.length, RANK_PAGE_SIZE, tscorePage, (p) => {
+            tscorePage = p;
+            renderTscoreView();
+            stockArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          })
+        );
+      }
+
+      const note = document.createElement('p');
+      note.className = 'score-view-note';
+      note.textContent = '기술적 매력도(Minervini SEPA/Trend Template 기반)는 데이터가 부족하거나 유동성 기준 미달인 종목은 제외됩니다. ' +
+        (unscored > 0 ? `이 목록에서 제외된 종목: ${unscored}개. ` : '') +
+        '투자 권고가 아닙니다.';
+      stockArea.appendChild(note);
+    }
+
     // ── 탭 전환 / 즐겨찾기만 보기 ──
     function setActiveViewButton(mode) {
       rankViewBtn.classList.toggle('active', mode === 'rank');
       industryViewBtn.classList.toggle('active', mode === 'industry');
       scoreViewBtn.classList.toggle('active', mode === 'score');
+      tscoreViewBtn.classList.toggle('active', mode === 'tscore');
     }
 
     function rerenderCurrentView() {
       if (currentView === 'rank') { renderRankView(); }
       else if (currentView === 'score') { renderScoreView(); }
+      else if (currentView === 'tscore') { renderTscoreView(); }
       else { renderSectorView(); }
     }
 
@@ -3022,6 +3166,7 @@
       favOnlyBtn.classList.toggle('active', active);
       rankPage = 1;
       scorePage = 1;
+      tscorePage = 1;
       rerenderCurrentView();
     }
 
@@ -3042,6 +3187,12 @@
       setActiveViewButton('score');
       renderScoreView();
     });
+    tscoreViewBtn.addEventListener('click', () => {
+      currentView = 'tscore';
+      tscorePage = 1;
+      setActiveViewButton('tscore');
+      renderTscoreView();
+    });
     favOnlyCheckbox.addEventListener('change', () => setFavOnly(favOnlyCheckbox.checked));
     favOnlyBtn.addEventListener('click', () => setFavOnly(!favOnlyActive));
 
@@ -3049,6 +3200,7 @@
       searchQuery = stockSearchInput.value.trim().toLowerCase();
       rankPage = 1;
       scorePage = 1;
+      tscorePage = 1;
       rerenderCurrentView();
     });
 
