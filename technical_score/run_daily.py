@@ -28,11 +28,22 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from technical_score.batch import TickerSpec, evaluate_batch  # noqa: E402
 
-logging.basicConfig(level=logging.INFO, format="[%(asctime)s] %(levelname)s %(message)s", datefmt="%H:%M:%S")
-logger = logging.getLogger(__name__)
-
 REPO_ROOT = Path(__file__).parent.parent
 INDEX_HTML_PATH = REPO_ROOT / "index.html"
+LOG_DIR = REPO_ROOT / "logs"
+
+# update_daily_charts.ps1의 logs/update_{timestamp}.log 관례와 동일하게, 콘솔과
+# 파일에 동시 기록 — 예약 작업(Task Scheduler)으로 무인 실행될 때 콘솔 출력은
+# 사라지므로 파일 로그가 유일한 사후 확인 수단이 된다.
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+_log_path = LOG_DIR / f"technical_score_{datetime.now():%Y%m%d_%H%M%S}.log"
+logging.basicConfig(
+    level=logging.INFO,
+    format="[%(asctime)s] %(levelname)s %(message)s",
+    datefmt="%H:%M:%S",
+    handlers=[logging.StreamHandler(), logging.FileHandler(_log_path, encoding="utf-8")],
+)
+logger = logging.getLogger(__name__)
 OUTPUT_PATH = REPO_ROOT / "data" / "technical_score.json"
 
 _STOCK_ENTRY_PATTERN = re.compile(
