@@ -153,7 +153,7 @@ body{background:var(--dp-bg);}
   .dp-cons-summary{font-size:14.5px;}.dp-news-date-select{font-size:13.5px;}.dp-news-title{font-size:14.5px;}.dp-news-meta{font-size:12.5px;}
   .dp-footer-note{font-size:12.5px;}.dp-news-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:10px;}.dp-news-date-label{font-size:12px;color:var(--dp-text3);}.dp-news-date-select{font-size:12.5px;padding:4px 8px;border:1px solid var(--dp-border2);border-radius:6px;background:var(--dp-card);color:inherit;}.dp-news-empty{font-size:12.5px;color:var(--dp-text3);text-align:center;padding:12px 0;}.dp-news-list{display:flex;flex-direction:column;}.dp-news-item{display:block;padding:10px 0;border-bottom:1px solid var(--dp-border2);text-decoration:none;color:inherit;}.dp-news-item:last-child{border-bottom:none;}.dp-news-title{font-size:13px;font-weight:600;line-height:1.5;margin-bottom:4px;}.dp-news-item:hover .dp-news-title{color:var(--dp-accent);}.dp-news-meta{display:flex;gap:8px;font-size:11px;color:var(--dp-text4);}.dp-news-source{font-weight:600;}
 }
-</style>
+.dp-tscore{background:var(--dp-accent-soft);border:1px solid var(--dp-accent-soft2);border-radius:12px;padding:16px 18px;margin-bottom:18px;}.dp-tscore-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:8px;}.dp-tscore-num{font-size:28px;font-weight:800;color:var(--dp-accent);}.dp-tscore-num span{font-size:14px;font-weight:600;color:var(--dp-text3);}.dp-tscore-grade{font-size:13px;font-weight:700;color:var(--dp-accent);background:var(--dp-card);padding:4px 12px;border-radius:999px;}.dp-tscore-track{background:oklch(0.93 0.004 90);border-radius:5px;height:8px;margin-bottom:10px;}.dp-tscore-fill{background:var(--dp-accent);border-radius:5px;height:8px;}.dp-tscore-sub{font-size:11px;color:var(--dp-text3);line-height:1.5;margin-bottom:10px;}.dp-tscore-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px;}.dp-tscore-item{background:var(--dp-card);border-radius:8px;padding:8px 6px;text-align:center;}.dp-tscore-item .l{font-size:9.5px;color:var(--dp-text3);margin-bottom:2px;display:block;}.dp-tscore-item .v{font-size:13px;font-weight:700;}.dp-tscore-summary{margin:0;padding-left:18px;font-size:11.5px;color:var(--dp-text2);line-height:1.7;}.dp-tscore-empty{font-size:12.5px;color:var(--dp-text3);text-align:center;padding:12px 0;}</style>
 
 <div class="dp">
 
@@ -197,6 +197,9 @@ body{background:var(--dp-bg);}
   <div class="dp-acc-body">
     <div id="ehChartControls" class="kc-controls"></div>
     <svg id="ehSvg" viewBox="0 0 720 240" width="100%" style="display:block;margin-bottom:16px;background:oklch(0.98 0.004 90);border-radius:10px;padding:4px;"></svg>
+<!-- dp-tscore:start -->
+    <div id="dpTscoreBody"><p class="dp-tscore-empty">불러오는 중...</p></div>
+    <!-- dp-tscore:end -->
 
     <div class="dp-g2">
       <div>
@@ -563,6 +566,7 @@ function dpToggle(id) {
   if (willOpen && id === 'tech' && !_dpTechDrawn) {
     _dpTechDrawn = true;
     renderCandleChart({svgId:'ehSvg', controlsId:'ehChartControls', data: data});
+    initTechnicalScore('0126Z0');
   }
   if (willOpen && id === 'fund' && !_dpAnnualDrawn) {
     _dpAnnualDrawn = true;
@@ -574,7 +578,7 @@ function dpOpenAll() {
   SECTION_IDS.forEach((id) => {
     document.getElementById('dpAcc-' + id).classList.add('open');
   });
-  if (!_dpTechDrawn) { _dpTechDrawn = true; renderCandleChart({svgId:'ehSvg', controlsId:'ehChartControls', data: data}); }
+  if (!_dpTechDrawn) { _dpTechDrawn = true; renderCandleChart({svgId:'ehSvg', controlsId:'ehChartControls', data: data}); initTechnicalScore('0126Z0'); }
   if (!_dpAnnualDrawn) { _dpAnnualDrawn = true; drawAnnualChart(); }
   if (!_dpNewsInit) { _dpNewsInit = true; initDpNews('0126Z0'); }
 }
