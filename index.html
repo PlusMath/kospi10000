@@ -505,12 +505,12 @@
     .up { color: var(--color-up); }
     .dn { color: var(--color-down); }
 
-    /* ── 매력도별 뷰: 순위별 뷰와 동일 그리드, 시가총액 칸을 매력도 점수로 교체 ── */
+    /* ── 매력도별 뷰: 순위별 뷰와 동일 그리드, 시가총액 칸을 기본·기술·총점 3분할로 교체 ── */
     .score-table-head,
     .score-row {
       display: grid;
-      grid-template-columns: 44px minmax(140px, 1.6fr) 130px 100px 84px 132px 36px;
-      grid-template-areas: "rank name industry price change score star";
+      grid-template-columns: 44px minmax(140px, 1.6fr) 100px 84px 216px 36px;
+      grid-template-areas: "rank name price change score star";
       align-items: center;
       gap: 8px 14px;
       padding: 13px 20px;
@@ -541,18 +541,37 @@
     .sr2-change { grid-area: change; font-size: 14px; font-weight: 700; text-align: right; }
     .sr2-star { grid-area: star; text-align: center; }
 
-    .score-badge-group { grid-area: score; display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
-    .score-badge-num { font-size: 14px; font-weight: 800; }
-    .score-badge-grade {
-      font-size: 10.5px;
-      font-weight: 700;
-      padding: 2px 8px;
+    .score-sort-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .score-sort-btn {
+      border: 1px solid var(--color-border);
+      background: var(--color-card-bg);
+      color: var(--color-text-secondary);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      padding: 7px 14px;
       border-radius: 999px;
-      white-space: nowrap;
+      cursor: pointer;
     }
-    .score-badge-grade.tier-cheap { background: var(--color-up-soft, oklch(0.55 0.2 25 / 0.12)); color: var(--color-up); }
-    .score-badge-grade.tier-mid { background: oklch(0.7 0.01 90 / 0.18); color: var(--color-text-secondary); }
-    .score-badge-grade.tier-expensive { background: var(--color-down-soft, oklch(0.52 0.14 250 / 0.12)); color: var(--color-down); }
+    .score-sort-btn.active { background: var(--color-accent); border-color: var(--color-accent); color: #fff; }
+
+    .score-badge-group.dual { grid-area: score; display: flex; align-items: center; justify-content: flex-end; gap: 6px; }
+    .score-mini {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 46px;
+      background: oklch(0.97 0.004 90);
+      border-radius: 8px;
+      padding: 4px 6px;
+    }
+    .score-mini-l { font-size: 8.5px; font-weight: 600; color: var(--color-text-secondary); }
+    .score-mini-v { font-size: 14px; font-weight: 800; }
+    .score-mini.tier-cheap .score-mini-v { color: var(--color-up); }
+    .score-mini.tier-mid .score-mini-v { color: var(--color-text-secondary); }
+    .score-mini.tier-expensive .score-mini-v { color: var(--color-down); }
+    .score-mini.total { background: var(--color-accent-soft); }
+    .score-mini.total .score-mini-v { color: var(--color-accent); }
 
     .score-view-note {
       font-size: 12.5px;
@@ -1070,6 +1089,24 @@
         display: none;
       }
 
+      .score-sort-bar {
+        gap: 6px;
+        margin-bottom: 10px;
+      }
+
+      .score-sort-btn {
+        padding: 6px 11px;
+        font-size: 12px;
+      }
+
+      .score-mini {
+        min-width: 38px;
+        padding: 3px 4px;
+      }
+
+      .score-mini-l { font-size: 8px; }
+      .score-mini-v { font-size: 12.5px; }
+
       .sr2-rank {
         width: 26px;
         height: 26px;
@@ -1168,7 +1205,6 @@
         <button class="view-btn active" type="button" id="rankViewBtn">순위별 보기</button>
         <button class="view-btn" type="button" id="industryViewBtn">업종별 보기</button>
         <button class="view-btn" type="button" id="scoreViewBtn">매력도별 보기</button>
-        <button class="view-btn" type="button" id="tscoreViewBtn">기술적 매력도순</button>
       </div>
       <div class="toolbar-right">
         <div class="stock-search">
@@ -2566,7 +2602,6 @@
     const rankViewBtn = document.getElementById('rankViewBtn');
     const industryViewBtn = document.getElementById('industryViewBtn');
     const scoreViewBtn = document.getElementById('scoreViewBtn');
-    const tscoreViewBtn = document.getElementById('tscoreViewBtn');
     const statGrid = document.getElementById('statGrid');
     const favCountEl = document.getElementById('favCount');
     const favOnlyCheckbox = document.getElementById('favOnlyCheckbox');
@@ -2584,7 +2619,7 @@
     let favOnlyActive = false;
     let rankPage = 1;
     let scorePage = 1;
-    let tscorePage = 1;
+    let scoreSortMode = 'total'; // 'fundamental' | 'technical' | 'total'
     let searchQuery = '';
     const RANK_PAGE_SIZE = 10;
 
@@ -2607,19 +2642,6 @@
       if (grade === '최상급 진입 후보' || grade === '기술적 매력 우수') return 'tier-cheap';
       if (grade === '관심 종목' || grade === '추세 양호·진입 위치 불리') return 'tier-mid';
       return 'tier-expensive';
-    }
-    // vscore 등급(2~5자)에 맞춰진 좁은 배지 칸에 그대로 넣기엔 기술적 매력도 등급
-    // 문자열이 너무 길어(예: "추세 양호·진입 위치 불리" 11자) 넘쳐 옆 칸과 겹치는
-    // 문제가 있어, 홈 목록 전용 축약 라벨을 별도로 둔다(상세페이지 카드는 원문 그대로 표시).
-    function tscoreShortGrade(grade) {
-      const map = {
-        '최상급 진입 후보': '최상급',
-        '기술적 매력 우수': '매력 우수',
-        '관심 종목': '관심 종목',
-        '추세 양호·진입 위치 불리': '진입 불리',
-        '기술적 부적격': '부적격',
-      };
-      return map[grade] || grade;
     }
 
     function matchesSearch(stock) {
@@ -2949,8 +2971,14 @@
       });
     }
 
-    // ── 매력도별 뷰 ──
-    function createScoreRow(stock, displayRank) {
+    // ── 매력도별 뷰(기본적 매력=vscore + 기술적 매력=technical_score 통합) ──
+    function scoreSortLabel(mode) {
+      if (mode === 'technical') return '기술적 매력순';
+      if (mode === 'fundamental') return '기본적 매력순';
+      return '총점순';
+    }
+
+    function createScoreRow(displayRank, stock, vscoreVal, tscoreEntry, totalVal) {
       const row = document.createElement('div');
       row.className = 'score-row';
       row.setAttribute('role', 'row');
@@ -2958,16 +2986,27 @@
       const live = stockLive[stock.code];
       const isFav = favorites.has(stock.code);
       const hasChange = live && typeof live.change === 'number';
-      const grade = vscoreGrade(stock.vscore);
+      const vTier = vscoreVal != null ? vscoreGrade(vscoreVal).tier : '';
+      const tTier = tscoreEntry ? tscoreGradeTier(tscoreEntry.grade) : '';
 
       row.innerHTML = `
         <div class="sr2-rank" role="cell">${displayRank}</div>
         <div class="sr2-name" role="cell">${stock.name}<small>${stock.code}</small></div>
         <div class="sr2-price" role="cell">${live ? fmtWon(live.price) : '—'}</div>
         <div class="sr2-change ${hasChange ? (live.change >= 0 ? 'up' : 'dn') : ''}" role="cell">${hasChange ? fmtChange(live.change) : '—'}</div>
-        <div class="score-badge-group" role="cell">
-          <span class="score-badge-num">${stock.vscore}<span style="font-weight:400;color:var(--color-text-secondary);">/100</span></span>
-          <span class="score-badge-grade ${grade.tier}">${grade.label}</span>
+        <div class="score-badge-group dual" role="cell">
+          <div class="score-mini ${vTier}" title="기본적 매력(밸류에이션)">
+            <span class="score-mini-l">기본</span>
+            <span class="score-mini-v">${vscoreVal != null ? vscoreVal : '—'}</span>
+          </div>
+          <div class="score-mini ${tTier}" title="기술적 매력(Minervini SEPA/Trend Template)">
+            <span class="score-mini-l">기술</span>
+            <span class="score-mini-v">${tscoreEntry ? tscoreEntry.technical_score : '—'}</span>
+          </div>
+          <div class="score-mini total" title="총점(기본+기술)">
+            <span class="score-mini-l">총점</span>
+            <span class="score-mini-v">${totalVal != null ? totalVal : '—'}</span>
+          </div>
         </div>
         <div class="sr2-star" role="cell"><button type="button" class="star-btn ${isFav ? 'active' : ''}" aria-label="즐겨찾기">${isFav ? '★' : '☆'}</button></div>
       `;
@@ -2985,12 +3024,54 @@
       stockArea.innerHTML = '';
       mainTitle.textContent = 'KOSPI Top 100';
 
-      const scored = [...stocks]
-        .filter((s) => !favOnlyActive || favorites.has(s.code))
-        .filter(matchesSearch)
-        .filter((s) => s.vscore != null)
-        .sort((a, b) => b.vscore - a.vscore);
-      const unscored = stocks.filter((s) => !favOnlyActive || favorites.has(s.code)).filter(matchesSearch).filter((s) => s.vscore == null).length;
+      const sortBar = document.createElement('div');
+      sortBar.className = 'score-sort-bar';
+      ['technical', 'fundamental', 'total'].forEach((mode) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'score-sort-btn' + (scoreSortMode === mode ? ' active' : '');
+        btn.textContent = scoreSortLabel(mode);
+        btn.addEventListener('click', () => {
+          if (scoreSortMode === mode) return;
+          scoreSortMode = mode;
+          scorePage = 1;
+          renderScoreView();
+        });
+        sortBar.appendChild(btn);
+      });
+      stockArea.appendChild(sortBar);
+
+      // 기본적 매력순만 볼 때는 technical_score.json이 필요 없어 fetch를 미룬다.
+      if (scoreSortMode !== 'fundamental' && !technicalScoreData) {
+        const loading = document.createElement('p');
+        loading.className = 'score-view-note';
+        loading.textContent = '기술적 매력도 데이터를 불러오는 중...';
+        stockArea.appendChild(loading);
+        loadTechnicalScoreData().then(() => {
+          if (currentView === 'score') renderScoreView();
+        });
+        return;
+      }
+
+      const base = stocks.filter((s) => !favOnlyActive || favorites.has(s.code)).filter(matchesSearch);
+      const combined = base.map((s) => {
+        const tEntry = technicalScoreData ? technicalScoreData[s.code] : undefined;
+        const hasT = !!(tEntry && tEntry.data_status === 'ok' && tEntry.technical_score != null);
+        const vscoreVal = s.vscore != null ? s.vscore : null;
+        const tscoreEntry = hasT ? tEntry : null;
+        const totalVal = (vscoreVal != null && tscoreEntry != null) ? (vscoreVal + tscoreEntry.technical_score) : null;
+        return { stock: s, vscoreVal, tscoreEntry, totalVal };
+      });
+
+      let scored;
+      if (scoreSortMode === 'fundamental') {
+        scored = combined.filter((c) => c.vscoreVal != null).sort((a, b) => b.vscoreVal - a.vscoreVal);
+      } else if (scoreSortMode === 'technical') {
+        scored = combined.filter((c) => c.tscoreEntry != null).sort((a, b) => b.tscoreEntry.technical_score - a.tscoreEntry.technical_score);
+      } else {
+        scored = combined.filter((c) => c.totalVal != null).sort((a, b) => b.totalVal - a.totalVal);
+      }
+      const excludedCount = combined.length - scored.length;
 
       if (scored.length === 0) {
         stockArea.appendChild(createEmptyState());
@@ -3014,12 +3095,12 @@
         <div role="columnheader">종목명</div>
         <div role="columnheader" style="text-align:right;">현재가</div>
         <div role="columnheader" style="text-align:right;">등락률</div>
-        <div role="columnheader" style="text-align:right;white-space:nowrap;">매력도 점수</div>
+        <div role="columnheader" style="text-align:right;white-space:nowrap;">기본 · 기술 · 총점</div>
         <div role="columnheader"></div>
       `;
       table.appendChild(head);
 
-      pageItems.forEach((stock, i) => table.appendChild(createScoreRow(stock, start + i + 1)));
+      pageItems.forEach((c, i) => table.appendChild(createScoreRow(start + i + 1, c.stock, c.vscoreVal, c.tscoreEntry, c.totalVal)));
 
       stockArea.appendChild(table);
 
@@ -3035,113 +3116,10 @@
 
       const note = document.createElement('p');
       note.className = 'score-view-note';
-      note.textContent = `밸류에이션 매력도 점수(1차 버전, 업종 내 상대순위 기준)는 업종 내 비교 가능한 지표가 3개 이상인 종목만 계산됩니다. ` +
-        (unscored > 0 ? `점수가 계산되지 않은 ${unscored}개 종목은 이 목록에서 제외됩니다.` : '') +
-        ' 저평가가 곧 주가 상승을 의미하지는 않으며, 투자 권고가 아닙니다.';
-      stockArea.appendChild(note);
-    }
-
-    // ── 기술적 매력도순 뷰 ──
-    function createTscoreRow(stock, displayRank, scoreEntry) {
-      const row = document.createElement('div');
-      row.className = 'score-row';
-      row.setAttribute('role', 'row');
-
-      const live = stockLive[stock.code];
-      const isFav = favorites.has(stock.code);
-      const hasChange = live && typeof live.change === 'number';
-      const tier = tscoreGradeTier(scoreEntry.grade);
-
-      row.innerHTML = `
-        <div class="sr2-rank" role="cell">${displayRank}</div>
-        <div class="sr2-name" role="cell">${stock.name}<small>${stock.code}</small></div>
-        <div class="sr2-price" role="cell">${live ? fmtWon(live.price) : '—'}</div>
-        <div class="sr2-change ${hasChange ? (live.change >= 0 ? 'up' : 'dn') : ''}" role="cell">${hasChange ? fmtChange(live.change) : '—'}</div>
-        <div class="score-badge-group" role="cell">
-          <span class="score-badge-num">${scoreEntry.technical_score}<span style="font-weight:400;color:var(--color-text-secondary);">/100</span></span>
-          <span class="score-badge-grade ${tier}">${tscoreShortGrade(scoreEntry.grade)}</span>
-        </div>
-        <div class="sr2-star" role="cell"><button type="button" class="star-btn ${isFav ? 'active' : ''}" aria-label="즐겨찾기">${isFav ? '★' : '☆'}</button></div>
-      `;
-
-      row.addEventListener('click', () => { window.location.href = stock.page; });
-      row.querySelector('.star-btn').addEventListener('click', (e) => {
-        e.stopPropagation();
-        toggleFavorite(stock.code);
-      });
-
-      return row;
-    }
-
-    function renderTscoreView() {
-      stockArea.innerHTML = '';
-      mainTitle.textContent = 'KOSPI Top 100';
-
-      if (!technicalScoreData) {
-        const loading = document.createElement('p');
-        loading.className = 'score-view-note';
-        loading.textContent = '기술적 매력도 데이터를 불러오는 중...';
-        stockArea.appendChild(loading);
-        loadTechnicalScoreData().then(() => {
-          if (currentView === 'tscore') renderTscoreView();
-        });
-        return;
-      }
-
-      const scored = [...stocks]
-        .filter((s) => !favOnlyActive || favorites.has(s.code))
-        .filter(matchesSearch)
-        .map((s) => ({ stock: s, entry: technicalScoreData[s.code] }))
-        .filter(({ entry }) => entry && entry.data_status === 'ok' && entry.technical_score != null)
-        .sort((a, b) => b.entry.technical_score - a.entry.technical_score);
-      const unscored = stocks.filter((s) => !favOnlyActive || favorites.has(s.code)).filter(matchesSearch).length - scored.length;
-
-      if (scored.length === 0) {
-        stockArea.appendChild(createEmptyState());
-        return;
-      }
-
-      const totalPages = Math.max(1, Math.ceil(scored.length / RANK_PAGE_SIZE));
-      if (tscorePage > totalPages) tscorePage = totalPages;
-      const start = (tscorePage - 1) * RANK_PAGE_SIZE;
-      const pageItems = scored.slice(start, start + RANK_PAGE_SIZE);
-
-      const table = document.createElement('div');
-      table.className = 'rank-table';
-      table.setAttribute('role', 'table');
-
-      const head = document.createElement('div');
-      head.className = 'score-table-head';
-      head.setAttribute('role', 'row');
-      head.innerHTML = `
-        <div role="columnheader">순위</div>
-        <div role="columnheader">종목명</div>
-        <div role="columnheader" style="text-align:right;">현재가</div>
-        <div role="columnheader" style="text-align:right;">등락률</div>
-        <div role="columnheader" style="text-align:right;white-space:nowrap;">기술적 매력도</div>
-        <div role="columnheader"></div>
-      `;
-      table.appendChild(head);
-
-      pageItems.forEach(({ stock, entry }, i) => table.appendChild(createTscoreRow(stock, start + i + 1, entry)));
-
-      stockArea.appendChild(table);
-
-      if (scored.length > 0) {
-        stockArea.appendChild(
-          createPagination(scored.length, RANK_PAGE_SIZE, tscorePage, (p) => {
-            tscorePage = p;
-            renderTscoreView();
-            stockArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          })
-        );
-      }
-
-      const note = document.createElement('p');
-      note.className = 'score-view-note';
-      note.textContent = '기술적 매력도(Minervini SEPA/Trend Template 기반)는 데이터가 부족하거나 유동성 기준 미달인 종목은 제외됩니다. ' +
-        (unscored > 0 ? `이 목록에서 제외된 종목: ${unscored}개. ` : '') +
-        '투자 권고가 아닙니다.';
+      note.textContent = '기본적 매력(밸류에이션, 업종 내 상대순위 1차 버전)과 기술적 매력(Minervini SEPA/Trend Template 기반) 점수를 함께 표시합니다. ' +
+        `총점은 두 점수의 합(200점 만점)입니다. 현재 "${scoreSortLabel(scoreSortMode)}" 기준으로, 그 정렬에 필요한 점수가 없는 종목은 목록에서 제외됩니다` +
+        (excludedCount > 0 ? `(제외 ${excludedCount}개).` : '.') +
+        ' 저평가·기술적 매력이 곧 주가 상승을 의미하지는 않으며, 투자 권고가 아닙니다.';
       stockArea.appendChild(note);
     }
 
@@ -3150,13 +3128,11 @@
       rankViewBtn.classList.toggle('active', mode === 'rank');
       industryViewBtn.classList.toggle('active', mode === 'industry');
       scoreViewBtn.classList.toggle('active', mode === 'score');
-      tscoreViewBtn.classList.toggle('active', mode === 'tscore');
     }
 
     function rerenderCurrentView() {
       if (currentView === 'rank') { renderRankView(); }
       else if (currentView === 'score') { renderScoreView(); }
-      else if (currentView === 'tscore') { renderTscoreView(); }
       else { renderSectorView(); }
     }
 
@@ -3166,7 +3142,6 @@
       favOnlyBtn.classList.toggle('active', active);
       rankPage = 1;
       scorePage = 1;
-      tscorePage = 1;
       rerenderCurrentView();
     }
 
@@ -3187,12 +3162,6 @@
       setActiveViewButton('score');
       renderScoreView();
     });
-    tscoreViewBtn.addEventListener('click', () => {
-      currentView = 'tscore';
-      tscorePage = 1;
-      setActiveViewButton('tscore');
-      renderTscoreView();
-    });
     favOnlyCheckbox.addEventListener('change', () => setFavOnly(favOnlyCheckbox.checked));
     favOnlyBtn.addEventListener('click', () => setFavOnly(!favOnlyActive));
 
@@ -3200,7 +3169,6 @@
       searchQuery = stockSearchInput.value.trim().toLowerCase();
       rankPage = 1;
       scorePage = 1;
-      tscorePage = 1;
       rerenderCurrentView();
     });
 
