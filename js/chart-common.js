@@ -135,6 +135,64 @@ function initDpNews(code) {
     });
 }
 
+// "1. 기술적 분석" 상단 — Minervini SEPA/Trend Template 기반 기술적 매력도 점수 카드.
+// data/technical_score.json(전 종목 통합, PowerShell과 무관한 별도 Python 배치가 매일
+// 갱신)을 fetch해서 렌더링. 100점 본점수와 별도 트랙인 돌파신호(10점)·수급점수(10점)도
+// 함께 표시.
+function initTechnicalScore(code) {
+  const holder = document.getElementById('dpTscoreBody');
+  if (!holder) return;
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  fetch('../data/technical_score.json')
+    .then(res => { if (!res.ok) throw new Error('no data'); return res.json(); })
+    .then(all => {
+      const r = all[code];
+      if (!r || r.data_status !== 'ok' || r.technical_score === null || r.technical_score === undefined) {
+        const reason = (r && r.error_message) || '기술적 매력도 데이터가 없습니다.';
+        holder.innerHTML = `<p class="dp-tscore-empty">${esc(reason)}</p>`;
+        return;
+      }
+
+      const score = r.technical_score;
+      const items = [];
+      if (r.trend_score) items.push(['추세 적격성 (40점)', r.trend_score.score]);
+      if (r.entry_score) items.push(['진입 매력도 (60점)', r.entry_score.score]);
+      if (r.risk_penalty) items.push(['위험 감점', r.risk_penalty.score]);
+      if (r.breakout_signal) items.push(['돌파 신호 (별도10점)', r.breakout_signal.score]);
+      if (r.supply_demand_score && r.supply_demand_score.computable) items.push(['수급 점수 (별도10점)', r.supply_demand_score.score]);
+
+      const itemsHtml = items.map(([label, val]) => {
+        const style = val < 0 ? ' style="color:var(--dp-down);"' : '';
+        const sign = val > 0 && label.indexOf('위험') >= 0 ? '+' : '';
+        return `<div class="dp-tscore-item"><span class="l">${esc(label)}</span><span class="v"${style}>${sign}${val.toFixed(1)}</span></div>`;
+      }).join('');
+
+      const warning = r.trend_score && r.trend_score.warning;
+      const warningHtml = warning ? ` · <span style="color:var(--dp-down);font-weight:700;">${esc(warning)}</span>` : '';
+      const summaryHtml = (r.summary || []).map(s => `<li>${esc(s)}</li>`).join('');
+
+      holder.innerHTML = `
+        <div class="dp-tscore">
+          <div class="dp-tscore-top">
+            <div class="dp-tscore-num">${Math.round(score)}<span>/100</span></div>
+            <div class="dp-tscore-grade">${esc(r.grade)}</div>
+          </div>
+          <div class="dp-tscore-track"><div class="dp-tscore-fill" style="width:${Math.max(0, Math.min(100, score))}%;"></div></div>
+          <div class="dp-tscore-sub">기술적 매력도(Minervini SEPA/Trend Template 기반)${warningHtml} · 투자 권고 아님</div>
+          <div class="dp-tscore-grid">${itemsHtml}</div>
+          ${summaryHtml ? `<ul class="dp-tscore-summary">${summaryHtml}</ul>` : ''}
+        </div>
+      `;
+    })
+    .catch(() => {
+      holder.innerHTML = '<p class="dp-tscore-empty">기술적 매력도 데이터를 불러오지 못했습니다.</p>';
+    });
+}
+
 // 공통 캔들차트 렌더러 — 기간 전환(1개월/3개월/6개월/1년) + 마우스 호버 툴팁
 // data: [{d:'YYYY-MM-DD', o,h,l,c}, ...] (오름차순, 만원 단위), 외부 CDN 없이 순수 SVG로 렌더링
 function renderCandleChart(cfg) {
