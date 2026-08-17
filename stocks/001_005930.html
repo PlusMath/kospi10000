@@ -244,12 +244,6 @@ body{background:var(--dp-bg);}
   <a href="#dpAcc-news" data-id="news" onclick="dpNavClick(event,'news')">7. Daily 주요 뉴스</a>
 </nav>
 
-<div class="dp-openclose">
-  <button class="op" onclick="dpOpenAll()">모두 열기</button>
-  <span class="dp-sep">|</span>
-  <button class="cl" onclick="dpCloseAll()">모두 닫기</button>
-</div>
-
 <!-- 1. 기술적 분석 -->
 <div class="dp-acc" id="dpAcc-tech">
   <div class="dp-acc-body">
@@ -869,11 +863,10 @@ function setActiveNav(id) {
   });
 }
 function dpNavClick(e, id) {
-  const el = document.getElementById('dpAcc-' + id);
-  if (!el.classList.contains('open')) {
-    el.classList.add('open');
-    dpEnsureLazyDraw(id);
-  }
+  SECTION_IDS.forEach((sid) => {
+    document.getElementById('dpAcc-' + sid).classList.toggle('open', sid === id);
+  });
+  dpEnsureLazyDraw(id);
   setActiveNav(id);
 }
 window.addEventListener('DOMContentLoaded', () => {
