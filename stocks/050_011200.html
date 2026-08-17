@@ -20,6 +20,12 @@
 }
 body{background:var(--dp-bg);}
 .dp{font-family:'Noto Sans KR',Arial,sans-serif;color:var(--dp-text);max-width:800px;margin:0 auto;padding:1rem 0 2rem;}
+.dp-sidenav{display:flex;flex-direction:row;flex-wrap:wrap;border:1px solid oklch(0.62 0.02 260);background:oklch(0.98 0.003 90);margin-bottom:16px;}
+.dp-sidenav a{flex:0 0 auto;display:block;padding:11px 14px;font-size:12.5px;font-weight:700;letter-spacing:-0.02em;text-align:center;color:oklch(0.22 0.02 260);text-decoration:none;border-right:1px solid oklch(0.87 0.005 90);border-bottom:1px solid oklch(0.87 0.005 90);white-space:nowrap;}
+.dp-sidenav a:last-child{border-right:none;}
+.dp-sidenav a:hover{background:oklch(0.93 0.005 90);}
+.dp-sidenav a.active{position:relative;background:var(--dp-accent);border-right-color:var(--dp-accent);color:#fff;}
+.dp-acc:not(.open){display:none;}
 .dp a{color:oklch(0.4 0.1 258);text-decoration:none;}
 .dp table{width:100%;border-collapse:collapse;}
 .dp-back{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:700;color:var(--dp-text3);margin-bottom:18px;}
@@ -108,6 +114,7 @@ body{background:var(--dp-bg);}
 .dp-cons-summary{display:flex;gap:20px;margin-top:14px;font-size:13px;}
 .dp-footer-note{font-size:11px;color:oklch(0.6 0.02 260);text-align:center;margin-top:20px;}.dp-news-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:10px;}.dp-news-date-label{font-size:12px;color:var(--dp-text3);}.dp-news-date-select{font-size:12.5px;padding:4px 8px;border:1px solid var(--dp-border2);border-radius:6px;background:var(--dp-card);color:inherit;}.dp-news-empty{font-size:12.5px;color:var(--dp-text3);text-align:center;padding:12px 0;}.dp-news-list{display:flex;flex-direction:column;}.dp-news-item{display:block;padding:10px 0;border-bottom:1px solid var(--dp-border2);text-decoration:none;color:inherit;}.dp-news-item:last-child{border-bottom:none;}.dp-news-title{font-size:13px;font-weight:600;line-height:1.5;margin-bottom:4px;}.dp-news-item:hover .dp-news-title{color:var(--dp-accent);}.dp-news-meta{display:flex;gap:8px;font-size:11px;color:var(--dp-text4);}.dp-news-source{font-weight:600;}
 @media (max-width:640px){
+  .dp-sidenav a{padding:10px 12px;font-size:12px;}
   .dp-g2,.dp-thesis{grid-template-columns:1fr;gap:16px;}
   .dp-stats{grid-template-columns:repeat(2,1fr);}
   .dp-seg3{grid-template-columns:1fr;}
@@ -188,15 +195,18 @@ body{background:var(--dp-bg);}
   <div class="dp-news-summary-b">오늘 관련 뉴스 1건 수집. 주요 이슈: <a href="https://www.kihoilbo.co.kr/news/articleView.html?idxno=3031796" target="_blank" rel="noopener">HMM 올해 상반기 매출 6조1천207억 원…영업이익은 26% 감소</a></div>
 </div><!-- dp-news-summary:end -->
 
-<div class="dp-openclose">
-  <button class="op" onclick="dpOpenAll()">모두 열기</button>
-  <span class="dp-sep">|</span>
-  <button class="cl" onclick="dpCloseAll()">모두 닫기</button>
-</div>
+<nav class="dp-sidenav" id="dpSidenav">
+  <a href="#dpAcc-tech" data-id="tech" onclick="dpNavClick(event,'tech')">1. 기술적 분석</a>
+  <a href="#dpAcc-fund" data-id="fund" onclick="dpNavClick(event,'fund')">2. 기본적 분석</a>
+  <a href="#dpAcc-valuation" data-id="valuation" onclick="dpNavClick(event,'valuation')">3. 투자지표</a>
+  <a href="#dpAcc-timeline" data-id="timeline" onclick="dpNavClick(event,'timeline')">4. 시계열 주요 이벤트</a>
+  <a href="#dpAcc-thesis" data-id="thesis" onclick="dpNavClick(event,'thesis')">5. 투자 포인트</a>
+  <a href="#dpAcc-consensus" data-id="consensus" onclick="dpNavClick(event,'consensus')">6. 목표주가</a>
+  <a href="#dpAcc-news" data-id="news" onclick="dpNavClick(event,'news')">7. Daily 주요 뉴스</a>
+</nav>
 
 <!-- 1. 기술적 분석 -->
 <div class="dp-acc" id="dpAcc-tech">
-  <button class="dp-acc-h" onclick="dpToggle('tech')"><span>1. 기술적 분석</span><span class="dp-acc-chev">▾</span></button>
   <div class="dp-acc-body">
     <div id="hmmChartControls" class="kc-controls"></div>
     <svg id="hmmSvg" viewBox="0 0 720 240" width="100%" style="display:block;margin-bottom:16px;background:oklch(0.98 0.004 90);border-radius:10px;padding:4px;"></svg>
@@ -262,7 +272,6 @@ body{background:var(--dp-bg);}
 
 <!-- 2. 기본적 분석 -->
 <div class="dp-acc" id="dpAcc-fund">
-  <button class="dp-acc-h" onclick="dpToggle('fund')"><span>2. 기본적 분석 — 공시 원문</span><span class="dp-acc-chev">▾</span></button>
   <div class="dp-acc-body">
     <div class="dp-tab-row">
       <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
@@ -336,7 +345,6 @@ body{background:var(--dp-bg);}
 
 <!-- 3. 투자지표 및 밸류에이션 -->
 <div class="dp-acc" id="dpAcc-valuation">
-  <button class="dp-acc-h" onclick="dpToggle('valuation')"><span>3. 투자지표 및 밸류에이션</span><span class="dp-acc-chev">▾</span></button>
   <div class="dp-acc-body">
     <!-- dp-vscore:start -->
     <div class="dp-vscore">
@@ -486,7 +494,6 @@ body{background:var(--dp-bg);}
 
 <!-- 4. 시계열 주요 이벤트 -->
 <div class="dp-acc" id="dpAcc-timeline">
-  <button class="dp-acc-h" onclick="dpToggle('timeline')"><span>4. 시계열 주요 이벤트</span><span class="dp-acc-chev">▾</span></button>
   <div class="dp-acc-body">
     <div class="dp-tl">
       <div class="dp-tl-item">
@@ -531,7 +538,6 @@ body{background:var(--dp-bg);}
 
 <!-- 5. 투자 포인트 -->
 <div class="dp-acc" id="dpAcc-thesis">
-  <button class="dp-acc-h" onclick="dpToggle('thesis')"><span>5. 투자 포인트</span><span class="dp-acc-chev">▾</span></button>
   <div class="dp-acc-body">
     <div class="dp-thesis">
       <div>
@@ -558,7 +564,6 @@ body{background:var(--dp-bg);}
 
 <!-- 6. 애널리스트 컨센서스 -->
 <div class="dp-acc" id="dpAcc-consensus">
-  <button class="dp-acc-h" onclick="dpToggle('consensus')"><span>6. 애널리스트 컨센서스</span><span class="dp-acc-chev">▾</span></button>
   <div class="dp-acc-body">
     <table>
       <thead>
@@ -586,7 +591,6 @@ body{background:var(--dp-bg);}
 
 <!-- 7. Daily 주요 뉴스 -->
 <div class="dp-acc" id="dpAcc-news">
-  <button class="dp-acc-h" onclick="dpToggle('news')"><span>7. Daily 주요 뉴스</span><span class="dp-acc-chev">▾</span></button>
   <div class="dp-acc-body">
         <div class="dp-news-toolbar" id="dpNewsToolbar">
       <span class="dp-news-date-label">날짜</span>
@@ -604,34 +608,60 @@ body{background:var(--dp-bg);}
 const SECTION_IDS = ['tech','fund','valuation','timeline','thesis','consensus','news'];
 let _dpTechDrawn = false, _dpAnnualDrawn = false, _dpQtrDrawn = false; let _dpNewsInit = false;
 
-function dpToggle(id) {
-  const el = document.getElementById('dpAcc-' + id);
-  const willOpen = !el.classList.contains('open');
-  el.classList.toggle('open', willOpen);
-  if (willOpen && id === 'tech' && !_dpTechDrawn) {
+function dpEnsureLazyDraw(id) {
+  if (id === 'tech' && !_dpTechDrawn) {
     _dpTechDrawn = true;
     renderCandleChart({svgId:'hmmSvg', controlsId:'hmmChartControls', data: data});
     initTechnicalScore('011200');
   }
-  if (willOpen && id === 'fund' && !_dpAnnualDrawn) {
+  if (id === 'fund' && !_dpAnnualDrawn) {
     _dpAnnualDrawn = true;
     drawAnnualChart();
   }
-  if (willOpen && id === 'news' && !_dpNewsInit) { _dpNewsInit = true; initDpNews('011200'); }
+  if (id === 'news' && !_dpNewsInit) { _dpNewsInit = true; initDpNews('011200'); }
+}
+function dpToggle(id) {
+  const el = document.getElementById('dpAcc-' + id);
+  const willOpen = !el.classList.contains('open');
+  el.classList.toggle('open', willOpen);
+  if (willOpen) { dpEnsureLazyDraw(id); setActiveNav(id); }
 }
 function dpOpenAll() {
   SECTION_IDS.forEach((id) => {
     document.getElementById('dpAcc-' + id).classList.add('open');
+    dpEnsureLazyDraw(id);
   });
-  if (!_dpTechDrawn) { _dpTechDrawn = true; renderCandleChart({svgId:'hmmSvg', controlsId:'hmmChartControls', data: data}); initTechnicalScore('011200'); }
-  if (!_dpAnnualDrawn) { _dpAnnualDrawn = true; drawAnnualChart(); }
-  if (!_dpNewsInit) { _dpNewsInit = true; initDpNews('011200'); }
 }
 function dpCloseAll() {
   SECTION_IDS.forEach((id) => {
     document.getElementById('dpAcc-' + id).classList.remove('open');
   });
 }
+function setActiveNav(id) {
+  document.querySelectorAll('#dpSidenav a').forEach((a) => {
+    a.classList.toggle('active', a.dataset.id === id);
+  });
+}
+function dpNavClick(e, id) {
+  SECTION_IDS.forEach((sid) => {
+    document.getElementById('dpAcc-' + sid).classList.toggle('open', sid === id);
+  });
+  dpEnsureLazyDraw(id);
+  setActiveNav(id);
+}
+window.addEventListener('DOMContentLoaded', () => {
+  if ('IntersectionObserver' in window) {
+    const dpNavObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) setActiveNav(entry.target.id.replace('dpAcc-', ''));
+      });
+    }, { rootMargin: '-15% 0px -70% 0px' });
+    SECTION_IDS.forEach((id) => {
+      const el = document.getElementById('dpAcc-' + id);
+      if (el) dpNavObserver.observe(el);
+    });
+  }
+});
 
 function dpSetFundTab(tab) {
   const isAnnual = tab === 'annual';
