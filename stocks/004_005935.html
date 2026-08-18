@@ -315,7 +315,10 @@ body{background:var(--dp-bg);}
     </div>
 
     <div id="dpFundQuarter" style="display:none;">
-      <svg id="spQtrChart" viewBox="0 0 680 210" width="100%" style="display:block;margin-bottom:16px;"></svg>
+      <div class="dp-secl">매출액 추이</div>
+      <svg id="spQtrChart" viewBox="0 0 680 170" width="100%" style="display:block;margin-bottom:16px;"></svg>
+      <div class="dp-secl">영업이익·법인세전·반기순이익·지배주주순이익 추이</div>
+      <svg id="spQtrChart2" viewBox="0 0 680 210" width="100%" style="display:block;margin-bottom:16px;"></svg>
       <div class="dp-g2">
         <div>
           <div class="dp-row2"><span class="l">1H26 연결 매출액</span><span class="v">305조 3,729억 (전년동기比 ▲98.7%)</span></div>
@@ -903,48 +906,94 @@ function drawAnnualChart(){
 }
 
 function drawQtrChart(){
-  const svg=document.getElementById('spQtrChart');
-  const W=680,H=210,pL=44,pR=20,pT=30,pB=34;
-  const cW=W-pL-pR,cH=H-pT-pB;
-  const labels=['매출액','영업이익','법인세전','반기순이익','지배주주순이익'];
-  const valsPrev=[153.7068,11.3613,14.9077,13.3393,12.9637];
-  const valsCurr=[305.3729,146.7252,153.2682,118.8497,118.3711];
-  const growth=['+98.7%','+1191.4%','+928.1%','+791.0%','+813.1%'];
-  const postcol='#1428A0';
-  const prevCol='#1D9E75';
-  const maxV=Math.max(...valsCurr,...valsPrev)*1.2;
-  const groupW=cW/labels.length;
-  const barW=groupW*0.28;
-  const gap=groupW*0.06;
-  function py(v){ return pT+cH*(1-v/maxV); }
-  [0,25,50,75,100].forEach(v=>{
-    const val=v/100*maxV;
-    const y=py(val);
-    svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:y,y2:y,stroke:'oklch(0.91 0.005 90)','stroke-width':1}));
-  });
-  labels.forEach((lab,i)=>{
-    const gx=pL+i*groupW+groupW/2;
-    const px=gx-gap/2-barW,cx=gx+gap/2;
-    const pTop=py(valsPrev[i]),cTop=py(valsCurr[i]);
-    svg.appendChild(svgEl('rect',{x:px,y:pTop,width:barW,height:py(0)-pTop,fill:prevCol,rx:2}));
-    svg.appendChild(svgEl('rect',{x:cx,y:cTop,width:barW,height:py(0)-cTop,fill:postcol,rx:2}));
-    const t1=svgEl('text',{x:px+barW/2,y:pTop-4,'text-anchor':'middle','font-size':8,fill:'oklch(0.55 0.02 260)'});
-    t1.textContent=valsPrev[i].toFixed(1)+'조'; svg.appendChild(t1);
-    const t2=svgEl('text',{x:cx+barW/2,y:cTop-14,'text-anchor':'middle','font-size':8.5,fill:'oklch(0.2 0.02 260)','font-weight':700});
-    t2.textContent=valsCurr[i].toFixed(1)+'조'; svg.appendChild(t2);
-    const t3=svgEl('text',{x:cx+barW/2,y:cTop-4,'text-anchor':'middle','font-size':8,fill:'#1D9E75','font-weight':700});
-    t3.textContent=growth[i]; svg.appendChild(t3);
-    const t4=svgEl('text',{x:gx,y:H-10,'text-anchor':'middle','font-size':9,fill:'oklch(0.5 0.02 260)'});
-    t4.textContent=lab; svg.appendChild(t4);
-  });
-  const legend=[[prevCol,'1H25'],['#1428A0','1H26']];
-  legend.forEach((l,i)=>{
-    const lx=pL+i*56;
-    svg.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
-    const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:'oklch(0.5 0.02 260)'});
-    t.textContent=l[1]; svg.appendChild(t);
-  });
-  addChartExpandButton(svg);
+  (function(){
+    const svg=document.getElementById('spQtrChart');
+    const W=680,H=170,pL=44,pR=20,pT=30,pB=34;
+    const cW=W-pL-pR,cH=H-pT-pB;
+    const labels=["\ub9e4\ucd9c\uc561"];
+    const valsPrev=[153.7068];
+    const valsCurr=[305.3729];
+    const growth=["+98.7%"];
+    const postcol='#1428A0';
+    const prevCol='#1D9E75';
+    const maxV=Math.max(...valsCurr,...valsPrev)*1.2;
+    const groupW=cW/labels.length;
+    const barW=groupW*0.28;
+    const gap=groupW*0.06;
+    function py(v){ return pT+cH*(1-v/maxV); }
+    [0,25,50,75,100].forEach(v=>{
+      const val=v/100*maxV;
+      const y=py(val);
+      svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:y,y2:y,stroke:'oklch(0.91 0.005 90)','stroke-width':1}));
+    });
+    labels.forEach((lab,i)=>{
+      const gx=pL+i*groupW+groupW/2;
+      const px=gx-gap/2-barW,cx=gx+gap/2;
+      const pTop=py(valsPrev[i]),cTop=py(valsCurr[i]);
+      svg.appendChild(svgEl('rect',{x:px,y:pTop,width:barW,height:py(0)-pTop,fill:prevCol,rx:2}));
+      svg.appendChild(svgEl('rect',{x:cx,y:cTop,width:barW,height:py(0)-cTop,fill:postcol,rx:2}));
+      const t1=svgEl('text',{x:px+barW/2,y:pTop-4,'text-anchor':'middle','font-size':8,fill:'oklch(0.55 0.02 260)'});
+      t1.textContent=valsPrev[i].toFixed(1)+'조'; svg.appendChild(t1);
+      const t2=svgEl('text',{x:cx+barW/2,y:cTop-14,'text-anchor':'middle','font-size':8.5,fill:'oklch(0.2 0.02 260)','font-weight':700});
+      t2.textContent=valsCurr[i].toFixed(1)+'조'; svg.appendChild(t2);
+      const t3=svgEl('text',{x:cx+barW/2,y:cTop-4,'text-anchor':'middle','font-size':8,fill:'#1D9E75','font-weight':700});
+      t3.textContent=growth[i]; svg.appendChild(t3);
+      const t4=svgEl('text',{x:gx,y:H-10,'text-anchor':'middle','font-size':9,fill:'oklch(0.5 0.02 260)'});
+      t4.textContent=lab; svg.appendChild(t4);
+    });
+    const legend=[[prevCol,'1H25'],[postcol,'1H26']];
+    legend.forEach((l,i)=>{
+      const lx=pL+i*56;
+      svg.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
+      const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:'oklch(0.5 0.02 260)'});
+      t.textContent=l[1]; svg.appendChild(t);
+    });
+    addChartExpandButton(svg);
+  })();
+  (function(){
+    const svg=document.getElementById('spQtrChart2');
+    const W=680,H=210,pL=44,pR=20,pT=30,pB=34;
+    const cW=W-pL-pR,cH=H-pT-pB;
+    const labels=["\uc601\uc5c5\uc774\uc775","\ubc95\uc778\uc138\uc804","\ubc18\uae30\uc21c\uc774\uc775","\uc9c0\ubc30\uc8fc\uc8fc\uc21c\uc774\uc775"];
+    const valsPrev=[11.3613,14.9077,13.3393,12.9637];
+    const valsCurr=[146.7252,153.2682,118.8497,118.3711];
+    const growth=["+1191.4%","+928.1%","+791.0%","+813.1%"];
+    const postcol='#1428A0';
+    const prevCol='#1D9E75';
+    const maxV=Math.max(...valsCurr,...valsPrev)*1.2;
+    const groupW=cW/labels.length;
+    const barW=groupW*0.28;
+    const gap=groupW*0.06;
+    function py(v){ return pT+cH*(1-v/maxV); }
+    [0,25,50,75,100].forEach(v=>{
+      const val=v/100*maxV;
+      const y=py(val);
+      svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:y,y2:y,stroke:'oklch(0.91 0.005 90)','stroke-width':1}));
+    });
+    labels.forEach((lab,i)=>{
+      const gx=pL+i*groupW+groupW/2;
+      const px=gx-gap/2-barW,cx=gx+gap/2;
+      const pTop=py(valsPrev[i]),cTop=py(valsCurr[i]);
+      svg.appendChild(svgEl('rect',{x:px,y:pTop,width:barW,height:py(0)-pTop,fill:prevCol,rx:2}));
+      svg.appendChild(svgEl('rect',{x:cx,y:cTop,width:barW,height:py(0)-cTop,fill:postcol,rx:2}));
+      const t1=svgEl('text',{x:px+barW/2,y:pTop-4,'text-anchor':'middle','font-size':8,fill:'oklch(0.55 0.02 260)'});
+      t1.textContent=valsPrev[i].toFixed(1)+'조'; svg.appendChild(t1);
+      const t2=svgEl('text',{x:cx+barW/2,y:cTop-14,'text-anchor':'middle','font-size':8.5,fill:'oklch(0.2 0.02 260)','font-weight':700});
+      t2.textContent=valsCurr[i].toFixed(1)+'조'; svg.appendChild(t2);
+      const t3=svgEl('text',{x:cx+barW/2,y:cTop-4,'text-anchor':'middle','font-size':8,fill:'#1D9E75','font-weight':700});
+      t3.textContent=growth[i]; svg.appendChild(t3);
+      const t4=svgEl('text',{x:gx,y:H-10,'text-anchor':'middle','font-size':9,fill:'oklch(0.5 0.02 260)'});
+      t4.textContent=lab; svg.appendChild(t4);
+    });
+    const legend=[[prevCol,'1H25'],[postcol,'1H26']];
+    legend.forEach((l,i)=>{
+      const lx=pL+i*56;
+      svg.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
+      const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:'oklch(0.5 0.02 260)'});
+      t.textContent=l[1]; svg.appendChild(t);
+    });
+    addChartExpandButton(svg);
+  })();
 }
 
 // -- SVG candlestick chart data (Yahoo Finance daily, with dates for hover/period) --

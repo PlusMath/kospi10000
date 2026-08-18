@@ -278,7 +278,10 @@ body{background:var(--dp-bg);}
     </div>
 
     <div id="dpFundAnnual">
-      <svg id="scardAnnualChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:16px;"></svg>
+      <div class="dp-secl">매출액(십억원) 추이</div>
+      <svg id="scardAnnualChart" viewBox="0 0 680 150" width="100%" style="display:block;margin-bottom:16px;"></svg>
+      <div class="dp-secl">영업이익·지배주주순이익 추이</div>
+      <svg id="scardAnnualChart2" viewBox="0 0 680 150" width="100%" style="display:block;margin-bottom:16px;"></svg>
       <div class="dp-g2">
         <div>
           <div class="dp-row2"><span class="l">연결 매출액</span><span class="v">4조 3,829억 (-0.01%)</span></div>
@@ -818,52 +821,78 @@ function svgEl(tag,attrs){
 }
 
 function drawAnnualChart(){
-  const svg=document.getElementById('scardAnnualChart');
-  const W=680,H=190,pL=44,pR=44,pT=16,pB=26;
-  const cW=W-pL-pR,cH=H-pT-pB;
-  const cats=['2023년','2024년','2025년'];
-  const rev=[400420,438320,438290];
-  const oi=[8100,8854,8537];
-  const ni=[6094,6646,6459];
-  const maxV=Math.max(...rev)*1.1;
-  const minV=0;
-  function py(v){ return pT+cH*(1-(v-minV)/(maxV-minV)); }
-  const zeroY=py(0);
-  svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:zeroY,y2:zeroY,stroke:cssVar('--color-border-tertiary'),'stroke-width':1}));
-  const revCol='#8B93A0', oiCol='#0C447C', niCol='#1D9E75';
-  const pts=[];
-  cats.forEach((cat,i)=>{
-    const gx=pL+i*(cW/cats.length)+(cW/cats.length)/2;
-    const barW=(cW/cats.length)*0.26;
-    const rx=gx-barW-2, ox=gx+2;
-    const rTop=py(rev[i]);
-    svg.appendChild(svgEl('rect',{x:rx,y:rTop,width:barW,height:py(0)-rTop,fill:revCol,rx:2,opacity:0.55}));
-    const oTop=py(oi[i]);
-    svg.appendChild(svgEl('rect',{x:ox,y:oTop,width:barW,height:py(0)-oTop,fill:oiCol,rx:2}));
-    const t1=svgEl('text',{x:rx+barW/2,y:rTop-4,'text-anchor':'middle','font-size':9,fill:revCol});
-    t1.textContent=Math.round(rev[i]/1000)+'십억'; svg.appendChild(t1);
-    const t2=svgEl('text',{x:ox+barW/2,y:oTop-4,'text-anchor':'middle','font-size':9,fill:oiCol,'font-weight':600});
-    t2.textContent=Math.round(oi[i])+'억'; svg.appendChild(t2);
-    const t3=svgEl('text',{x:gx,y:H-6,'text-anchor':'middle','font-size':10,fill:cssVar('--color-text-secondary')});
-    t3.textContent=cat; svg.appendChild(t3);
-    pts.push([gx, py(ni[i])]);
-  });
-  for(let i=0;i<pts.length-1;i++){
-    svg.appendChild(svgEl('line',{x1:pts[i][0],y1:pts[i][1],x2:pts[i+1][0],y2:pts[i+1][1],stroke:niCol,'stroke-width':2.5}));
-  }
-  pts.forEach((p,i)=>{
-    svg.appendChild(svgEl('circle',{cx:p[0],cy:p[1],r:4,fill:niCol}));
-    const t=svgEl('text',{x:p[0],y:p[1]-9,'text-anchor':'middle','font-size':9,fill:niCol,'font-weight':600});
-    t.textContent=Math.round(ni[i])+'억'; svg.appendChild(t);
-  });
-  const legend=[[revCol,'매출액(십억원)'],[oiCol,'영업이익(억원)'],[niCol,'지배주주순이익(억원)']];
-  legend.forEach((l,i)=>{
-    const lx=pL+i*135;
-    svg.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
-    const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:cssVar('--color-text-secondary')});
-    t.textContent=l[1]; svg.appendChild(t);
-  });
-  addChartExpandButton(svg);
+  (function(){
+    const svg=document.getElementById('scardAnnualChart');
+    const W=680,H=150,pL=44,pR=20,pT=16,pB=26;
+    const cW=W-pL-pR,cH=H-pT-pB;
+    const cats=['2023년','2024년','2025년'];
+    const rev=[400420,438320,438290];
+    const revCol='#8B93A0';
+    const maxV=Math.max(...rev)*1.15;
+    const groupW=cW/cats.length;
+    const barW=groupW*0.4;
+    function py(v){ return pT+cH*(1-v/maxV); }
+    [0,0.25,0.5,0.75,1].forEach(f=>{
+      const y=py(maxV*f);
+      svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:y,y2:y,stroke:'oklch(0.91 0.005 90)','stroke-width':1}));
+    });
+    cats.forEach((cat,i)=>{
+      const gx=pL+i*groupW+groupW/2;
+      const top=py(rev[i]);
+      svg.appendChild(svgEl('rect',{x:gx-barW/2,y:top,width:barW,height:py(0)-top,fill:revCol,rx:2}));
+      const t1=svgEl('text',{x:gx,y:top-6,'text-anchor':'middle','font-size':10,fill:revCol,'font-weight':600});
+      t1.textContent=Math.round(rev[i]/1000)+'십억'; svg.appendChild(t1);
+      const t2=svgEl('text',{x:gx,y:H-8,'text-anchor':'middle','font-size':10,fill:'oklch(0.5 0.02 260)'});
+      t2.textContent=cat; svg.appendChild(t2);
+    });
+    addChartExpandButton(svg);
+  })();
+  (function(){
+    const svg=document.getElementById('scardAnnualChart2');
+    const W=680,H=150,pL=44,pR=44,pT=16,pB=26;
+    const cW=W-pL-pR,cH=H-pT-pB;
+    const cats=['2023년','2024년','2025년'];
+    const oi=[8100,8854,8537];
+    const ni=[6094,6646,6459];
+    const oiCol='#0C447C', niCol='#1D9E75', negCol='#D85A30';
+    const maxV=Math.max(0,...oi,...ni)*1.2;
+    const minV=Math.min(0,...oi,...ni)*1.2;
+    const range=(maxV-minV)||1;
+    const groupW=cW/cats.length;
+    const barW=groupW*0.3;
+    function py(v){ return pT+cH*(maxV-v)/range; }
+    const zeroY=py(0);
+    svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:zeroY,y2:zeroY,stroke:'oklch(0.85 0.005 90)','stroke-width':1}));
+    const pts=[];
+    cats.forEach((cat,i)=>{
+      const gx=pL+i*groupW+groupW/2;
+      const oColor = oi[i]>=0 ? oiCol : negCol;
+      const oTop=py(Math.max(oi[i],0)), oBot=py(Math.min(oi[i],0));
+      svg.appendChild(svgEl('rect',{x:gx-barW/2,y:oTop,width:barW,height:Math.max(oBot-oTop,1),fill:oColor,rx:2}));
+      const t2=svgEl('text',{x:gx,y:oi[i]>=0?oTop-4:oBot+12,'text-anchor':'middle','font-size':9,fill:oColor,'font-weight':600});
+      t2.textContent=Math.round(oi[i])+'억'; svg.appendChild(t2);
+      const t3=svgEl('text',{x:gx,y:H-6,'text-anchor':'middle','font-size':10,fill:'oklch(0.5 0.02 260)'});
+      t3.textContent=cat; svg.appendChild(t3);
+      pts.push([gx, py(ni[i]), ni[i]>=0]);
+    });
+    for(let i=0;i<pts.length-1;i++){
+      svg.appendChild(svgEl('line',{x1:pts[i][0],y1:pts[i][1],x2:pts[i+1][0],y2:pts[i+1][1],stroke:niCol,'stroke-width':2.5}));
+    }
+    pts.forEach((p,i)=>{
+      const c = ni[i]>=0 ? niCol : negCol;
+      svg.appendChild(svgEl('circle',{cx:p[0],cy:p[1],r:4,fill:c}));
+      const t=svgEl('text',{x:p[0],y:ni[i]>=0?p[1]-9:p[1]+16,'text-anchor':'middle','font-size':9,fill:c,'font-weight':600});
+      t.textContent=Math.round(ni[i])+'억'; svg.appendChild(t);
+    });
+    const legend=[[oiCol,'영업이익'],[niCol,'지배주주순이익']];
+    legend.forEach((l,i)=>{
+      const lx=pL+i*90;
+      svg.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
+      const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:'oklch(0.5 0.02 260)'});
+      t.textContent=l[1]; svg.appendChild(t);
+    });
+    addChartExpandButton(svg);
+  })();
 }
 
 function drawQtrChart(){

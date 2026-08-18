@@ -276,7 +276,10 @@ body{background:var(--dp-bg);}
     </div>
 
     <div id="dpFundAnnual">
-      <svg id="kalAnnualChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:16px;"></svg>
+      <div class="dp-secl">매출액 추이</div>
+      <svg id="kalAnnualChart" viewBox="0 0 680 150" width="100%" style="display:block;margin-bottom:16px;"></svg>
+      <div class="dp-secl">영업이익·지배주주순이익 추이</div>
+      <svg id="kalAnnualChart2" viewBox="0 0 680 150" width="100%" style="display:block;margin-bottom:16px;"></svg>
       <div class="dp-g2">
         <div>
           <div class="dp-row2"><span class="l">연결 매출액</span><span class="v up">25조 2,255억 (▲41.15%)</span></div>
@@ -315,7 +318,10 @@ body{background:var(--dp-bg);}
     </div>
 
     <div id="dpFundQuarter" style="display:none;">
-      <svg id="kalQtrChart" viewBox="0 0 680 210" width="100%" style="display:block;margin-bottom:16px;"></svg>
+      <div class="dp-secl">매출액 추이</div>
+      <svg id="kalQtrChart" viewBox="0 0 680 170" width="100%" style="display:block;margin-bottom:16px;"></svg>
+      <div class="dp-secl">영업이익·지배주주순이익 추이</div>
+      <svg id="kalQtrChart2" viewBox="0 0 680 210" width="100%" style="display:block;margin-bottom:16px;"></svg>
       <div class="dp-g2">
         <div>
           <div class="dp-row2"><span class="l">1H26 연결 매출액</span><span class="v up">13조 8,881억 (▲9.3%)</span></div>
@@ -675,97 +681,169 @@ function svgEl(tag,attrs){
 }
 
 function drawAnnualChart(){
-  const svg=document.getElementById('kalAnnualChart');
-  const W=680,H=190,pL=44,pR=44,pT=16,pB=26;
-  const cW=W-pL-pR,cH=H-pT-pB;
-  const cats=['2023년','2024년','2025년'];
-  const rev=[16.11,17.87,25.23];
-  const oi=[1.79,2.11,1.11];
-  const ni=[1.06,1.32,0.78];
-  const maxV=Math.max(...rev)*1.1;
-  const minV=0;
-  function py(v){ return pT+cH*(1-(v-minV)/(maxV-minV)); }
-  const zeroY=py(0);
-  svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:zeroY,y2:zeroY,stroke:cssVar('--color-border-tertiary'),'stroke-width':1}));
-  const revCol='#8B93A0', oiCol='#0B3D6B', niCol='#1D9E75';
-  const pts=[];
-  cats.forEach((cat,i)=>{
-    const gx=pL+i*(cW/cats.length)+(cW/cats.length)/2;
-    const barW=(cW/cats.length)*0.26;
-    const rx=gx-barW-2, ox=gx+2;
-    const rTop=py(rev[i]);
-    svg.appendChild(svgEl('rect',{x:rx,y:rTop,width:barW,height:py(0)-rTop,fill:revCol,rx:2,opacity:0.55}));
-    const oTop=py(oi[i]);
-    svg.appendChild(svgEl('rect',{x:ox,y:oTop,width:barW,height:py(0)-oTop,fill:oiCol,rx:2}));
-    const t1=svgEl('text',{x:rx+barW/2,y:rTop-4,'text-anchor':'middle','font-size':9,fill:revCol});
-    t1.textContent=rev[i].toFixed(2)+'조'; svg.appendChild(t1);
-    const t2=svgEl('text',{x:ox+barW/2,y:oTop-4,'text-anchor':'middle','font-size':9,fill:oiCol,'font-weight':600});
-    t2.textContent=oi[i].toFixed(2)+'조'; svg.appendChild(t2);
-    const t3=svgEl('text',{x:gx,y:H-6,'text-anchor':'middle','font-size':10,fill:cssVar('--color-text-secondary')});
-    t3.textContent=cat; svg.appendChild(t3);
-    pts.push([gx, py(ni[i])]);
-  });
-  for(let i=0;i<pts.length-1;i++){
-    svg.appendChild(svgEl('line',{x1:pts[i][0],y1:pts[i][1],x2:pts[i+1][0],y2:pts[i+1][1],stroke:niCol,'stroke-width':2.5}));
-  }
-  pts.forEach((p,i)=>{
-    svg.appendChild(svgEl('circle',{cx:p[0],cy:p[1],r:4,fill:niCol}));
-    const t=svgEl('text',{x:p[0],y:p[1]-9,'text-anchor':'middle','font-size':9,fill:niCol,'font-weight':600});
-    t.textContent=ni[i].toFixed(2)+'조'; svg.appendChild(t);
-  });
-  const legend=[[revCol,'매출액'],[oiCol,'영업이익'],[niCol,'지배주주순이익']];
-  legend.forEach((l,i)=>{
-    const lx=pL+i*90;
-    svg.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
-    const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:cssVar('--color-text-secondary')});
-    t.textContent=l[1]; svg.appendChild(t);
-  });
-  addChartExpandButton(svg);
+  (function(){
+    const svg=document.getElementById('kalAnnualChart');
+    const W=680,H=150,pL=44,pR=20,pT=16,pB=26;
+    const cW=W-pL-pR,cH=H-pT-pB;
+    const cats=['2023년','2024년','2025년'];
+    const rev=[16.11,17.87,25.23];
+    const revCol='#8B93A0';
+    const maxV=Math.max(...rev)*1.15;
+    const groupW=cW/cats.length;
+    const barW=groupW*0.4;
+    function py(v){ return pT+cH*(1-v/maxV); }
+    [0,0.25,0.5,0.75,1].forEach(f=>{
+      const y=py(maxV*f);
+      svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:y,y2:y,stroke:'oklch(0.91 0.005 90)','stroke-width':1}));
+    });
+    cats.forEach((cat,i)=>{
+      const gx=pL+i*groupW+groupW/2;
+      const top=py(rev[i]);
+      svg.appendChild(svgEl('rect',{x:gx-barW/2,y:top,width:barW,height:py(0)-top,fill:revCol,rx:2}));
+      const t1=svgEl('text',{x:gx,y:top-6,'text-anchor':'middle','font-size':10,fill:revCol,'font-weight':600});
+      t1.textContent=rev[i].toFixed(2)+'조'; svg.appendChild(t1);
+      const t2=svgEl('text',{x:gx,y:H-8,'text-anchor':'middle','font-size':10,fill:'oklch(0.5 0.02 260)'});
+      t2.textContent=cat; svg.appendChild(t2);
+    });
+    addChartExpandButton(svg);
+  })();
+  (function(){
+    const svg=document.getElementById('kalAnnualChart2');
+    const W=680,H=150,pL=44,pR=44,pT=16,pB=26;
+    const cW=W-pL-pR,cH=H-pT-pB;
+    const cats=['2023년','2024년','2025년'];
+    const oi=[1.79,2.11,1.11];
+    const ni=[1.06,1.32,0.78];
+    const oiCol='#0B3D6B', niCol='#1D9E75', negCol='#D85A30';
+    const maxV=Math.max(0,...oi,...ni)*1.2;
+    const minV=Math.min(0,...oi,...ni)*1.2;
+    const range=(maxV-minV)||1;
+    const groupW=cW/cats.length;
+    const barW=groupW*0.3;
+    function py(v){ return pT+cH*(maxV-v)/range; }
+    const zeroY=py(0);
+    svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:zeroY,y2:zeroY,stroke:'oklch(0.85 0.005 90)','stroke-width':1}));
+    const pts=[];
+    cats.forEach((cat,i)=>{
+      const gx=pL+i*groupW+groupW/2;
+      const oColor = oi[i]>=0 ? oiCol : negCol;
+      const oTop=py(Math.max(oi[i],0)), oBot=py(Math.min(oi[i],0));
+      svg.appendChild(svgEl('rect',{x:gx-barW/2,y:oTop,width:barW,height:Math.max(oBot-oTop,1),fill:oColor,rx:2}));
+      const t2=svgEl('text',{x:gx,y:oi[i]>=0?oTop-4:oBot+12,'text-anchor':'middle','font-size':9,fill:oColor,'font-weight':600});
+      t2.textContent=oi[i].toFixed(2)+'조'; svg.appendChild(t2);
+      const t3=svgEl('text',{x:gx,y:H-6,'text-anchor':'middle','font-size':10,fill:'oklch(0.5 0.02 260)'});
+      t3.textContent=cat; svg.appendChild(t3);
+      pts.push([gx, py(ni[i]), ni[i]>=0]);
+    });
+    for(let i=0;i<pts.length-1;i++){
+      svg.appendChild(svgEl('line',{x1:pts[i][0],y1:pts[i][1],x2:pts[i+1][0],y2:pts[i+1][1],stroke:niCol,'stroke-width':2.5}));
+    }
+    pts.forEach((p,i)=>{
+      const c = ni[i]>=0 ? niCol : negCol;
+      svg.appendChild(svgEl('circle',{cx:p[0],cy:p[1],r:4,fill:c}));
+      const t=svgEl('text',{x:p[0],y:ni[i]>=0?p[1]-9:p[1]+16,'text-anchor':'middle','font-size':9,fill:c,'font-weight':600});
+      t.textContent=ni[i].toFixed(2)+'조'; svg.appendChild(t);
+    });
+    const legend=[[oiCol,'영업이익'],[niCol,'지배주주순이익']];
+    legend.forEach((l,i)=>{
+      const lx=pL+i*90;
+      svg.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
+      const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:'oklch(0.5 0.02 260)'});
+      t.textContent=l[1]; svg.appendChild(t);
+    });
+    addChartExpandButton(svg);
+  })();
 }
 
 function drawQtrChart(){
-  const svg=document.getElementById('kalQtrChart');
-  const W=680,H=210,pL=44,pR=20,pT=30,pB=34;
-  const cW=W-pL-pR,cH=H-pT-pB;
-  const labels=['매출액','영업이익','지배주주순이익'];
-  const valsPrev=[12.7026,0.8011,0.7696];
-  const valsCurr=[13.8881,0.3103,-0.2661];
-  const growth=['+9.3%','-61.3%','흑자→적자'];
-  const postcol='#1428A0';
-  const prevCol='#1D9E75';
-  const maxV=Math.max(0,...valsCurr,...valsPrev)*1.15;
-  const minV=Math.min(0,...valsCurr,...valsPrev)*1.15;
-  const range=(maxV-minV)||1;
-  const groupW=cW/labels.length;
-  const barW=groupW*0.28;
-  const gap=groupW*0.06;
-  function py(v){ return pT+cH*(maxV-v)/range; }
-  const zeroY=py(0);
-  svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:zeroY,y2:zeroY,stroke:'oklch(0.85 0.005 90)','stroke-width':1}));
-  labels.forEach((lab,i)=>{
-    const gx=pL+i*groupW+groupW/2;
-    const px=gx-gap/2-barW,cx=gx+gap/2;
-    const pTop=py(Math.max(valsPrev[i],0)),pBot=py(Math.min(valsPrev[i],0));
-    const cTop=py(Math.max(valsCurr[i],0)),cBot=py(Math.min(valsCurr[i],0));
-    svg.appendChild(svgEl('rect',{x:px,y:pTop,width:barW,height:Math.max(pBot-pTop,1),fill:prevCol,rx:2}));
-    svg.appendChild(svgEl('rect',{x:cx,y:cTop,width:barW,height:Math.max(cBot-cTop,1),fill:postcol,rx:2}));
-    const t1=svgEl('text',{x:px+barW/2,y:valsPrev[i]>=0?pTop-4:pBot+12,'text-anchor':'middle','font-size':8,fill:'oklch(0.55 0.02 260)'});
-    t1.textContent=valsPrev[i].toFixed(1)+'조'; svg.appendChild(t1);
-    const t2=svgEl('text',{x:cx+barW/2,y:valsCurr[i]>=0?cTop-14:cBot+26,'text-anchor':'middle','font-size':8.5,fill:'oklch(0.2 0.02 260)','font-weight':700});
-    t2.textContent=valsCurr[i].toFixed(1)+'조'; svg.appendChild(t2);
-    const t3=svgEl('text',{x:cx+barW/2,y:valsCurr[i]>=0?cTop-4:cBot+12,'text-anchor':'middle','font-size':8,fill:'#1D9E75','font-weight':700});
-    t3.textContent=growth[i]; svg.appendChild(t3);
-    const t4=svgEl('text',{x:gx,y:H-10,'text-anchor':'middle','font-size':9,fill:'oklch(0.5 0.02 260)'});
-    t4.textContent=lab; svg.appendChild(t4);
-  });
-  const legend=[[prevCol,'1H25'],['#1428A0','1H26']];
-  legend.forEach((l,i)=>{
-    const lx=pL+i*56;
-    svg.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
-    const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:'oklch(0.5 0.02 260)'});
-    t.textContent=l[1]; svg.appendChild(t);
-  });
-  addChartExpandButton(svg);
+  (function(){
+    const svg=document.getElementById('kalQtrChart');
+    const W=680,H=170,pL=44,pR=20,pT=30,pB=34;
+    const cW=W-pL-pR,cH=H-pT-pB;
+    const labels=["\ub9e4\ucd9c\uc561"];
+    const valsPrev=[12.7026];
+    const valsCurr=[13.8881];
+    const growth=["+9.3%"];
+    const postcol='#1428A0';
+    const prevCol='#1D9E75';
+    const maxV=Math.max(0,...valsCurr,...valsPrev)*1.15;
+    const minV=Math.min(0,...valsCurr,...valsPrev)*1.15;
+    const range=(maxV-minV)||1;
+    const groupW=cW/labels.length;
+    const barW=groupW*0.28;
+    const gap=groupW*0.06;
+    function py(v){ return pT+cH*(maxV-v)/range; }
+    const zeroY=py(0);
+    svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:zeroY,y2:zeroY,stroke:'oklch(0.85 0.005 90)','stroke-width':1}));
+    labels.forEach((lab,i)=>{
+      const gx=pL+i*groupW+groupW/2;
+      const px=gx-gap/2-barW,cx=gx+gap/2;
+      const pTop=py(Math.max(valsPrev[i],0)),pBot=py(Math.min(valsPrev[i],0));
+      const cTop=py(Math.max(valsCurr[i],0)),cBot=py(Math.min(valsCurr[i],0));
+      svg.appendChild(svgEl('rect',{x:px,y:pTop,width:barW,height:Math.max(pBot-pTop,1),fill:prevCol,rx:2}));
+      svg.appendChild(svgEl('rect',{x:cx,y:cTop,width:barW,height:Math.max(cBot-cTop,1),fill:postcol,rx:2}));
+      const t1=svgEl('text',{x:px+barW/2,y:valsPrev[i]>=0?pTop-4:Math.min(pBot+12,H-pB+10),'text-anchor':'middle','font-size':8,fill:'oklch(0.55 0.02 260)'});
+      t1.textContent=valsPrev[i].toFixed(1)+'조'; svg.appendChild(t1);
+      const t2=svgEl('text',{x:cx+barW/2,y:valsCurr[i]>=0?cTop-14:Math.min(cBot+18,H-pB+20),'text-anchor':'middle','font-size':8.5,fill:'oklch(0.2 0.02 260)','font-weight':700});
+      t2.textContent=valsCurr[i].toFixed(1)+'조'; svg.appendChild(t2);
+      const t3=svgEl('text',{x:cx+barW/2,y:valsCurr[i]>=0?cTop-4:Math.min(cBot+8,H-pB+8),'text-anchor':'middle','font-size':8,fill:'#1D9E75','font-weight':700});
+      t3.textContent=growth[i]; svg.appendChild(t3);
+      const t4=svgEl('text',{x:gx,y:H-10,'text-anchor':'middle','font-size':9,fill:'oklch(0.5 0.02 260)'});
+      t4.textContent=lab; svg.appendChild(t4);
+    });
+    const legend=[[prevCol,'1H25'],[postcol,'1H26']];
+    legend.forEach((l,i)=>{
+      const lx=pL+i*56;
+      svg.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
+      const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:'oklch(0.5 0.02 260)'});
+      t.textContent=l[1]; svg.appendChild(t);
+    });
+    addChartExpandButton(svg);
+  })();
+  (function(){
+    const svg=document.getElementById('kalQtrChart2');
+    const W=680,H=210,pL=44,pR=20,pT=30,pB=34;
+    const cW=W-pL-pR,cH=H-pT-pB;
+    const labels=["\uc601\uc5c5\uc774\uc775","\uc9c0\ubc30\uc8fc\uc8fc\uc21c\uc774\uc775"];
+    const valsPrev=[0.8011,0.7696];
+    const valsCurr=[0.3103,-0.2661];
+    const growth=["-61.3%","\ud751\uc790\u2192\uc801\uc790"];
+    const postcol='#1428A0';
+    const prevCol='#1D9E75';
+    const maxV=Math.max(0,...valsCurr,...valsPrev)*1.15;
+    const minV=Math.min(0,...valsCurr,...valsPrev)*1.15;
+    const range=(maxV-minV)||1;
+    const groupW=cW/labels.length;
+    const barW=groupW*0.28;
+    const gap=groupW*0.06;
+    function py(v){ return pT+cH*(maxV-v)/range; }
+    const zeroY=py(0);
+    svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:zeroY,y2:zeroY,stroke:'oklch(0.85 0.005 90)','stroke-width':1}));
+    labels.forEach((lab,i)=>{
+      const gx=pL+i*groupW+groupW/2;
+      const px=gx-gap/2-barW,cx=gx+gap/2;
+      const pTop=py(Math.max(valsPrev[i],0)),pBot=py(Math.min(valsPrev[i],0));
+      const cTop=py(Math.max(valsCurr[i],0)),cBot=py(Math.min(valsCurr[i],0));
+      svg.appendChild(svgEl('rect',{x:px,y:pTop,width:barW,height:Math.max(pBot-pTop,1),fill:prevCol,rx:2}));
+      svg.appendChild(svgEl('rect',{x:cx,y:cTop,width:barW,height:Math.max(cBot-cTop,1),fill:postcol,rx:2}));
+      const t1=svgEl('text',{x:px+barW/2,y:valsPrev[i]>=0?pTop-4:Math.min(pBot+12,H-pB+10),'text-anchor':'middle','font-size':8,fill:'oklch(0.55 0.02 260)'});
+      t1.textContent=valsPrev[i].toFixed(1)+'조'; svg.appendChild(t1);
+      const t2=svgEl('text',{x:cx+barW/2,y:valsCurr[i]>=0?cTop-14:Math.min(cBot+18,H-pB+20),'text-anchor':'middle','font-size':8.5,fill:'oklch(0.2 0.02 260)','font-weight':700});
+      t2.textContent=valsCurr[i].toFixed(1)+'조'; svg.appendChild(t2);
+      const t3=svgEl('text',{x:cx+barW/2,y:valsCurr[i]>=0?cTop-4:Math.min(cBot+8,H-pB+8),'text-anchor':'middle','font-size':8,fill:'#1D9E75','font-weight':700});
+      t3.textContent=growth[i]; svg.appendChild(t3);
+      const t4=svgEl('text',{x:gx,y:H-10,'text-anchor':'middle','font-size':9,fill:'oklch(0.5 0.02 260)'});
+      t4.textContent=lab; svg.appendChild(t4);
+    });
+    const legend=[[prevCol,'1H25'],[postcol,'1H26']];
+    legend.forEach((l,i)=>{
+      const lx=pL+i*56;
+      svg.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
+      const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:'oklch(0.5 0.02 260)'});
+      t.textContent=l[1]; svg.appendChild(t);
+    });
+    addChartExpandButton(svg);
+  })();
 }
 
 // ── SVG 캔들차트 (Yahoo Finance 일봉 실데이터) ────────────────────────
