@@ -741,7 +741,7 @@ function drawQtrChart(){
   const cW=W-pL-pR,cH=H-pT-pB;
   const labels=['1H26 보험손익','1H26 투자손익','1H26 지배주주순이익'];
   const vals=[0.834,0.753,1.114];
-  const cols=['#1B4B73','#185FA5','#1D9E75'];
+  const postcol='#1428A0';
   const maxV=Math.max(...vals)*1.3;
   const groupW=cW/labels.length;
   const barW=groupW*0.5;
@@ -754,7 +754,7 @@ function drawQtrChart(){
   labels.forEach((lab,i)=>{
     const gx=pL+i*groupW+groupW/2;
     const top=py(vals[i]);
-    svg.appendChild(svgEl('rect',{x:gx-barW/2,y:top,width:barW,height:py(0)-top,fill:cols[i],rx:3}));
+    svg.appendChild(svgEl('rect',{x:gx-barW/2,y:top,width:barW,height:py(0)-top,fill:postcol,rx:3}));
     const t1=svgEl('text',{x:gx,y:top-6,'text-anchor':'middle','font-size':10,fill:cssVar('--color-text-primary'),'font-weight':600});
     t1.textContent=vals[i].toFixed(3)+'조'; svg.appendChild(t1);
     const t2=svgEl('text',{x:gx,y:H-8,'text-anchor':'middle','font-size':9,fill:cssVar('--color-text-secondary')});

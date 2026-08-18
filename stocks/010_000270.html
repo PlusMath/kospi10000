@@ -807,8 +807,8 @@ function drawQtrChart(){
   const valsPrev=[57.3671,5.7734,6.2436,4.6608,4.6618];
   const valsCurr=[62.5389,4.8336,5.7033,4.1579,4.1590];
   const growth=['+9.0%','-16.3%','-8.7%','-10.8%','-10.8%'];
-  const cols=['#8B93A0','#1428A0','#1428A0','#1D9E75','#1D9E75'];
-  const prevCol='#C7CBD1';
+  const postcol='#1428A0';
+  const prevCol='#1D9E75';
   const maxV=Math.max(...valsCurr,...valsPrev)*1.2;
   const groupW=cW/labels.length;
   const barW=groupW*0.28;
@@ -824,7 +824,7 @@ function drawQtrChart(){
     const px=gx-gap/2-barW,cx=gx+gap/2;
     const pTop=py(valsPrev[i]),cTop=py(valsCurr[i]);
     svg.appendChild(svgEl('rect',{x:px,y:pTop,width:barW,height:py(0)-pTop,fill:prevCol,rx:2}));
-    svg.appendChild(svgEl('rect',{x:cx,y:cTop,width:barW,height:py(0)-cTop,fill:cols[i],rx:2}));
+    svg.appendChild(svgEl('rect',{x:cx,y:cTop,width:barW,height:py(0)-cTop,fill:postcol,rx:2}));
     const t1=svgEl('text',{x:px+barW/2,y:pTop-4,'text-anchor':'middle','font-size':8,fill:'oklch(0.55 0.02 260)'});
     t1.textContent=valsPrev[i].toFixed(1)+'조'; svg.appendChild(t1);
     const t2=svgEl('text',{x:cx+barW/2,y:cTop-14,'text-anchor':'middle','font-size':8.5,fill:'oklch(0.2 0.02 260)','font-weight':700});
