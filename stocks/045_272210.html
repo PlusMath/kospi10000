@@ -754,7 +754,7 @@ function drawAnnualChart(){
     const revCol='#8B93A0';
     const maxV=Math.max(...rev)*1.15;
     const groupW=cW/cats.length;
-    const barW=groupW*0.4;
+    const barW=Math.min(groupW*0.4,64);
     function py(v){ return pT+cH*(1-v/maxV); }
     [0,0.25,0.5,0.75,1].forEach(f=>{
       const y=py(maxV*f);
@@ -783,7 +783,7 @@ function drawAnnualChart(){
     const minV=Math.min(0,...oi,...ni)*1.2;
     const range=(maxV-minV)||1;
     const groupW=cW/cats.length;
-    const barW=groupW*0.3;
+    const barW=Math.min(groupW*0.3,64);
     function py(v){ return pT+cH*(maxV-v)/range; }
     const zeroY=py(0);
     svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:zeroY,y2:zeroY,stroke:'oklch(0.85 0.005 90)','stroke-width':1}));
@@ -834,7 +834,7 @@ function drawQtrChart(){
     const minV=Math.min(0,...valsCurr,...valsPrev)*1.15;
     const range=(maxV-minV)||1;
     const groupW=cW/labels.length;
-    const barW=groupW*0.28;
+    const barW=Math.min(groupW*0.28,64);
     const gap=groupW*0.06;
     function py(v){ return pT+cH*(maxV-v)/range; }
     const zeroY=py(0);
@@ -878,7 +878,7 @@ function drawQtrChart(){
     const minV=Math.min(0,...valsCurr,...valsPrev)*1.15;
     const range=(maxV-minV)||1;
     const groupW=cW/labels.length;
-    const barW=groupW*0.28;
+    const barW=Math.min(groupW*0.28,64);
     const gap=groupW*0.06;
     function py(v){ return pT+cH*(maxV-v)/range; }
     const zeroY=py(0);
