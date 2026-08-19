@@ -1205,6 +1205,7 @@
         <button class="view-btn active" type="button" id="rankViewBtn">순위별 보기</button>
         <button class="view-btn" type="button" id="industryViewBtn">업종별 보기</button>
         <button class="view-btn" type="button" id="scoreViewBtn">매력도별 보기</button>
+        <button class="view-btn" type="button" id="changeViewBtn">등락률별 보기</button>
       </div>
       <div class="toolbar-right">
         <div class="stock-search">
@@ -2598,6 +2599,7 @@
     const rankViewBtn = document.getElementById('rankViewBtn');
     const industryViewBtn = document.getElementById('industryViewBtn');
     const scoreViewBtn = document.getElementById('scoreViewBtn');
+    const changeViewBtn = document.getElementById('changeViewBtn');
     const statGrid = document.getElementById('statGrid');
     const favCountEl = document.getElementById('favCount');
     const favOnlyCheckbox = document.getElementById('favOnlyCheckbox');
@@ -2615,6 +2617,7 @@
     let favOnlyActive = false;
     let rankPage = 1;
     let scorePage = 1;
+    let changePage = 1;
     let scoreSortMode = 'total'; // 'fundamental' | 'technical' | 'total'
     let searchQuery = '';
     const RANK_PAGE_SIZE = 10;
@@ -2899,6 +2902,60 @@
       }
     }
 
+    // ── 등락률별 뷰 (당일 등락률 내림차순 — 상승률 큰 순서) ──
+    function renderChangeView() {
+      stockArea.innerHTML = '';
+      mainTitle.textContent = 'KOSPI Top 100';
+
+      const base = [...stocks]
+        .filter((s) => !favOnlyActive || favorites.has(s.code))
+        .filter(matchesSearch)
+        .filter((s) => stockLive[s.code] && typeof stockLive[s.code].change === 'number')
+        .sort((a, b) => stockLive[b.code].change - stockLive[a.code].change);
+
+      if (base.length === 0) {
+        stockArea.appendChild(createEmptyState());
+        return;
+      }
+
+      const totalPages = Math.max(1, Math.ceil(base.length / RANK_PAGE_SIZE));
+      if (changePage > totalPages) changePage = totalPages;
+      const start = (changePage - 1) * RANK_PAGE_SIZE;
+      const pageItems = base.slice(start, start + RANK_PAGE_SIZE);
+
+      const table = document.createElement('div');
+      table.className = 'rank-table';
+      table.setAttribute('role', 'table');
+
+      const head = document.createElement('div');
+      head.className = 'rank-table-head';
+      head.setAttribute('role', 'row');
+      head.innerHTML = `
+        <div role="columnheader">순위</div>
+        <div role="columnheader">종목명</div>
+        <div role="columnheader">업종</div>
+        <div role="columnheader" style="text-align:right;">현재가</div>
+        <div role="columnheader" style="text-align:right;">등락률</div>
+        <div role="columnheader" style="text-align:right;">시가총액</div>
+        <div role="columnheader"></div>
+      `;
+      table.appendChild(head);
+
+      pageItems.forEach((stock) => table.appendChild(createRankRow(stock)));
+
+      stockArea.appendChild(table);
+
+      if (base.length > 0) {
+        stockArea.appendChild(
+          createPagination(base.length, RANK_PAGE_SIZE, changePage, (p) => {
+            changePage = p;
+            renderChangeView();
+            stockArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          })
+        );
+      }
+    }
+
     // ── 업종별 뷰 ──
     function createSectorRow(stock) {
       const row = document.createElement('div');
@@ -3124,11 +3181,13 @@
       rankViewBtn.classList.toggle('active', mode === 'rank');
       industryViewBtn.classList.toggle('active', mode === 'industry');
       scoreViewBtn.classList.toggle('active', mode === 'score');
+      changeViewBtn.classList.toggle('active', mode === 'change');
     }
 
     function rerenderCurrentView() {
       if (currentView === 'rank') { renderRankView(); }
       else if (currentView === 'score') { renderScoreView(); }
+      else if (currentView === 'change') { renderChangeView(); }
       else { renderSectorView(); }
     }
 
@@ -3138,6 +3197,7 @@
       favOnlyBtn.classList.toggle('active', active);
       rankPage = 1;
       scorePage = 1;
+      changePage = 1;
       rerenderCurrentView();
     }
 
@@ -3158,6 +3218,12 @@
       setActiveViewButton('score');
       renderScoreView();
     });
+    changeViewBtn.addEventListener('click', () => {
+      currentView = 'change';
+      changePage = 1;
+      setActiveViewButton('change');
+      renderChangeView();
+    });
     favOnlyCheckbox.addEventListener('change', () => setFavOnly(favOnlyCheckbox.checked));
     favOnlyBtn.addEventListener('click', () => setFavOnly(!favOnlyActive));
 
@@ -3165,6 +3231,7 @@
       searchQuery = stockSearchInput.value.trim().toLowerCase();
       rankPage = 1;
       scorePage = 1;
+      changePage = 1;
       rerenderCurrentView();
     });
 
