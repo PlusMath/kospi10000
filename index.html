@@ -2618,6 +2618,7 @@
     let rankPage = 1;
     let scorePage = 1;
     let changePage = 1;
+    let changeSortMode = 'desc'; // 'desc' (상승률 큰 순) | 'asc' (하락률 큰 순)
     let scoreSortMode = 'total'; // 'fundamental' | 'technical' | 'total'
     let searchQuery = '';
     const RANK_PAGE_SIZE = 10;
@@ -2903,15 +2904,37 @@
     }
 
     // ── 등락률별 뷰 (당일 등락률 내림차순 — 상승률 큰 순서) ──
+    function changeSortLabel(mode) {
+      return mode === 'desc' ? '내림차순 (상승률 큰 순)' : '오름차순 (하락률 큰 순)';
+    }
+
     function renderChangeView() {
       stockArea.innerHTML = '';
       mainTitle.textContent = 'KOSPI Top 100';
 
+      const sortBar = document.createElement('div');
+      sortBar.className = 'score-sort-bar';
+      ['desc', 'asc'].forEach((mode) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'score-sort-btn' + (changeSortMode === mode ? ' active' : '');
+        btn.textContent = changeSortLabel(mode);
+        btn.addEventListener('click', () => {
+          if (changeSortMode === mode) return;
+          changeSortMode = mode;
+          changePage = 1;
+          renderChangeView();
+        });
+        sortBar.appendChild(btn);
+      });
+      stockArea.appendChild(sortBar);
+
+      const dir = changeSortMode === 'desc' ? -1 : 1;
       const base = [...stocks]
         .filter((s) => !favOnlyActive || favorites.has(s.code))
         .filter(matchesSearch)
         .filter((s) => stockLive[s.code] && typeof stockLive[s.code].change === 'number')
-        .sort((a, b) => stockLive[b.code].change - stockLive[a.code].change);
+        .sort((a, b) => dir * (stockLive[a.code].change - stockLive[b.code].change));
 
       if (base.length === 0) {
         stockArea.appendChild(createEmptyState());
