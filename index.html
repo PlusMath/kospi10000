@@ -2588,9 +2588,14 @@
             "image": "images/108_kumho-tire.png",
             "page": "stocks/108_073240.html",
             "sharesOut": 287260287,
-            "vscore": null
+            "vscore": 50
       }
-].filter((s) => s.rank <= 100);
+];
+
+    // 순위별 뷰 및 "대상 종목" 통계 카드는 top-100만 대상으로 함 — 100위 밖 종목
+    // (금호타이어·드림텍 등, rank>100)은 업종별/매력도별/등락률별 뷰에는 나오되
+    // 순위별 뷰에는 나오지 않도록 stocks(전체)와 stocks100(상위 100)을 분리.
+    const stocks100 = stocks.filter((s) => s.rank <= 100);
 
     const industryOrder = [
       "반도체·전자",
@@ -2721,7 +2726,7 @@
     // 시가총액(marketCapOf) 내림차순으로 매긴 실시간 순위. 라이브 시총이 없는 종목은
     // 뒤로 밀리되, 서로간에는 정적 rank(초기 선정 기준)로 정렬해 순서가 흔들리지 않게 함.
     function computeLiveRanks() {
-      const withCap = stocks.map((s) => ({ code: s.code, cap: marketCapOf(s), staticRank: s.rank }));
+      const withCap = stocks100.map((s) => ({ code: s.code, cap: marketCapOf(s), staticRank: s.rank }));
       withCap.sort((a, b) => {
         if (a.cap != null && b.cap != null) return b.cap - a.cap;
         if (a.cap != null) return -1;
@@ -2737,7 +2742,7 @@
 
     function getVisibleIndustries() {
       return industryOrder.filter((industry) =>
-        stocks.some((stock) => stock.industry === industry)
+        stocks100.some((stock) => stock.industry === industry)
       );
     }
 
@@ -2746,7 +2751,7 @@
     // 클릭 시 뜨는 팝업 목록의 개수가 항상 일치한다(stockLive 자체는 top100 밖 종목도
     // 포함할 수 있어 그걸 그대로 세면 숫자가 안 맞을 수 있음).
     function getMovers(direction) {
-      return stocks
+      return stocks100
         .map((s) => ({ stock: s, live: stockLive[s.code] }))
         .filter((x) => x.live && typeof x.live.change === 'number' && (direction === 'up' ? x.live.change >= 5 : x.live.change <= -5))
         .sort((a, b) => (direction === 'up' ? b.live.change - a.live.change : a.live.change - b.live.change));
@@ -2758,7 +2763,7 @@
       statGrid.innerHTML = `
         <div class="stat-card">
           <div class="stat-label">대상 종목</div>
-          <div class="stat-value">${stocks.length}<span class="stat-unit"> 개</span></div>
+          <div class="stat-value">${stocks100.length}<span class="stat-unit"> 개</span></div>
         </div>
         <div class="stat-card">
           <div class="stat-label">해당 업종</div>
@@ -2879,7 +2884,7 @@
       stockArea.innerHTML = '';
       mainTitle.textContent = 'KOSPI Top 100';
 
-      const base = [...stocks]
+      const base = [...stocks100]
         .filter((s) => !favOnlyActive || favorites.has(s.code))
         .filter(matchesSearch)
         .sort((a, b) => rankOf(a) - rankOf(b));
