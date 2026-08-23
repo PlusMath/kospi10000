@@ -88,46 +88,105 @@ function openChartFullscreen(wrap, controls) {
 // <select> 날짜 변경 시 재요청 없이 즉시 다시 그린다. 종목 파일 자체는 정적이라
 // 매일 갱신되는 아카이브 JSON만 새로 받아오면 페이지 코드 수정 없이 최신 상태 반영.
 function initDpNews(code) {
-  const select = document.getElementById('dpNewsDateSelect');
   const holder = document.getElementById('dpNewsBody');
   const toolbar = document.getElementById('dpNewsToolbar');
-  if (!select || !holder) return;
+  if (!holder) return;
 
   function esc(s) {
     return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   }
-  function fmtDateLabel(dateStr) {
-    const d = new Date(dateStr + 'T00:00:00+09:00');
-    const days = ['일', '월', '화', '수', '목', '금', '토'];
-    return `${d.getFullYear()}.${d.getMonth() + 1}.${d.getDate()} (${days[d.getDay()]})`;
+
+  const PAGE_SIZE = 10;
+  let page = 1;
+  let query = '';
+  let allItems = [];
+
+  function filteredItems() {
+    if (!query) return allItems;
+    const q = query.toLowerCase();
+    return allItems.filter(n =>
+      n.title.toLowerCase().includes(q) || (n.source && n.source.toLowerCase().includes(q))
+    );
   }
-  function render(archive, dateKey) {
-    const items = archive[dateKey] || [];
+
+  function updateCount() {
+    const label = document.getElementById('dpNewsCountLabel');
+    if (label) label.textContent = `총 ${filteredItems().length}건`;
+  }
+
+  function renderList() {
+    const items = filteredItems();
     if (items.length === 0) {
-      holder.innerHTML = '<p class="dp-news-empty">이 날짜에는 관련 뉴스가 없습니다.</p>';
+      holder.innerHTML = `<p class="dp-news-empty">${query ? '검색 결과가 없습니다.' : '최근 뉴스 데이터가 없습니다.'}</p>`;
       return;
     }
-    holder.innerHTML = '<div class="dp-news-list">' + items.map(n => `
+    const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
+    if (page > totalPages) page = totalPages;
+    const start = (page - 1) * PAGE_SIZE;
+    const pageItems = items.slice(start, start + PAGE_SIZE);
+
+    const listHtml = '<div class="dp-news-list">' + pageItems.map(n => `
       <a class="dp-news-item" href="${esc(n.link)}" target="_blank" rel="noopener">
         <div class="dp-news-title">${esc(n.title)}</div>
         <div class="dp-news-meta"><span class="dp-news-source">${esc(n.source)}</span><span class="dp-news-time">${esc(n.time)}</span></div>
       </a>
     `).join('') + '</div>';
+
+    let pagerHtml = '';
+    if (totalPages > 1) {
+      const btnStyle = 'border:1px solid var(--dp-border2);background:var(--dp-card);border-radius:6px;padding:5px 10px;font-size:12px;cursor:pointer;color:var(--dp-text2);font-family:inherit;';
+      const disabledStyle = 'opacity:.4;cursor:default;';
+      pagerHtml = `
+        <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-top:14px;">
+          <button type="button" data-act="prev" ${page <= 1 ? 'disabled' : ''} style="${btnStyle}${page <= 1 ? disabledStyle : ''}">이전</button>
+          <span style="font-size:12px;color:var(--dp-text3);">${page} / ${totalPages}</span>
+          <button type="button" data-act="next" ${page >= totalPages ? 'disabled' : ''} style="${btnStyle}${page >= totalPages ? disabledStyle : ''}">다음</button>
+        </div>`;
+    }
+
+    holder.innerHTML = listHtml + pagerHtml;
+
+    const prevBtn = holder.querySelector('[data-act="prev"]');
+    const nextBtn = holder.querySelector('[data-act="next"]');
+    if (prevBtn) prevBtn.addEventListener('click', () => {
+      if (page > 1) { page--; renderList(); holder.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+    });
+    if (nextBtn) nextBtn.addEventListener('click', () => {
+      if (page < totalPages) { page++; renderList(); holder.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+    });
+  }
+
+  if (toolbar) {
+    toolbar.innerHTML = `
+      <input type="search" id="dpNewsSearchInput" placeholder="뉴스 제목·언론사 검색" style="flex:1;min-width:0;font-size:12.5px;padding:6px 10px;border:1px solid var(--dp-border2);border-radius:6px;background:var(--dp-card);color:inherit;font-family:inherit;">
+      <span id="dpNewsCountLabel" style="font-size:11px;color:var(--dp-text4);white-space:nowrap;"></span>
+    `;
+    const input = document.getElementById('dpNewsSearchInput');
+    input.addEventListener('input', () => {
+      query = input.value.trim();
+      page = 1;
+      updateCount();
+      renderList();
+    });
   }
 
   fetch(`../data/news/${code}.json`)
     .then(res => { if (!res.ok) throw new Error('no data'); return res.json(); })
     .then(archive => {
-      const dateKeys = Object.keys(archive).sort().reverse();
-      if (dateKeys.length === 0) {
+      allItems = [];
+      Object.keys(archive).forEach(dateKey => {
+        (archive[dateKey] || []).forEach(n => allItems.push(n));
+      });
+      // n.time은 "MM-dd HH:mm" 형식이라 문자열 내림차순 정렬만으로도 최신순이 됨(연도 경계 근처 예외는 무시).
+      allItems.sort((a, b) => (a.time < b.time ? 1 : (a.time > b.time ? -1 : 0)));
+
+      if (allItems.length === 0) {
         holder.innerHTML = '<p class="dp-news-empty">최근 뉴스 데이터가 없습니다.</p>';
         if (toolbar) toolbar.style.display = 'none';
         return;
       }
-      select.innerHTML = dateKeys.map(k => `<option value="${esc(k)}">${esc(fmtDateLabel(k))}</option>`).join('');
-      select.value = dateKeys[0];
-      select.addEventListener('change', () => render(archive, select.value));
-      render(archive, dateKeys[0]);
+      updateCount();
+      renderList();
     })
     .catch(() => {
       holder.innerHTML = '<p class="dp-news-empty">뉴스 데이터를 불러오지 못했습니다.</p>';
