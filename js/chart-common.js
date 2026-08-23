@@ -170,7 +170,7 @@ function initDpNews(code) {
     });
   }
 
-  fetch(`../data/news/${code}.json`)
+  fetch(`../data/news/${code}.json?v=${Date.now()}`, { cache: 'no-store' })
     .then(res => { if (!res.ok) throw new Error('no data'); return res.json(); })
     .then(archive => {
       allItems = [];
@@ -206,7 +206,7 @@ function initTechnicalScore(code) {
     return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   }
 
-  fetch('../data/technical_score.json')
+  fetch(`../data/technical_score.json?v=${Date.now()}`, { cache: 'no-store' })
     .then(res => { if (!res.ok) throw new Error('no data'); return res.json(); })
     .then(all => {
       const r = all[code];

@@ -2660,7 +2660,7 @@
     function loadTechnicalScoreData() {
       if (technicalScoreData) return Promise.resolve(technicalScoreData);
       if (technicalScoreLoadPromise) return technicalScoreLoadPromise;
-      technicalScoreLoadPromise = fetch('data/technical_score.json')
+      technicalScoreLoadPromise = fetch(`data/technical_score.json?v=${Date.now()}`, { cache: 'no-store' })
         .then((res) => { if (!res.ok) throw new Error('no data'); return res.json(); })
         .then((data) => { technicalScoreData = data; return data; })
         .catch(() => { technicalScoreData = {}; return technicalScoreData; });
