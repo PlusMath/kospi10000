@@ -96,7 +96,7 @@ function initDpNews(code) {
     return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   }
 
-  const PAGE_SIZE = 10;
+  const PAGE_SIZE = 5;
   let page = 1;
   let query = '';
   let allItems = [];
