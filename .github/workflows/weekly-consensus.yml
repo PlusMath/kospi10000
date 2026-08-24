@@ -31,6 +31,13 @@ jobs:
       - name: Install Codex CLI
         run: npm install -g @openai/codex
 
+      - name: Authenticate Codex CLI
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          printenv OPENAI_API_KEY | codex login --with-api-key
+          codex login status
+
       - name: Compute this week's rotation batch
         run: |
           python3 - "${{ github.event.inputs.batch_size || '25' }}" << 'PYEOF'
