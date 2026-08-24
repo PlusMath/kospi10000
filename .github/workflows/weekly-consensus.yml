@@ -26,7 +26,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0
 
       - name: Install Claude Code CLI
         run: npm install -g @anthropic-ai/claude-code
@@ -115,7 +115,22 @@ jobs:
           git add stocks/*.html consensus_rotation_state.json
           if ! git diff --cached --quiet; then
             git commit -m "애널리스트 컨센서스 주간 갱신 ($(date -u +%Y-%m-%d), GitHub Actions)"
-            git push origin HEAD:main
+            # 리서치에 시간이 걸리는 동안(수십 분) 다른 파이프라인이 main을 앞세울 수 있어,
+            # push 직전에 최신 main을 받아 리베이스한 뒤 재시도.
+            for i in 1 2 3; do
+              git fetch origin main
+              if git rebase origin/main; then
+                if git push origin HEAD:main; then
+                  break
+                fi
+              else
+                echo "::error::리베이스 충돌 — 수동 확인 필요"
+                git rebase --abort
+                exit 1
+              fi
+              echo "push 재시도 ($i)"
+              sleep 5
+            done
           else
             echo "변경사항 없음 — 커밋 생략"
           fi
