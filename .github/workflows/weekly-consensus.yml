@@ -28,8 +28,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install Claude Code CLI
-        run: npm install -g @anthropic-ai/claude-code
+      - name: Install Codex CLI
+        run: npm install -g @openai/codex
 
       - name: Compute this week's rotation batch
         run: |
@@ -68,9 +68,9 @@ jobs:
               print(f'  - {f}')
           PYEOF
 
-      - name: Process batch file-by-file (commits each file, waits out session-limit resets)
+      - name: Process batch file-by-file with Codex (commits each file)
         env:
-          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           git config user.name "kospi10000-bot"
           git config user.email "actions@users.noreply.github.com"
@@ -108,37 +108,20 @@ jobs:
           print(template.replace('%%BATCH_COUNT%%', '1').replace('%%BATCH_LIST%%', f'- {f}'))
           PYEOF
 
-            while true; do
-              set +e
-              OUT=$(cat _one_prompt.txt | claude -p \
-                --permission-mode bypassPermissions \
-                --allowedTools "WebSearch,WebFetch,Read,Edit,Grep,Glob,Bash(git diff*),Bash(git status*),Bash(git log*),Bash(grep*),Bash(date*)" \
-                --max-budget-usd 3 \
-                --output-format text 2>&1)
-              set -e
-              echo "$OUT"
-
-              if echo "$OUT" | grep -qi "session limit"; then
-                RESET_HHMM=$(echo "$OUT" | grep -oiP 'resets \K[0-9]{1,2}:[0-9]{2}[ap]m' | head -1)
-                if [ -z "$RESET_HHMM" ]; then
-                  echo "한도 메시지는 감지했지만 리셋 시각 파싱 실패 — 이번 실행 종료"; exit 1
-                fi
-                NOW_EPOCH=$(date -u +%s)
-                RESET_EPOCH=$(date -u -d "today ${RESET_HHMM} UTC" +%s)
-                if [ "$RESET_EPOCH" -le "$NOW_EPOCH" ]; then
-                  RESET_EPOCH=$(date -u -d "tomorrow ${RESET_HHMM} UTC" +%s)
-                fi
-                WAIT=$(( RESET_EPOCH - NOW_EPOCH + 90 ))
-                echo "세션 한도 도달(리셋 ${RESET_HHMM} UTC) — ${WAIT}초 대기 후 같은 파일 재시도"
-                if [ $(( $(date -u +%s) + WAIT )) -ge "$JOB_DEADLINE" ]; then
-                  echo "대기하면 작업 시간 예산을 넘김 — 이번 실행 종료, 다음 실행에서 이어감"
-                  exit 0
-                fi
-                sleep "$WAIT"
-                continue
-              fi
-              break
-            done
+            set +e
+            OUT=$(codex --search \
+              --sandbox workspace-write \
+              --ask-for-approval never \
+              exec \
+              --color never \
+              - < _one_prompt.txt 2>&1)
+            CODEX_STATUS=$?
+            set -e
+            echo "$OUT"
+            if [ "$CODEX_STATUS" -ne 0 ]; then
+              echo "::error::Codex 처리 실패 ($FILE, exit code $CODEX_STATUS)"
+              exit "$CODEX_STATUS"
+            fi
 
             push_current_file "stocks/$FILE"
 
