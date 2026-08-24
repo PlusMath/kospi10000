@@ -134,3 +134,24 @@ jobs:
           else
             echo "변경사항 없음 — 커밋 생략"
           fi
+
+      - name: Push to preview repo
+        env:
+          PREVIEW_REPO_TOKEN: ${{ secrets.PREVIEW_REPO_TOKEN }}
+        run: |
+          git remote add preview "https://x-access-token:${PREVIEW_REPO_TOKEN}@github.com/PlusMath/kospi10000_preview.git" 2>/dev/null || \
+            git remote set-url preview "https://x-access-token:${PREVIEW_REPO_TOKEN}@github.com/PlusMath/kospi10000_preview.git"
+          for i in 1 2 3; do
+            git fetch preview main
+            if git rebase preview/main; then
+              if git push preview HEAD:main; then
+                break
+              fi
+            else
+              echo "::error::preview 리베이스 충돌 — 수동 확인 필요"
+              git rebase --abort
+              exit 1
+            fi
+            echo "preview push 재시도 ($i)"
+            sleep 5
+          done
