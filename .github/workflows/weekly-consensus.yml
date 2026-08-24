@@ -139,12 +139,16 @@ jobs:
         env:
           PREVIEW_REPO_TOKEN: ${{ secrets.PREVIEW_REPO_TOKEN }}
         run: |
-          git remote add preview "https://x-access-token:${PREVIEW_REPO_TOKEN}@github.com/PlusMath/kospi10000_preview.git" 2>/dev/null || \
+          # actions/checkout이 github.com 전체에 대해 GITHUB_TOKEN(github-actions[bot]) 인증
+          # 헤더를 미리 심어놔서, URL에 박은 PREVIEW_REPO_TOKEN보다 그게 우선 적용되며 preview
+          # 레포에는 권한이 없어 403이 남 — 이 헤더를 -c로 매 명령마다 비워서 무효화.
+          NOAUTH=(-c http.https://github.com/.extraheader=)
+          git "${NOAUTH[@]}" remote add preview "https://x-access-token:${PREVIEW_REPO_TOKEN}@github.com/PlusMath/kospi10000_preview.git" 2>/dev/null || \
             git remote set-url preview "https://x-access-token:${PREVIEW_REPO_TOKEN}@github.com/PlusMath/kospi10000_preview.git"
           for i in 1 2 3; do
-            git fetch preview main
+            git "${NOAUTH[@]}" fetch preview main
             if git rebase preview/main; then
-              if git push preview HEAD:main; then
+              if git "${NOAUTH[@]}" push preview HEAD:main; then
                 break
               fi
             else
