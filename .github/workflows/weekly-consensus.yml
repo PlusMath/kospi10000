@@ -1,0 +1,121 @@
+name: Weekly Analyst Consensus Update
+
+on:
+  schedule:
+    # 매주 월요일 01:00 UTC = 10:00 KST (기존 로컬 예약작업과 동일한 시각대)
+    - cron: '0 1 * * 1'
+  workflow_dispatch:
+    inputs:
+      batch_size:
+        description: '이번 실행에서 처리할 종목 수'
+        required: false
+        default: '25'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: weekly-consensus
+  cancel-in-progress: false
+
+jobs:
+  update-consensus:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Compute this week's rotation batch
+        run: |
+          python3 - "${{ github.event.inputs.batch_size || '25' }}" << 'PYEOF'
+          import json, re, sys, pathlib
+
+          batch_size = int(sys.argv[1])
+          stocks_dir = pathlib.Path('stocks')
+          files = sorted(
+              p.name for p in stocks_dir.glob('*.html')
+              if re.match(r'^\d{3}_[0-9A-Za-z]+\.html$', p.name)
+          )
+          files = [f for f in files if 'dp-acc"' in (stocks_dir / f).read_text(encoding='utf-8')]
+          if not files:
+              print('대상 파일 없음'); sys.exit(1)
+
+          state_path = pathlib.Path('consensus_rotation_state.json')
+          last_index = 0
+          if state_path.exists():
+              try:
+                  last_index = int(json.loads(state_path.read_text(encoding='utf-8')).get('lastIndex', 0))
+              except Exception:
+                  last_index = 0
+          if last_index >= len(files):
+              last_index = 0
+
+          n = min(batch_size, len(files))
+          batch = [files[(last_index + i) % len(files)] for i in range(n)]
+          next_index = (last_index + len(batch)) % len(files)
+
+          pathlib.Path('_batch_list.txt').write_text(
+              '\n'.join(f'- stocks/{f}' for f in batch), encoding='utf-8'
+          )
+          pathlib.Path('_batch_meta.json').write_text(
+              json.dumps({'lastIndex': last_index, 'nextIndex': next_index, 'count': len(batch)}),
+              encoding='utf-8'
+          )
+          print(f'전체 대상: {len(files)}개 / 이번 배치: {len(batch)}개 (커서 {last_index} -> {next_index})')
+          for f in batch:
+              print(f'  - {f}')
+          PYEOF
+
+      - name: Build prompt
+        run: |
+          python3 - << 'PYEOF'
+          import json, pathlib
+          batch_list = pathlib.Path('_batch_list.txt').read_text(encoding='utf-8')
+          meta = json.loads(pathlib.Path('_batch_meta.json').read_text(encoding='utf-8'))
+          template = pathlib.Path('.github/consensus_prompt_template.md').read_text(encoding='utf-8')
+          prompt = template.replace('%%BATCH_COUNT%%', str(meta['count'])).replace('%%BATCH_LIST%%', batch_list)
+          pathlib.Path('_prompt.txt').write_text(prompt, encoding='utf-8')
+          PYEOF
+
+      - name: Run Claude Code (headless research + edit)
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          cat _prompt.txt | claude -p \
+            --permission-mode bypassPermissions \
+            --allowedTools "WebSearch,WebFetch,Read,Edit,Grep,Glob,Bash(git diff*),Bash(git status*),Bash(git log*),Bash(grep*),Bash(date*)" \
+            --max-budget-usd 25 \
+            --output-format text
+
+      - name: Advance rotation cursor
+        run: |
+          python3 - << 'PYEOF'
+          import json, pathlib, datetime
+          meta = json.loads(pathlib.Path('_batch_meta.json').read_text(encoding='utf-8'))
+          state = {
+              'lastIndex': meta['nextIndex'],
+              'lastRunUtc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+          }
+          pathlib.Path('consensus_rotation_state.json').write_text(
+              json.dumps(state, ensure_ascii=False, indent=2), encoding='utf-8'
+          )
+          PYEOF
+          rm -f _batch_list.txt _batch_meta.json _prompt.txt
+
+      - name: Commit and push to main
+        run: |
+          git config user.name "kospi10000-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add stocks/*.html consensus_rotation_state.json
+          if ! git diff --cached --quiet; then
+            git commit -m "애널리스트 컨센서스 주간 갱신 ($(date -u +%Y-%m-%d), GitHub Actions)"
+            git push origin HEAD:main
+          else
+            echo "변경사항 없음 — 커밋 생략"
+          fi
