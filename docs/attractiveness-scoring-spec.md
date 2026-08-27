@@ -83,7 +83,9 @@ $scoreMetricDefs = @(
   변경. 노트 텍스트 패턴이 다른(위 3개 문구가 전혀 없는) 진짜 "데이터 없음" 케이스는 여전히
   지표 제외(가중치 재분배)로 처리됨 — 확정된 적자만 0점 처리 대상.
 - 함수: `Get-DpScoreMetrics`(ROE/EPS성장률/부채비율 원본 파싱), `Get-Percentile`(백분위 계산),
-  `Set-DpVscoreCard`(카드 렌더링), `Get-DpVscoreGrade`(등급 문자열).
+  `Get-DpVscoreResult`(2026-08-27 신규 — 지표별 status/coverage/게시여부까지 판정하는 순수
+  함수, 부수효과 없어 테스트에서 재사용), `Set-DpVscoreCard`/`Set-DpVscoreUnavailableCard`(카드
+  렌더링, 공용 삽입 로직은 `Set-DpVscoreBlock`), `Get-DpVscoreGrade`(등급 문자열).
 
 ### 1-2. 백분위(percentile) 계산 — `Get-Percentile`
 
@@ -127,9 +129,10 @@ $scoreIndustryGroupMap = @{
 
 | 지표 | 소스 |
 |------|------|
-| PER / Forward PER / PBR / 배당수익률 | 당일 종가 ÷ (EPS/BPS/DPS) — 각 종목 페이지의 `dp-share4`/EPS 게이지에서 이미 파싱해둔 값 재사용 |
+| PER / Forward PER / PBR | 당일 종가 ÷ (EPS/BPS) — 각 종목 페이지의 `dp-share4`/EPS 게이지에서 이미 파싱해둔 값 재사용 |
+| 배당수익률 | 배당 게이지 note에서 DPS 직접 파싱(아래 별도 절 참고, 2026-08-27 전면 재작성) |
 | ROE / EPS 성장률 / 부채비율 | **"2. 기본적 분석 — 공시 원문"의 `사업보고서(연간)` 탭**에서 라벨 매칭으로 직접 파싱 (`Get-DpAnnualBlock`으로 `dpFundAnnual` 블록만 스코프 제한 — `dpFundQuarter`(분기/반기) 블록과 라벨이 동일해서 스코프를 안 좁히면 잘못 매칭될 위험이 있었음) |
-| 우선주 | 백분위 모집단에서 **제외**(`name -notmatch '우[A-Z]?$'`) — 우선주는 밸류에이션 성격이 보통주와 달라 왜곡 방지 |
+| 우선주 | 백분위 모집단에서 **제외**(`name -notmatch '우[A-Z]?$'`) — 우선주는 밸류에이션 성격이 보통주와 달라 왜곡 방지. 2026-08-27: 이 제외가 `$industryStats`(업종 평균 PER/PBR 비교 문구용 median)에는 빠져있던 버그를 발견해 동일 기준으로 통일함(예: 삼성전자/삼성전자우가 같은 업종 median 풀에 둘 다 잡혀있던 사례) |
 
 ROE/EPS성장률/부채비율 계산식:
 ```
@@ -140,25 +143,87 @@ EPS 성장률 = (최근연도 EPS - 최초연도 EPS) ÷ |최초연도 EPS| × 1
 라벨 변형이 세션마다 제각각이라(11가지 변형 실측) `$script:DpNetIncomeLabels` 등 배열에
 전부 등록해 매칭 — 매칭 실패 시 조용히 `$null` 반환(허위 데이터 생성 금지).
 
+#### 배당수익률 파싱 (2026-08-27 전면 재작성)
+
+기존 `Update-DpDividendYield`는 게이지 **wrapper 전체**(`Find-DpGaugeMatch` → 열림 태그부터
+닫힘 태그까지)를 정규식으로 통째로 매칭했는데, 배당 게이지 뒤에 "최근 5개년 배당금" 표가
+추가된 파일(실측 83/109개)에서 wrapper 매칭이 조용히 실패해 배당수익률이 가격 갱신·vscore
+양쪽에서 전부 빠지는 버그가 있었다(실측: OLD 로직 재현 시 109개 중 성공 2개뿐). 수정 내용:
+
+- `Find-DpGaugeRowOnlyMatch` + `Get-DpGaugeRowOnly{V2,V1,Old}Pattern`: wrapper 여는 태그부터
+  "행"(gauge-row 또는 gauge-h+track+note) 닫힘까지만 좁게 매칭 — 뒤에 붙은 `dp-insight`·배당표는
+  손대지 않고 그대로 보존.
+- DPS note 정규식이 `DPS(\([^)]*\))?\s*([\d,]+)원(\([^)]*\))?\s*(?:÷\s*(?:현재가\s*)?[\d,]+원)?\s*(.*)$`로
+  확장돼 실측된 변형(`DPS(보통주) N원`, `DPS N원(구주 기준)`, `÷ 현재가 M원`, `DPS 0원`(÷ 있음/없음
+  둘 다)) 전부 지원.
+- **DPS=0은 결측이 아니라 유효한 0% 관측치**(`status=zero_dividend`)로 반환 — 이전엔
+  `DPS<=0`이면 `$null` 반환해 무배당 종목이 배당 15점 결측 처리(→ 나머지로 재분배)되는 바람에
+  오히려 불이익을 피하는 왜곡이 있었음.
+- 반환값이 `(content, yield, status)` 3-tuple로 바뀜(기존 2-tuple에서 확장) —
+  status: `valid` | `zero_dividend` | `parse_error` | `missing`(게이지 자체 없음). "DPS 없이
+  순수 서술형 문장"(예: "2년 연속 순손실로 배당보류...")처럼 원천적으로 숫자가 없는 노트는
+  `parse_error`로 남고, 이건 파서를 더 고쳐도 해결 안 됨(원본 콘텐츠에 숫자가 없음 — 실측
+  16/109건).
+
 ### 1-5. 등급 경계 — `Get-DpVscoreGrade`
 
+2026-08-27: 산식이 실제로는 "절대적 저평가/고평가"가 아니라 **업종 내 상대순위(percentile)**일
+뿐이라(업종 전체가 비싸도 반드시 상위/하위 종목이 생기고, 비교군이 3개면 사실상 0/50/100의
+매우 거친 순위만 나옴) "저평가"라는 절대적 표현을 상대매력 표현으로 교체(임계값은 그대로):
+
 ```
-score >= 80  → "매우 저평가"
-score >= 70  → "저평가"
-score >= 60  → "다소 저평가"
-score >= 40  → "적정 범위"
-그 외         → "고평가 또는 재무위험"
+score >= 80  → "업종 내 상대매력 최상위"
+score >= 70  → "업종 내 상대매력 상위"
+score >= 60  → "업종 내 상대매력 중상위"
+score >= 40  → "업종 내 중립"
+그 외         → "업종 내 상대매력 하위 또는 재무위험"
 ```
 (JS 쪽 동일 로직: `index.html`의 `vscoreGrade()`, tier는 `tier-cheap`(≥60)/`tier-mid`(40~59)/
-`tier-expensive`(<40)로 매핑)
+`tier-expensive`(<40)로 매핑 — tier 이름·경계는 변경 없음, label 텍스트만 교체)
 
-### 1-6. 렌더링 및 홈페이지 동기화
+### 1-6. 게시 기준(coverage 게이트) — 2026-08-27 신규
 
-- 종목 페이지: `<!-- dp-vscore:start/end -->` 마커 안에 카드 삽입(`Set-DpVscoreCard`). 삼성전자는
-  마커 체계 이전에 수동으로 넣어놔서 마커가 없어 legacy 패턴으로 별도 매칭.
+기존엔 "지표 3개 이상 계산되면 100점으로 재정규화해 카드 표시"였는데, 이러면 3개 지표만으로
+100점 만점 재분배돼 과대평가되는 사례가 실측됨(예: LG유플러스 88점 = Forward PER/PBR/ROE 3개뿐,
+삼성SDI 83점 = PBR/ROE/재무안전성 3개뿐 — 둘 다 배당수익률이 파싱 실패로 빠져있던 사례). 새 게이트
+(`Get-DpVscoreResult`):
+
+- **최소 4개 지표**(`$VscoreMinMetricCount`) 이상 관측돼야 함(기존 3개에서 상향).
+- 그중 **가치지표(Forward PER 또는 PBR) 1개 이상**, **품질지표(ROE/EPS성장률/재무안전성) 1개
+  이상**이 반드시 포함돼야 함(배당수익률만으로는 이 두 카테고리 어느 쪽도 채울 수 없음).
+- **coverage**(= observedWeight ÷ eligibleWeight) **75% 이상**(`$VscoreCoverageThreshold`,
+  상수로 분리) — eligibleWeight는 금융업 재무안전성 제외 등 "설계상 해당 없음"을 뺀 값, 25%
+  이상이 결측 재분배면 표시 점수의 4분의 1 이상이 실측이 아닌 값이라 신뢰도가 낮다고 판단.
+- 지표별 status: `valid`(정상 관측) / `zero_dividend`(무배당, 0%도 유효 관측치) /
+  `loss`(적자로 Forward PER 산출 불가, 0점 확정이지만 유효 관측치) /
+  `designed_not_applicable`(금융업 재무안전성처럼 의도적 제외) / `missing`(결측·파싱실패, 이
+  값은 eligibleWeight엔 들어가지만 observedWeight엔 안 들어감).
+- 게이트를 통과 못 하면 카드에 숫자 대신 "계산 불가/데이터 부족"과 미달 사유를 표시
+  (`Set-DpVscoreUnavailableCard`), `index.html`의 `vscore`는 명시적으로 `null`로 씀(아래 1-7
+  참고).
+
+### 1-7. 렌더링 및 홈페이지 동기화
+
+- 종목 페이지: `<!-- dp-vscore:start/end -->` 마커 안에 카드 삽입(`Set-DpVscoreCard`, 게이트
+  통과 못 하면 `Set-DpVscoreUnavailableCard`). 두 함수 다 공용 삽입 로직(`Set-DpVscoreBlock`)을
+  공유 — 마커 있으면 교체, 없으면(삼성전자처럼 마커 체계 이전에 손으로 넣은 케이스) legacy
+  패턴 매칭, 그것도 없으면 3번 섹션 acc-body 앵커 뒤에 신규 삽입.
 - 홈페이지: `index.html`의 `const stocks = [...]` 배열 각 항목에 `"vscore": N`(또는 `null`) 필드를
-  코드 앵커 기반 정규식으로 동기화. **오늘 계산에서 빠진 종목은 이전 값을 그대로 둠**(허위로 null
-  덮어쓰지 않음).
+  코드 앵커 기반 정규식으로 동기화.
+  **2026-08-27 변경**: 예전엔 "오늘 계산에서 빠진 종목은 이전 값을 그대로 둠"이었는데, 이게
+  "이번 실행에서 시도했지만 게시 기준 미달"과 "이번 실행에서 아예 시도 안 함"을 구분 못 해서
+  전자의 경우에도 옛 점수가 최신인 것처럼 남는 버그였음(실측: 상세페이지엔 옛 숫자 점수 카드가
+  남아있는데 index는 이미 null인 불일치 케이스 등). 이제 `valuationCandidates`에 후보로
+  들어간(=이번 실행에서 시도된) 종목은 게이트 통과 여부와 무관하게 **항상** `vscore`를 갱신하고
+  (미달이면 명시적 `null`), **후보 자체에 안 들어간**(=신규 상장 직후 등으로 계산을 시도조차
+  안 한) 종목만 이전 값을 그대로 둔다. index.html 저장 직전에 상세페이지 카드와 index의 숫자가
+  실제로 일치하는지 재파싱해서 비교하는 검증 루프도 추가됨(불일치 시 WARN 로그).
+- `data/fundamental_score.json`(2026-08-27 신규): 종목별 `score/grade/coverage/eligible_weight/
+  observed_weight/peer_group/peer_count/calculated_at/price_as_of/financial_data_as_of/지표별
+  breakdown`을 구조화 저장. 위 카드·index와 동일한 `Get-DpVscoreResult` 결과를 그대로
+  직렬화하므로 숫자가 항상 일치. daily 스크립트의 `git add` 목록에도 포함시켜야 함(`data/news`,
+  `data/technical_score.json`이 한동안 git add 누락으로 커밋 안 되던 것과 같은 실수를 반복하지
+  않기 위해 명시적으로 챙김).
 
 ---
 
@@ -370,11 +435,11 @@ let scoreSortMode = 'total'; // 'fundamental' | 'technical' | 'total'
 2. **vscore 산출 근거의 페이지 노출 범위**: vscore는 `dpFundAnnual`(사업보고서 연간) 블록만
    읽는다. 반기/분기 실적 갱신 세션(`stocks/*.html`의 `dpFundQuarter` 블록 갱신)은 vscore 계산에
    영향을 주지 않는다 — 이는 의도된 설계(연 1회 재무제표 기준 유지)이지, 버그가 아님. 다만
-   반기보고서가 사업보고서를 대체할 시점(다음 사업연도 정기공시)이 되면 자연히 갱신됨.
-3. **총점(vscore+technical_score) 정규화**: 현재 단순 합산(200점 만점). 두 점수의 분포 특성이
-   다를 수 있어(예: vscore는 백분위 기반이라 이론상 고르게 분포, technical_score는 조건 충족형이라
-   분포가 더 뾰족할 수 있음) 필요 시 표준화(z-score) 방식 도입을 검토할 수 있음 — 다만 현재는
-   "1차 버전"으로 명시되어 있어 단순 합산이 의도된 선택일 가능성이 높음.
+   반기보고서가 사업보고서를 대체할 시점(다음 사업연도 정기공시)이 되면 자연히 갱신됨. P1 설계안
+   ([vscore-p1-design.md](./vscore-p1-design.md) 5번)에서 TTM/분기 갱신 방식을 다룸.
+3. **총점(vscore+technical_score) 정규화**: 현재 단순 합산(200점 만점) — "1차 버전"으로 명시된
+   의도된 선택. 표준화(z-score) 결합 방식은 [vscore-p1-design.md](./vscore-p1-design.md) 7번에
+   설계안으로 정리해둠(이번 P0 작업 범위 밖, 미구현).
 4. **매력도별 보기의 "SEPA" 표기**: 코드 곳곳의 주석·UI 문구는 "Minervini SEPA/Trend Template"로
    표기되어 있음(`js/chart-common.js`, `data/technical_score.json`의 `grade` 계산 로직 주석 등).
    사용자가 요청 시 "세타"라고 쓴 것은 "SEPA"의 오기로 추정됨.
@@ -400,9 +465,18 @@ technical_score/
   ├─ run_daily.py                    # 실행 진입점 → data/technical_score.json
   └─ tests/                          # 각 모듈별 단위 테스트
 data/
-  └─ technical_score.json            # 전종목 통합 기술점수 결과(Python 배치 산출물)
+  ├─ technical_score.json            # 전종목 통합 기술점수 결과(Python 배치 산출물)
+  └─ fundamental_score.json          # 2026-08-27 신규 — vscore 전종목 산출 근거(지표별 status/
+                                      #   coverage/weight/percentile 포함), Get-DpVscoreResult 직렬화
 js/
   └─ chart-common.js                 # initTechnicalScore() 등 종목 페이지 공통 렌더러
 index.html                           # 홈페이지: renderScoreView(), vscoreGrade(), tscoreGradeTier()
-stocks/*.html                        # 종목별 상세 페이지(105개) — dp-vscore/dp-tscore/dp-investor-flow 마커
+stocks/*.html                        # 종목별 상세 페이지(109개) — dp-vscore/dp-tscore/dp-investor-flow 마커
+tests/vscore/                        # 2026-08-27 신규 — vscore/배당파서 전용 테스트(라인 번호
+  ├─ Import-VscoreFunctions.ps1      #   비의존, 브레이스 매칭으로 update_daily_charts.ps1에서
+  ├─ vscore.tests.ps1                #   순수 함수만 추출해 dot-source). 실행:
+  ├─ dividend.tests.ps1              #   powershell -ExecutionPolicy Bypass -File tests\vscore\run.ps1
+  └─ run.ps1
+docs/vscore-p1-design.md             # 2026-08-27 신규 — P1(미구현) 설계안: 가치/품질/성장 분리,
+                                      #   업종별 모델, GICS 계층, XBRL, TTM 갱신, 백테스트, z-score 결합
 ```
