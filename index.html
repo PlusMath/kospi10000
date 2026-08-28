@@ -689,6 +689,22 @@
       color: var(--color-up);
     }
 
+    .auth-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      background: var(--color-accent-soft);
+      color: var(--color-accent);
+      text-decoration: none;
+    }
+
     .daily-movers {
       display: none;
       position: fixed;
@@ -939,6 +955,11 @@
         font-size: 12px;
       }
 
+      .auth-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+
       .data-note {
         display: none;
       }
@@ -1178,6 +1199,7 @@
       <span class="market-switch-btn active">🇰🇷 KOSPI Top 100</span>
       <span class="fav-count">★ <span id="favCount">0</span></span>
       <button type="button" class="movers-toggle-btn" id="moversToggleBtn" aria-expanded="false">🔔 5%+ 변동 <span id="moversToggleCount">0</span></button>
+      <a href="#" class="auth-btn" id="authBtn">로그인</a>
     </nav>
   </header>
 
@@ -3357,6 +3379,29 @@
     renderStatCards();
     renderDailyMovers();
     renderRankView();
+
+    // ── 로그인 상태 표시 (카카오/네이버 로그인, auth.kospi10000.kro.kr에서 세션 확인) ──
+    // 세션 쿠키는 .kospi10000.kro.kr로 공유되지만 httpOnly라 여기서 직접 못 읽고,
+    // /api/auth/session을 credentials:'include'로 호출해서 로그인 여부만 확인.
+    (function initAuthButton() {
+      const AUTH_ORIGIN = 'https://auth.kospi10000.kro.kr';
+      const authBtn = document.getElementById('authBtn');
+      if (!authBtn) return;
+      const returnUrl = encodeURIComponent(location.href);
+      authBtn.href = `${AUTH_ORIGIN}/?callbackUrl=${returnUrl}`;
+
+      fetch(`${AUTH_ORIGIN}/api/auth/session`, { credentials: 'include' })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((session) => {
+          if (session && session.user) {
+            authBtn.textContent = '로그아웃';
+            authBtn.href = `${AUTH_ORIGIN}/api/auth/signout?callbackUrl=${returnUrl}`;
+          }
+        })
+        .catch(() => {
+          // 네트워크 오류 시 기본 "로그인" 상태 그대로 둠(허위로 로그인됨 표시 금지)
+        });
+    })();
   </script>
 </body>
 </html>
