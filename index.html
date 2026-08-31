@@ -2646,9 +2646,12 @@
     const moverModalBody = document.getElementById('moverModalBody');
     const moverModalClose = document.getElementById('moverModalClose');
 
-    // ── 즐겨찾기 (localStorage) ──
+    // ── 즐겨찾기 (localStorage + 로그인 시 auth.kospi10000.kro.kr 서버 동기화) ──
     const FAV_KEY = 'kospi10000.favorites';
+    const AUTH_ORIGIN = 'https://auth.kospi10000.kro.kr';
     let favorites = new Set(JSON.parse(localStorage.getItem(FAV_KEY) || '[]'));
+    // 로그인 확인 전까지는 로컬만 사용 — 로그인 세션이 확인되면 서버와 병합 후 true로 전환.
+    let serverSyncEnabled = false;
     let currentView = 'rank';
     let favOnlyActive = false;
     let rankPage = 1;
@@ -2703,10 +2706,44 @@
     }
 
     function toggleFavorite(code) {
-      favorites.has(code) ? favorites.delete(code) : favorites.add(code);
+      const nowFav = !favorites.has(code);
+      nowFav ? favorites.add(code) : favorites.delete(code);
       saveFavorites();
       updateFavCount();
       rerenderCurrentView();
+      // 로그인 상태면 서버에도 반영 — 실패해도(네트워크 오류 등) 로컬 상태를 되돌리지 않음.
+      // 다음 로그인 시 재동기화되므로 사용자 경험상 즉시 실패를 보여줄 필요는 없음.
+      if (serverSyncEnabled) {
+        fetch(`${AUTH_ORIGIN}/api/favorites`, {
+          method: nowFav ? 'POST' : 'DELETE',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code }),
+        }).catch(() => {});
+      }
+    }
+
+    // 로그인 최초 확인 시 1회 호출 — 로컬(오프라인) 즐겨찾기를 서버 목록과 병합하고,
+    // 이후 toggleFavorite()가 서버에도 반영되도록 전환.
+    function syncFavoritesWithServer() {
+      fetch(`${AUTH_ORIGIN}/api/favorites`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ codes: [...favorites] }),
+      })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((data) => {
+          if (!data || !Array.isArray(data.codes)) return;
+          favorites = new Set(data.codes);
+          saveFavorites();
+          updateFavCount();
+          rerenderCurrentView();
+          serverSyncEnabled = true;
+        })
+        .catch(() => {
+          // 병합 실패 시 로컬 전용으로 계속 동작(허위 동기화 표시 안 함).
+        });
     }
 
     // ── 포맷터 ──
@@ -3381,7 +3418,6 @@
     // 세션 쿠키는 .kospi10000.kro.kr로 공유되지만 httpOnly라 여기서 직접 못 읽고,
     // /api/auth/session을 credentials:'include'로 호출해서 로그인 여부만 확인.
     (function initAuthButton() {
-      const AUTH_ORIGIN = 'https://auth.kospi10000.kro.kr';
       const authBtn = document.getElementById('authBtn');
       if (!authBtn) return;
       const returnUrl = encodeURIComponent(location.href);
@@ -3393,6 +3429,7 @@
           if (session && session.user) {
             authBtn.textContent = '로그아웃';
             authBtn.href = `${AUTH_ORIGIN}/api/auth/signout?callbackUrl=${returnUrl}`;
+            syncFavoritesWithServer();
           }
         })
         .catch(() => {
