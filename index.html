@@ -3423,6 +3423,20 @@
       const returnUrl = encodeURIComponent(location.href);
       authBtn.href = `${AUTH_ORIGIN}/?callbackUrl=${returnUrl}`;
 
+      // 로그아웃 클릭 시(버튼이 현재 "로그아웃" 상태일 때만) 서버 동기화로 로컬에 남아있던
+      // 즐겨찾기를 비움 — 안 그러면 로그인 중 병합된 목록이 localStorage에 그대로 남아
+      // 로그아웃해도 헤더 ★ 표시가 안 바뀌는 것처럼 보임. 로그아웃 확인 페이지로 넘어가기
+      // 전에 지우는 거라, 취소해도(로그아웃 안 해도) 이미 비워진 상태는 유지됨 — 다음
+      // 로그인 시 서버 목록을 다시 받아오므로 데이터 손실 아님.
+      authBtn.addEventListener('click', () => {
+        if (authBtn.textContent === '로그아웃') {
+          favorites = new Set();
+          saveFavorites();
+          updateFavCount();
+          rerenderCurrentView();
+        }
+      });
+
       fetch(`${AUTH_ORIGIN}/api/auth/session`, { credentials: 'include' })
         .then((r) => (r.ok ? r.json() : null))
         .then((session) => {
