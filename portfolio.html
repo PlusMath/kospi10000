@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>내 보유종목 — 가치를말하다의 KOSPI 분석</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --color-accent: oklch(0.47 0.14 258);
+      --color-accent-soft: oklch(0.47 0.14 258 / 0.09);
+      --color-up: oklch(0.56 0.19 25);
+      --color-down: oklch(0.55 0.16 240);
+      --color-bg: oklch(0.98 0.004 90);
+      --color-card-bg: oklch(1 0 0);
+      --color-border: oklch(0.9 0.006 90);
+      --color-text: oklch(0.22 0.02 260);
+      --color-text-secondary: oklch(0.52 0.02 260);
+      --radius-card: 12px;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Noto Sans KR', Arial, sans-serif; background-color: var(--color-bg); color: var(--color-text); }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 12px 48px;
+      min-height: 72px;
+      background-color: var(--color-card-bg);
+      border-bottom: 1px solid var(--color-border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      flex-wrap: wrap;
+    }
+    .header-brand { display: flex; align-items: center; gap: 14px; text-decoration: none; color: inherit; }
+    .logo-badge { width: 36px; height: 36px; flex-shrink: 0; border-radius: 9px; background: var(--color-accent); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; }
+    header h1 { margin: 0; font-size: 16px; font-weight: 800; line-height: 1.2; }
+    header p { margin: 2px 0 0; color: var(--color-text-secondary); font-size: 12px; line-height: 1.2; }
+    .back-link { font-size: 13px; font-weight: 600; color: var(--color-text-secondary); text-decoration: none; }
+    .back-link:hover { color: var(--color-accent); }
+
+    .page-wrap { max-width: 900px; margin: 0 auto; padding: 28px 20px 60px; }
+    .page-title { font-size: 22px; font-weight: 800; margin: 0 0 20px; }
+
+    .gate-card { background: var(--color-card-bg); border: 1px solid var(--color-border); border-radius: var(--radius-card); padding: 40px; text-align: center; color: var(--color-text-secondary); }
+    .gate-card a { display: inline-block; margin-top: 14px; padding: 10px 20px; border-radius: 8px; background: var(--color-accent); color: #fff; text-decoration: none; font-weight: 700; font-size: 14px; }
+
+    .account-tabs { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 18px; }
+    .account-tab { padding: 8px 16px; border-radius: 999px; border: 1px solid var(--color-border); background: var(--color-card-bg); cursor: pointer; font-weight: 700; font-size: 13px; font-family: inherit; color: var(--color-text-secondary); }
+    .account-tab.active { background: var(--color-accent); color: #fff; border-color: var(--color-accent); }
+    .account-add-btn { padding: 8px 14px; border-radius: 999px; border: 1px dashed var(--color-border); background: transparent; cursor: pointer; font-weight: 700; font-size: 13px; font-family: inherit; color: var(--color-text-secondary); }
+    .account-add-btn:hover { border-color: var(--color-accent); color: var(--color-accent); }
+
+    .summary-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+    .summary-card { background: var(--color-card-bg); border: 1px solid var(--color-border); border-radius: var(--radius-card); padding: 14px 16px; }
+    .summary-card .l { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 6px; }
+    .summary-card .v { font-size: 18px; font-weight: 800; }
+
+    .toolbar-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 10px; flex-wrap: wrap; }
+    .btn { padding: 9px 16px; border-radius: 8px; border: none; cursor: pointer; font-weight: 700; font-size: 13px; font-family: inherit; }
+    .btn-primary { background: var(--color-accent); color: #fff; }
+    .btn-ghost { background: transparent; border: 1px solid var(--color-border); color: var(--color-text-secondary); }
+    .btn-ghost:hover { border-color: var(--color-down); color: var(--color-down); }
+
+    .holdings-card { background: var(--color-card-bg); border: 1px solid var(--color-border); border-radius: var(--radius-card); overflow: hidden; }
+    .holdings-head, .holdings-row {
+      display: grid;
+      grid-template-columns: minmax(120px, 1.4fr) 90px 110px 110px 120px 110px 70px 32px;
+      align-items: center;
+      gap: 8px 12px;
+      padding: 12px 18px;
+    }
+    .holdings-head { background: oklch(0.97 0.004 90); font-size: 11.5px; color: var(--color-text-secondary); font-weight: 700; }
+    .holdings-row { border-top: 1px solid var(--color-border); font-size: 13.5px; }
+    .holdings-row .name { font-weight: 700; }
+    .holdings-row .code { font-size: 11px; color: var(--color-text-secondary); }
+    .num { text-align: right; font-variant-numeric: tabular-nums; }
+    .pl-up { color: var(--color-up); }
+    .pl-down { color: var(--color-down); }
+    .row-del-btn { border: none; background: transparent; color: var(--color-text-secondary); cursor: pointer; font-size: 16px; }
+    .row-del-btn:hover { color: var(--color-down); }
+    .empty-state { padding: 40px 20px; text-align: center; color: var(--color-text-secondary); font-size: 13.5px; }
+
+    .modal-backdrop { display: none; position: fixed; inset: 0; background: oklch(0 0 0 / 0.4); z-index: 100; align-items: center; justify-content: center; }
+    .modal-backdrop.open { display: flex; }
+    .modal-card { background: var(--color-card-bg); border-radius: var(--radius-card); padding: 24px; width: 340px; max-width: 90vw; }
+    .modal-card h3 { margin: 0 0 16px; font-size: 16px; }
+    .modal-field { margin-bottom: 14px; }
+    .modal-field label { display: block; font-size: 12.5px; color: var(--color-text-secondary); margin-bottom: 6px; font-weight: 600; }
+    .modal-field input { width: 100%; padding: 9px 12px; border: 1px solid var(--color-border); border-radius: 8px; font-size: 14px; font-family: inherit; }
+    .modal-field input:focus { outline: none; border-color: var(--color-accent); }
+    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 18px; }
+    .modal-error { color: var(--color-down); font-size: 12.5px; margin-top: 6px; min-height: 1em; }
+
+    @media (max-width: 720px) {
+      header { padding: 12px 16px; }
+      .page-wrap { padding: 20px 12px 40px; }
+      .summary-cards { grid-template-columns: repeat(2, 1fr); }
+      .holdings-head { display: none; }
+      .holdings-row {
+        grid-template-columns: 1fr auto;
+        grid-template-areas: "name del" "code code" "meta meta";
+        padding: 14px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="header-brand" href="index.html">
+      <div class="logo-badge">주</div>
+      <div>
+        <h1>가치를말하다</h1>
+        <p>KOSPI 분석</p>
+      </div>
+    </a>
+    <a class="back-link" href="index.html">← 목록으로</a>
+  </header>
+
+  <main class="page-wrap">
+    <h2 class="page-title">내 보유종목</h2>
+
+    <div id="loginGate" style="display:none;">
+      <div class="gate-card">
+        로그인하면 계좌별 보유종목을 저장하고 어느 기기에서든 확인할 수 있어요.
+        <br />
+        <a id="loginLink" href="#">로그인하기</a>
+      </div>
+    </div>
+
+    <div id="portfolioApp" style="display:none;">
+      <div class="account-tabs" id="accountTabs"></div>
+
+      <div id="noAccounts" class="gate-card" style="display:none;">
+        아직 등록한 계좌가 없어요. 위에서 "+ 계좌 추가"로 첫 계좌를 만들어보세요.
+      </div>
+
+      <div id="accountView" style="display:none;">
+        <div class="summary-cards" id="summaryCards"></div>
+        <div class="toolbar-row">
+          <button class="btn btn-primary" id="addHoldingBtn">+ 종목 추가</button>
+          <button class="btn btn-ghost" id="deleteAccountBtn">이 계좌 삭제</button>
+        </div>
+        <div class="holdings-card">
+          <div class="holdings-head">
+            <div>종목</div>
+            <div class="num">수량</div>
+            <div class="num">평단가</div>
+            <div class="num">현재가</div>
+            <div class="num">평가금액</div>
+            <div class="num">평가손익</div>
+            <div class="num">수익률</div>
+            <div></div>
+          </div>
+          <div id="holdingsList"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="modal-backdrop" id="accountModalBackdrop">
+    <div class="modal-card">
+      <h3>새 계좌 추가</h3>
+      <div class="modal-field">
+        <label for="accountNameInput">계좌 이름</label>
+        <input type="text" id="accountNameInput" placeholder="예: 키움증권" maxlength="50" />
+      </div>
+      <div class="modal-error" id="accountModalError"></div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="accountModalCancel">취소</button>
+        <button class="btn btn-primary" id="accountModalSave">추가</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="holdingModalBackdrop">
+    <div class="modal-card">
+      <h3 id="holdingModalTitle">종목 추가</h3>
+      <div class="modal-field">
+        <label for="holdingCodeInput">종목명 또는 코드</label>
+        <input type="text" id="holdingCodeInput" list="stockDatalist" placeholder="예: 삼성전자 또는 005930" />
+        <datalist id="stockDatalist"></datalist>
+      </div>
+      <div class="modal-field">
+        <label for="holdingQtyInput">수량</label>
+        <input type="number" id="holdingQtyInput" min="1" step="1" placeholder="10" />
+      </div>
+      <div class="modal-field">
+        <label for="holdingPriceInput">평단가(원)</label>
+        <input type="number" id="holdingPriceInput" min="1" step="1" placeholder="65000" />
+      </div>
+      <div class="modal-error" id="holdingModalError"></div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="holdingModalCancel">취소</button>
+        <button class="btn btn-primary" id="holdingModalSave">저장</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const AUTH_ORIGIN = 'https://auth.kospi10000.kr';
+    let stocksByCode = {};
+    let liveByCode = {};
+    let accounts = [];
+    let currentAccountId = null;
+    let holdings = [];
+    let editingCode = null; // null이면 신규 추가, 값이 있으면 그 종목 수정 모드
+
+    function fmtWon(n) { return Math.round(n).toLocaleString('ko-KR') + '원'; }
+    function fmtPct(n) {
+      const s = n.toFixed(2) + '%';
+      return n >= 0 ? '+' + s : s;
+    }
+
+    // index.html의 stocks/stockLive 상수를 그대로 재사용 — 별도 데이터 파일을 새로
+    // 만들지 않고, 이미 매일 자동 갱신되는 index.html을 fetch해서 파싱.
+    async function loadStockData() {
+      const html = await fetch('/index.html', { cache: 'no-store' }).then((r) => r.text());
+      const stocksMatch = html.match(/const stocks = (\[[\s\S]*?\n\])/);
+      const liveMatch = html.match(/const stockLive = (\{[\s\S]*?\n\s*\})/);
+      if (stocksMatch) {
+        try {
+          const arr = JSON.parse(stocksMatch[1]);
+          arr.forEach((s) => { stocksByCode[s.code] = s; });
+        } catch (e) { /* 파싱 실패해도 종목명 없이 코드만 표시하며 계속 동작 */ }
+      }
+      if (liveMatch) {
+        try {
+          liveByCode = new Function('return (' + liveMatch[1] + ')')();
+        } catch (e) { /* 현재가 없이 계속 동작 */ }
+      }
+      const datalist = document.getElementById('stockDatalist');
+      datalist.innerHTML = Object.values(stocksByCode)
+        .map((s) => `<option value="${s.code}">${s.name} (${s.code})</option>`)
+        .join('');
+    }
+
+    function stockName(code) { return (stocksByCode[code] && stocksByCode[code].name) || code; }
+    function currentPrice(code) { return liveByCode[code] ? liveByCode[code].price : null; }
+
+    async function apiFetch(path, options) {
+      const res = await fetch(`${AUTH_ORIGIN}${path}`, {
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        ...options,
+      });
+      if (!res.ok) throw new Error(`API ${path} 실패 (${res.status})`);
+      return res.json();
+    }
+
+    async function checkLoginAndInit() {
+      const returnUrl = encodeURIComponent(location.href);
+      document.getElementById('loginLink').href = `${AUTH_ORIGIN}/?callbackUrl=${returnUrl}`;
+
+      let session = null;
+      try {
+        session = await fetch(`${AUTH_ORIGIN}/api/auth/session`, { credentials: 'include' }).then((r) => (r.ok ? r.json() : null));
+      } catch (e) { /* 네트워크 오류 시 로그인 안내 화면으로 폴백 */ }
+
+      if (!session || !session.user) {
+        document.getElementById('loginGate').style.display = '';
+        return;
+      }
+      document.getElementById('portfolioApp').style.display = '';
+      await loadStockData();
+      await loadAccounts();
+    }
+
+    async function loadAccounts() {
+      const data = await apiFetch('/api/accounts');
+      accounts = data.accounts;
+      renderAccountTabs();
+      if (accounts.length === 0) {
+        document.getElementById('noAccounts').style.display = '';
+        document.getElementById('accountView').style.display = 'none';
+        return;
+      }
+      document.getElementById('noAccounts').style.display = 'none';
+      if (!currentAccountId || !accounts.some((a) => a.id === currentAccountId)) {
+        currentAccountId = accounts[0].id;
+      }
+      await selectAccount(currentAccountId);
+    }
+
+    function renderAccountTabs() {
+      const el = document.getElementById('accountTabs');
+      el.innerHTML = '';
+      accounts.forEach((a) => {
+        const btn = document.createElement('button');
+        btn.className = 'account-tab' + (a.id === currentAccountId ? ' active' : '');
+        btn.textContent = a.name;
+        btn.onclick = () => selectAccount(a.id);
+        el.appendChild(btn);
+      });
+      const addBtn = document.createElement('button');
+      addBtn.className = 'account-add-btn';
+      addBtn.textContent = '+ 계좌 추가';
+      addBtn.onclick = openAccountModal;
+      el.appendChild(addBtn);
+    }
+
+    async function selectAccount(id) {
+      currentAccountId = id;
+      renderAccountTabs();
+      document.getElementById('accountView').style.display = '';
+      const data = await apiFetch(`/api/accounts/${id}/holdings`);
+      holdings = data.holdings;
+      renderHoldings();
+    }
+
+    function renderHoldings() {
+      let totalCost = 0;
+      let totalValue = 0;
+      const listEl = document.getElementById('holdingsList');
+
+      if (holdings.length === 0) {
+        listEl.innerHTML = '<div class="empty-state">보유종목이 없어요. "+ 종목 추가"로 등록해보세요.</div>';
+      } else {
+        listEl.innerHTML = holdings
+          .map((h) => {
+            const price = currentPrice(h.code);
+            const cost = h.quantity * h.avgPrice;
+            const value = price != null ? h.quantity * price : null;
+            totalCost += cost;
+            if (value != null) totalValue += value;
+            const pl = value != null ? value - cost : null;
+            const plPct = value != null && cost > 0 ? (pl / cost) * 100 : null;
+            const plCls = pl == null ? '' : pl >= 0 ? 'pl-up' : 'pl-down';
+            return `
+              <div class="holdings-row">
+                <div><div class="name">${stockName(h.code)}</div><div class="code">${h.code}</div></div>
+                <div class="num">${h.quantity.toLocaleString('ko-KR')}</div>
+                <div class="num">${fmtWon(h.avgPrice)}</div>
+                <div class="num">${price != null ? fmtWon(price) : '—'}</div>
+                <div class="num">${value != null ? fmtWon(value) : '—'}</div>
+                <div class="num ${plCls}">${pl != null ? fmtWon(pl) : '—'}</div>
+                <div class="num ${plCls}">${plPct != null ? fmtPct(plPct) : '—'}</div>
+                <div><button class="row-del-btn" data-code="${h.code}" title="삭제">✕</button></div>
+              </div>`;
+          })
+          .join('');
+        listEl.querySelectorAll('.row-del-btn').forEach((btn) => {
+          btn.addEventListener('click', () => deleteHolding(btn.dataset.code));
+        });
+      }
+
+      const totalPl = totalValue - totalCost;
+      const totalPlPct = totalCost > 0 ? (totalPl / totalCost) * 100 : 0;
+      const plCls = totalPl >= 0 ? 'pl-up' : 'pl-down';
+      document.getElementById('summaryCards').innerHTML = `
+        <div class="summary-card"><div class="l">총 매입금액</div><div class="v">${fmtWon(totalCost)}</div></div>
+        <div class="summary-card"><div class="l">총 평가금액</div><div class="v">${fmtWon(totalValue)}</div></div>
+        <div class="summary-card"><div class="l">평가손익</div><div class="v ${plCls}">${fmtWon(totalPl)}</div></div>
+        <div class="summary-card"><div class="l">수익률</div><div class="v ${plCls}">${fmtPct(totalPlPct)}</div></div>
+      `;
+    }
+
+    // ── 계좌 추가 모달 ──
+    function openAccountModal() {
+      document.getElementById('accountNameInput').value = '';
+      document.getElementById('accountModalError').textContent = '';
+      document.getElementById('accountModalBackdrop').classList.add('open');
+      document.getElementById('accountNameInput').focus();
+    }
+    function closeAccountModal() { document.getElementById('accountModalBackdrop').classList.remove('open'); }
+
+    async function saveAccount() {
+      const name = document.getElementById('accountNameInput').value.trim();
+      const errEl = document.getElementById('accountModalError');
+      if (!name) { errEl.textContent = '계좌 이름을 입력해주세요.'; return; }
+      try {
+        const data = await apiFetch('/api/accounts', { method: 'POST', body: JSON.stringify({ name }) });
+        closeAccountModal();
+        accounts.push(data.account);
+        currentAccountId = data.account.id;
+        renderAccountTabs();
+        document.getElementById('noAccounts').style.display = 'none';
+        await selectAccount(currentAccountId);
+      } catch (e) {
+        errEl.textContent = '계좌 추가에 실패했어요. 잠시 후 다시 시도해주세요.';
+      }
+    }
+
+    async function deleteCurrentAccount() {
+      if (!currentAccountId) return;
+      if (!confirm('이 계좌와 보유종목 내역을 모두 삭제할까요? 되돌릴 수 없어요.')) return;
+      try {
+        await fetch(`${AUTH_ORIGIN}/api/accounts/${currentAccountId}`, { method: 'DELETE', credentials: 'include' });
+        currentAccountId = null;
+        await loadAccounts();
+      } catch (e) {
+        alert('계좌 삭제에 실패했어요. 잠시 후 다시 시도해주세요.');
+      }
+    }
+
+    // ── 종목 추가/수정 모달 ──
+    function openHoldingModal(existing) {
+      editingCode = existing ? existing.code : null;
+      document.getElementById('holdingModalTitle').textContent = existing ? '종목 수정' : '종목 추가';
+      document.getElementById('holdingCodeInput').value = existing ? `${existing.code}` : '';
+      document.getElementById('holdingCodeInput').disabled = !!existing;
+      document.getElementById('holdingQtyInput').value = existing ? existing.quantity : '';
+      document.getElementById('holdingPriceInput').value = existing ? existing.avgPrice : '';
+      document.getElementById('holdingModalError').textContent = '';
+      document.getElementById('holdingModalBackdrop').classList.add('open');
+    }
+    function closeHoldingModal() { document.getElementById('holdingModalBackdrop').classList.remove('open'); }
+
+    async function saveHolding() {
+      const rawCode = document.getElementById('holdingCodeInput').value.trim();
+      const code = (rawCode.match(/^\S+/) || [''])[0];
+      const quantity = parseInt(document.getElementById('holdingQtyInput').value, 10);
+      const avgPrice = parseFloat(document.getElementById('holdingPriceInput').value);
+      const errEl = document.getElementById('holdingModalError');
+
+      if (!code) { errEl.textContent = '종목을 선택하거나 코드를 입력해주세요.'; return; }
+      if (!Number.isInteger(quantity) || quantity <= 0) { errEl.textContent = '수량은 1 이상 정수로 입력해주세요.'; return; }
+      if (!(avgPrice > 0)) { errEl.textContent = '평단가는 0보다 커야 해요.'; return; }
+
+      try {
+        const data = await apiFetch(`/api/accounts/${currentAccountId}/holdings`, {
+          method: 'POST',
+          body: JSON.stringify({ code, quantity, avgPrice }),
+        });
+        holdings = data.holdings;
+        renderHoldings();
+        closeHoldingModal();
+      } catch (e) {
+        errEl.textContent = '저장에 실패했어요. 잠시 후 다시 시도해주세요.';
+      }
+    }
+
+    async function deleteHolding(code) {
+      try {
+        const data = await apiFetch(`/api/accounts/${currentAccountId}/holdings`, {
+          method: 'DELETE',
+          body: JSON.stringify({ code }),
+        });
+        holdings = data.holdings;
+        renderHoldings();
+      } catch (e) {
+        alert('삭제에 실패했어요. 잠시 후 다시 시도해주세요.');
+      }
+    }
+
+    document.getElementById('accountModalCancel').addEventListener('click', closeAccountModal);
+    document.getElementById('accountModalSave').addEventListener('click', saveAccount);
+    document.getElementById('holdingModalCancel').addEventListener('click', closeHoldingModal);
+    document.getElementById('holdingModalSave').addEventListener('click', saveHolding);
+    document.getElementById('addHoldingBtn').addEventListener('click', () => openHoldingModal(null));
+    document.getElementById('deleteAccountBtn').addEventListener('click', deleteCurrentAccount);
+    [document.getElementById('accountModalBackdrop'), document.getElementById('holdingModalBackdrop')].forEach((backdrop) => {
+      backdrop.addEventListener('click', (e) => { if (e.target === backdrop) backdrop.classList.remove('open'); });
+    });
+
+    checkLoginAndInit();
+  </script>
+</body>
+</html>
