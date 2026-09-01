@@ -79,6 +79,8 @@
     .holdings-head { background: oklch(0.97 0.004 90); font-size: 11.5px; color: var(--color-text-secondary); font-weight: 700; }
     .holdings-row { border-top: 1px solid var(--color-border); font-size: 13.5px; }
     .holdings-row .name { font-weight: 700; }
+    .name-link { color: inherit; text-decoration: none; }
+    .name-link:hover { color: var(--color-accent); text-decoration: underline; }
     .holdings-row .code { font-size: 11px; color: var(--color-text-secondary); }
     .num { text-align: right; font-variant-numeric: tabular-nums; }
     .pl-up { color: var(--color-up); }
@@ -242,6 +244,7 @@
     }
 
     function stockName(code) { return (stocksByCode[code] && stocksByCode[code].name) || code; }
+    function stockPage(code) { return stocksByCode[code] ? stocksByCode[code].page : null; }
     function currentPrice(code) { return liveByCode[code] ? liveByCode[code].price : null; }
 
     async function apiFetch(path, options) {
@@ -334,7 +337,11 @@
             const plCls = pl == null ? '' : pl >= 0 ? 'pl-up' : 'pl-down';
             return `
               <div class="holdings-row">
-                <div><div class="name">${stockName(h.code)}</div><div class="code">${h.code}</div></div>
+                <div><div class="name">${
+                  stockPage(h.code)
+                    ? `<a class="name-link" href="${stockPage(h.code)}">${stockName(h.code)}</a>`
+                    : stockName(h.code)
+                }</div><div class="code">${h.code}</div></div>
                 <div class="num">${h.quantity.toLocaleString('ko-KR')}</div>
                 <div class="num">${fmtWon(h.avgPrice)}</div>
                 <div class="num">${price != null ? fmtWon(price) : '—'}</div>
