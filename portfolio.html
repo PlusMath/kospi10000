@@ -271,8 +271,11 @@
         return;
       }
       document.getElementById('portfolioApp').style.display = '';
-      await loadStockData();
-      await loadAccounts();
+      // index.html(종목명·현재가용) 가져오기와 계좌 목록 가져오기는 서로 무관해서 동시에 진행 —
+      // 계좌 쪽이 먼저 끝나 renderHoldings()가 아직 못 채워진 종목 데이터로 한 번 그려질 수
+      // 있어서, 두 요청이 다 끝난 뒤 정확한 데이터로 한 번 더 그려 보정.
+      await Promise.all([loadStockData(), loadAccounts()]);
+      if (currentAccountId) renderHoldings();
     }
 
     async function loadAccounts() {
