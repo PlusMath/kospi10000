@@ -82,10 +82,20 @@ $scoreMetricDefs = @(
   기업이라도 PBR·배당·ROE 등 나머지가 좋으면 총점이 부풀려질 수 있었음 — 이 왜곡을 막기 위한
   변경. 노트 텍스트 패턴이 다른(위 3개 문구가 전혀 없는) 진짜 "데이터 없음" 케이스는 여전히
   지표 제외(가중치 재분배)로 처리됨 — 확정된 적자만 0점 처리 대상.
+- **2026-09-02: Forward PER 분모를 실제 증권사 컨센서스 EPS로 전환.** 이전엔 `Update-DpForwardPER`가
+  기존 note에 박혀있던 "1H26 실적 단순연환산" EPS를 그대로 재사용만 했음(진짜 컨센서스가 아니라는
+  게 P0 리뷰에서 지적됐지만 당시엔 실데이터 소스가 없어 보류). 네이버 금융 종목 메인 페이지
+  (`finance.naver.com/item/main.naver?code=X`)의 "추정PER│EPS" 행(`id="_cns_eps"`)이 정확히
+  증권사 컨센서스(에프앤가이드 제공, **3개 이상 증권사 추정치가 있을 때만 표시**)라는 걸 실측
+  확인해 `Get-DpConsensusEps`로 매일 조회하도록 변경. 컨센서스가 음수(적자 예상)면 기존
+  `fpeLoss`와 동일하게 확정 손실로 취급(0점, 지표 제외 아님). **컨센서스 미제공(3개 미만 커버리지)
+  종목은 기존 1H 연환산 방식으로 폴백**(note에 "컨센서스 EPS"/"1H26 연환산" 문구가 각각 남아
+  방식을 구분할 수 있음) — 소형주 coverage 손실 방지. 신규 상장주 등 실측상 소수 종목만 폴백 대상.
 - 함수: `Get-DpScoreMetrics`(ROE/EPS성장률/부채비율 원본 파싱), `Get-Percentile`(백분위 계산),
-  `Get-DpVscoreResult`(2026-08-27 신규 — 지표별 status/coverage/게시여부까지 판정하는 순수
-  함수, 부수효과 없어 테스트에서 재사용), `Set-DpVscoreCard`/`Set-DpVscoreUnavailableCard`(카드
-  렌더링, 공용 삽입 로직은 `Set-DpVscoreBlock`), `Get-DpVscoreGrade`(등급 문자열).
+  `Get-DpConsensusEps`(네이버 컨센서스 EPS 조회, 2026-09-02 신규), `Get-DpVscoreResult`
+  (2026-08-27 신규 — 지표별 status/coverage/게시여부까지 판정하는 순수 함수, 부수효과 없어
+  테스트에서 재사용), `Set-DpVscoreCard`/`Set-DpVscoreUnavailableCard`(카드 렌더링, 공용 삽입
+  로직은 `Set-DpVscoreBlock`), `Get-DpVscoreGrade`(등급 문자열).
 
 ### 1-2. 백분위(percentile) 계산 — `Get-Percentile`
 
