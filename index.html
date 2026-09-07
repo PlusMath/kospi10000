@@ -150,6 +150,46 @@
       padding: 22px 24px;
     }
 
+    .index-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+      margin: 0 0 28px;
+    }
+
+    .index-card {
+      background: var(--color-card-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      padding: 12px 10px;
+      text-align: center;
+    }
+
+    .index-label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .index-value {
+      display: block;
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--color-text);
+    }
+
+    .index-change {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .index-change.up { color: var(--color-up); }
+    .index-change.down { color: var(--color-down); }
+
     .market-summary-card {
       background: var(--color-card-bg);
       border: 1px solid var(--color-border);
@@ -1049,6 +1089,24 @@
         margin-bottom: 6px;
       }
 
+      .index-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin: 0 0 20px;
+      }
+
+      .index-card {
+        padding: 9px 6px;
+      }
+
+      .index-label {
+        font-size: 10.5px;
+      }
+
+      .index-value {
+        font-size: 13.5px;
+      }
+
       .market-summary-card {
         padding: 16px 16px;
         margin: 0 0 20px;
@@ -1306,6 +1364,8 @@
 
     <div class="stat-grid" id="statGrid"></div>
 
+    <div class="index-grid" id="indexGrid"></div>
+
     <section class="market-summary-card" id="marketSummaryCard" hidden>
       <p class="market-summary-eyebrow">오늘의 시황</p>
       <div class="market-summary-date" id="marketSummaryDate"></div>
@@ -1353,7 +1413,7 @@
           <h2 class="daily-movers-title" id="dailyMoversTitle">전일 대비 5% 이상 변동 종목</h2>
         </div>
         <div style="display:flex;align-items:center;gap:10px;">
-          <div class="daily-movers-date">2026년 9월 4일 종가 기준</div>
+          <div class="daily-movers-date">2026년 9월 7일 종가 기준</div>
           <button type="button" class="movers-close-btn" id="moversCloseBtn" aria-label="닫기">✕</button>
         </div>
       </div>
@@ -1361,11 +1421,11 @@
       <div class="mover-summary" aria-label="변동 종목 요약">
         <div class="mover-summary-card">
           <span class="mover-summary-label">대상 종목</span>
-          <strong class="mover-summary-value">10개</strong>
+          <strong class="mover-summary-value">2개</strong>
         </div>
         <div class="mover-summary-card">
           <span class="mover-summary-label">해당 업종</span>
-          <strong class="mover-summary-value">7개</strong>
+          <strong class="mover-summary-value">2개</strong>
         </div>
         <div class="mover-summary-card">
           <span class="mover-summary-label">5% 이상 하락</span>
@@ -1387,135 +1447,25 @@
 
   <script>
     const dailyMovers = [
-      { name: "HD현대", code: "267250", industry: "지주·복합기업", close: "240,500원", change: 12.65, page: "stocks/037_267250.html" },
-      { name: "한미반도체", code: "042700", industry: "반도체·전자", close: "230,000원", change: 9.26, page: "stocks/025_042700.html" },
-      { name: "한진칼", code: "180640", industry: "지주·복합기업", close: "146,000원", change: 9.12, page: "stocks/086_180640.html" },
-      { name: "S-Oil", code: "010950", industry: "화학·정유·에너지", close: "157,300원", change: 6.36, page: "stocks/063_010950.html" },
-      { name: "SK스퀘어", code: "402340", industry: "지주·투자회사", close: "1,041,000원", change: 6.12, page: "stocks/003_402340.html" },
-      { name: "SK이노베이션", code: "096770", industry: "화학·정유·에너지", close: "138,300원", change: 5.73, page: "stocks/043_096770.html" },
-      { name: "카카오페이", code: "377300", industry: "금융·은행·증권", close: "47,300원", change: 5.58, page: "stocks/093_377300.html" },
-      { name: "삼성에스디에스", code: "018260", industry: "IT서비스·SW", close: "238,000원", change: 5.31, page: "stocks/061_018260.html" },
-      { name: "SK", code: "034730", industry: "지주·복합기업", close: "573,000원", change: 5.14, page: "stocks/023_034730.html" },
-      { name: "삼성화재", code: "000810", industry: "보험", close: "663,000원", change: -5.56, page: "stocks/042_000810.html" }
+      { name: "SK스퀘어", code: "402340", industry: "지주·투자회사", close: "1,101,000원", change: 5.76, page: "stocks/003_402340.html" },
+      { name: "SK하이닉스", code: "000660", industry: "반도체·전자", close: "1,740,000원", change: 5.65, page: "stocks/002_000660.html" }
     ];
 
     const stockLive = {
-      "005930": { price: 255500, change: 2.2 },
-      "000660": { price: 1647000, change: 3.2 },
-      "402340": { price: 1041000, change: 6.12 },
-      "005935": { price: 191600, change: 4.07 },
-      "005380": { price: 383500, change: 0 },
-      "373220": { price: 358500, change: -1.92 },
-      "329180": { price: 436500, change: 0.34 },
-      "034020": { price: 79200, change: 0 },
-      "009150": { price: 1401000, change: 3.93 },
-      "000270": { price: 126500, change: -0.71 },
-      "028260": { price: 367000, change: -1.34 },
-      "012450": { price: 1055000, change: 0.76 },
-      "207940": { price: 1447000, change: -2.03 },
-      "032830": { price: 297500, change: -1.82 },
-      "012330": { price: 422000, change: -0.35 },
-      "105560": { price: 172000, change: -3.32 },
-      "006400": { price: 548000, change: 1.67 },
-      "267260": { price: 714000, change: 1.13 },
-      "055550": { price: 110300, change: -3.67 },
-      "010120": { price: 195300, change: 1.67 },
-      "068270": { price: 188100, change: 0.53 },
-      "006800": { price: 34450, change: 3.77 },
-      "034730": { price: 573000, change: 5.14 },
-      "298040": { price: 2732000, change: 0.26 },
-      "042700": { price: 230000, change: 9.26 },
-      "005490": { price: 337000, change: -1.46 },
-      "042660": { price: 86800, change: 0.35 },
-      "086790": { price: 134300, change: -3.73 },
-      "009540": { price: 348500, change: 1.31 },
-      "035420": { price: 213500, change: 2.89 },
-      "010130": { price: 1222000, change: -0.16 },
-      "066570": { price: 201500, change: 0.9 },
-      "051910": { price: 282000, change: -1.74 },
-      "010140": { price: 21400, change: -1.15 },
-      "000150": { price: 1142000, change: 1.51 },
-      "015760": { price: 32150, change: -0.92 },
-      "267250": { price: 240500, change: 12.65 },
-      "064350": { price: 126800, change: 0.32 },
-      "316140": { price: 33200, change: -4.18 },
-      "017670": { price: 92500, change: 3.93 },
-      "003670": { price: 183600, change: -0.11 },
-      "000810": { price: 663000, change: -5.56 },
-      "096770": { price: 138300, change: 5.73 },
-      "086280": { price: 206000, change: 1.98 },
-      "272210": { price: 68800, change: 1.18 },
-      "033780": { price: 172500, change: -1.26 },
-      "079550": { price: 652000, change: -1.95 },
-      "307950": { price: 395000, change: 2.73 },
-      "035720": { price: 36200, change: 2.4 },
-      "011200": { price: 21050, change: -1.41 },
-      "000720": { price: 119700, change: 0.17 },
-      "138040": { price: 135500, change: -1.02 },
-      "011070": { price: 562000, change: 1.08 },
-      "003550": { price: 121100, change: 2.37 },
-      "024110": { price: 20700, change: -2.13 },
-      "006260": { price: 299500, change: 2.57 },
-      "047810": { price: 126500, change: 1.2 },
-      "278470": { price: 394000, change: -2.96 },
-      "030200": { price: 54300, change: 0.93 },
-      "071050": { price: 188800, change: 1.18 },
-      "018260": { price: 238000, change: 5.31 },
-      "259960": { price: 216500, change: -0.69 },
-      "010950": { price: 157300, change: 6.36 },
-      "047050": { price: 54700, change: -1.44 },
-      "0126Z0": { price: 356000, change: 0.14 },
-      "001440": { price: 27400, change: 1.67 },
-      "005940": { price: 26650, change: 1.33 },
-      "047040": { price: 16850, change: 0.6 },
-      "016360": { price: 86800, change: 0.23 },
-      "039490": { price: 270500, change: 0.74 },
-      "005830": { price: 195700, change: -3.6 },
-      "323410": { price: 21950, change: 0.69 },
-      "443060": { price: 210500, change: 2.43 },
-      "028050": { price: 45850, change: -0.54 },
-      "352820": { price: 178500, change: 1.42 },
-      "000880": { price: 137400, change: 2.77 },
-      "005387": { price: 184800, change: 0.11 },
-      "007660": { price: 111100, change: 4.81 },
-      "003230": { price: 1417000, change: -0.49 },
-      "003490": { price: 30200, change: 3.6 },
-      "062040": { price: 191700, change: 2.79 },
-      "267270": { price: 140000, change: 3.47 },
-      "000500": { price: 212000, change: 1.68 },
-      "000990": { price: 89900, change: 2.04 },
-      "029780": { price: 46150, change: -0.97 },
-      "326030": { price: 86600, change: 0.23 },
-      "180640": { price: 146000, change: 9.12 },
-      "009830": { price: 30050, change: 0.5 },
-      "138930": { price: 15390, change: -2.72 },
-      "161390": { price: 65400, change: -1.65 },
-      "064400": { price: 74100, change: 2.21 },
-      "034220": { price: 9130, change: 1 },
-      "175330": { price: 31000, change: -1.9 },
-      "353200": { price: 99500, change: -2.07 },
-      "090430": { price: 143300, change: 0.56 },
-      "377300": { price: 47300, change: 5.58 },
-      "066970": { price: 121300, change: 0.33 },
-      "271560": { price: 126300, change: -2.32 },
-      "000100": { price: 81400, change: 0 },
-      "241560": { price: 62800, change: 0 },
-      "021240": { price: 99400, change: 1.22 },
-      "078930": { price: 123900, change: 4.21 },
-      "036570": { price: 222000, change: 2.3 },
-      "103590": { price: 68300, change: 1.04 },
-      "032640": { price: 14760, change: -0.34 },
-      "004370": { price: 430000, change: -0.12 },
-      "192650": { price: 6300, change: 2.94 },
-      "073240": { price: 7180, change: 0.84 },
-      "066575": { price: 74800, change: 1.22 }
+      "005930": { price: 265500, change: 3.91 },
+      "000660": { price: 1740000, change: 5.65 },
+      "402340": { price: 1101000, change: 5.76 }
     };
 
     // Claude API로 생성한 하루 시황 요약 카드 — update_daily_charts.ps1이 매일 실제 종가·등락률
     // 통계와 당일 상위 변동종목의 실제 뉴스 헤드라인만 근거로 재생성. 생성 실패(API 키 없음/응답
     // 파싱 실패 등) 시에는 이 블록을 건드리지 않고 마지막 성공분을 그대로 둠 — 그래서 날짜는
     // 항상 "이 요약이 실제로 생성된 날"을 의미하며, 오늘 날짜인 척 허위로 표시하지 않는다.
-    const marketSummary = {"date":"2026년 9월 4일","headline":"코스피 상승 우위, HD현대 급등","body":"2026년 9월 4일 코스피 상위 100종목(집계 109개) 중 69개가 상승하고 36개가 하락, 4개가 보합으로 마감해 평균 등락률은 0.95%였습니다. HD현대가 12.65% 오른 24만500원으로 상승률 1위를 기록했고, 한미반도체가 9.26% 올라 23만원, 한진칼이 9.12% 상승해 14만6000원에 거래를 마쳤습니다. 반면 삼성화재는 5.56% 내린 66만3000원, 우리금융지주는 4.18% 하락한 3만3200원, 하나금융지주는 3.73% 떨어진 13만4300원으로 마감했습니다. 당일 헤드라인으로는 HD현대와 롯데의 석유화학 합작사 \u0027H\u0026L 어드밴스드\u0027 본격 운영, 일본항공의 한진칼 지분 취득 소식 등이 전해졌습니다.","refs":[{"title":"우리금융지주, 우리금융 통합 생보사, 자산 55조·CSM 3.5조…다음 과제...","link":"http://www.press9.kr/news/articleView.html?idxno=82204","source":"press9.kr"},{"title":"하나금융지주, 하나손보에 자본 투입 검토…내년 새 규제 대비","link":"http://www.press9.kr/news/articleView.html?idxno=82207","source":"press9.kr"},{"title":"삼성전자·삼성화재 \u0027IFA 2026\u0027서 혁신상 4개 수상·\u0027제4회 모빌리티 컨...","link":"http://www.wsobi.com/news/articleView.html?idxno=317601","source":"wsobi.com"},{"title":"석유화학 재편 첫 결실…HD현대·롯데 ‘H\u0026L 어드밴스드’ 본격 운영","link":"https://www.hani.co.kr/arti/economy/economy_general/1276281.html","source":"한겨레"}]};
+    const marketSummary = {"date":"2026년 9월 7일","headline":"반도체 강세, 코스피 6900선 복귀","body":"2026년 9월 7일 집계 대상 3개 종목이 모두 상승해 평균 등락률은 5.11%를 기록했다. SK스퀘어가 5.76% 오른 110만1000원, SK하이닉스가 5.65% 오른 174만원, 삼성전자가 3.91% 오른 26만5500원에 마감했다. 이날 뉴스에서는 삼성전자와 SK하이닉스의 상승과 함께 코스피가 6900선을 회복했다고 전해졌다.","refs":[{"title":"\u0027불기둥\u0027 삼성전자·SK하이닉스⋯코스피 6900선 복귀","link":"http://www.inews24.com/view/2002535","source":"inews24.com"},{"title":"\u0027기아·SK하이닉스\u0027 잇는 실무형 인재 키운다… 동의과학대, 미래차 초광...","link":"https://view.asiae.co.kr/article/2026090709382238909","source":"아시아경제"}]};
+
+    // 코스피·해외 주요 지수 및 환율 — update_daily_charts.ps1이 매일 Yahoo Finance에서
+    // 실제 값을 가져와 재생성. 실패 시(그날은) 이 블록을 건드리지 않고 마지막 성공분 유지.
+    const marketIndices = {"KOSPI":{"name":"코스피","value":6898.84,"change":3.16},"SP500":{"name":"S\u0026P500","value":7718.6,"change":-0.38},"DOW":{"name":"다우존스","value":53414.25,"change":-0.51},"RUSSELL2000":{"name":"러셀2000","value":2975.65,"change":0.25},"NIKKEI":{"name":"닛케이225","value":66210.12,"change":1.83},"USDKRW":{"name":"달러환율","value":1339.09,"change":-1.2},"JPYKRW":{"name":"엔환율(100엔)","value":856.3,"change":-1.66}};
 
     const stocks = [
       {
@@ -1527,7 +1477,7 @@
             "image": "images/001_samsung-electronics.png",
             "page": "stocks/001_005930.html",
             "sharesOut": 5846278608,
-            "vscore": 76
+            "vscore": null
       },
       {
             "rank": 2,
@@ -1538,7 +1488,7 @@
             "image": "images/002_sk-hynix.png",
             "page": "stocks/002_000660.html",
             "sharesOut": 730492365,
-            "vscore": 72
+            "vscore": null
       },
       {
             "rank": 3,
@@ -1549,7 +1499,7 @@
             "image": "images/003_sk-square.png",
             "page": "stocks/003_402340.html",
             "sharesOut": 131958386,
-            "vscore": 79
+            "vscore": null
       },
       {
             "rank": 4,
@@ -3559,9 +3509,33 @@
       card.hidden = false;
     }
 
+    const INDEX_ORDER = ['KOSPI', 'SP500', 'DOW', 'RUSSELL2000', 'NIKKEI', 'USDKRW', 'JPYKRW'];
+
+    function renderMarketIndices() {
+      const grid = document.getElementById('indexGrid');
+      if (!marketIndices) {
+        grid.innerHTML = '';
+        return;
+      }
+      grid.innerHTML = INDEX_ORDER.map((key) => {
+        const idx = marketIndices[key];
+        if (!idx || typeof idx.value !== 'number') return '';
+        const changeCls = idx.change > 0 ? 'up' : (idx.change < 0 ? 'down' : '');
+        const sign = idx.change > 0 ? '+' : '';
+        const valueStr = idx.value.toLocaleString('ko-KR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
+        const changeStr = typeof idx.change === 'number' ? `${sign}${idx.change.toFixed(2)}%` : '-';
+        return `<div class="index-card">
+          <span class="index-label">${idx.name}</span>
+          <span class="index-value">${valueStr}</span>
+          <span class="index-change ${changeCls}">${changeStr}</span>
+        </div>`;
+      }).join('');
+    }
+
     updateFavCount();
     updateMoversToggleBadge();
     renderStatCards();
+    renderMarketIndices();
     renderMarketSummary();
     renderDailyMovers();
     renderRankView();
