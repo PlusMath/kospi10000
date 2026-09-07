@@ -425,24 +425,30 @@ function renderCandleChart(cfg) {
     });
   }
 
+  // cfg.periods/cfg.defaultPeriodDays: 지수·환율 페이지처럼 수집 가능한 최대기간(수십 년치
+  // 일봉)을 그대로 저장하는 경우, 기존 종목 차트의 "1년=9999(=전체)"라는 눌림목 전제가
+  // 더는 성립하지 않아 실제 거래일수 기준 값과 "전체" 버튼을 분리해야 한다(2026-09-07).
+  // 둘 다 생략하면 기존 종목 차트와 완전히 동일하게 동작.
+  const defaultPeriodDays = cfg.defaultPeriodDays || 9999;
   if (controls) {
-    const periods = [['1개월', 21], ['3개월', 63], ['6개월', 126], ['1년', 9999]];
+    const periods = cfg.periods || [['1개월', 21], ['3개월', 63], ['6개월', 126], ['1년', 9999]];
     controls.innerHTML = '';
     periods.forEach(([label, days]) => {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.textContent = label;
-      btn.className = 'kc-period-btn' + (days === 9999 ? ' active' : '');
+      btn.className = 'kc-period-btn' + (days === defaultPeriodDays ? ' active' : '');
       btn.addEventListener('click', function () {
         Array.from(controls.children).forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         render(days);
+        if (cfg.onPeriodChange) cfg.onPeriodChange(days);
       });
       controls.appendChild(btn);
     });
   }
 
-  render(9999);
+  render(defaultPeriodDays);
 }
 
 // ── 지수/환율 상세페이지 공용 로직 (2026-09-07 신규, indices/*.html 7개 페이지가 공유) ──
@@ -539,12 +545,15 @@ function computeIndexStats(data) {
   };
 }
 
+// 반환값(draw 함수): 캔들차트의 기간 버튼과 같은 구간을 보도록 외부에서 다시 호출할 수
+// 있게 노출한다(2026-09-07). 지수·환율 페이지는 데이터가 수십 년치 일봉이라, 캔들차트가
+// "1년"으로 좁혀졌는데 RSI만 전체 기간을 그리면 두 차트의 x축 구간이 안 맞게 되기 때문.
 function renderRsiChart(cfg) {
   const svg = document.getElementById(cfg.svgId);
-  if (!svg) return;
+  if (!svg) return function () {};
   const data = cfg.data;
   const closes = data.map(d => d.c);
-  const rsi = calcRsiSeries(closes, 14);
+  const rsiFull = calcRsiSeries(closes, 14);
   const W = 720, H = 90, pL = 40, pR = 12, pT = 8, pB = 16;
   const cW = W - pL - pR, cH = H - pT - pB;
   function svgEl(tag, attrs) {
@@ -552,26 +561,33 @@ function renderRsiChart(cfg) {
     for (const k in attrs) e.setAttribute(k, attrs[k]);
     return e;
   }
-  while (svg.firstChild) svg.removeChild(svg.firstChild);
-  function py(v) { return pT + cH * (1 - v / 100); }
-  const colW = cW / data.length;
-  [30, 50, 70].forEach((v) => {
-    svg.appendChild(svgEl('line', { x1: pL, x2: pL + cW, y1: py(v), y2: py(v), stroke: 'oklch(0.85 0.005 90)', 'stroke-width': 1, 'stroke-dasharray': v === 50 ? '2,2' : 'none' }));
-    const t = svgEl('text', { x: pL - 4, y: py(v) + 3, 'text-anchor': 'end', 'font-size': 8, fill: 'oklch(0.55 0.02 260)' });
-    t.textContent = v;
-    svg.appendChild(t);
-  });
-  const pts = [];
-  rsi.forEach((v, i) => { if (v === null) return; pts.push(`${pL + (i + 0.5) * colW},${py(v)}`); });
-  if (pts.length >= 2) {
-    svg.appendChild(svgEl('polyline', { points: pts.join(' '), fill: 'none', stroke: '#9370DB', 'stroke-width': 1.5 }));
+  function draw(periodDays) {
+    const n = data.length;
+    const startIdx = periodDays >= n ? 0 : n - periodDays;
+    const rsi = rsiFull.slice(startIdx);
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    function py(v) { return pT + cH * (1 - v / 100); }
+    const colW = cW / rsi.length;
+    [30, 50, 70].forEach((v) => {
+      svg.appendChild(svgEl('line', { x1: pL, x2: pL + cW, y1: py(v), y2: py(v), stroke: 'oklch(0.85 0.005 90)', 'stroke-width': 1, 'stroke-dasharray': v === 50 ? '2,2' : 'none' }));
+      const t = svgEl('text', { x: pL - 4, y: py(v) + 3, 'text-anchor': 'end', 'font-size': 8, fill: 'oklch(0.55 0.02 260)' });
+      t.textContent = v;
+      svg.appendChild(t);
+    });
+    const pts = [];
+    rsi.forEach((v, i) => { if (v === null) return; pts.push(`${pL + (i + 0.5) * colW},${py(v)}`); });
+    if (pts.length >= 2) {
+      svg.appendChild(svgEl('polyline', { points: pts.join(' '), fill: 'none', stroke: '#9370DB', 'stroke-width': 1.5 }));
+    }
+    const lastRsi = rsi[rsi.length - 1];
+    if (lastRsi !== null && lastRsi !== undefined) {
+      const t = svgEl('text', { x: W - pR, y: pT + 8, 'text-anchor': 'end', 'font-size': 10, 'font-weight': 700, fill: '#9370DB' });
+      t.textContent = 'RSI(14) ' + lastRsi.toFixed(1);
+      svg.appendChild(t);
+    }
   }
-  const lastRsi = rsi[rsi.length - 1];
-  if (lastRsi !== null && lastRsi !== undefined) {
-    const t = svgEl('text', { x: W - pR, y: pT + 8, 'text-anchor': 'end', 'font-size': 10, 'font-weight': 700, fill: '#9370DB' });
-    t.textContent = 'RSI(14) ' + lastRsi.toFixed(1);
-    svg.appendChild(t);
-  }
+  draw(cfg.defaultPeriodDays || 9999);
+  return draw;
 }
 
 function renderIndexMaStatus(containerId, stats) {
@@ -677,8 +693,16 @@ function initIndexDetailPage(cfg) {
   const fmtValue = cfg.fmtValue || function (v) { return v.toLocaleString('ko-KR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }); };
   const unit = cfg.unit || '';
 
-  renderCandleChart({ svgId: 'idxSvg', controlsId: 'idxChartControls', data: data, fmtValue: fmtValue, unit: unit });
-  renderRsiChart({ svgId: 'idxRsiSvg', data: data });
+  // 지수·환율 데이터는 수집 가능한 최대기간(수십 년치 일봉)을 통째로 담고 있으므로,
+  // 종목 차트의 "1개월/3개월/6개월/1년(=전체)" 구성 대신 실제 연 단위 구간 + "전체" 버튼을
+  // 쓰고, 기본값도 최근 1년으로 좁혀 첫 렌더링이 무겁지 않게 한다(2026-09-07).
+  const INDEX_CHART_PERIODS = [['1년', 252], ['3년', 756], ['5년', 1260], ['10년', 2520], ['전체', 9999]];
+  const rsiDraw = renderRsiChart({ svgId: 'idxRsiSvg', data: data, defaultPeriodDays: 252 });
+  renderCandleChart({
+    svgId: 'idxSvg', controlsId: 'idxChartControls', data: data, fmtValue: fmtValue, unit: unit,
+    periods: INDEX_CHART_PERIODS, defaultPeriodDays: 252,
+    onPeriodChange: function (days) { rsiDraw(days); },
+  });
 
   const stats = computeIndexStats(data);
   if (stats) {
