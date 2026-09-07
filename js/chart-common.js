@@ -194,7 +194,8 @@ function initDpNews(code) {
     });
 }
 
-// "1. 기술적 분석" 상단 — Minervini SEPA/Trend Template 기반 기술적 매력도 점수 카드.
+// "1. 기술적 분석" 상단 — 눌림목매매 기준 기술적 매력도 점수 카드(2026-09-07 개편,
+// 이전 Minervini SEPA/Trend Template 기반에서 교체).
 // data/technical_score.json(전 종목 통합, PowerShell과 무관한 별도 Python 배치가 매일
 // 갱신)을 fetch해서 렌더링. 100점 본점수와 별도 트랙인 돌파신호(10점)·수급점수(10점)도
 // 함께 표시.
@@ -218,8 +219,8 @@ function initTechnicalScore(code) {
 
       const score = r.technical_score;
       const items = [];
-      if (r.trend_score) items.push(['추세 적격성 (40점)', r.trend_score.score]);
-      if (r.entry_score) items.push(['진입 매력도 (60점)', r.entry_score.score]);
+      if (r.setup_score) items.push(['눌림목 셋업 적격성 (40점)', r.setup_score.score]);
+      if (r.entry_score) items.push(['진입 타이밍 매력도 (60점)', r.entry_score.score]);
       if (r.risk_penalty) items.push(['위험 감점', r.risk_penalty.score]);
       if (r.breakout_signal) items.push(['돌파 신호 (별도10점)', r.breakout_signal.score]);
       if (r.supply_demand_score && r.supply_demand_score.computable) items.push(['수급 점수 (별도10점)', r.supply_demand_score.score]);
@@ -230,7 +231,7 @@ function initTechnicalScore(code) {
         return `<div class="dp-tscore-item"><span class="l">${esc(label)}</span><span class="v"${style}>${sign}${val.toFixed(1)}</span></div>`;
       }).join('');
 
-      const warning = r.trend_score && r.trend_score.warning;
+      const warning = r.setup_score && r.setup_score.warning;
       const warningHtml = warning ? ` · <span style="color:var(--dp-down);font-weight:700;">${esc(warning)}</span>` : '';
       const summaryHtml = (r.summary || []).map(s => `<li>${esc(s)}</li>`).join('');
 
@@ -241,7 +242,7 @@ function initTechnicalScore(code) {
             <div class="dp-tscore-grade">${esc(r.grade)}</div>
           </div>
           <div class="dp-tscore-track"><div class="dp-tscore-fill" style="width:${Math.max(0, Math.min(100, score))}%;"></div></div>
-          <div class="dp-tscore-sub">기술적 매력도(Minervini SEPA/Trend Template 기반)${warningHtml} · 투자 권고 아님</div>
+          <div class="dp-tscore-sub">기술적 매력도(눌림목매매 기준)${warningHtml} · 투자 권고 아님</div>
           <div class="dp-tscore-grid">${itemsHtml}</div>
           ${summaryHtml ? `<ul class="dp-tscore-summary">${summaryHtml}</ul>` : ''}
         </div>

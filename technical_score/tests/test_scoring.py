@@ -1,4 +1,4 @@
-"""scoring.py 단위 테스트 — 등급 분류, 클램프, 데이터 부족/유동성 제외 처리."""
+"""scoring.py 단위 테스트 — 등급 분류, 클램프, 데이터 부족/유동성 제외 처리 (눌림목매매 기준)."""
 
 from __future__ import annotations
 
@@ -15,17 +15,17 @@ class TestClassifyGrade:
     @pytest.mark.parametrize(
         "score,expected",
         [
-            (100, "최상급 진입 후보"),
-            (85, "최상급 진입 후보"),
-            (84.6, "최상급 진입 후보"),  # round(84.6)=85
-            (84, "기술적 매력 우수"),
-            (75, "기술적 매력 우수"),
+            (100, "최상급 눌림목"),
+            (85, "최상급 눌림목"),
+            (84.6, "최상급 눌림목"),  # round(84.6)=85
+            (84, "눌림목 매력 우수"),
+            (75, "눌림목 매력 우수"),
             (74, "관심 종목"),
             (65, "관심 종목"),
-            (64, "추세 양호·진입 위치 불리"),
-            (50, "추세 양호·진입 위치 불리"),
-            (49, "기술적 부적격"),
-            (0, "기술적 부적격"),
+            (64, "셋업 양호·타이밍 불리"),
+            (50, "셋업 양호·타이밍 불리"),
+            (49, "눌림목 부적격"),
+            (0, "눌림목 부적격"),
         ],
     )
     def test_grade_boundaries(self, score: float, expected: str):
@@ -72,6 +72,30 @@ class TestEvaluateTechnicalScoreHappyPath:
         df = pd.DataFrame({"Open": close, "High": high, "Low": low, "Close": close, "Volume": volume})
         return FetchResult(ticker="005930.KS", status=DataStatus.OK, data=df, as_of_date="2024-01-01", trading_days=n)
 
+    def _pullback_fetch_result(self) -> FetchResult:
+        """하락(저점) -> 상승(임펄스, 고점) -> 조정(되돌림 40%로 수렴) 패턴 — 눌림목 셋업의
+        "정상 케이스"(동률 없는 매끄러운 함수 하나로 구성 — 이유는 test_setup_qualification.py
+        의 ``_build_series`` 주석 참고)."""
+        n = 75
+        idx = pd.date_range("2023-01-01", periods=n, freq="B")
+        closes: list[float] = []
+        for i in range(n):
+            if i <= 35:
+                closes.append(75.0 - i * (15.0 / 35))
+            elif i <= 60:
+                closes.append(60.0 + (i - 35) * (40.0 / 25))
+            else:
+                retrace = (i - 60) * (40.0 / 14)
+                closes.append(100.0 * (1 - retrace / 100.0))
+        close = pd.Series(closes, index=idx)
+        high = close * 1.005
+        low = close * 0.995
+        # 유동성 게이트(최근20일 평균거래대금 >= 5억원)를 넉넉히 통과하도록 거래량을 키움
+        # (종가 ~60~100원대라 주당 거래량을 충분히 높여야 함).
+        volume = pd.Series([10_000_000.0] * 35 + [30_000_000.0] * 25 + [10_000_000.0] * 15, index=idx)
+        df = pd.DataFrame({"Open": close, "High": high, "Low": low, "Close": close, "Volume": volume})
+        return FetchResult(ticker="005930.KS", status=DataStatus.OK, data=df, as_of_date="2024-01-01", trading_days=n)
+
     def test_score_is_clamped_0_100(self):
         fr = self._healthy_fetch_result()
         result = scoring.evaluate_technical_score("005930.KS", "삼성전자", fr, 90.0, 90.0)
@@ -100,7 +124,20 @@ class TestEvaluateTechnicalScoreHappyPath:
         result = scoring.evaluate_technical_score("005930.KS", "삼성전자", fr, 90.0, 90.0)
         expected_keys = {
             "ticker", "name", "as_of_date", "data_status", "technical_score", "grade",
-            "trend_qualified", "trend_score", "entry_score", "risk_penalty",
+            "setup_qualified", "setup_score", "entry_score", "risk_penalty",
             "breakout_signal", "summary",
         }
         assert expected_keys.issubset(result.keys())
+
+    def test_pullback_pattern_scores_meaningfully_positive(self):
+        """임펄스+되돌림+지지선 유지 패턴은 0점이 아니라 유의미한 점수가 나와야 함."""
+        fr = self._pullback_fetch_result()
+        result = scoring.evaluate_technical_score("005930.KS", "삼성전자", fr, None, None)
+        assert result["setup_score"]["impulse"] is not None
+        assert result["technical_score"] > 20.0
+
+    def test_monotonic_uptrend_finds_no_impulse(self):
+        """스윙고점이 확정되지 않는 순수 우상향 데이터는 임펄스를 못 찾는 게 정상(허위 판정 방지)."""
+        fr = self._healthy_fetch_result()
+        result = scoring.evaluate_technical_score("005930.KS", "삼성전자", fr, None, None)
+        assert result["setup_score"]["impulse"] is None

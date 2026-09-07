@@ -2,7 +2,12 @@
 
 데이터 수집(``data_collection``)과 완전히 분리되어 있다 — 이 모듈은 이미
 수집된 ``FetchResult``와 배치 단위로 미리 계산된 상대강도 백분위만 입력받아
-순수 계산만 수행한다. 최종 점수 = clamp(추세적격성 + 진입매력도 - 위험감점, 0, 100).
+순수 계산만 수행한다. 최종 점수 = clamp(셋업적격성 + 진입타이밍매력도 - 위험감점, 0, 100).
+
+2026-09-07: 미너비니 SEPA/Trend Template 기반에서 눌림목매매 기준으로 전면 개편
+(``setup_qualification``/``entry_desirability``/``risk_penalty`` 참조). 임펄스(선행
+상승) 탐지는 ``setup_qualification``에서 한 번만 계산해 나머지 두 모듈에 그대로
+전달한다(중복 탐지 방지, 계산 결과 불일치 위험 제거).
 """
 
 from __future__ import annotations
@@ -14,7 +19,7 @@ from .data_collection import DataStatus, FetchResult
 from .entry_desirability import evaluate_entry_desirability
 from .investor_flow import DailyInvestorFlow, score_supply_demand
 from .risk_penalty import evaluate_risk_penalty
-from .trend_qualification import evaluate_trend_qualification
+from .setup_qualification import evaluate_setup_qualification
 
 MIN_AVG_TRADING_VALUE_KRW = 500_000_000.0
 """최근 20거래일 평균 거래대금(종가×거래량)이 이 미만이면 평가 제외. 스펙에
@@ -24,11 +29,11 @@ LIQUIDITY_WINDOW_DAYS = 20
 
 
 GRADE_BANDS: list[tuple[int, int, str]] = [
-    (85, 100, "최상급 진입 후보"),
-    (75, 84, "기술적 매력 우수"),
+    (85, 100, "최상급 눌림목"),
+    (75, 84, "눌림목 매력 우수"),
     (65, 74, "관심 종목"),
-    (50, 64, "추세 양호·진입 위치 불리"),
-    (0, 49, "기술적 부적격"),
+    (50, 64, "셋업 양호·타이밍 불리"),
+    (0, 49, "눌림목 부적격"),
 ]
 
 
@@ -39,7 +44,7 @@ def classify_grade(score: float) -> str:
         if low <= rounded <= high:
             return label
     # 이론상 도달 불가(0~100 클램프 이후 호출되므로) — 안전망.
-    return "기술적 부적격"
+    return "눌림목 부적격"
 
 
 def _avg_trading_value(close, volume, window: int = LIQUIDITY_WINDOW_DAYS) -> Optional[float]:
@@ -50,7 +55,7 @@ def _avg_trading_value(close, volume, window: int = LIQUIDITY_WINDOW_DAYS) -> Op
 
 
 def build_summary(
-    trend_result: dict[str, Any],
+    setup_result: dict[str, Any],
     entry_result: dict[str, Any],
     risk_result: dict[str, Any],
     supply_demand_result: Optional[dict[str, Any]] = None,
@@ -58,15 +63,15 @@ def build_summary(
     """항목별 결과에서 사람이 읽을 수 있는 요약 문장 목록을 만든다."""
     lines: list[str] = []
 
-    md = trend_result.get("mandatory_details", {})
-    if md.get("close_above_200ma") and md.get("ma50_above_ma200"):
-        lines.append("50일선이 200일선 위, 종가도 200일선 위(정배열 유지)")
-    elif md.get("close_above_200ma") is False:
-        lines.append("종가가 200일선 아래(추세 부적격 위험)")
+    impulse = setup_result.get("impulse")
+    if impulse:
+        lines.append(f"최근 임펄스 상승폭 {impulse['gain_pct']:.1f}%")
+    if setup_result.get("mandatory_conditions_met") is False:
+        lines.append("지지선 이탈 또는 되돌림 범위 이탈(셋업 부적격 위험)")
 
-    hd = entry_result.get("high_52w_distance", {})
-    if hd.get("computable") and hd.get("value") is not None:
-        lines.append(f"52주 고점 대비 {hd['value']:.1f}% 하락")
+    retrace = entry_result.get("retrace_position", {})
+    if retrace.get("computable") and retrace.get("value") is not None:
+        lines.append(f"임펄스 고점 대비 {retrace['value']:.1f}% 되돌림")
 
     rsi = entry_result.get("rsi", {})
     if rsi.get("computable") and rsi.get("value") is not None:
@@ -81,7 +86,7 @@ def build_summary(
 
     vd = entry_result.get("volume_dry_up", {})
     if vd.get("computable") and vd.get("value") is not None:
-        lines.append(f"최근 5일 거래량이 50일 평균의 {vd['value']:.0f}%")
+        lines.append(f"조정중 거래량이 임펄스 구간의 {vd['value']:.0f}%")
 
     if risk_result.get("reasons"):
         lines.append("위험 감점 사유: " + ", ".join(risk_result["reasons"]))
@@ -100,8 +105,8 @@ def _insufficient_result(ticker: str, name: str, fetch_result: FetchResult) -> d
         "data_status": fetch_result.status,
         "technical_score": None,
         "grade": None,
-        "trend_qualified": None,
-        "trend_score": None,
+        "setup_qualified": None,
+        "setup_score": None,
         "entry_score": None,
         "risk_penalty": None,
         "breakout_signal": None,
@@ -120,11 +125,11 @@ def evaluate_technical_score(
     min_avg_trading_value_krw: float = MIN_AVG_TRADING_VALUE_KRW,
     investor_flows: Optional[list[DailyInvestorFlow]] = None,
 ) -> dict[str, Any]:
-    """단일 종목의 최종 기술적 매력도 결과(스펙 8절 JSON 형식)를 계산.
+    """단일 종목의 최종 기술적 매력도 결과(눌림목매매 기준, 8절 JSON 형식)를 계산.
 
     :param fetch_result: ``data_collection.fetch_ohlcv``(또는 캐시 버전)의 결과.
-    :param relative_strength_52w_percentile: 배치 내 52주 상대수익률 백분위(0~100).
-    :param relative_strength_6m_percentile: 배치 내 6개월 상대수익률(지수 대비 초과분) 백분위(0~100).
+    :param relative_strength_52w_percentile: (현재 미사용 — 하위호환을 위해 시그니처 유지)
+    :param relative_strength_6m_percentile: (현재 미사용 — 하위호환을 위해 시그니처 유지)
     :param investor_flows: ``investor_flow.fetch_investor_flow``의 결과(선택). 전달되면
         "수급 점수"(0~10, 100점 체계와 별도 트랙)와 "개인 단독 매수" 위험 감점을 함께 계산한다.
         전달하지 않으면 두 신호 모두 계산 불가(None)로 표시되고 기존 100점 로직은 그대로 동작한다.
@@ -145,13 +150,14 @@ def evaluate_technical_score(
         )
         return result
 
-    trend_result = evaluate_trend_qualification(close, high, low, relative_strength_52w_percentile)
-    entry_result = evaluate_entry_desirability(close, high, low, volume, relative_strength_6m_percentile)
-    risk_result = evaluate_risk_penalty(close, high, low, volume, investor_flows=investor_flows)
+    setup_result = evaluate_setup_qualification(close, high, low, volume)
+    impulse = setup_result.get("impulse")
+    entry_result = evaluate_entry_desirability(close, high, low, volume, impulse)
+    risk_result = evaluate_risk_penalty(close, high, low, volume, impulse=impulse, investor_flows=investor_flows)
     breakout_result = evaluate_breakout_signal(close, high, low, volume)
     supply_demand_result = score_supply_demand(investor_flows or [], volume)
 
-    raw_total = trend_result["score"] + entry_result["score"] + risk_result["score"]
+    raw_total = setup_result["score"] + entry_result["score"] + risk_result["score"]
     final_score = max(0.0, min(100.0, raw_total))
 
     return {
@@ -161,18 +167,20 @@ def evaluate_technical_score(
         "data_status": DataStatus.OK,
         "technical_score": round(final_score, 1),
         "grade": classify_grade(final_score),
-        "trend_qualified": trend_result["mandatory_conditions_met"],
-        "trend_score": {
-            "score": trend_result["score"],
-            "max_score": trend_result["max_score"],
-            "qualified_excellent": trend_result["qualified"],
-            "mandatory_conditions_met": trend_result["mandatory_conditions_met"],
-            "warning": trend_result["warning"],
-            "details": trend_result["details"],
+        "setup_qualified": setup_result["mandatory_conditions_met"],
+        "setup_score": {
+            "score": setup_result["score"],
+            "max_score": setup_result["max_score"],
+            "qualified_excellent": setup_result["qualified"],
+            "mandatory_conditions_met": setup_result["mandatory_conditions_met"],
+            "warning": setup_result["warning"],
+            "impulse": setup_result["impulse"],
+            "support_level": setup_result["support_level"],
+            "details": setup_result["details"],
         },
         "entry_score": entry_result,
         "risk_penalty": risk_result,
         "breakout_signal": breakout_result,
         "supply_demand_score": supply_demand_result,
-        "summary": build_summary(trend_result, entry_result, risk_result, supply_demand_result),
+        "summary": build_summary(setup_result, entry_result, risk_result, supply_demand_result),
     }

@@ -222,6 +222,60 @@ def rolling_high_low(
     return float(high.iloc[-w:].max()), float(low.iloc[-w:].min())
 
 
+def find_recent_impulse(
+    high: pd.Series,
+    low: pd.Series,
+    order: int = 5,
+    lookback_days: int = 60,
+) -> Optional[dict]:
+    """눌림목매매용 — 최근 ``lookback_days`` 구간에서 가장 최근에 확정된 상승 임펄스
+    (스윙저점 → 스윙고점)를 찾는다.
+
+    스윙고점 확정에는 좌우 ``order``개 봉이 필요하므로(``find_swing_points`` 참조,
+    룩어헤드 방지), 최근 ``order``거래일 안의 고점은 아직 "확정된 고점"으로 잡히지
+    않는다 — 이는 의도된 동작이다(아직 꼭짓점인지 모르는 상태에서 눌림목 판정을
+    시작하지 않기 위함).
+
+    반환: {"start_index", "start_price", "peak_index", "peak_price", "gain_pct"}
+    (모두 원본 시리즈 기준 0-based 위치) 또는 조건을 만족하는 임펄스를 못 찾으면 None.
+    """
+    n = len(high)
+    if n == 0:
+        return None
+    window_start = max(0, n - lookback_days)
+    window_high = high.iloc[window_start:].reset_index(drop=True)
+    window_low = low.iloc[window_start:].reset_index(drop=True)
+    swings = find_swing_points(window_high, window_low, order=order)
+    if not swings:
+        return None
+
+    peak_pos = None
+    for i in range(len(swings) - 1, -1, -1):
+        if swings[i].kind == "high":
+            peak_pos = i
+            break
+    if peak_pos is None:
+        return None
+
+    trough = None
+    for i in range(peak_pos - 1, -1, -1):
+        if swings[i].kind == "low":
+            trough = swings[i]
+            break
+    if trough is None or trough.price <= 0:
+        return None
+
+    peak = swings[peak_pos]
+    gain_pct = (peak.price - trough.price) / trough.price * 100.0
+    return {
+        "start_index": window_start + trough.index,
+        "start_price": trough.price,
+        "peak_index": window_start + peak.index,
+        "peak_price": peak.price,
+        "gain_pct": gain_pct,
+    }
+
+
 def close_position_in_range(close: float, high: float, low: float) -> Optional[float]:
     """당일 가격 범위에서 종가의 상대 위치. (종가-저가)/(고가-저가), 0~1.
 

@@ -1,4 +1,4 @@
-"""risk_penalty.py 단위 테스트."""
+"""risk_penalty.py 단위 테스트 (눌림목매매 기준)."""
 
 from __future__ import annotations
 
@@ -17,19 +17,19 @@ def _flat_df(n: int, price: float = 100.0, volume: float = 1000.0):
     return close, high, low, volume_s
 
 
-class TestMa50DistancePenalty:
-    def test_triggers_above_15pct(self):
-        r = rp.penalty_ma50_distance_over_15(close_val=116.0, sma50=100.0)
+class TestCloseBelowSupport:
+    def test_triggers(self):
+        r = rp.penalty_close_below_support(95.0, 100.0)
         assert r["triggered"] is True
-        assert r["points"] == pytest.approx(-10.0)
+        assert r["points"] == pytest.approx(-20.0)
 
-    def test_no_trigger_at_exactly_15pct(self):
-        r = rp.penalty_ma50_distance_over_15(close_val=115.0, sma50=100.0)
+    def test_no_trigger(self):
+        r = rp.penalty_close_below_support(105.0, 100.0)
         assert r["triggered"] is False
 
-    def test_no_trigger_when_below_ma(self):
-        r = rp.penalty_ma50_distance_over_15(close_val=90.0, sma50=100.0)
-        assert r["triggered"] is False
+    def test_none_when_missing(self):
+        r = rp.penalty_close_below_support(None, 100.0)
+        assert r["computable"] is False
 
 
 class TestSharpDropWithVolume:
@@ -54,24 +54,13 @@ class TestSharpDropWithVolume:
         assert r["triggered"] is False
 
 
-class TestCloseBelowMa50:
-    def test_triggers(self):
-        r = rp.penalty_close_below_ma50(95.0, 100.0)
-        assert r["triggered"] is True
-        assert r["points"] == pytest.approx(-15.0)
-
-    def test_no_trigger(self):
-        r = rp.penalty_close_below_ma50(105.0, 100.0)
-        assert r["triggered"] is False
-
-
-class TestMa50Falling:
+class TestSupportMaFalling:
     def test_triggers_when_falling(self):
-        r = rp.penalty_ma50_falling(sma50_now=95.0, sma50_22d_ago=100.0)
+        r = rp.penalty_support_ma_falling(sma60_now=95.0, sma60_22d_ago=100.0)
         assert r["triggered"] is True
 
     def test_no_trigger_when_rising(self):
-        r = rp.penalty_ma50_falling(sma50_now=105.0, sma50_22d_ago=100.0)
+        r = rp.penalty_support_ma_falling(sma60_now=105.0, sma60_22d_ago=100.0)
         assert r["triggered"] is False
 
 
@@ -99,35 +88,15 @@ class TestAtrExpansion:
         assert r["points"] == pytest.approx(-5.0)
 
 
-class TestPivotReentryFailure:
-    def test_triggers_when_broke_out_then_reentered(self):
-        n = 35
-        idx = pd.date_range("2024-01-01", periods=n, freq="B")
-        # 피벗 기준 구간(재이탈 확인 10일보다 이전, 20일): 박스권 고가 110으로 평탄.
-        # 재이탈 확인 구간(최근 10거래일, 오늘 제외): 첫날 돌파(118) 후 유지.
-        # 오늘: 피벗(110) 아래로 재진입(104).
-        highs = [110.0] * 24 + [120.0] + [115.0] * 9 + [105.0]
-        closes = [108.0] * 24 + [118.0] + [115.0] * 9 + [104.0]
-        assert len(highs) == n and len(closes) == n
-        high = pd.Series(highs, index=idx)
-        close = pd.Series(closes, index=idx)
-        r = rp.penalty_pivot_breakout_failure(close, high)
-        assert r["triggered"] is True
-
-    def test_no_trigger_when_pivot_itself_still_holds(self):
-        n = 35
-        idx = pd.date_range("2024-01-01", periods=n, freq="B")
-        highs = [110.0] * 24 + [120.0] + [115.0] * 10
-        closes = [108.0] * 24 + [118.0] + [115.0] * 10  # 오늘도 피벗(110) 위에 유지
-        high = pd.Series(highs, index=idx)
-        close = pd.Series(closes, index=idx)
-        r = rp.penalty_pivot_breakout_failure(close, high)
-        assert r["triggered"] is False
-
-
 class TestEvaluateRiskPenaltyAggregate:
     def test_no_penalties_on_healthy_flat_data(self):
         close, high, low, volume = _flat_df(260)
         result = rp.evaluate_risk_penalty(close, high, low, volume)
         # 완전히 평탄한 데이터는 위험 신호가 없어야 함(또는 계산불가로 0 처리).
         assert result["score"] <= 0.0
+
+    def test_close_below_impulse_start_triggers_via_support(self):
+        close, high, low, volume = _flat_df(70, price=40.0)
+        impulse = {"start_index": 0, "start_price": 100.0, "peak_index": 10, "peak_price": 150.0}
+        result = rp.evaluate_risk_penalty(close, high, low, volume, impulse=impulse)
+        assert "종가 < 지지선" in result["reasons"]
