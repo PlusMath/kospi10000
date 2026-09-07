@@ -158,11 +158,19 @@
     }
 
     .index-card {
+      display: block;
       background: var(--color-card-bg);
       border: 1px solid var(--color-border);
       border-radius: var(--radius-card);
       padding: 12px 10px;
       text-align: center;
+      text-decoration: none;
+      transition: border-color .15s, transform .15s;
+    }
+
+    .index-card:hover {
+      border-color: var(--color-text-info, #185FA5);
+      transform: translateY(-1px);
     }
 
     .index-label {
@@ -1447,25 +1455,25 @@
 
   <script>
     const dailyMovers = [
-      { name: "SK스퀘어", code: "402340", industry: "지주·투자회사", close: "1,101,000원", change: 5.76, page: "stocks/003_402340.html" },
+      { name: "SK스퀘어", code: "402340", industry: "지주·투자회사", close: "1,103,000원", change: 5.96, page: "stocks/003_402340.html" },
       { name: "SK하이닉스", code: "000660", industry: "반도체·전자", close: "1,740,000원", change: 5.65, page: "stocks/002_000660.html" }
     ];
 
     const stockLive = {
-      "005930": { price: 265500, change: 3.91 },
+      "005930": { price: 266000, change: 4.11 },
       "000660": { price: 1740000, change: 5.65 },
-      "402340": { price: 1101000, change: 5.76 }
+      "402340": { price: 1103000, change: 5.96 }
     };
 
     // Claude API로 생성한 하루 시황 요약 카드 — update_daily_charts.ps1이 매일 실제 종가·등락률
     // 통계와 당일 상위 변동종목의 실제 뉴스 헤드라인만 근거로 재생성. 생성 실패(API 키 없음/응답
     // 파싱 실패 등) 시에는 이 블록을 건드리지 않고 마지막 성공분을 그대로 둠 — 그래서 날짜는
     // 항상 "이 요약이 실제로 생성된 날"을 의미하며, 오늘 날짜인 척 허위로 표시하지 않는다.
-    const marketSummary = {"date":"2026년 9월 7일","headline":"반도체 강세, 코스피 6900선 복귀","body":"2026년 9월 7일 집계 대상 3개 종목이 모두 상승해 평균 등락률은 5.11%를 기록했다. SK스퀘어가 5.76% 오른 110만1000원, SK하이닉스가 5.65% 오른 174만원, 삼성전자가 3.91% 오른 26만5500원에 마감했다. 이날 뉴스에서는 삼성전자와 SK하이닉스의 상승과 함께 코스피가 6900선을 회복했다고 전해졌다.","refs":[{"title":"\u0027불기둥\u0027 삼성전자·SK하이닉스⋯코스피 6900선 복귀","link":"http://www.inews24.com/view/2002535","source":"inews24.com"},{"title":"\u0027기아·SK하이닉스\u0027 잇는 실무형 인재 키운다… 동의과학대, 미래차 초광...","link":"https://view.asiae.co.kr/article/2026090709382238909","source":"아시아경제"}]};
+    const marketSummary = {"date":"2026년 9월 7일","headline":"반도체 강세, 3종목 모두 상승","body":"2026년 9월 7일 집계 대상 3종목이 모두 올라 평균 등락률은 5.24%를 기록했다. SK스퀘어가 5.96% 오른 110만3000원, SK하이닉스가 5.65% 오른 174만원, 삼성전자가 4.11% 오른 26만6000원에 마감했다. 이날 SK하이닉스는 목표주가 상향 소식이, 삼성전자는 주주단체의 이사회·노조 추가 고발 소식이 전해졌다.","refs":[{"title":"성과급에 뿔난 주주단체…삼성전자 이사회·노조 추가 고발","link":"http://www.wowtv.co.kr/NewsCenter/News/Read?articleId=A202609070185\u0026t=NN","source":"wowtv.co.kr"},{"title":"“310만닉스 가나요”…SK하이닉스 목표가 ‘쑥’ [오늘, 이 종목]","link":"https://www.mk.co.kr/article/12145904","source":"매일경제"}]};
 
     // 코스피·해외 주요 지수 및 환율 — update_daily_charts.ps1이 매일 Yahoo Finance에서
     // 실제 값을 가져와 재생성. 실패 시(그날은) 이 블록을 건드리지 않고 마지막 성공분 유지.
-    const marketIndices = {"KOSPI":{"name":"코스피","value":6898.84,"change":3.16},"SP500":{"name":"S\u0026P500","value":7718.6,"change":-0.38},"DOW":{"name":"다우존스","value":53414.25,"change":-0.51},"RUSSELL2000":{"name":"러셀2000","value":2975.65,"change":0.25},"NIKKEI":{"name":"닛케이225","value":66210.12,"change":1.83},"USDKRW":{"name":"달러환율","value":1339.09,"change":-1.2},"JPYKRW":{"name":"엔환율(100엔)","value":856.3,"change":-1.66}};
+    const marketIndices = {"KOSPI":{"name":"코스피","value":6893.5,"change":3.08},"SP500":{"name":"S\u0026P500","value":7718.6,"change":-0.38},"DOW":{"name":"다우존스","value":53414.25,"change":-0.51},"RUSSELL2000":{"name":"러셀2000","value":2975.65,"change":0.25},"NIKKEI":{"name":"닛케이225","value":66525.06,"change":2.31},"USDKRW":{"name":"달러환율","value":1343.68,"change":-0.87},"JPYKRW":{"name":"엔환율(100엔)","value":858,"change":-1.47}};
 
     const stocks = [
       {
@@ -3510,6 +3518,11 @@
     }
 
     const INDEX_ORDER = ['KOSPI', 'SP500', 'DOW', 'RUSSELL2000', 'NIKKEI', 'USDKRW', 'JPYKRW'];
+    const INDEX_PAGE_MAP = {
+      KOSPI: 'indices/kospi.html', SP500: 'indices/sp500.html', DOW: 'indices/dow.html',
+      RUSSELL2000: 'indices/russell2000.html', NIKKEI: 'indices/nikkei.html',
+      USDKRW: 'indices/usdkrw.html', JPYKRW: 'indices/jpykrw.html'
+    };
 
     function renderMarketIndices() {
       const grid = document.getElementById('indexGrid');
@@ -3524,11 +3537,11 @@
         const sign = idx.change > 0 ? '+' : '';
         const valueStr = idx.value.toLocaleString('ko-KR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
         const changeStr = typeof idx.change === 'number' ? `${sign}${idx.change.toFixed(2)}%` : '-';
-        return `<div class="index-card">
+        return `<a class="index-card" href="${INDEX_PAGE_MAP[key]}">
           <span class="index-label">${idx.name}</span>
           <span class="index-value">${valueStr}</span>
           <span class="index-change ${changeCls}">${changeStr}</span>
-        </div>`;
+        </a>`;
       }).join('');
     }
 

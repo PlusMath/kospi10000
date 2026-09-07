@@ -274,6 +274,10 @@ function renderCandleChart(cfg) {
   }
   function fmtMD(dateStr) { const p = dateStr.split('-'); return p[1] + '/' + p[2]; }
   function won(v) { return Math.round(v * 10000).toLocaleString(); }
+  // cfg.fmtValue/cfg.unit: 지수·환율 페이지처럼 만원 단위 변환(*10000)이 맞지 않는 값을
+  // 그리는 경우를 위한 오버라이드(2026-09-07). 둘 다 생략하면 기존 종목 차트와 완전히 동일.
+  const fmtValue = cfg.fmtValue || won;
+  const unit = cfg.unit !== undefined ? cfg.unit : '원';
 
   const ma5Full = calcMA(data, 5), ma20Full = calcMA(data, 20), ma60Full = calcMA(data, 60), ma120Full = calcMA(data, 120);
 
@@ -322,7 +326,7 @@ function renderCandleChart(cfg) {
       const y = py(v);
       svg.appendChild(svgEl('line', { x1: pL, x2: pL + cW, y1: y, y2: y, stroke: gridCol, opacity: 0.15, 'stroke-width': 1 }));
       const t = svgEl('text', { x: pL - 4, y: y + 3, 'text-anchor': 'end', 'font-size': 9, fill: gridCol, opacity: 0.85 });
-      t.textContent = won(v);
+      t.textContent = fmtValue(v);
       svg.appendChild(t);
     }
 
@@ -351,7 +355,7 @@ function renderCandleChart(cfg) {
     const mkLabel = (idx, val, dateStr, isLow, col) => {
       const cx = pL + (idx + 0.5) * colW, cy = isLow ? py(val) + 12 : py(val) - 8;
       const t = svgEl('text', { x: cx, y: cy, 'text-anchor': 'middle', 'font-size': 9, fill: col, 'font-weight': 600 });
-      t.textContent = (isLow ? '저 ' : '고 ') + won(val) + ' (' + fmtMD(dateStr) + ')';
+      t.textContent = (isLow ? '저 ' : '고 ') + fmtValue(val) + ' (' + fmtMD(dateStr) + ')';
       svg.appendChild(t);
     };
     mkLabel(hiIdx, hi.h, hi.d, false, '#B02E3C');
@@ -360,7 +364,7 @@ function renderCandleChart(cfg) {
     const lastIdx = slice.length - 1, last = slice[lastIdx];
     const curCx = pL + (lastIdx + 0.5) * colW, curCy = py(last.h) - 8;
     const curT = svgEl('text', { x: curCx - 4, y: curCy, 'text-anchor': 'end', 'font-size': 9, fill: cssVar('--color-text-primary'), 'font-weight': 600 });
-    curT.textContent = '현재 ' + won(last.c);
+    curT.textContent = '현재 ' + fmtValue(last.c);
     svg.appendChild(curT);
 
     const tickCount = Math.min(7, slice.length);
@@ -405,8 +409,8 @@ function renderCandleChart(cfg) {
       }
       tip.innerHTML =
         '<b>' + d.d + '</b><br>' +
-        '시가 ' + won(d.o) + '원 · 고가 ' + won(d.h) + '원<br>' +
-        '저가 ' + won(d.l) + '원 · 종가 ' + won(d.c) + '원' + chgHtml;
+        '시가 ' + fmtValue(d.o) + unit + ' · 고가 ' + fmtValue(d.h) + unit + '<br>' +
+        '저가 ' + fmtValue(d.l) + unit + ' · 종가 ' + fmtValue(d.c) + unit + chgHtml;
       tip.style.visibility = 'visible';
       const wrapRect = wrap.getBoundingClientRect();
       let left = (evt.clientX - wrapRect.left) + 14;
@@ -439,4 +443,254 @@ function renderCandleChart(cfg) {
   }
 
   render(9999);
+}
+
+// ── 지수/환율 상세페이지 공용 로직 (2026-09-07 신규, indices/*.html 7개 페이지가 공유) ──
+// 종목 상세페이지와 달리 PER/PBR/재무제표가 없는 대신, 캔들 데이터(data) 배열 하나만
+// 있으면 RSI·변동성·기간별 수익률·월별 등락률을 전부 클라이언트에서 계산해 그린다.
+// PowerShell 쪽은 하루 한 번 OHLCV 배열(만원 단위 변환 없이 실제 지수·환율 값 그대로)만
+// 구워 넣으면 되고, 헤더(현재값·등락률·52주 최고/최저)만 기존 종목 페이지와 동일하게
+// 정적 텍스트로 굽는다(계산 로직을 PowerShell/JS 두 곳에 이중 구현하지 않기 위함).
+
+// Wilder's smoothing 방식 RSI(14) 시계열 — data.length와 동일한 길이 배열(초기 n개는 null).
+function calcRsiSeries(closes, n) {
+  n = n || 14;
+  const out = new Array(closes.length).fill(null);
+  if (closes.length < n + 1) return out;
+  let gains = 0, losses = 0;
+  for (let i = 1; i <= n; i++) {
+    const diff = closes[i] - closes[i - 1];
+    if (diff >= 0) gains += diff; else losses -= diff;
+  }
+  let avgGain = gains / n, avgLoss = losses / n;
+  out[n] = avgLoss === 0 ? 100 : 100 - 100 / (1 + avgGain / avgLoss);
+  for (let i = n + 1; i < closes.length; i++) {
+    const diff = closes[i] - closes[i - 1];
+    const gain = diff >= 0 ? diff : 0, loss = diff < 0 ? -diff : 0;
+    avgGain = (avgGain * (n - 1) + gain) / n;
+    avgLoss = (avgLoss * (n - 1) + loss) / n;
+    out[i] = avgLoss === 0 ? 100 : 100 - 100 / (1 + avgGain / avgLoss);
+  }
+  return out;
+}
+
+function computeIndexStats(data) {
+  if (!data || data.length < 2) return null;
+  const closes = data.map(d => d.c);
+  const last = data[data.length - 1];
+  const prev = data[data.length - 2];
+  const changePct = ((last.c - prev.c) / prev.c) * 100;
+
+  const win = data.slice(-252); // 52주(거래일 기준) 최고/최저
+  let hi = win[0], lo = win[0];
+  win.forEach(d => { if (d.h > hi.h) hi = d; if (d.l < lo.l) lo = d; });
+
+  function barNTradingDaysAgo(n) {
+    const idx = data.length - 1 - n;
+    return idx >= 0 ? data[idx] : null;
+  }
+  function pctFrom(pastBar) {
+    return pastBar ? ((last.c - pastBar.c) / pastBar.c) * 100 : null;
+  }
+  const ytdKey = last.d.slice(0, 4) + '-01-01';
+  const ytdBar = data.find(d => d.d >= ytdKey) || null;
+
+  const periodReturns = {
+    w1: pctFrom(barNTradingDaysAgo(5)),
+    m1: pctFrom(barNTradingDaysAgo(21)),
+    m3: pctFrom(barNTradingDaysAgo(63)),
+    m6: pctFrom(barNTradingDaysAgo(126)),
+    y1: pctFrom(barNTradingDaysAgo(252)),
+    ytd: pctFrom(ytdBar),
+  };
+
+  const byMonth = {};
+  data.forEach(d => {
+    const mk = d.d.slice(0, 7);
+    (byMonth[mk] = byMonth[mk] || []).push(d);
+  });
+  const monthly = Object.keys(byMonth).sort().map(mk => {
+    const bars = byMonth[mk];
+    const open = bars[0].o, close = bars[bars.length - 1].c;
+    const high = Math.max(...bars.map(b => b.h)), low = Math.min(...bars.map(b => b.l));
+    return { month: mk, open, high, low, close, changePct: ((close - open) / open) * 100 };
+  });
+
+  // 최근 20거래일 일간수익률 표준편차의 연환산(%) — 단순 실현변동성 근사치.
+  const recent = data.slice(-21);
+  const rets = [];
+  for (let i = 1; i < recent.length; i++) rets.push((recent[i].c - recent[i - 1].c) / recent[i - 1].c);
+  const mean = rets.reduce((s, x) => s + x, 0) / (rets.length || 1);
+  const variance = rets.reduce((s, x) => s + (x - mean) * (x - mean), 0) / (rets.length || 1);
+  const vol20d = rets.length ? Math.sqrt(variance) * Math.sqrt(252) * 100 : null;
+
+  function sma(n) {
+    if (closes.length < n) return null;
+    const slice = closes.slice(-n);
+    return slice.reduce((s, x) => s + x, 0) / n;
+  }
+
+  const rsiSeries = calcRsiSeries(closes, 14);
+
+  return {
+    last, prev, changePct, high52w: hi, low52w: lo, periodReturns, monthly,
+    vol20d, rsi14: rsiSeries[rsiSeries.length - 1],
+    ma5: sma(5), ma20: sma(20), ma60: sma(60), ma120: sma(120),
+  };
+}
+
+function renderRsiChart(cfg) {
+  const svg = document.getElementById(cfg.svgId);
+  if (!svg) return;
+  const data = cfg.data;
+  const closes = data.map(d => d.c);
+  const rsi = calcRsiSeries(closes, 14);
+  const W = 720, H = 90, pL = 40, pR = 12, pT = 8, pB = 16;
+  const cW = W - pL - pR, cH = H - pT - pB;
+  function svgEl(tag, attrs) {
+    const e = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  while (svg.firstChild) svg.removeChild(svg.firstChild);
+  function py(v) { return pT + cH * (1 - v / 100); }
+  const colW = cW / data.length;
+  [30, 50, 70].forEach((v) => {
+    svg.appendChild(svgEl('line', { x1: pL, x2: pL + cW, y1: py(v), y2: py(v), stroke: 'oklch(0.85 0.005 90)', 'stroke-width': 1, 'stroke-dasharray': v === 50 ? '2,2' : 'none' }));
+    const t = svgEl('text', { x: pL - 4, y: py(v) + 3, 'text-anchor': 'end', 'font-size': 8, fill: 'oklch(0.55 0.02 260)' });
+    t.textContent = v;
+    svg.appendChild(t);
+  });
+  const pts = [];
+  rsi.forEach((v, i) => { if (v === null) return; pts.push(`${pL + (i + 0.5) * colW},${py(v)}`); });
+  if (pts.length >= 2) {
+    svg.appendChild(svgEl('polyline', { points: pts.join(' '), fill: 'none', stroke: '#9370DB', 'stroke-width': 1.5 }));
+  }
+  const lastRsi = rsi[rsi.length - 1];
+  if (lastRsi !== null && lastRsi !== undefined) {
+    const t = svgEl('text', { x: W - pR, y: pT + 8, 'text-anchor': 'end', 'font-size': 10, 'font-weight': 700, fill: '#9370DB' });
+    t.textContent = 'RSI(14) ' + lastRsi.toFixed(1);
+    svg.appendChild(t);
+  }
+}
+
+function renderIndexMaStatus(containerId, stats) {
+  const el = document.getElementById(containerId);
+  if (!el || !stats) return;
+  const rows = [['5일선', stats.ma5], ['20일선', stats.ma20], ['60일선', stats.ma60], ['120일선', stats.ma120]];
+  el.innerHTML = rows.map(([label, ma]) => {
+    if (ma === null) return `<div class="dp-row2"><span class="l">${label}</span><span class="v">데이터 부족</span></div>`;
+    const above = stats.last.c >= ma;
+    return `<div class="dp-row2"><span class="l">${label}</span><span class="v${above ? ' up' : ''}"${above ? '' : ' style="color:var(--dp-down);"'}>${above ? '가격 상회' : '가격 하회'}</span></div>`;
+  }).join('');
+}
+
+function renderIndexPeriodReturns(containerId, stats) {
+  const el = document.getElementById(containerId);
+  if (!el || !stats) return;
+  const items = [
+    ['1주', stats.periodReturns.w1], ['1개월', stats.periodReturns.m1], ['3개월', stats.periodReturns.m3],
+    ['6개월', stats.periodReturns.m6], ['1년', stats.periodReturns.y1], ['YTD', stats.periodReturns.ytd],
+  ];
+  el.innerHTML = items.map(([label, pct]) => {
+    if (pct === null || pct === undefined || isNaN(pct)) {
+      return `<div class="idx-ret-item"><div class="idx-ret-l">${label}</div><div class="idx-ret-v">-</div></div>`;
+    }
+    const sign = pct >= 0 ? '+' : '';
+    const color = pct >= 0 ? 'var(--dp-up)' : 'var(--dp-down)';
+    return `<div class="idx-ret-item"><div class="idx-ret-l">${label}</div><div class="idx-ret-v" style="color:${color};">${sign}${pct.toFixed(2)}%</div></div>`;
+  }).join('');
+}
+
+function renderIndexMonthlyTable(tbodyId, stats, fmtValue) {
+  const el = document.getElementById(tbodyId);
+  if (!el || !stats) return;
+  const rows = stats.monthly.slice(-12).slice().reverse();
+  el.innerHTML = rows.map((m) => {
+    const sign = m.changePct >= 0 ? '+' : '';
+    const color = m.changePct >= 0 ? 'var(--dp-up)' : 'var(--dp-down)';
+    return `<tr>
+      <td>${m.month}</td>
+      <td style="text-align:right;">${fmtValue(m.open)}</td>
+      <td style="text-align:right;">${fmtValue(m.high)}</td>
+      <td style="text-align:right;">${fmtValue(m.low)}</td>
+      <td style="text-align:right;">${fmtValue(m.close)}</td>
+      <td style="text-align:right;color:${color};font-weight:700;">${sign}${m.changePct.toFixed(2)}%</td>
+    </tr>`;
+  }).join('');
+}
+
+// 홈페이지 index-grid와 동일한 7개 지수/환율을 상세페이지 안에서도 보여주는 위젯.
+// indices/*.html은 서로 형제 파일이라 링크는 파일명만("kospi.html")으로 충분.
+const IDX_ORDER = ['KOSPI', 'SP500', 'DOW', 'RUSSELL2000', 'NIKKEI', 'USDKRW', 'JPYKRW'];
+const IDX_PAGE_MAP = {
+  KOSPI: 'kospi.html', SP500: 'sp500.html', DOW: 'dow.html', RUSSELL2000: 'russell2000.html',
+  NIKKEI: 'nikkei.html', USDKRW: 'usdkrw.html', JPYKRW: 'jpykrw.html',
+};
+function renderIndexCompareGrid(containerId, marketIndices, currentKey) {
+  const el = document.getElementById(containerId);
+  if (!el || !marketIndices) return;
+  el.innerHTML = IDX_ORDER.map((key) => {
+    const idx = marketIndices[key];
+    if (!idx || typeof idx.value !== 'number') return '';
+    const isSelf = key === currentKey;
+    const changeCls = idx.change > 0 ? 'up' : (idx.change < 0 ? 'down' : '');
+    const sign = idx.change > 0 ? '+' : '';
+    const valueStr = idx.value.toLocaleString('ko-KR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
+    const changeStr = typeof idx.change === 'number' ? `${sign}${idx.change.toFixed(2)}%` : '-';
+    const inner = `<span class="idx-cmp-label">${idx.name}${isSelf ? ' · 현재' : ''}</span>` +
+      `<span class="idx-cmp-value">${valueStr}</span>` +
+      `<span class="idx-cmp-change ${changeCls}">${changeStr}</span>`;
+    return isSelf
+      ? `<div class="idx-cmp-card self">${inner}</div>`
+      : `<a class="idx-cmp-card" href="${IDX_PAGE_MAP[key]}">${inner}</a>`;
+  }).join('');
+}
+
+// 코스피 페이지 전용: 이미 계산된 dailyMovers(±5% 변동, kospi10000 Top100 대상)를
+// 상승/하락으로 나눠 각각 상위 10개만 보여준다. indices/kospi.html에서 한 단계 아래
+// stocks/*.html로 링크해야 하므로 경로 앞에 '../'를 붙인다.
+function renderIndexMovers(dailyMovers) {
+  const upEl = document.getElementById('idxMoversUp');
+  const downEl = document.getElementById('idxMoversDown');
+  if (!upEl && !downEl) return;
+  const gainers = dailyMovers.filter((m) => m.change > 0).sort((a, b) => b.change - a.change).slice(0, 10);
+  const losers = dailyMovers.filter((m) => m.change < 0).sort((a, b) => a.change - b.change).slice(0, 10);
+  function rowHtml(m) {
+    const cls = m.change >= 0 ? 'up' : 'down';
+    const sign = m.change >= 0 ? '+' : '';
+    return `<a class="idx-mover-row" href="../${m.page}">
+      <span class="idx-mover-name">${m.name}</span>
+      <span class="idx-mover-close">${m.close}</span>
+      <span class="idx-mover-chg ${cls}">${sign}${m.change.toFixed(2)}%</span>
+    </a>`;
+  }
+  if (upEl) upEl.innerHTML = gainers.length ? gainers.map(rowHtml).join('') : '<p class="idx-mover-empty">오늘 +5% 이상 상승 종목 없음</p>';
+  if (downEl) downEl.innerHTML = losers.length ? losers.map(rowHtml).join('') : '<p class="idx-mover-empty">오늘 -5% 이상 하락 종목 없음</p>';
+}
+
+// 7개 indices/*.html 페이지가 공통으로 호출하는 진입점.
+// cfg: { code, data, fmtValue?, unit?, marketIndices?, dailyMovers? }
+function initIndexDetailPage(cfg) {
+  const data = cfg.data;
+  if (!data || data.length < 2) return;
+  const fmtValue = cfg.fmtValue || function (v) { return v.toLocaleString('ko-KR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }); };
+  const unit = cfg.unit || '';
+
+  renderCandleChart({ svgId: 'idxSvg', controlsId: 'idxChartControls', data: data, fmtValue: fmtValue, unit: unit });
+  renderRsiChart({ svgId: 'idxRsiSvg', data: data });
+
+  const stats = computeIndexStats(data);
+  if (stats) {
+    renderIndexMaStatus('idxMaStatus', stats);
+    const volEl = document.getElementById('idxVolStat');
+    if (volEl) volEl.textContent = (stats.vol20d === null || isNaN(stats.vol20d)) ? '-' : stats.vol20d.toFixed(1) + '%';
+    renderIndexPeriodReturns('idxPeriodReturns', stats);
+    renderIndexMonthlyTable('idxMonthlyBody', stats, fmtValue);
+  }
+
+  if (cfg.marketIndices) renderIndexCompareGrid('idxCompareGrid', cfg.marketIndices, cfg.code);
+  if (cfg.dailyMovers) renderIndexMovers(cfg.dailyMovers);
+
+  initDpNews(cfg.code);
 }
