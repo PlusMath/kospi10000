@@ -685,6 +685,43 @@ function renderIndexMovers(dailyMovers) {
   if (downEl) downEl.innerHTML = losers.length ? losers.map(rowHtml).join('') : '<p class="idx-mover-empty">오늘 -5% 이상 하락 종목 없음</p>';
 }
 
+// "시계열 주요 뉴스" — data/news/{code}.json(30일 롤링 아카이브)를 initDpNews()처럼
+// 검색+페이지네이션 목록으로 보여주는 대신, 날짜 구분 없이 전체 기간을 하나의 타임라인
+// (.dp-tl, 종목 상세페이지 "연간 주요 뉴스"와 같은 스타일)으로 이어 보여준다(2026-09-07).
+// 데이터 소스는 initDpNews()와 동일 — 수집 방식이 아니라 보여주는 방식만 다르다.
+function renderNewsTimeline(code) {
+  const holder = document.getElementById('idxNewsTimeline');
+  if (!holder) return;
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  fetch(`../data/news/${code}.json?v=${Date.now()}`, { cache: 'no-store' })
+    .then(res => { if (!res.ok) throw new Error('no data'); return res.json(); })
+    .then(archive => {
+      const items = [];
+      Object.keys(archive).forEach(dateKey => {
+        (archive[dateKey] || []).forEach(n => items.push(n));
+      });
+      if (items.length === 0) {
+        holder.innerHTML = '<p class="dp-news-empty">최근 수집된 뉴스가 없습니다.</p>';
+        return;
+      }
+      // n.time은 "MM-dd HH:mm" 형식이라 문자열 내림차순 정렬만으로도 최신순이 됨(연도 경계 근처 예외는 무시).
+      items.sort((a, b) => (a.time < b.time ? 1 : (a.time > b.time ? -1 : 0)));
+      holder.innerHTML = items.map(n => `
+        <div class="dp-tl-item">
+          <span class="dp-tl-dot"></span>
+          <div class="dp-tl-date">${esc(n.time)}</div>
+          <a class="dp-tl-title" href="${esc(n.link)}" target="_blank" rel="noopener">${esc(n.title)}</a>
+          <div class="dp-tl-body">${esc(n.source)}</div>
+        </div>
+      `).join('');
+    })
+    .catch(() => {
+      holder.innerHTML = '<p class="dp-news-empty">뉴스 데이터를 불러오지 못했습니다.</p>';
+    });
+}
+
 // 7개 indices/*.html 페이지가 공통으로 호출하는 진입점.
 // cfg: { code, data, fmtValue?, unit?, marketIndices?, dailyMovers? }
 function initIndexDetailPage(cfg) {
@@ -716,5 +753,6 @@ function initIndexDetailPage(cfg) {
   if (cfg.marketIndices) renderIndexCompareGrid('idxCompareGrid', cfg.marketIndices, cfg.code);
   if (cfg.dailyMovers) renderIndexMovers(cfg.dailyMovers);
 
+  renderNewsTimeline(cfg.code);
   initDpNews(cfg.code);
 }
