@@ -78,6 +78,7 @@ def run(limit: int = 0, only_code: str | None = None, output_path: Path = OUTPUT
     specs = load_kospi10000_universe()
     logger.info("index.html에서 종목 %d개 로드", len(specs))
 
+    is_partial_run = bool(only_code) or limit > 0
     if only_code:
         specs = [s for s in specs if s.code == only_code]
         if not specs:
@@ -98,7 +99,22 @@ def run(limit: int = 0, only_code: str | None = None, output_path: Path = OUTPUT
         if r["data_status"] != "ok":
             logger.warning("%s(%s): %s - %s", r["ticker"], r["name"], r["data_status"], r.get("error_message"))
 
-    by_code = {}
+    # 2026-09-07 실측 버그 수정: --limit/--code로 일부 종목만 테스트 실행해도 항상 파일
+    # 전체를 "이번에 평가한 종목만" 담은 내용으로 덮어써서, 나머지 전 종목 데이터가
+    # 통째로 사라지는 사고가 실측됨(운영 세션에서 --limit 30으로 테스트했다가 79개
+    # 종목 데이터를 날릴 뻔함). --limit/--code(부분 실행)일 때는 기존 파일을 읽어와
+    # 병합하고, 이번에 평가한 종목만 갱신 — 인자 없는 전체 실행(운영 스케줄 기본값)은
+    # 기존과 동일하게 완전히 새로 씀(현재 유니버스와 정확히 일치시키기 위해 상장폐지
+    # 등으로 빠진 종목의 잔여 데이터를 자연스럽게 정리하는 의도된 동작).
+    by_code: dict[str, Any] = {}
+    if is_partial_run and output_path.exists():
+        try:
+            existing_raw = output_path.read_text(encoding="utf-8")
+            by_code.update(json.loads(existing_raw))
+            logger.info("부분 실행(--limit/--code) — 기존 %d종목에 병합", len(by_code))
+        except (OSError, json.JSONDecodeError) as e:
+            logger.warning("기존 파일 병합 실패(%s) - 이번에 평가한 종목만으로 저장", e)
+
     for spec, r in zip(specs, results):
         by_code[spec.code] = r
 
