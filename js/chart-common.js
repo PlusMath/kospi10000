@@ -685,40 +685,49 @@ function renderIndexMovers(dailyMovers) {
   if (downEl) downEl.innerHTML = losers.length ? losers.map(rowHtml).join('') : '<p class="idx-mover-empty">오늘 -5% 이상 하락 종목 없음</p>';
 }
 
-// "시계열 주요 뉴스" — data/news/{code}.json(30일 롤링 아카이브)를 initDpNews()처럼
-// 검색+페이지네이션 목록으로 보여주는 대신, 날짜 구분 없이 전체 기간을 하나의 타임라인
-// (.dp-tl, 종목 상세페이지 "연간 주요 뉴스"와 같은 스타일)으로 이어 보여준다(2026-09-07).
-// 데이터 소스는 initDpNews()와 동일 — 수집 방식이 아니라 보여주는 방식만 다르다.
-function renderNewsTimeline(code) {
+// "시계열 주요 뉴스" — "Daily 주요 뉴스"(최근 30일 실제 기사 스크랩)와는 성격이 완전히
+// 다르다(2026-09-08, 사용자 명확화). data/news/{code}.json을 그대로 재포장하는 게 아니라,
+// data/index_events/{code}.json — 수집 가능한 최대기간(수십 년치 일봉) 전체에서 실제 가격
+// 데이터로 감지한 급등락·사상 최고/최저 이벤트에 claude가 그 실제 수치를 근거로 한 문장씩
+// 설명을 붙인 아카이브 — 를 읽어 타임라인으로 보여준다. 감지·설명 생성은 update_daily_charts.ps1
+// 쪽(Get-DpIndexMajorEvents/Get-DpIndexEventDescriptions)에서 이미 끝난 상태이고, 여기서는
+// 그 결과를 그대로 시간순으로 나열만 한다.
+function renderIndexEventsTimeline(code) {
   const holder = document.getElementById('idxNewsTimeline');
   if (!holder) return;
   function esc(s) {
     return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   }
-  fetch(`../data/news/${code}.json?v=${Date.now()}`, { cache: 'no-store' })
+  function typeLabel(e) {
+    if (e.type === 'big_move') return (typeof e.changePct === 'number' && e.changePct < 0) ? '급락' : '급등';
+    if (e.type === 'new_high') return '사상 최고';
+    if (e.type === 'new_low') return '사상 최저';
+    return '';
+  }
+  fetch(`../data/index_events/${code}.json?v=${Date.now()}`, { cache: 'no-store' })
     .then(res => { if (!res.ok) throw new Error('no data'); return res.json(); })
     .then(archive => {
-      const items = [];
-      Object.keys(archive).forEach(dateKey => {
-        (archive[dateKey] || []).forEach(n => items.push(n));
-      });
-      if (items.length === 0) {
-        holder.innerHTML = '<p class="dp-news-empty">최근 수집된 뉴스가 없습니다.</p>';
+      const events = archive.events || [];
+      if (events.length === 0) {
+        holder.innerHTML = '<p class="dp-news-empty">아직 감지된 주요 사건이 없습니다.</p>';
         return;
       }
-      // n.time은 "MM-dd HH:mm" 형식이라 문자열 내림차순 정렬만으로도 최신순이 됨(연도 경계 근처 예외는 무시).
-      items.sort((a, b) => (a.time < b.time ? 1 : (a.time > b.time ? -1 : 0)));
-      holder.innerHTML = items.map(n => `
+      const sorted = events.slice().sort((a, b) => (a.date < b.date ? 1 : (a.date > b.date ? -1 : 0)));
+      holder.innerHTML = sorted.map(e => {
+        const closeStr = (typeof e.close === 'number') ? e.close.toLocaleString('ko-KR', { maximumFractionDigits: 2 }) : '-';
+        const chgStr = (typeof e.changePct === 'number') ? ` · 전일대비 ${e.changePct >= 0 ? '+' : ''}${e.changePct.toFixed(2)}%` : '';
+        return `
         <div class="dp-tl-item">
           <span class="dp-tl-dot"></span>
-          <div class="dp-tl-date">${esc(n.time)}</div>
-          <a class="dp-tl-title" href="${esc(n.link)}" target="_blank" rel="noopener">${esc(n.title)}</a>
-          <div class="dp-tl-body">${esc(n.source)}</div>
+          <div class="dp-tl-date">${esc(e.date)} <span class="dp-tl-badge">${esc(typeLabel(e))}</span></div>
+          <div class="dp-tl-title">${esc(e.description || '')}</div>
+          <div class="dp-tl-body">종가 ${closeStr}${chgStr}</div>
         </div>
-      `).join('');
+      `;
+      }).join('');
     })
     .catch(() => {
-      holder.innerHTML = '<p class="dp-news-empty">뉴스 데이터를 불러오지 못했습니다.</p>';
+      holder.innerHTML = '<p class="dp-news-empty">주요 사건 데이터를 불러오지 못했습니다.</p>';
     });
 }
 
@@ -753,6 +762,6 @@ function initIndexDetailPage(cfg) {
   if (cfg.marketIndices) renderIndexCompareGrid('idxCompareGrid', cfg.marketIndices, cfg.code);
   if (cfg.dailyMovers) renderIndexMovers(cfg.dailyMovers);
 
-  renderNewsTimeline(cfg.code);
+  renderIndexEventsTimeline(cfg.code);
   initDpNews(cfg.code);
 }
