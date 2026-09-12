@@ -47,6 +47,8 @@ body{background:var(--dp-bg);}
 .dp-summary-l{font-size:13px;font-weight:700;color:var(--dp-accent);margin-bottom:5px;}
 .dp-summary-b{font-size:13px;line-height:1.7;color:oklch(0.28 0.03 260);}
 .dp-logic-list{display:flex;flex-direction:column;margin:10px 0 14px;}
+.dp-logic-axis-h{font-size:11px;font-weight:800;color:var(--dp-accent);text-transform:uppercase;letter-spacing:0.02em;margin:10px 0 2px;}
+.dp-logic-axis-h:first-child{margin-top:0;}
 .dp-logic-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--dp-accent-soft2);}
 .dp-logic-item:last-child{border-bottom:none;}
 .dp-logic-info{display:flex;flex-direction:column;gap:2px;min-width:0;}
@@ -57,6 +59,7 @@ body{background:var(--dp-bg);}
 .dp-logic-btn.yes.active{background:var(--dp-up);border-color:var(--dp-up);color:#fff;}
 .dp-logic-btn.no.active{background:var(--dp-down);border-color:var(--dp-down);color:#fff;}
 .dp-logic-chart-l{font-size:12px;font-weight:700;color:var(--dp-text3);margin:12px 0 5px;padding-top:12px;border-top:1px dashed var(--dp-accent-soft2);}
+.dp-logic-chart-formula{font-size:12px;color:var(--dp-text3);margin-bottom:3px;}
 .dp-logic-chart-summary{font-size:15px;font-weight:800;margin-bottom:8px;}
 .dp-logic-chart-summary .dp-logic-chart-pct{font-weight:700;}
 .dp-logic-chart-note{font-size:11px;color:var(--dp-text4);margin-top:6px;}
@@ -174,10 +177,12 @@ body{background:var(--dp-bg);}
   .dp-stat-v{font-size:15.5px;}
   .dp-summary-l{font-size:14.5px;}
   .dp-summary-b{font-size:15px;}.dp-news-summary-l{font-size:14px;}.dp-news-summary-b{font-size:14.5px;}
+  .dp-logic-axis-h{font-size:12px;}
   .dp-logic-txt{font-size:14.5px;}
   .dp-logic-impact{font-size:12.5px;}
   .dp-logic-btn{font-size:13px;padding:6px 13px;}
   .dp-logic-chart-l{font-size:13px;}
+  .dp-logic-chart-formula{font-size:13px;}
   .dp-logic-chart-summary{font-size:16px;}
   .dp-logic-chart-note{font-size:12px;}
   .dp-openclose button{font-size:14px;}
@@ -271,9 +276,10 @@ body{background:var(--dp-bg);}
   <div class="dp-summary-l">핵심 투자 논리</div>
   <div class="dp-logic-list" id="dpLogicList"></div>
   <div class="dp-logic-chart-l">1년 후 예상 주가 (채택한 논리 기준)</div>
+  <div class="dp-logic-chart-formula" id="dpLogicChartFormula"></div>
   <div class="dp-logic-chart-summary" id="dpLogicChartSummary"></div>
   <svg id="dpLogicChart" viewBox="0 0 680 220" width="100%" style="display:block;"></svg>
-  <div class="dp-logic-chart-note">각 논리의 가격 반영분은 논리별 근거를 바탕으로 한 가정치이며, 실제 주가를 보장하지 않습니다.</div>
+  <div class="dp-logic-chart-note">목표주가 = 오늘 가격 × 이익 성장(EPS) 배수 × 밸류에이션(PER) 배수. 각 배수와 가격 반영분은 논리별 근거를 바탕으로 한 가정치이며, 실제 주가를 보장하지 않습니다.</div>
 </div>
 
 <!-- dp-news-summary:start --><div class="dp-news-summary">
@@ -955,16 +961,19 @@ const SECTION_IDS = ['tech','fund','valuation','timeline','thesis','consensus','
 let _dpTechDrawn = false, _dpAnnualDrawn = false, _dpQtrDrawn = false; let _dpNewsInit = false; let _dpMetricChartInit = false;
 
 // -- 핵심 투자 논리 (yes/no 토글로 1년 후 예상 주가 차트에 반영/제외) --
+// 이익(EPS) 축과 밸류에이션(PER) 축을 분리해 목표가 = 오늘가 × EPS배수 × PER배수 로 계산.
+// 같은 축 안에서는 단순 합산되지만, 축이 다른 논리를 함께 채택하면 두 배수가 곱해져
+// 개별 효과의 단순 합보다 더 크게(또는 작게) 상호작용하며 반영된다.
 const DP_PRICE_TODAY = 269500;
 const DP_PRICE_TODAY_LABEL = '오늘 (2026.09.09)';
 const DP_PRICE_TARGET_LABEL = '1년 후 (2027.09.09)';
+const DP_AXIS_LABELS = { eps: '이익 성장(EPS) 논리', per: '밸류에이션(PER) 논리' };
 const DP_LOGIC_ITEMS = [
-  { id: 'ai_hbm', label: 'AI·HBM 슈퍼사이클 지속', detail: 'HBM4 양산 확대·서버 D램 ASP 상승 지속 시', impact: 90000 },
-  { id: 'valuation', label: 'Forward PER 리레이팅', detail: 'Forward PER 7.65x가 업종 평균(약 15x)에 근접할 경우', impact: 70000 },
-  { id: 'momentum', label: '분기 실적 모멘텀 지속', detail: '2Q26 영업이익 +56.4%(QoQ) 성장세가 하반기에도 유지될 경우', impact: 60000 },
-  { id: 'technical', label: '기술적 추세 회복', detail: '120일선 지지 확인 후 신고가(374,500원) 재도전 시', impact: 40000 },
+  { id: 'memory_supercycle', axis: 'eps', label: 'AI·HBM 메모리 슈퍼사이클 지속', detail: 'HBM4 양산 확대·서버 D램 ASP 상승이 이어져 DS(반도체)부문 이익이 현재 추정치보다 추가 성장', impact: 0.20 },
+  { id: 'foundry_turnaround', axis: 'eps', label: '파운드리·시스템반도체 흑자전환', detail: '현재 부진한 비메모리 부문이 흑자로 전환되며 전사 이익에 추가로 기여', impact: 0.10 },
+  { id: 'per_rerating', axis: 'per', label: '업종 평균 수준 멀티플 리레이팅', detail: 'Forward PER 7.65x가 반도체 업종 평균(약 15x) 수준까지 재평가', impact: 0.25 },
+  { id: 'technical_confidence', axis: 'per', label: '기술적 반등 확인 (신고가 재도전)', detail: '120일선 지지 확인 후 신고가(374,500원) 재도전에 성공, 투자심리 개선', impact: 0.12 },
 ];
-const DP_LOGIC_MAX_TARGET = DP_PRICE_TODAY + DP_LOGIC_ITEMS.reduce((sum, item) => sum + item.impact, 0);
 const dpLogicState = {};
 DP_LOGIC_ITEMS.forEach((item) => { dpLogicState[item.id] = true; });
 
@@ -972,7 +981,15 @@ function dpRenderLogicList() {
   const list = document.getElementById('dpLogicList');
   if (!list) return;
   list.innerHTML = '';
+  let lastAxis = null;
   DP_LOGIC_ITEMS.forEach((item) => {
+    if (item.axis !== lastAxis) {
+      lastAxis = item.axis;
+      const h = document.createElement('div');
+      h.className = 'dp-logic-axis-h';
+      h.textContent = DP_AXIS_LABELS[item.axis];
+      list.appendChild(h);
+    }
     const row = document.createElement('div');
     row.className = 'dp-logic-item';
     const info = document.createElement('span');
@@ -982,8 +999,8 @@ function dpRenderLogicList() {
     txt.textContent = item.label + ' — ' + item.detail;
     const impact = document.createElement('span');
     impact.className = 'dp-logic-impact';
-    const pct = (item.impact / DP_PRICE_TODAY * 100).toFixed(1);
-    impact.textContent = '+' + item.impact.toLocaleString() + '원 (+' + pct + '%)';
+    const pct = (item.impact * 100).toFixed(0);
+    impact.textContent = (item.axis === 'eps' ? 'EPS ' : 'PER ') + '+' + pct + '%';
     info.appendChild(txt);
     info.appendChild(impact);
     const toggle = document.createElement('span');
@@ -1010,6 +1027,15 @@ function dpSetLogic(id, value) {
   dpLogicState[id] = value;
   dpRenderLogicChart();
 }
+function dpComputeLogicTarget() {
+  let epsFactor = 1, perFactor = 1;
+  DP_LOGIC_ITEMS.forEach((item) => {
+    if (!dpLogicState[item.id]) return;
+    if (item.axis === 'eps') epsFactor += item.impact;
+    else perFactor += item.impact;
+  });
+  return { epsFactor, perFactor, target: DP_PRICE_TODAY * epsFactor * perFactor };
+}
 function dpRenderLogicChart() {
   DP_LOGIC_ITEMS.forEach((item, i) => {
     const row = document.querySelectorAll('#dpLogicList .dp-logic-item')[i];
@@ -1018,16 +1044,18 @@ function dpRenderLogicChart() {
     row.querySelector('.dp-logic-btn.no').classList.toggle('active', !dpLogicState[item.id]);
   });
 
-  const adopted = DP_LOGIC_ITEMS.filter((item) => dpLogicState[item.id]);
-  const target = DP_PRICE_TODAY + adopted.reduce((sum, item) => sum + item.impact, 0);
+  const { epsFactor, perFactor, target } = dpComputeLogicTarget();
   const pct = ((target - DP_PRICE_TODAY) / DP_PRICE_TODAY * 100).toFixed(1);
   const pctColor = target === DP_PRICE_TODAY ? 'oklch(0.55 0.02 260)' : 'var(--dp-up)';
+  const formula = document.getElementById('dpLogicChartFormula');
+  formula.textContent = '이익 성장 ×' + epsFactor.toFixed(2) + '  ×  밸류에이션 ×' + perFactor.toFixed(2);
   const summary = document.getElementById('dpLogicChartSummary');
-  summary.innerHTML = target.toLocaleString() + '원 <span class="dp-logic-chart-pct" style="color:' + pctColor + ';">(+' + pct + '%)</span>';
+  summary.innerHTML = Math.round(target).toLocaleString() + '원 <span class="dp-logic-chart-pct" style="color:' + pctColor + ';">(+' + pct + '%)</span>';
 
   // 오늘→목표가를 잇되 실제 시세처럼 오르내리는 경로 생성 (시드 고정 랜덤워크 + 브릿지 보정으로 시작/끝 가격은 정확히 고정)
   const N = 26;
-  const seed = Math.round(target) * 1000 + adopted.length;
+  const adoptedCount = DP_LOGIC_ITEMS.filter((item) => dpLogicState[item.id]).length;
+  const seed = Math.round(target) * 1000 + adoptedCount;
   let s = seed >>> 0;
   function rand() {
     s |= 0; s = (s + 0x6D2B79F5) | 0;
@@ -1091,7 +1119,7 @@ function dpRenderLogicChart() {
   svg.appendChild(startLabel);
   const endLabelY = last[1] < pT + 14 ? last[1] + 16 : last[1] - 10;
   const endLabel = svgEl('text', { x: last[0], y: endLabelY, 'text-anchor': 'end', 'font-size': 11, 'font-weight': 800, fill: lineColor });
-  endLabel.textContent = target.toLocaleString() + '원';
+  endLabel.textContent = Math.round(target).toLocaleString() + '원';
   svg.appendChild(endLabel);
 
   // x축 라벨
