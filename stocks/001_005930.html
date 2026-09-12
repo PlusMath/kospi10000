@@ -45,7 +45,17 @@ body{background:var(--dp-bg);}
 .dp-stat-v{font-size:14px;font-weight:700;}
 .dp-summary{background:var(--dp-accent-soft);border:1px solid var(--dp-accent-soft2);border-radius:12px;padding:16px 18px;margin-bottom:28px;}
 .dp-summary-l{font-size:13px;font-weight:700;color:var(--dp-accent);margin-bottom:5px;}
-.dp-summary-b{font-size:13px;line-height:1.7;color:oklch(0.28 0.03 260);}.dp-news-summary{background:var(--dp-card);border:1px solid var(--dp-border);border-radius:12px;padding:14px 18px;margin-bottom:28px;}.dp-news-summary-l{font-size:12.5px;font-weight:700;color:var(--dp-text3);margin-bottom:5px;}.dp-news-summary-b{font-size:13px;line-height:1.6;color:var(--dp-text2);}.dp-news-summary-b a{color:inherit;text-decoration:underline;text-decoration-color:var(--dp-border2);}
+.dp-summary-b{font-size:13px;line-height:1.7;color:oklch(0.28 0.03 260);}
+.dp-logic-list{display:flex;flex-direction:column;margin:10px 0 14px;}
+.dp-logic-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--dp-accent-soft2);}
+.dp-logic-item:last-child{border-bottom:none;}
+.dp-logic-txt{font-size:13px;line-height:1.5;color:oklch(0.28 0.03 260);}
+.dp-logic-toggle{display:flex;gap:4px;flex-shrink:0;}
+.dp-logic-btn{padding:5px 12px;border-radius:7px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;border:1px solid var(--dp-border);background:var(--dp-card);color:var(--dp-text3);}
+.dp-logic-btn.yes.active{background:var(--dp-up);border-color:var(--dp-up);color:#fff;}
+.dp-logic-btn.no.active{background:var(--dp-down);border-color:var(--dp-down);color:#fff;}
+.dp-logic-analysis-l{font-size:12px;font-weight:700;color:var(--dp-text3);margin:12px 0 5px;padding-top:12px;border-top:1px dashed var(--dp-accent-soft2);}
+.dp-news-summary{background:var(--dp-card);border:1px solid var(--dp-border);border-radius:12px;padding:14px 18px;margin-bottom:28px;}.dp-news-summary-l{font-size:12.5px;font-weight:700;color:var(--dp-text3);margin-bottom:5px;}.dp-news-summary-b{font-size:13px;line-height:1.6;color:var(--dp-text2);}.dp-news-summary-b a{color:inherit;text-decoration:underline;text-decoration-color:var(--dp-border2);}
 .dp-openclose{display:flex;justify-content:flex-end;gap:10px;margin-bottom:10px;}
 .dp-openclose button{border:none;background:none;cursor:pointer;font-size:12.5px;font-weight:700;padding:0;font-family:inherit;}
 .dp-openclose .op{color:var(--dp-accent);}
@@ -159,6 +169,9 @@ body{background:var(--dp-bg);}
   .dp-stat-v{font-size:15.5px;}
   .dp-summary-l{font-size:14.5px;}
   .dp-summary-b{font-size:15px;}.dp-news-summary-l{font-size:14px;}.dp-news-summary-b{font-size:14.5px;}
+  .dp-logic-txt{font-size:14.5px;}
+  .dp-logic-btn{font-size:13px;padding:6px 13px;}
+  .dp-logic-analysis-l{font-size:13px;}
   .dp-openclose button{font-size:14px;}
   .dp-acc-h span:first-child{font-size:16.5px;}
   .dp-row2{font-size:14.5px;}
@@ -246,9 +259,11 @@ body{background:var(--dp-bg);}
   <div class="dp-stat"><div class="dp-stat-l">고점 대비</div><div class="dp-stat-v" style="color:var(--dp-down);">-34.3%</div></div>
 </div>
 
-<div class="dp-summary">
-  <div class="dp-summary-l">핵심 요약</div>
-  <div class="dp-summary-b">AI·HBM 반도체 슈퍼사이클의 최대 수혜주. 2023년 다운사이클 저점(EPS 2,131원) 이후 2024년(+132.3%)→2025년(+33.4%) 2년 연속 폭발적 이익 회복. 1Q26 EPS(7,123원)가 이미 2025년 연간 EPS(6,605원)를 초과하는 가속 국면. 신고가(374,500원) 대비 -34.3% 조정 중이나 120일선 상회로 중장기 추세는 유효.</div>
+<div class="dp-summary" id="dpLogicBox">
+  <div class="dp-summary-l">핵심 투자 논리</div>
+  <div class="dp-logic-list" id="dpLogicList"></div>
+  <div class="dp-logic-analysis-l">종합 분석 (채택한 논리 기준)</div>
+  <div class="dp-summary-b" id="dpLogicAnalysis"></div>
 </div>
 
 <!-- dp-news-summary:start --><div class="dp-news-summary">
@@ -928,6 +943,65 @@ body{background:var(--dp-bg);}
 <script>
 const SECTION_IDS = ['tech','fund','valuation','timeline','thesis','consensus','news'];
 let _dpTechDrawn = false, _dpAnnualDrawn = false, _dpQtrDrawn = false; let _dpNewsInit = false; let _dpMetricChartInit = false;
+
+// -- 핵심 투자 논리 (yes/no 토글로 종합 분석에 반영/제외) --
+const DP_LOGIC_BASE = '삼성전자는 2023년 다운사이클 저점(EPS 2,131원) 이후 2024년(+132.3%)→2025년(+33.4%) 2년 연속 이익이 회복되는 국면에 있다.';
+const DP_LOGIC_ITEMS = [
+  { id: 'ai_hbm', label: 'AI·HBM 반도체 슈퍼사이클 최대 수혜', text: 'HBM·D램 세계 1위 경쟁력을 바탕으로 AI 서버향 메모리 수요 폭증의 직접적 수혜를 받고 있다.' },
+  { id: 'valuation', label: '이익 가속 + Forward 밸류에이션 매력', text: '1Q26 EPS(7,123원)가 이미 2025년 연간 EPS(6,605원)를 넘어서는 이익 가속 국면이며, Forward PER 7.65x는 트레일링 대비 큰 폭 낮아 밸류에이션 매력이 부각되는 구간이다.' },
+  { id: 'momentum', label: '분기 실적 모멘텀 — 영업 레버리지', text: '2Q26 단독 영업이익(89조 4,924억)이 1Q26 대비도 +56.4% 늘며 분기 자체 기록을 경신했고, 매출 증가율(+98.7%)보다 이익 증가율(+813.1%)이 훨씬 큰 영업 레버리지가 뚜렷하다.' },
+  { id: 'technical', label: '기술적 추세 — 저점 대비 견조', text: '신고가(374,500원) 대비 -34.3% 조정 중이나 120일선은 여전히 상회하고 있고, 52주 저점 대비로는 +264.4% 높은 수준을 유지하고 있다.' },
+];
+const dpLogicState = {};
+DP_LOGIC_ITEMS.forEach((item) => { dpLogicState[item.id] = true; });
+
+function dpRenderLogicList() {
+  const list = document.getElementById('dpLogicList');
+  if (!list) return;
+  list.innerHTML = '';
+  DP_LOGIC_ITEMS.forEach((item) => {
+    const row = document.createElement('div');
+    row.className = 'dp-logic-item';
+    const txt = document.createElement('span');
+    txt.className = 'dp-logic-txt';
+    txt.textContent = item.label;
+    const toggle = document.createElement('span');
+    toggle.className = 'dp-logic-toggle';
+    const yesBtn = document.createElement('button');
+    yesBtn.type = 'button';
+    yesBtn.className = 'dp-logic-btn yes';
+    yesBtn.textContent = 'Yes';
+    yesBtn.onclick = () => dpSetLogic(item.id, true);
+    const noBtn = document.createElement('button');
+    noBtn.type = 'button';
+    noBtn.className = 'dp-logic-btn no';
+    noBtn.textContent = 'No';
+    noBtn.onclick = () => dpSetLogic(item.id, false);
+    toggle.appendChild(yesBtn);
+    toggle.appendChild(noBtn);
+    row.appendChild(txt);
+    row.appendChild(toggle);
+    list.appendChild(row);
+  });
+  dpRenderLogicAnalysis();
+}
+function dpSetLogic(id, value) {
+  dpLogicState[id] = value;
+  dpRenderLogicAnalysis();
+}
+function dpRenderLogicAnalysis() {
+  DP_LOGIC_ITEMS.forEach((item) => {
+    const row = document.querySelectorAll('#dpLogicList .dp-logic-item')[DP_LOGIC_ITEMS.indexOf(item)];
+    if (!row) return;
+    row.querySelector('.dp-logic-btn.yes').classList.toggle('active', dpLogicState[item.id]);
+    row.querySelector('.dp-logic-btn.no').classList.toggle('active', !dpLogicState[item.id]);
+  });
+  const adopted = DP_LOGIC_ITEMS.filter((item) => dpLogicState[item.id]);
+  const parts = [DP_LOGIC_BASE, ...adopted.map((item) => item.text)];
+  if (adopted.length === 0) parts.push('채택한 투자 논리가 없어 위 기본 흐름 외 추가 근거는 반영하지 않았습니다.');
+  document.getElementById('dpLogicAnalysis').textContent = parts.join(' ');
+}
+dpRenderLogicList();
 
 function dpEnsureLazyDraw(id) {
   if (id === 'tech' && !_dpTechDrawn) {
