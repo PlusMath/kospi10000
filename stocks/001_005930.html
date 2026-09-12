@@ -279,7 +279,7 @@ body{background:var(--dp-bg);}
   <div class="dp-logic-chart-formula" id="dpLogicChartFormula"></div>
   <div class="dp-logic-chart-summary" id="dpLogicChartSummary"></div>
   <svg id="dpLogicChart" viewBox="0 0 680 220" width="100%" style="display:block;"></svg>
-  <div class="dp-logic-chart-note">목표주가 = 오늘 가격 × 이익 성장(EPS) 배수 × 밸류에이션(PER) 배수. 각 배수와 가격 반영분은 논리별 근거를 바탕으로 한 가정치이며, 실제 주가를 보장하지 않습니다.</div>
+  <div class="dp-logic-chart-note">목표주가 = 오늘 가격 × 이익(EPS) 배수 × 밸류에이션 리레이팅 배수. 각 논리의 반영 비율은 컨센서스 Forward EPS·별도/연결 순이익 증가율·PBR·52주 최고가 등 실제 공시·컨센서스 수치의 비율로 계산한 값이며, 실제 주가를 보장하지 않습니다.</div>
 </div>
 
 <!-- dp-news-summary:start --><div class="dp-news-summary">
@@ -961,18 +961,24 @@ const SECTION_IDS = ['tech','fund','valuation','timeline','thesis','consensus','
 let _dpTechDrawn = false, _dpAnnualDrawn = false, _dpQtrDrawn = false; let _dpNewsInit = false; let _dpMetricChartInit = false;
 
 // -- 핵심 투자 논리 (yes/no 토글로 1년 후 예상 주가 차트에 반영/제외) --
-// 이익(EPS) 축과 밸류에이션(PER) 축을 분리해 목표가 = 오늘가 × EPS배수 × PER배수 로 계산.
+// 이익(EPS) 축과 밸류에이션 리레이팅 축을 분리해 목표가 = 오늘가 × EPS배수 × 리레이팅배수 로 계산.
 // 같은 축 안에서는 단순 합산되지만, 축이 다른 논리를 함께 채택하면 두 배수가 곱해져
-// 개별 효과의 단순 합보다 더 크게(또는 작게) 상호작용하며 반영된다.
+// 개별 효과의 단순 합보다 더 크게 상호작용하며 반영된다.
+// 각 논리의 impact는 반올림한 임의 수치가 아니라, 재무제표·컨센서스 실제 수치의 비율로 계산한 값이다:
+//   consensus_eps: 컨센서스 Forward EPS 48,239원(에프앤가이드) ÷ 1H26 EPS 연환산 35,900원 - 1 = 34.4%
+//   subsidiary_catchup: (1+별도 순이익 증가율 42.8%) ÷ (1+연결 순이익 증가율 31.2%) - 1 = 8.8%
+//   pbr_normalize: 업종 평균 PBR 4.58x ÷ 현재 PBR 3.31x - 1 = 38.4%
+//   prior_high_retest: 52주 최고가 374,500원 ÷ 현재가 269,500원 - 1 = 39.0%
 const DP_PRICE_TODAY = 269500;
 const DP_PRICE_TODAY_LABEL = '오늘 (2026.09.09)';
 const DP_PRICE_TARGET_LABEL = '1년 후 (2027.09.09)';
-const DP_AXIS_LABELS = { eps: '이익 성장(EPS) 논리', per: '밸류에이션(PER) 논리' };
+const DP_AXIS_LABELS = { eps: '이익(EPS) 성장 논리', per: '밸류에이션 리레이팅 논리' };
+const DP_AXIS_BADGE = { eps: 'EPS', per: '리레이팅' };
 const DP_LOGIC_ITEMS = [
-  { id: 'memory_supercycle', axis: 'eps', label: 'AI·HBM 메모리 슈퍼사이클 지속', detail: 'HBM4 양산 확대·서버 D램 ASP 상승이 이어져 DS(반도체)부문 이익이 현재 추정치보다 추가 성장', impact: 0.20 },
-  { id: 'foundry_turnaround', axis: 'eps', label: '파운드리·시스템반도체 흑자전환', detail: '현재 부진한 비메모리 부문이 흑자로 전환되며 전사 이익에 추가로 기여', impact: 0.10 },
-  { id: 'per_rerating', axis: 'per', label: '업종 평균 수준 멀티플 리레이팅', detail: 'Forward PER 7.65x가 반도체 업종 평균(약 15x) 수준까지 재평가', impact: 0.25 },
-  { id: 'technical_confidence', axis: 'per', label: '기술적 반등 확인 (신고가 재도전)', detail: '120일선 지지 확인 후 신고가(374,500원) 재도전에 성공, 투자심리 개선', impact: 0.12 },
+  { id: 'consensus_eps', axis: 'eps', label: '컨센서스 Forward EPS 달성', detail: '1H26 EPS 연환산(35,900원) → 컨센서스 Forward EPS(48,239원, 에프앤가이드 3개+ 증권사 평균) 도달 시', impact: 48239 / 35900 - 1 },
+  { id: 'subsidiary_catchup', axis: 'eps', label: '자회사·비메모리 부문 실적 개선', detail: '별도 순이익 증가율(+42.8%)과 연결 순이익 증가율(+31.2%)의 격차(11.6%p)가 해소될 경우', impact: 1.428 / 1.312 - 1 },
+  { id: 'pbr_normalize', axis: 'per', label: 'PBR 업종 평균 수준 정상화', detail: 'PBR 3.31x(현재 -27.6% 저평가) → 업종 평균 4.58x까지 회복 시', impact: 4.58 / 3.31 - 1 },
+  { id: 'prior_high_retest', axis: 'per', label: '52주 신고가 재도전', detail: '현재가 269,500원 → 52주 최고가 374,500원(2026.06.19) 재도전·회복 시', impact: 374500 / 269500 - 1 },
 ];
 const dpLogicState = {};
 DP_LOGIC_ITEMS.forEach((item) => { dpLogicState[item.id] = true; });
@@ -999,8 +1005,8 @@ function dpRenderLogicList() {
     txt.textContent = item.label + ' — ' + item.detail;
     const impact = document.createElement('span');
     impact.className = 'dp-logic-impact';
-    const pct = (item.impact * 100).toFixed(0);
-    impact.textContent = (item.axis === 'eps' ? 'EPS ' : 'PER ') + '+' + pct + '%';
+    const pct = (item.impact * 100).toFixed(1);
+    impact.textContent = DP_AXIS_BADGE[item.axis] + ' +' + pct + '%';
     info.appendChild(txt);
     info.appendChild(impact);
     const toggle = document.createElement('span');
