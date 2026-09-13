@@ -974,10 +974,14 @@ let _dpTechDrawn = false, _dpAnnualDrawn = false, _dpQtrDrawn = false; let _dpNe
 // 각 논리의 impact는 임의 수치가 아니라 재무제표·컨센서스 실제 수치의 비율로 계산한 값이다:
 //   consensus_eps: 컨센서스 Forward EPS 48,239원(에프앤가이드) ÷ 1H26 EPS 연환산 35,900원 - 1 = 34.4%
 //   subsidiary_catchup: (1+별도 순이익 증가율 42.8%) ÷ (1+연결 순이익 증가율 31.2%) - 1 = 8.8%
+//   revenue_growth: 1H26 매출 연환산(305.3729조×2) ÷ 2025년 매출 333.6059조 - 1 = 83.1%
 //   pbr_normalize: 업종 평균 PBR 4.58x ÷ 현재 PBR 3.31x - 1 = 38.4%
 //   target_price: 증권사 평균 목표주가 484,000원(5개 증권사) ÷ 현재가 269,500원 - 1 = 79.6%
 //   eps_reversion(하락): 1H26 EPS 연환산 35,900원 ÷ 컨센서스 Forward EPS 48,239원 - 1 = -25.6%
+//   revenue_decline(하락): 2025년 매출 333.6059조 ÷ 1H26 매출 연환산(610.7458조) - 1 = -45.4%
+//   downcycle(하락): 2023년 다운사이클 저점 EPS 2,131원 ÷ 컨센서스 Forward EPS 48,239원 - 1 = -95.6%
 //   low52_retest(하락): 52주 최저가 67,500원 ÷ 현재가 269,500원 - 1 = -75.0%
+//   per_discount(하락): 업종 내 최저 트레일링 PER 29.91x(SK하이닉스) ÷ 현재 PER 40.80x - 1 = -26.7%
 const DP_PRICE_TODAY = 269500;
 const DP_PRICE_TODAY_LABEL = '오늘 (2026.09.09)';
 const DP_PRICE_TARGET_LABEL = '1년 후 (2027.09.09)';
@@ -986,10 +990,14 @@ const DP_DIR_ARROW = { up: '▲', down: '▼' };
 const DP_LOGIC_ITEMS = [
   { id: 'consensus_eps', axis: 'eps', direction: 'up', title: '이익 전망 달성', sub: 'EPS 35,900원에서 컨센서스 목표치인 48,239원으로 오르는 경우', impact: 48239 / 35900 - 1 },
   { id: 'subsidiary_catchup', axis: 'eps', direction: 'up', title: '자회사 실적 정상화', sub: '이익 증가율 31.2%에서 본사 수준인 42.8%로 개선되는 경우', impact: 1.428 / 1.312 - 1 },
+  { id: 'revenue_growth', axis: 'eps', direction: 'up', title: '매출 성장 가속', sub: '매출액 333.6조원에서 1H26 연환산 기준 610.7조원으로 늘어나는 경우', impact: (305.3729 * 2) / 333.6059 - 1 },
   { id: 'pbr_normalize', axis: 'per', direction: 'up', title: '저평가 해소', sub: 'PBR 3.31배에서 업종 평균인 4.58배로 재평가되는 경우', impact: 4.58 / 3.31 - 1 },
   { id: 'target_price', axis: 'per', direction: 'up', title: '목표주가 도달', sub: '주가 269,500원에서 증권사 5곳 평균 목표가인 484,000원으로 오르는 경우', impact: 484000 / 269500 - 1 },
   { id: 'eps_reversion', axis: 'eps', direction: 'down', title: '이익 성장 둔화', sub: 'EPS 전망이 목표치 48,239원에서 35,900원으로 후퇴하는 경우', impact: 35900 / 48239 - 1 },
+  { id: 'revenue_decline', axis: 'eps', direction: 'down', title: '매출 성장 둔화', sub: '매출액이 연환산 610.7조원에서 2025년 실적 수준인 333.6조원으로 되돌아가는 경우', impact: 333.6059 / (305.3729 * 2) - 1 },
+  { id: 'downcycle', axis: 'eps', direction: 'down', title: '반도체 다운사이클 재진입', sub: 'EPS가 컨센서스 목표치 48,239원에서 2023년 저점 수준인 2,131원으로 급락하는 경우', impact: 2131 / 48239 - 1 },
   { id: 'low52_retest', axis: 'per', direction: 'down', title: '52주 저점 재하락', sub: '주가 269,500원에서 52주 최저가인 67,500원으로 되밀리는 경우', impact: 67500 / 269500 - 1 },
+  { id: 'per_discount', axis: 'per', direction: 'down', title: '밸류에이션 할인 확대', sub: 'PER 40.80배에서 업종 내 최저 수준인 29.91배로 낮아지는 경우', impact: 29.91 / 40.80 - 1 },
 ];
 const dpLogicState = {};
 DP_LOGIC_ITEMS.forEach((item) => { dpLogicState[item.id] = item.direction === 'up'; });
