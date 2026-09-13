@@ -285,7 +285,7 @@ body{background:var(--dp-bg);}
   <div class="dp-logic-chart-formula" id="dpLogicChartFormula"></div>
   <div class="dp-logic-chart-summary" id="dpLogicChartSummary"></div>
   <svg id="dpLogicChart" viewBox="0 0 680 220" width="100%" style="display:block;"></svg>
-  <div class="dp-logic-chart-note">각 포인트 옆 %는 실제 공시·컨센서스 수치를 기반으로 계산한 값입니다. 여러 개를 함께 채택하면 개별 효과보다 더 크게 반영되며, 실제 주가를 보장하지 않습니다.</div>
+  <div class="dp-logic-chart-note">각 포인트 옆 범위는 삼성전자 IR·TrendForce 전망 등 실제 자료를 근거로 한 독립 민감도(그 포인트만 변하고 나머지는 유지된다고 가정)이며, 예측값이 아닌 조건부 범위입니다. 토글 시에는 구간의 중간값으로 계산하며, 실제 주가는 환율·수급 등에 따라 범위를 벗어날 수 있습니다.</div>
 </div>
 
 <!-- dp-news-summary:start --><div class="dp-news-summary">
@@ -967,37 +967,33 @@ const SECTION_IDS = ['tech','fund','valuation','timeline','thesis','consensus','
 let _dpTechDrawn = false, _dpAnnualDrawn = false, _dpQtrDrawn = false; let _dpNewsInit = false; let _dpMetricChartInit = false;
 
 // -- 핵심 투자 논리 (yes/no 토글로 1년 후 예상 주가 차트에 반영/제외) --
-// 상승 포인트/하락 포인트로 먼저 나누고, 각 논리는 내부적으로 '이익(eps)'과 '밸류에이션(per)'
-// 두 축 중 하나에 속해 목표가 = 오늘가 × 이익배수 × 밸류에이션배수 로 계산된다(축 이름은
-// 화면에 노출하지 않음). 같은 축의 논리는 단순 합산, 다른 축을 함께 채택하면 두 배수가
-// 곱해져 단순 합보다 더 크게(상승) 또는 더 깊게(하락) 반영된다.
-// 각 논리의 impact는 임의 수치가 아니라 재무제표·컨센서스 실제 수치의 비율로 계산한 값이다:
-//   consensus_eps: 컨센서스 Forward EPS 48,239원(에프앤가이드) ÷ 1H26 EPS 연환산 35,900원 - 1 = 34.4%
-//   subsidiary_catchup: (1+별도 순이익 증가율 42.8%) ÷ (1+연결 순이익 증가율 31.2%) - 1 = 8.8%
-//   revenue_growth: 1H26 매출 연환산(305.3729조×2) ÷ 2025년 매출 333.6059조 - 1 = 83.1%
-//   pbr_normalize: 업종 평균 PBR 4.58x ÷ 현재 PBR 3.31x - 1 = 38.4%
-//   target_price: 증권사 평균 목표주가 484,000원(5개 증권사) ÷ 현재가 269,500원 - 1 = 79.6%
-//   eps_reversion(하락): 1H26 EPS 연환산 35,900원 ÷ 컨센서스 Forward EPS 48,239원 - 1 = -25.6%
-//   revenue_decline(하락): 2025년 매출 333.6059조 ÷ 1H26 매출 연환산(610.7458조) - 1 = -45.4%
-//   downcycle(하락): 2023년 다운사이클 저점 EPS 2,131원 ÷ 컨센서스 Forward EPS 48,239원 - 1 = -95.6%
-//   low52_retest(하락): 52주 최저가 67,500원 ÷ 현재가 269,500원 - 1 = -75.0%
-//   per_discount(하락): 업종 내 최저 트레일링 PER 29.91x(SK하이닉스) ÷ 현재 PER 40.80x - 1 = -26.7%
+// 삼성전자 2026년 2분기 IR·TrendForce 전망·삼성 뉴스룸 등 실제 자료를 근거로 한
+// "KOSPI 상위 10종목 주가 시나리오 모델"(2026-09-13)을 반영. 서로 겹치는 논리를
+// 통합해 상승 3개·하락 3개의 독립적인 포인트로 구성했다.
+// 각 포인트는 그 포인트만 변하고 나머지는 그대로라고 가정한 "독립 민감도"이며,
+// 내부적으로 이익(EPS) 변화율과 적용 PER 변화율 두 구간으로 나뉜다.
+// 목표가 = 오늘가 × (1+선택된 포인트들의 EPS 변화율 합) × (1+선택된 포인트들의 PER 변화율 합)
+// 로 계산해, 중복 없이 EPS·PER 두 축을 한 번씩만 반영한다(문서의 "종합 시나리오" 방식과 동일).
+// 배지의 범위(예: +15~31%)는 해당 포인트만 단독으로 변했을 때의 독립 영향 범위이며,
+// 토글 시 계산에는 그 구간의 중간값을 사용한다.
+//   memory_hbm: EPS +15~25%(중간값 20%), PER +0~5%(중간값 2.5%) → 독립 영향 +15~31%
+//   dx_foundry: EPS +3~7%(중간값 5%), PER +2~4%(중간값 3%) → 독립 영향 +5~11%
+//   capital_return: PER +4~8%(중간값 6%, 현금수익률·자본배분 신뢰 재평가) → 독립 영향 +4~8%
+//   memory_normalize(하락): EPS -20~-30%(중간값 -25%), PER -5~-10%(중간값 -7.5%) → -24~-37%
+//   dx_foundry_delay(하락): EPS -3~-6%(중간값 -4.5%), PER -2~-5%(중간값 -3.5%) → -5~-11%
+//   capital_disappoint(하락): PER -2~-6%(중간값 -4%) → -2~-6%
 const DP_PRICE_TODAY = 269500;
 const DP_PRICE_TODAY_LABEL = '오늘 (2026.09.09)';
 const DP_PRICE_TARGET_LABEL = '1년 후 (2027.09.09)';
 const DP_DIR_LABELS = { up: '상승 포인트', down: '하락 포인트' };
 const DP_DIR_ARROW = { up: '▲', down: '▼' };
 const DP_LOGIC_ITEMS = [
-  { id: 'consensus_eps', axis: 'eps', direction: 'up', title: '이익 전망 달성', sub: 'EPS 35,900원에서 컨센서스 목표치인 48,239원으로 오르는 경우', impact: 48239 / 35900 - 1 },
-  { id: 'subsidiary_catchup', axis: 'eps', direction: 'up', title: '자회사 실적 정상화', sub: '이익 증가율 31.2%에서 본사 수준인 42.8%로 개선되는 경우', impact: 1.428 / 1.312 - 1 },
-  { id: 'revenue_growth', axis: 'eps', direction: 'up', title: '매출 성장 가속', sub: '매출액 333.6조원에서 1H26 연환산 기준 610.7조원으로 늘어나는 경우', impact: (305.3729 * 2) / 333.6059 - 1 },
-  { id: 'pbr_normalize', axis: 'per', direction: 'up', title: '저평가 해소', sub: 'PBR 3.31배에서 업종 평균인 4.58배로 재평가되는 경우', impact: 4.58 / 3.31 - 1 },
-  { id: 'target_price', axis: 'per', direction: 'up', title: '목표주가 도달', sub: '주가 269,500원에서 증권사 5곳 평균 목표가인 484,000원으로 오르는 경우', impact: 484000 / 269500 - 1 },
-  { id: 'eps_reversion', axis: 'eps', direction: 'down', title: '이익 성장 둔화', sub: 'EPS 전망이 목표치 48,239원에서 35,900원으로 후퇴하는 경우', impact: 35900 / 48239 - 1 },
-  { id: 'revenue_decline', axis: 'eps', direction: 'down', title: '매출 성장 둔화', sub: '매출액이 연환산 610.7조원에서 2025년 실적 수준인 333.6조원으로 되돌아가는 경우', impact: 333.6059 / (305.3729 * 2) - 1 },
-  { id: 'downcycle', axis: 'eps', direction: 'down', title: '반도체 다운사이클 재진입', sub: 'EPS가 컨센서스 목표치 48,239원에서 2023년 저점 수준인 2,131원으로 급락하는 경우', impact: 2131 / 48239 - 1 },
-  { id: 'low52_retest', axis: 'per', direction: 'down', title: '52주 저점 재하락', sub: '주가 269,500원에서 52주 최저가인 67,500원으로 되밀리는 경우', impact: 67500 / 269500 - 1 },
-  { id: 'per_discount', axis: 'per', direction: 'down', title: '밸류에이션 할인 확대', sub: 'PER 40.80배에서 업종 내 최저 수준인 29.91배로 낮아지는 경우', impact: 29.91 / 40.80 - 1 },
+  { id: 'memory_hbm', direction: 'up', title: '메모리·HBM4 강세', sub: '2Q26 메모리 매출 120.8조원(전분기比 +62%)에 이어 HBM4 판매 확대가 지속되는 경우', rangeLabel: '+15~31%', epsImpact: 0.20, perImpact: 0.025 },
+  { id: 'dx_foundry', direction: 'up', title: 'DX 흑자·파운드리 회복', sub: 'DX가 분기 흑자로 전환하고 파운드리 매출이 두 자릿수 성장하는 경우', rangeLabel: '+5~11%', epsImpact: 0.05, perImpact: 0.03 },
+  { id: 'capital_return', direction: 'up', title: '주주환원 확대', sub: '2026년 환원 90~110조원 중 상단에 가깝고 자사주 소각 비중이 높아지는 경우', rangeLabel: '+4~8%', epsImpact: 0, perImpact: 0.06 },
+  { id: 'memory_normalize', direction: 'down', title: '메모리 이익 정상화', sub: 'DRAM 가격 상승 폭이 둔화되며 상반기의 이례적 이익 수준이 정상화되는 경우', rangeLabel: '-24~-37%', epsImpact: -0.25, perImpact: -0.075 },
+  { id: 'dx_foundry_delay', direction: 'down', title: 'DX 적자·파운드리 지연', sub: 'DX 적자가 지속되고 2nm 파운드리 양산·대형 고객 확보가 계획보다 늦어지는 경우', rangeLabel: '-5~-11%', epsImpact: -0.045, perImpact: -0.035 },
+  { id: 'capital_disappoint', direction: 'down', title: '환원 구성 실망', sub: '환원 규모가 90조원 하단에 머물고 소각보다 현금배당·보상용 매입 비중이 높은 경우', rangeLabel: '-2~-6%', epsImpact: 0, perImpact: -0.04 },
 ];
 const dpLogicState = {};
 DP_LOGIC_ITEMS.forEach((item) => { dpLogicState[item.id] = item.direction === 'up'; });
@@ -1020,9 +1016,8 @@ function dpRenderLogicList() {
     const info = document.createElement('span');
     info.className = 'dp-logic-info';
     const impact = document.createElement('span');
-    impact.className = 'dp-logic-impact' + (item.impact < 0 ? ' down' : '');
-    const pct = Math.round(item.impact * 100);
-    impact.textContent = (pct >= 0 ? '+' : '') + pct + '%';
+    impact.className = 'dp-logic-impact' + (item.direction === 'down' ? ' down' : '');
+    impact.textContent = item.rangeLabel;
     const text = document.createElement('span');
     text.className = 'dp-logic-text';
     const txt = document.createElement('div');
@@ -1063,10 +1058,10 @@ function dpComputeLogicTarget() {
   let epsFactor = 1, perFactor = 1;
   DP_LOGIC_ITEMS.forEach((item) => {
     if (!dpLogicState[item.id]) return;
-    if (item.axis === 'eps') epsFactor += item.impact;
-    else perFactor += item.impact;
+    epsFactor += item.epsImpact;
+    perFactor += item.perImpact;
   });
-  // 여러 하락 논리가 같은 축에서 겹치면 배수가 0 이하로 내려갈 수 있어, 실제 주가처럼
+  // 여러 하락 포인트가 겹치면 배수가 0 이하로 내려갈 수 있어, 실제 주가처럼
   // 완전히 0/음수로 떨어지지 않도록 축별 최소값(5%)을 둔다.
   epsFactor = Math.max(epsFactor, 0.05);
   perFactor = Math.max(perFactor, 0.05);
@@ -1080,7 +1075,7 @@ function dpRenderLogicChart() {
     const yesBtn = row.querySelector('.dp-logic-btn.yes');
     const noBtn = row.querySelector('.dp-logic-btn.no');
     const isYes = dpLogicState[item.id];
-    const yesColor = item.impact >= 0 ? 'var(--dp-up)' : 'var(--dp-down)';
+    const yesColor = item.direction === 'up' ? 'var(--dp-up)' : 'var(--dp-down)';
     yesBtn.classList.toggle('active', isYes);
     yesBtn.style.background = isYes ? yesColor : '';
     yesBtn.style.borderColor = isYes ? yesColor : '';
