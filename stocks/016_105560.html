@@ -47,17 +47,19 @@ body{background:var(--dp-bg);}
 .dp-summary-l{font-size:13px;font-weight:700;color:var(--dp-accent);margin-bottom:5px;}
 .dp-summary-b{font-size:13px;line-height:1.7;color:oklch(0.28 0.03 260);}
 .dp-logic-list{display:flex;flex-direction:column;margin:10px 0 14px;}
-.dp-logic-dir-h{font-size:13px;font-weight:800;margin:14px 0 4px;padding-top:12px;border-top:1px solid var(--dp-accent-soft2);}
+.dp-logic-dir-h{display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:800;margin:16px 0 6px;padding-top:14px;border-top:1px solid var(--dp-accent-soft2);}
 .dp-logic-dir-h:first-child{margin-top:0;padding-top:0;border-top:none;}
 .dp-logic-dir-h.up{color:var(--dp-up);}
 .dp-logic-dir-h.down{color:var(--dp-down);}
-.dp-logic-axis-h{font-size:11px;font-weight:800;color:var(--dp-text3);text-transform:uppercase;letter-spacing:0.02em;margin:8px 0 2px;}
-.dp-logic-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--dp-accent-soft2);}
+.dp-logic-dir-h .arrow{font-size:15px;}
+.dp-logic-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--dp-accent-soft2);}
 .dp-logic-item:last-child{border-bottom:none;}
-.dp-logic-info{display:flex;flex-direction:column;gap:2px;min-width:0;}
-.dp-logic-txt{font-size:13px;line-height:1.5;color:oklch(0.28 0.03 260);}
-.dp-logic-impact{font-size:11.5px;font-weight:700;color:var(--dp-up);}
-.dp-logic-impact.down{color:var(--dp-down);}
+.dp-logic-info{display:flex;align-items:center;gap:9px;min-width:0;}
+.dp-logic-impact{flex-shrink:0;font-size:12.5px;font-weight:800;color:var(--dp-up);background:oklch(0.55 0.2 25 / 0.1);border-radius:6px;padding:3px 7px;}
+.dp-logic-impact.down{color:var(--dp-down);background:oklch(0.52 0.14 250 / 0.1);}
+.dp-logic-text{min-width:0;}
+.dp-logic-txt{font-size:13.5px;font-weight:700;color:oklch(0.2 0.02 260);line-height:1.4;}
+.dp-logic-sub{font-size:12px;color:var(--dp-text3);line-height:1.4;margin-top:1px;}
 .dp-logic-toggle{display:flex;gap:4px;flex-shrink:0;}
 .dp-logic-btn{padding:5px 12px;border-radius:7px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;border:1px solid var(--dp-border);background:var(--dp-card);color:var(--dp-text3);}
 .dp-logic-btn.active{color:#fff;}
@@ -154,10 +156,10 @@ body{background:var(--dp-bg);}
   .dp-stat-v{font-size:15.5px;}
   .dp-summary-l{font-size:14.5px;}
   .dp-summary-b{font-size:15px;}.dp-news-summary-l{font-size:14px;}.dp-news-summary-b{font-size:14.5px;}
-  .dp-logic-dir-h{font-size:14.5px;}
-  .dp-logic-axis-h{font-size:12px;}
+  .dp-logic-dir-h{font-size:15.5px;}
   .dp-logic-txt{font-size:14.5px;}
-  .dp-logic-impact{font-size:12.5px;}
+  .dp-logic-sub{font-size:13px;}
+  .dp-logic-impact{font-size:13px;}
   .dp-logic-btn{font-size:13px;padding:6px 13px;}
   .dp-logic-chart-l{font-size:13px;}
   .dp-logic-chart-formula{font-size:13px;}
@@ -245,7 +247,7 @@ body{background:var(--dp-bg);}
   <div class="dp-logic-chart-formula" id="dpLogicChartFormula"></div>
   <div class="dp-logic-chart-summary" id="dpLogicChartSummary"></div>
   <svg id="dpLogicChart" viewBox="0 0 680 220" width="100%" style="display:block;"></svg>
-  <div class="dp-logic-chart-note">목표주가 = 오늘 가격 × 이익(EPS) 배수 × 밸류에이션 리레이팅 배수. 상승/하락 포인트 모두 컨센서스 Forward EPS·평균 목표주가·PER·PBR·52주 최고가·52주 최저가 등 실제 공시·컨센서스 수치의 비율로 계산한 값이며, 실제 주가를 보장하지 않습니다.</div>
+  <div class="dp-logic-chart-note">각 포인트 옆 범위는 실적 발표·업계 전망 등 실제 자료를 근거로 한 독립 민감도(그 포인트만 변하고 나머지는 유지된다고 가정)이며, 예측값이 아닌 조건부 범위입니다. 토글 시에는 구간의 중간값으로 계산하며, 실제 주가는 환율·수급 등에 따라 범위를 벗어날 수 있습니다.</div>
 </div>
 
 <!-- dp-news-summary:start --><div class="dp-news-summary">
@@ -916,22 +918,24 @@ const SECTION_IDS = ['tech','fund','valuation','timeline','thesis','consensus','
 let _dpTechDrawn = false, _dpAnnualDrawn = false, _dpQtrDrawn = false; let _dpNewsInit = false; let _dpMetricChartInit = false;
 
 // -- 핵심 투자 논리 (yes/no 토글로 1년 후 예상 주가 차트에 반영/제외) --
-// 이익(EPS) 축과 밸류에이션 리레이팅 축을 분리해 목표가 = 오늘가 × EPS배수 × 리레이팅배수 로 계산.
-// 같은 축 안에서는 단순 합산되지만, 축이 다른 논리를 함께 채택하면 두 배수가 곱해져
-// 개별 효과의 단순 합보다 더 크게 상호작용하며 반영된다. 상승 포인트는 impact가 양수,
-// 하락 포인트는 impact가 음수인 항목으로, 계산 로직은 동일하게 공유한다.
-// 각 논리의 impact는 임의 수치가 아니라 컨센서스·재무 실제 수치의 비율로 계산한 값이다.
+// "KOSPI 상위 10종목 주가 시나리오 모델"(2026-09-13)을 반영. 상승 3개·하락 3개의
+// 서로 겹치지 않는 독립 포인트로 구성했다. 각 포인트는 그 포인트만 변하고 나머지는
+// 유지된다는 "독립 민감도"이며, 내부적으로 EPS 변화율과 적용 PER 변화율로 나뉜다.
+// 목표가 = 오늘가 × (1+선택 포인트 EPS 변화율 합) × (1+선택 포인트 PER 변화율 합)
+// 로 계산해 중복 없이 EPS·PER 두 축을 한 번씩만 반영한다. 배지의 범위(예: +15~31%)는
+// 해당 포인트만 단독으로 변했을 때의 독립 영향 범위이며, 토글 계산에는 중간값을 쓴다.
 const DP_PRICE_TODAY = 172000;
 const DP_PRICE_TODAY_LABEL = '오늘 (2026.09.09)';
 const DP_PRICE_TARGET_LABEL = '1년 후 (2027.09.09)';
-const DP_AXIS_LABELS = { eps: '이익(EPS)', per: '밸류에이션 리레이팅' };
-const DP_AXIS_BADGE = { eps: 'EPS', per: '리레이팅' };
 const DP_DIR_LABELS = { up: '상승 포인트', down: '하락 포인트' };
+const DP_DIR_ARROW = { up: '▲', down: '▼' };
 const DP_LOGIC_ITEMS = [
-  { id: 'target_price', axis: 'eps', direction: 'up', label: '컨센서스 평균 목표주가 반영', detail: '현재가(172,000원) → 애널리스트 평균 목표주가(219,200원, 5개 증권사) 도달 시', impact: 0.27441860465116275 },
-  { id: 'prior_high_retest', axis: 'per', direction: 'up', label: '52주 신고가 재도전', detail: '현재가(172,000원) → 52주 최고가(194,500원) 재도전·회복 시', impact: 0.1308139534883721 },
-  { id: 'low52_retest', axis: 'per', direction: 'down', label: '52주 저점 대비 재하락', detail: '현재가(172,000원) → 52주 최저가(105,800원)까지 되밀릴 경우', impact: -0.3848837209302326 },
-  { id: 'per_correction', axis: 'per', direction: 'down', label: 'PER 업종 평균 수준 조정', detail: '현재 PER이 업종 평균(8.82x) 대비 26.5% 고평가 상태 → 업종 평균 수준으로 조정될 경우', impact: -0.20948616600790515 },
+  { id: 'profit_roe', direction: 'up', title: '순이익·ROE 지속', sub: '상반기 순이익 3.8846조원(+13.1%), ROE 14.09%가 유지되는 경우', rangeLabel: '+8~16%', epsImpact: 0.075, perImpact: 0.0419 },
+  { id: 'cet1_buyback', direction: 'up', title: 'CET1 연계 소각 확대', sub: 'CET1 13.74%가 기준(13.5%)을 웃도는 초과자본을 유지하며 연말 추가 환원이 이어지는 경우', rangeLabel: '+6~12%', epsImpact: 0.044, perImpact: 0.044 },
+  { id: 'nonbank_fee', direction: 'up', title: '비은행·수수료 성장', sub: '증권 순이익 기여 21%, 비이자이익이 33.3% 성장하는 경우', rangeLabel: '+5~10%', epsImpact: 0, perImpact: 0.075 },
+  { id: 'nim_decline', direction: 'down', title: 'NIM 하락', sub: '은행 순이자마진(NIM) 1.74%에서 추가 하락하고 조달비용이 상승하는 경우', rangeLabel: '-8~-15%', epsImpact: -0.115, perImpact: 0 },
+  { id: 'credit_cost', direction: 'down', title: '신용비용·RWA 증가', sub: 'PF·기업대출 충당금이 늘고 환율 상승으로 CET1이 13.5%를 하회하는 경우', rangeLabel: '-10~-20%', epsImpact: -0.0806, perImpact: -0.0806 },
+  { id: 'regulatory_volatility', direction: 'down', title: '자본시장·규제 변동성', sub: '증시 둔화와 보험 손해율 상승, 상생금융·수수료 규제가 겹치는 경우', rangeLabel: '-5~-12%', epsImpact: -0.0433, perImpact: -0.0433 },
 ];
 const dpLogicState = {};
 DP_LOGIC_ITEMS.forEach((item) => { dpLogicState[item.id] = item.direction === 'up'; });
@@ -941,36 +945,33 @@ function dpRenderLogicList() {
   if (!list) return;
   list.innerHTML = '';
   let lastDir = null;
-  let lastAxis = null;
   DP_LOGIC_ITEMS.forEach((item) => {
     if (item.direction !== lastDir) {
       lastDir = item.direction;
-      lastAxis = null;
       const dh = document.createElement('div');
       dh.className = 'dp-logic-dir-h ' + item.direction;
-      dh.textContent = DP_DIR_LABELS[item.direction];
+      dh.innerHTML = '<span class="arrow">' + DP_DIR_ARROW[item.direction] + '</span> ' + DP_DIR_LABELS[item.direction];
       list.appendChild(dh);
-    }
-    if (item.axis !== lastAxis) {
-      lastAxis = item.axis;
-      const h = document.createElement('div');
-      h.className = 'dp-logic-axis-h';
-      h.textContent = DP_AXIS_LABELS[item.axis];
-      list.appendChild(h);
     }
     const row = document.createElement('div');
     row.className = 'dp-logic-item';
     const info = document.createElement('span');
     info.className = 'dp-logic-info';
-    const txt = document.createElement('span');
-    txt.className = 'dp-logic-txt';
-    txt.textContent = item.label + ' — ' + item.detail;
     const impact = document.createElement('span');
-    impact.className = 'dp-logic-impact' + (item.impact < 0 ? ' down' : '');
-    const pct = (item.impact * 100).toFixed(1);
-    impact.textContent = DP_AXIS_BADGE[item.axis] + ' ' + (item.impact >= 0 ? '+' : '') + pct + '%';
-    info.appendChild(txt);
+    impact.className = 'dp-logic-impact' + (item.direction === 'down' ? ' down' : '');
+    impact.textContent = item.rangeLabel;
+    const text = document.createElement('span');
+    text.className = 'dp-logic-text';
+    const txt = document.createElement('div');
+    txt.className = 'dp-logic-txt';
+    txt.textContent = item.title;
+    const sub = document.createElement('div');
+    sub.className = 'dp-logic-sub';
+    sub.textContent = item.sub;
+    text.appendChild(txt);
+    text.appendChild(sub);
     info.appendChild(impact);
+    info.appendChild(text);
     const toggle = document.createElement('span');
     toggle.className = 'dp-logic-toggle';
     const yesBtn = document.createElement('button');
@@ -999,10 +1000,10 @@ function dpComputeLogicTarget() {
   let epsFactor = 1, perFactor = 1;
   DP_LOGIC_ITEMS.forEach((item) => {
     if (!dpLogicState[item.id]) return;
-    if (item.axis === 'eps') epsFactor += item.impact;
-    else perFactor += item.impact;
+    epsFactor += item.epsImpact;
+    perFactor += item.perImpact;
   });
-  // 여러 하락 논리가 같은 축에서 겹치면 배수가 0 이하로 내려갈 수 있어, 실제 주가처럼
+  // 여러 하락 포인트가 겹치면 배수가 0 이하로 내려갈 수 있어, 실제 주가처럼
   // 완전히 0/음수로 떨어지지 않도록 축별 최소값(5%)을 둔다.
   epsFactor = Math.max(epsFactor, 0.05);
   perFactor = Math.max(perFactor, 0.05);
@@ -1016,7 +1017,7 @@ function dpRenderLogicChart() {
     const yesBtn = row.querySelector('.dp-logic-btn.yes');
     const noBtn = row.querySelector('.dp-logic-btn.no');
     const isYes = dpLogicState[item.id];
-    const yesColor = item.impact >= 0 ? 'var(--dp-up)' : 'var(--dp-down)';
+    const yesColor = item.direction === 'up' ? 'var(--dp-up)' : 'var(--dp-down)';
     yesBtn.classList.toggle('active', isYes);
     yesBtn.style.background = isYes ? yesColor : '';
     yesBtn.style.borderColor = isYes ? yesColor : '';
@@ -1025,12 +1026,14 @@ function dpRenderLogicChart() {
     noBtn.style.borderColor = !isYes ? NEUTRAL : '';
   });
 
-  const { epsFactor, perFactor, target } = dpComputeLogicTarget();
+  const { target } = dpComputeLogicTarget();
   const pct = ((target - DP_PRICE_TODAY) / DP_PRICE_TODAY * 100).toFixed(1);
   const pctColor = target === DP_PRICE_TODAY ? NEUTRAL : (target > DP_PRICE_TODAY ? 'var(--dp-up)' : 'var(--dp-down)');
   const pctSign = target >= DP_PRICE_TODAY ? '+' : '';
+  const upCount = DP_LOGIC_ITEMS.filter((item) => item.direction === 'up' && dpLogicState[item.id]).length;
+  const downCount = DP_LOGIC_ITEMS.filter((item) => item.direction === 'down' && dpLogicState[item.id]).length;
   const formula = document.getElementById('dpLogicChartFormula');
-  formula.textContent = '이익 성장 ×' + epsFactor.toFixed(2) + '  ×  밸류에이션 ×' + perFactor.toFixed(2);
+  formula.textContent = '채택한 논리 — 상승 ' + upCount + '개 · 하락 ' + downCount + '개';
   const summary = document.getElementById('dpLogicChartSummary');
   summary.innerHTML = Math.round(target).toLocaleString() + '원 <span class="dp-logic-chart-pct" style="color:' + pctColor + ';">(' + pctSign + pct + '%)</span>';
 
