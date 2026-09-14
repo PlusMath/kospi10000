@@ -816,7 +816,7 @@ const SECTION_IDS = ['tech','fund','valuation','timeline','thesis','consensus','
 let _dpTechDrawn = false, _dpAnnualDrawn = false, _dpQtrDrawn = false; let _dpNewsInit = false; let _dpMetricChartInit = false;
 
 // -- 핵심 투자 논리 (yes/no 토글로 1년 후 예상 주가 차트에 반영/제외) --
-// "KOSPI 상위 10종목 주가 시나리오 모델"(2026-09-13)을 반영. 상승 3개·하락 3개의
+// "KOSPI 12~20위 종목별 상승·하락 3개와 가격 시나리오"(2026-09-14)를 반영. 상승 3개·하락 3개의
 // 서로 겹치지 않는 독립 포인트로 구성했다. 각 포인트는 그 포인트만 변하고 나머지는
 // 유지된다는 "독립 민감도"이며, 내부적으로 EPS 변화율과 적용 PER 변화율로 나뉜다.
 // 목표가 = 오늘가 × (1+선택 포인트 EPS 변화율 합) × (1+선택 포인트 PER 변화율 합)
@@ -828,12 +828,12 @@ const DP_PRICE_TARGET_LABEL = '1년 후 (2027.09.11)';
 const DP_DIR_LABELS = { up: '상승 포인트', down: '하락 포인트' };
 const DP_DIR_ARROW = { up: '▲', down: '▼' };
 const DP_LOGIC_ITEMS = [
-  { id: 'cdmo_orders', direction: 'up', title: 'CDMO 수주·고마진 성장', sub: '누적 계약가치 216억달러의 매출 전환이 이어지고 연간 가이던스 상단을 달성하는 경우', rangeLabel: '+12~22%', epsImpact: 0.13, perImpact: 0.04 },
-  { id: 'plant5_utilization', direction: 'up', title: '5공장 가동률 상승', sub: '5공장이 PPQ를 완료하고 대형 고객 배치가 계획대로 늘어나는 경우', rangeLabel: '+8~18%', epsImpact: 0.063, perImpact: 0.063 },
-  { id: 'polypeptide_synergy', direction: 'up', title: 'PolyPeptide 시너지', sub: '약 2.71조원 규모 PolyPeptide 인수로 펩타이드 고객 교차수주와 유럽·인도 네트워크 활용이 현실화되는 경우', rangeLabel: '+6~15%', epsImpact: 0, perImpact: 0.105 },
-  { id: 'rights_offering', direction: 'down', title: '유상증자·주식 수 증가', sub: '227만주, 3조원 규모 유상증자(약 4.9% 물량)로 희석 부담이 부각되는 경우', rangeLabel: '-4~-9%', epsImpact: -0.065, perImpact: 0 },
-  { id: 'acquisition_integration', direction: 'down', title: '인수 프리미엄·통합 실패', sub: 'PolyPeptide 인수 후 수주·마진 시너지가 지연되는 경우', rangeLabel: '-8~-18%', epsImpact: -0.0673, perImpact: -0.0673 },
-  { id: 'expansion_risk', direction: 'down', title: '증설·품질·환율 리스크', sub: '5공장·Rockville 초기비용과 배치 차질, 원화 강세가 겹치는 경우', rangeLabel: '-8~-20%', epsImpact: -0.1, perImpact: -0.0444 },
+  { id: 'plant_utilization', direction: 'up', title: '기존 공장 고가동률', sub: '2026년 2분기 매출 1조 3,209억원(전년比 +30.24%), 1~4공장 완전 가동이 성장 요인으로 유지되는 경우', rangeLabel: '+1~5%', epsImpact: 0, perImpact: 0.0463 },
+  { id: 'new_site_contribution', direction: 'up', title: '신규 생산거점 기여', sub: '5공장·미국 록빌 생산시설 매출 기여 확대로 2026년 매출 성장률 가이던스 +15~20% 상단을 달성하는 경우', rangeLabel: '+1~5%', epsImpact: 0, perImpact: 0.0463 },
+  { id: 'portfolio_expansion', direction: 'up', title: '서비스 포트폴리오 확대', sub: '펩타이드 CDMO 기업 인수, ADC·mRNA 역량 확대로 항체의약품 이외 매출원이 자리 잡는 경우', rangeLabel: '+1~5%', epsImpact: 0, perImpact: 0.0463 },
+  { id: 'high_pbr_growth_priced', direction: 'down', title: '고성장 기대 선반영', sub: '기준 PBR 8.7811배로 고성장이 상당 부분 반영, 예상 성장률이 소폭만 낮아져도 배수 조정이 커질 수 있는 경우', rangeLabel: '-3~-7%', epsImpact: 0, perImpact: -0.0676 },
+  { id: 'fx_dependence', direction: 'down', title: '환율 의존', sub: '2분기 성장에 우호적 환율이 기여했다고 회사가 명시, 원화 강세 시 원화 환산 매출·이익 증가율이 낮아지는 경우', rangeLabel: '-3~-7%', epsImpact: 0, perImpact: -0.0676 },
+  { id: 'no_dividend', direction: 'down', title: '현금배당 부재', sub: '현재 배당이 없어 투자수익이 주가 상승에 더 의존, 성장주 배수 하락 시 배당 완충이 없는 경우', rangeLabel: '-3~-7%', epsImpact: 0, perImpact: -0.0676 },
 ];
 const dpLogicState = {};
 DP_LOGIC_ITEMS.forEach((item) => { dpLogicState[item.id] = item.direction === 'up'; });
