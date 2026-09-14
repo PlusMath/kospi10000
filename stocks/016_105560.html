@@ -891,7 +891,7 @@ const SECTION_IDS = ['tech','fund','valuation','timeline','thesis','consensus','
 let _dpTechDrawn = false, _dpAnnualDrawn = false, _dpQtrDrawn = false; let _dpNewsInit = false; let _dpMetricChartInit = false;
 
 // -- 핵심 투자 논리 (yes/no 토글로 1년 후 예상 주가 차트에 반영/제외) --
-// "KOSPI 상위 10종목 주가 시나리오 모델"(2026-09-13)을 반영. 상승 3개·하락 3개의
+// "KOSPI 12~20위 종목별 상승·하락 3개와 가격 시나리오"(2026-09-14)를 반영. 상승 3개·하락 3개의
 // 서로 겹치지 않는 독립 포인트로 구성했다. 각 포인트는 그 포인트만 변하고 나머지는
 // 유지된다는 "독립 민감도"이며, 내부적으로 EPS 변화율과 적용 PER 변화율로 나뉜다.
 // 목표가 = 오늘가 × (1+선택 포인트 EPS 변화율 합) × (1+선택 포인트 PER 변화율 합)
@@ -903,12 +903,12 @@ const DP_PRICE_TARGET_LABEL = '1년 후 (2027.09.11)';
 const DP_DIR_LABELS = { up: '상승 포인트', down: '하락 포인트' };
 const DP_DIR_ARROW = { up: '▲', down: '▼' };
 const DP_LOGIC_ITEMS = [
-  { id: 'profit_roe', direction: 'up', title: '순이익·ROE 지속', sub: '상반기 순이익 3.8846조원(+13.1%), ROE 14.09%가 유지되는 경우', rangeLabel: '+8~16%', epsImpact: 0.075, perImpact: 0.0419 },
-  { id: 'cet1_buyback', direction: 'up', title: 'CET1 연계 소각 확대', sub: 'CET1 13.74%가 기준(13.5%)을 웃도는 초과자본을 유지하며 연말 추가 환원이 이어지는 경우', rangeLabel: '+6~12%', epsImpact: 0.044, perImpact: 0.044 },
-  { id: 'nonbank_fee', direction: 'up', title: '비은행·수수료 성장', sub: '증권 순이익 기여 21%, 비이자이익이 33.3% 성장하는 경우', rangeLabel: '+5~10%', epsImpact: 0, perImpact: 0.075 },
-  { id: 'nim_decline', direction: 'down', title: 'NIM 하락', sub: '은행 순이자마진(NIM) 1.74%에서 추가 하락하고 조달비용이 상승하는 경우', rangeLabel: '-8~-15%', epsImpact: -0.115, perImpact: 0 },
-  { id: 'credit_cost', direction: 'down', title: '신용비용·RWA 증가', sub: 'PF·기업대출 충당금이 늘고 환율 상승으로 CET1이 13.5%를 하회하는 경우', rangeLabel: '-10~-20%', epsImpact: -0.0806, perImpact: -0.0806 },
-  { id: 'regulatory_volatility', direction: 'down', title: '자본시장·규제 변동성', sub: '증시 둔화와 보험 손해율 상승, 상생금융·수수료 규제가 겹치는 경우', rangeLabel: '-5~-12%', epsImpact: -0.0433, perImpact: -0.0433 },
+  { id: 'net_profit_growth', direction: 'up', title: '순이익 증가', sub: '2026년 상반기 순이익 3조 8,846억원(전년比 +13.1%), 이익 유지 시 자본 축적과 환원 재원이 늘어나는 경우', rangeLabel: '+2~5%', epsImpact: 0, perImpact: 0.0523 },
+  { id: 'capital_return', direction: 'up', title: '자본·주주환원 확대', sub: 'CET1 13.74%, 추가 자사주 매입·소각 7,000억원, 2026년 총주주환원 3.7조원(전망) 계획이 이행되는 경우', rangeLabel: '+2~5%', epsImpact: 0, perImpact: 0.0523 },
+  { id: 'noninterest_income', direction: 'up', title: '비이자 수익원 확대', sub: '상반기 비이자이익 3조 6,292억원, 자본시장 부문 기여가 지속되며 이자이익 의존이 낮아지는 경우', rangeLabel: '+2~5%', epsImpact: 0, perImpact: 0.0523 },
+  { id: 'nim_pressure', direction: 'down', title: '예대마진 압박', sub: '2026년 2분기 은행 NIM 1.74%(-3bp), 그룹 NIM 1.94%(-5bp), 조달비용 상승이 이어지는 경우', rangeLabel: '-2~-6%', epsImpact: 0, perImpact: -0.0556 },
+  { id: 'credit_cost_up', direction: 'down', title: '신용비용 상승', sub: '대손충당금이 예상보다 증가하며 순이익과 자본환원 여력이 줄어드는 경우', rangeLabel: '-2~-6%', epsImpact: 0, perImpact: -0.0556 },
+  { id: 'securities_capital_drag', direction: 'down', title: '증권사업 자본 소요', sub: '증권 자회사에 1.7조원 자본 확충, 투자수익이 자본비용을 밑돌거나 위험가중자산이 커지는 경우', rangeLabel: '-2~-6%', epsImpact: 0, perImpact: -0.0556 },
 ];
 const dpLogicState = {};
 DP_LOGIC_ITEMS.forEach((item) => { dpLogicState[item.id] = item.direction === 'up'; });
