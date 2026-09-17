@@ -864,24 +864,25 @@ const SECTION_IDS = ['tech','fund','valuation','timeline','thesis','consensus','
 let _dpTechDrawn = false, _dpAnnualDrawn = false, _dpQtrDrawn = false; let _dpNewsInit = false; let _dpMetricChartInit = false;
 
 // -- 핵심 투자 논리 (yes/no 토글로 1년 후 예상 주가 차트에 반영/제외) --
-// "KOSPI 상위 10종목 주가 시나리오 모델"(2026-09-13)을 반영. 상승 3개·하락 3개의
-// 서로 겹치지 않는 독립 포인트로 구성했다. 각 포인트는 그 포인트만 변하고 나머지는
-// 유지된다는 "독립 민감도"이며, 내부적으로 EPS 변화율과 적용 PER 변화율로 나뉜다.
-// 목표가 = 오늘가 × (1+선택 포인트 EPS 변화율 합) × (1+선택 포인트 PER 변화율 합)
-// 로 계산해 중복 없이 EPS·PER 두 축을 한 번씩만 반영한다. 배지의 범위(예: +15~31%)는
-// 해당 포인트만 단독으로 변했을 때의 독립 영향 범위이며, 토글 계산에는 중간값을 쓴다.
-const DP_PRICE_TODAY = 1400000;
-const DP_PRICE_TODAY_LABEL = '오늘 (2026.09.11)';
-const DP_PRICE_TARGET_LABEL = '1년 후 (2027.09.11)';
+// 2Q26 실적·수주 공시 및 최신 업황(웹 검색, 2026-09) 기반으로 재작성 — 상승 3개·
+// 하락 3개의 서로 겹치지 않는 독립 포인트로 구성했다. 각 포인트는 그 포인트만
+// 변하고 나머지는 유지된다는 "독립 민감도"이며, 내부적으로 EPS 변화율과 적용
+// PER 변화율로 나뉜다. 목표가 = 오늘가 × (1+선택 포인트 EPS 변화율 합) ×
+// (1+선택 포인트 PER 변화율 합)로 계산해 중복 없이 EPS·PER 두 축을 한 번씩만
+// 반영한다. 배지의 범위는 해당 포인트만 단독으로 변했을 때의 독립 영향 범위이며,
+// 토글 계산에는 중간값을 쓴다.
+const DP_PRICE_TODAY = 1381000;
+const DP_PRICE_TODAY_LABEL = '오늘 (2026.09.16)';
+const DP_PRICE_TARGET_LABEL = '1년 후 (2027.09.16)';
 const DP_DIR_LABELS = { up: '상승 포인트', down: '하락 포인트' };
 const DP_DIR_ARROW = { up: '▲', down: '▼' };
 const DP_LOGIC_ITEMS = [
-  { id: 'mlcc_mix', direction: 'up', title: 'AI·전장 MLCC 가격·믹스', sub: '2Q26 영업이익률 12.7%에서 고부가 MLCC 매출 성장과 판가 인상이 이어지는 경우', rangeLabel: '+12~25%', epsImpact: 0.15, perImpact: 0.03 },
-  { id: 'fcbga_growth', direction: 'up', title: 'FCBGA 성장', sub: 'AI 가속기·서버 CPU용 기판(FCBGA)의 고객·물량이 확대되는 경우', rangeLabel: '+8~18%', epsImpact: 0.095, perImpact: 0.035 },
-  { id: 'lta_conversion', direction: 'up', title: 'LTA·대형계약 매출 전환', sub: '10여 개 장기공급계약과 AI 서버용 MLCC 1.07조원 계약이 일정대로 매출화되는 경우', rangeLabel: '+5~12%', epsImpact: 0.0416, perImpact: 0.0416 },
-  { id: 'mlcc_normalize', direction: 'down', title: 'MLCC 업황·가격 정상화', sub: 'AI向 주문이 둔화되고 범용 MLCC 가격이 하락하는 경우', rangeLabel: '-15~-25%', epsImpact: -0.16, perImpact: -0.0476 },
-  { id: 'raw_material', direction: 'down', title: '원재료·증설 부담', sub: '금·구리·T-glass 가격 상승과 신규 라인 가동 지연이 겹치는 경우', rangeLabel: '-8~-16%', epsImpact: -0.0619, perImpact: -0.0619 },
-  { id: 'customer_concentration', direction: 'down', title: '스마트폰·고객 집중 부진', sub: '광학 매출이 줄고 주요 고객사 신제품 판매가 부진한 경우', rangeLabel: '-6~-14%', epsImpact: -0.065, perImpact: -0.0374 },
+  { id: 'sem_mlccprice9b', direction: 'up', title: 'MLCC·FCBGA 판가 인상 지속', sub: '2Q26 영업이익이 전년 동기보다 107% 늘어난 MLCC·FCBGA 판가 인상 흐름이 이어지는 경우', rangeLabel: '+14~21%', epsImpact: 0.14, perImpact: 0.06 },
+  { id: 'sem_fcbgacustomer9b', direction: 'up', title: 'FCBGA 고객·물량 확대', sub: 'AI 가속기·서버 CPU용 FCBGA의 고객사 실공급 확대와 수익성 개선이 현실화되는 경우', rangeLabel: '+11~19%', epsImpact: 0.08, perImpact: 0.10 },
+  { id: 'sem_lta9b', direction: 'up', title: 'LTA 대형계약 매출 전환', sub: '10여 개 장기공급계약과 AI 서버용 MLCC 1.07조 원 계약이 일정대로 매출화되는 경우', rangeLabel: '+8~14%', epsImpact: 0.05, perImpact: 0.09 },
+  { id: 'sem_mlccdown9b', direction: 'down', title: '범용 MLCC 가격 하락', sub: '범용 MLCC 단가 하락세가 이어지고 무라타 등 경쟁사 대비 원가경쟁력이 약화되는 경우', rangeLabel: '-9~-15%', epsImpact: -0.10, perImpact: -0.06 },
+  { id: 'sem_apple9b', direction: 'down', title: '애플 출하 둔화', sub: '주요 고객사 애플의 아이폰 출하가 둔화돼 광학·MLCC 매출에 부담이 되는 경우', rangeLabel: '-6~-10%', epsImpact: -0.06, perImpact: -0.04 },
+  { id: 'sem_fpe9b', direction: 'down', title: '선행 실적 눈높이 하향', sub: '선행 이익 추정치가 현재보다 낮게 잡혀 Forward PER이 오히려 상승하는 실적 눈높이 하향이 이어지는 경우', rangeLabel: '-6~-10%', epsImpact: 0, perImpact: -0.10 },
 ];
 const dpLogicState = {};
 DP_LOGIC_ITEMS.forEach((item) => { dpLogicState[item.id] = item.direction === 'up'; });

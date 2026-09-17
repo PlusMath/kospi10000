@@ -845,24 +845,25 @@ const SECTION_IDS = ['tech','fund','valuation','timeline','thesis','consensus','
 let _dpTechDrawn = false, _dpAnnualDrawn = false, _dpQtrDrawn = false; let _dpNewsInit = false; let _dpMetricChartInit = false;
 
 // -- 핵심 투자 논리 (yes/no 토글로 1년 후 예상 주가 차트에 반영/제외) --
-// 2Q26 실적·수주 공시 및 최신 산업 동향(웹 검색, 2026-09) 기반. 상승 3개·하락 3개의
-// 서로 겹치지 않는 독립 포인트로 구성했다. 각 포인트는 그 포인트만 변하고 나머지는
-// 유지된다는 "독립 민감도"이며, 내부적으로 EPS 변화율과 적용 PER 변화율로 나뉜다.
-// 목표가 = 오늘가 × (1+선택 포인트 EPS 변화율 합) × (1+선택 포인트 PER 변화율 합)
-// 로 계산해 중복 없이 EPS·PER 두 축을 한 번씩만 반영한다. 배지의 범위(예: +15~31%)는
-// 해당 포인트만 단독으로 변했을 때의 독립 영향 범위이며, 토글 계산에는 중간값을 쓴다.
+// 2Q26 실적·수주 공시 및 최신 업황(웹 검색, 2026-09) 기반으로 재작성 — 상승 3개·
+// 하락 3개의 서로 겹치지 않는 독립 포인트로 구성했다. 각 포인트는 그 포인트만
+// 변하고 나머지는 유지된다는 "독립 민감도"이며, 내부적으로 EPS 변화율과 적용
+// PER 변화율로 나뉜다. 목표가 = 오늘가 × (1+선택 포인트 EPS 변화율 합) ×
+// (1+선택 포인트 PER 변화율 합)로 계산해 중복 없이 EPS·PER 두 축을 한 번씩만
+// 반영한다. 배지의 범위는 해당 포인트만 단독으로 변했을 때의 독립 영향 범위이며,
+// 토글 계산에는 중간값을 쓴다.
 const DP_PRICE_TODAY = 83800;
 const DP_PRICE_TODAY_LABEL = '오늘 (2026.09.16)';
 const DP_PRICE_TARGET_LABEL = '1년 후 (2027.09.16)';
 const DP_DIR_LABELS = { up: '상승 포인트', down: '하락 포인트' };
 const DP_DIR_ARROW = { up: '▲', down: '▼' };
 const DP_LOGIC_ITEMS = [
-  { id: 'doosan_czech8', direction: 'up', title: '체코 원전 수주 실현', sub: '체코 두코바니 5·6·7·8호기 총 11.2조 원 규모 수주가 계획대로 매출로 전환되는 경우', rangeLabel: '+12~19%', epsImpact: 0.10, perImpact: 0.08 },
-  { id: 'doosan_gasturbine8', direction: 'up', title: '가스터빈 수출 확대', sub: '북미 데이터센터 전력 수요發 가스터빈 수주가 연 12기 이상으로 확대되는 경우', rangeLabel: '+10~18%', epsImpact: 0.08, perImpact: 0.09 },
-  { id: 'doosan_smr8', direction: 'up', title: 'SMR 생산체계 구축', sub: '뉴스케일파워·X-energy 등과의 협력으로 연 20기 SMR 생산 체계가 계획대로 구축되는 경우', rangeLabel: '+8~18%', epsImpact: 0.05, perImpact: 0.12 },
-  { id: 'doosan_orderdelay8', direction: 'down', title: '수주 발주 지연', sub: '원전·가스터빈 신규 발주가 지연되거나 감소하는 경우', rangeLabel: '-9~-15%', epsImpact: -0.10, perImpact: -0.06 },
-  { id: 'doosan_restructure8', direction: 'down', title: '사업재편 불확실성', sub: '두산밥캣 이전 등 사업구조 재편 과정에서 지배구조 불확실성이 재부각되는 경우', rangeLabel: '-5~-8%', epsImpact: 0, perImpact: -0.08 },
-  { id: 'doosan_expansion8', direction: 'down', title: '증설 실행 리스크', sub: '2028년 완공 목표 SMR 전용 공장 등 대규모 증설이 일정·비용에서 계획을 벗어나는 경우', rangeLabel: '-6~-10%', epsImpact: -0.05, perImpact: -0.05 },
+  { id: 'doosan_smr8b', direction: 'up', title: 'SMR 대형 발주 확보', sub: '2030년까지 뉴스케일파워 10.2조·X-energy 13.8조 등 총 28조 원 규모 SMR 수주 목표가 계획대로 진행되는 경우', rangeLabel: '+13~20%', epsImpact: 0.09, perImpact: 0.10 },
+  { id: 'doosan_backlog8b', direction: 'up', title: '수주잔고 급증세', sub: '상반기 신규수주 7.1조 원으로 수주잔고가 16.4조에서 26.4조 원(+60.4%)으로 급증한 흐름이 이어지는 경우', rangeLabel: '+11~18%', epsImpact: 0.10, perImpact: 0.07 },
+  { id: 'doosan_czech8b', direction: 'up', title: '체코 원전·가스터빈 매출화', sub: '체코 두코바니 5·6·7·8호기(11.2조 원)와 가스터빈 수출 확대가 계획대로 매출로 전환되는 경우', rangeLabel: '+9~17%', epsImpact: 0.07, perImpact: 0.09 },
+  { id: 'doosan_cashflow8b', direction: 'down', title: '현금흐름·단기차입 부담', sub: '매출채권·미청구공사 증가와 설비투자가 겹쳐 단기차입금 4조 원 초과 등 현금흐름 압박이 심화되는 경우', rangeLabel: '-8~-14%', epsImpact: -0.08, perImpact: -0.07 },
+  { id: 'doosan_fpe8b', direction: 'down', title: '선행 실적 눈높이 하향', sub: 'Forward PER이 트레일링보다 오히려 높아질 만큼 컨센서스 선행 실적 기대치가 낮아지는 경우', rangeLabel: '-6~-9%', epsImpact: 0, perImpact: -0.09 },
+  { id: 'doosan_rerate8b', direction: 'down', title: '밸류에이션 재조정', sub: '52주 고점(139,200원) 대비 -44.7% 하락한 상태에서 섹터 차익매물에 따른 조정이 장기화되는 경우', rangeLabel: '-6~-11%', epsImpact: -0.05, perImpact: -0.06 },
 ];
 const dpLogicState = {};
 DP_LOGIC_ITEMS.forEach((item) => { dpLogicState[item.id] = item.direction === 'up'; });
