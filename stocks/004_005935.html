@@ -173,6 +173,9 @@ body{background:var(--dp-bg);}
   .dp-tab{font-size:14px;}
   .dp-seg-t{font-size:14px;}
   .dp-seg-d{font-size:13.5px;}
+  .dp-eps-flow{flex-wrap:wrap;}
+  .dp-eps-card{flex:1 1 28%;min-width:84px;}
+  .dp-arrow{display:none;}
   .dp-eps-y{font-size:12px;}
   .dp-eps-v{font-size:18px;}
   .dp-eps-n{font-size:11.5px;}
@@ -332,9 +335,13 @@ body{background:var(--dp-bg);}
         <div class="dp-seg"><div class="dp-seg-t">파운드리·기타</div><div class="dp-seg-d">선단공정 경쟁 지속, OLED 세계 1위. 중장기 성장 포트폴리오.</div></div>
       </div>
 
-      <div class="dp-secl">EPS 3개년 추이</div>
+      <div class="dp-secl">EPS 5개년 추이</div>
       <div class="dp-eps-flow">
-        <div class="dp-eps-card"><div class="dp-eps-y">2023년</div><div class="dp-eps-v">2,131원</div><div class="dp-eps-n">다운사이클 저점</div></div>
+        <div class="dp-eps-card"><div class="dp-eps-y">2021년</div><div class="dp-eps-v">5,777원</div><div class="dp-eps-n">반도체 호황</div></div>
+        <div class="dp-arrow">→</div>
+        <div class="dp-eps-card"><div class="dp-eps-y">2022년</div><div class="dp-eps-v">8,057원</div><div class="dp-eps-n">▲39.5%</div></div>
+        <div class="dp-arrow">→</div>
+        <div class="dp-eps-card"><div class="dp-eps-y">2023년</div><div class="dp-eps-v">2,131원</div><div class="dp-eps-n">▼73.5% 다운사이클 저점</div></div>
         <div class="dp-arrow">→</div>
         <div class="dp-eps-card"><div class="dp-eps-y">2024년</div><div class="dp-eps-v">4,950원</div><div class="dp-eps-n">▲132.3%</div></div>
         <div class="dp-arrow">→</div>
@@ -343,34 +350,36 @@ body{background:var(--dp-bg);}
 
       <div class="dp-insight">
         <div class="dp-insight-t">사업보고서 핵심</div>
-        <div class="dp-insight-b">EPS 2,131원(2023,저점)→4,950원(2024,+132.3%)→6,605원(2025,+33.4%) 2년 연속 성장. 보통주와 동일한 실적을 공유하되, 우선주는 분기 배당금이 보통주 대비 1원씩 더 많아 연간 DPS가 1,672원으로 근소하게 높음.</div>
+        <div class="dp-insight-b">EPS는 5,777원(2021)→8,057원(2022,+39.5%)→2,131원(2023,-73.5%, 다운사이클 저점)→4,950원(2024,+132.3%)→6,605원(2025,+33.4%)로 변동. 보통주와 완전히 동일한 영업실적·EPS를 공유하는 종목으로, 2022년은 영업이익이 줄었음에도 비영업(외화평가) 이익으로 순이익·EPS는 오히려 늘어난 특이 구간이었고 2023년 다운사이클 저점을 지나 2024~2025년 2년 연속 급성장. 우선주는 분기 배당금이 보통주 대비 1원씩 더 많아 연간 DPS가 보통주보다 4원 높음(2025년 1,672원).</div>
       </div>
     </div>
 
     <div id="dpFundQuarter" style="display:none;">
-      <div class="dp-secl">매출액 추이</div>
-      <svg id="spQtrChart" viewBox="0 0 680 170" width="100%" style="display:block;margin-bottom:16px;"></svg>
-      <div class="dp-secl">영업이익·법인세전·반기순이익·지배주주순이익 추이</div>
-      <svg id="spQtrChart2" viewBox="0 0 680 210" width="100%" style="display:block;margin-bottom:16px;"></svg>
+      <div class="dp-secl">분기별 실적 (2개년, 3Q24~2Q26, 보통주와 동일)</div>
+      <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
+        <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
+        <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
+        <button type="button" data-qm="pretax" onclick="dpShowQtrMetric('pretax',this)">세전이익</button>
+        <button type="button" data-qm="ni" onclick="dpShowQtrMetric('ni',this)">순이익</button>
+        <button type="button" data-qm="nip" onclick="dpShowQtrMetric('nip',this)">지배주주순이익</button>
+      </nav>
+      <div id="seQtrChartTitle" style="font-size:11px;font-weight:700;color:var(--dp-text3);margin-bottom:4px;">매출액 — 2개년 분기 추이</div>
+      <svg id="spQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
+      <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* 세전이익(3Q25~2Q26)과 지배주주순이익(1Q26~2Q26)의 음영 표시(*) 막대는 분기 공시에 세부 항목이 없어 반기·연간 확정치에서 역산한 추정값. 나머지는 분기 공시 확정치 또는 반기·연간 확정치의 단순 차감(정확한 값). 보통주(005930)와 완전히 동일한 연결 실적을 공유.</div>
       <div class="dp-g2">
-        <div>
-          <div class="dp-row2"><span class="l">1H26 연결 매출액</span><span class="v">305조 3,729억 (전년동기比 ▲98.7%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v up">146조 7,252억 (전년동기比 ▲1191.4%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 법인세차감전이익</span><span class="v up">153조 2,682억 (전년동기比 ▲928.1%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 반기순이익</span><span class="v up">118조 8,497억 (전년동기比 ▲791.0%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 지배주주 순이익</span><span class="v up">118조 3,711억 (전년동기比 ▲813.1%)</span></div>
-        </div>
         <div>
           <div class="dp-row2"><span class="l">1H26 EPS (기본)</span><span class="v up">17,950원 (연환산 35,900원)</span></div>
           <div class="dp-row2"><span class="l">1H26 연결 자산총계</span><span class="v">759조 4,805억 (▲34.0%)</span></div>
           <div class="dp-row2"><span class="l">지배기업소유주지분</span><span class="v">565조 647억 (▲33.2%)</span></div>
+        </div>
+        <div>
           <div class="dp-row2"><span class="l">연결 자본총계</span><span class="v up">579조 3,097억 (▲32.8%)</span></div>
           <div class="dp-row2"><span class="l">2Q26 단독 영업이익</span><span class="v up">89조 4,924억 (1Q26 대비 ▲56.4%)</span></div>
         </div>
       </div>
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심</div>
-        <div class="dp-insight-b">1H26 지배주주 순이익(118조 3,711억)은 전년동기(12조 9,637억) 대비 813.1% 급증, EPS(17,950원)의 연환산(35,900원)은 2025년 연간 EPS 대비 5.4배 수준. 보통주·우선주 모두 동일한 기본주당순이익을 공유하며, Forward PER은 우선주 가격(195,600원) 기준으로 산출 시 트레일링 대비 더 큰 폭으로 낮음.</div>
+        <div class="dp-insight-t">분기보고서 핵심 — 2개년 흐름</div>
+        <div class="dp-insight-b">2024년 3분기(영업이익 9.18조)부터 2025년 2분기(4.66조)까지는 메모리 다운사이클 여진으로 분기 이익이 낮았으나, 2025년 3분기(12.2조)·4분기(20.1조)부터 HBM向 고부가 제품 판매 확대로 회복이 시작됐고 2026년 1분기(57.2조)·2분기(89.49조)에는 분기 기록을 연속 경신하는 급증세로 이어짐. 1H26 EPS(17,950원)의 연환산(35,900원)은 2025년 연간 EPS 대비 5.4배 수준. 보통주·우선주 모두 동일한 기본주당순이익을 공유하며, Forward PER은 우선주 가격(201,000원) 기준으로 산출 시 트레일링 대비 더 큰 폭으로 낮음.</div>
       </div>
     </div>
   </div>
@@ -1255,10 +1264,10 @@ function drawAnnualChart(){
   const svg=document.getElementById('spAnnualChart');
   const W=680,H=190,pL=44,pR=44,pT=16,pB=26;
   const cW=W-pL-pR,cH=H-pT-pB;
-  const cats=['2023년','2024년','2025년 (제57기)'];
-  const rev=[258.94,300.87,333.61];
-  const oi=[6.57,32.73,43.60];
-  const ni=[14.47,33.62,44.26];
+  const cats=['2021년','2022년','2023년','2024년','2025년 (제57기)'];
+  const rev=[279.60,302.23,258.94,300.87,333.61];
+  const oi=[51.63,43.38,6.57,32.73,43.60];
+  const ni=[39.24,54.73,14.47,33.62,44.26];
   const maxV=Math.max(...rev)*1.1;
   const groupW=cW/cats.length;
   const barW=Math.min(groupW*0.26,64);
@@ -1299,95 +1308,59 @@ function drawAnnualChart(){
   addChartExpandButton(svg);
 }
 
+// 2개년 분기 실적(3Q24~2Q26) — 보통주(005930)와 완전히 동일한 연결 실적을 공유해 그대로 재사용.
+// 세전이익(3Q25~2Q26)·지배주주순이익(1Q26~2Q26)만 분기 세부가 공개되지 않아 확정 반기/연간
+// 합계를 영업이익/순이익 비중으로 배분한 추정값(qtrEstimated로 표시).
+const qtrLabels=['3Q24','4Q24','1Q25','2Q25','3Q25','4Q25','1Q26','2Q26'];
+const qtrData={
+  rev:   [79.1, 75.8, 79.14, 74.57, 86.1, 93.8, 133.9, 171.47],
+  oi:    [9.18, 6.5, 6.7, 4.66, 12.2, 20.1, 57.2, 89.49],
+  pretax:[10.32, 7.9, 9.2, 5.71, 13.05, 21.52, 52.48, 100.79],
+  ni:    [10.10, 7.8, 8.2, 5.14, 12.2, 19.67, 47.23, 71.62],
+  nip:   [9.78, 7.6, 8.0, 4.96, 12.0, 19.30, 46.24, 72.13]
+};
+const qtrEstimated={ pretax:[4,5,6,7], nip:[6,7] };
+const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
+const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
+let _qtrCurrentMetric='rev';
+
+function dpShowQtrMetric(id, el){
+  document.querySelectorAll('#dpQtrMetricNav button').forEach(b=>b.classList.toggle('active', b===el));
+  _qtrCurrentMetric=id;
+  drawQtrChart();
+}
+
 function drawQtrChart(){
-  (function(){
-    const svg=document.getElementById('spQtrChart');
-    const W=680,H=170,pL=44,pR=20,pT=30,pB=34;
-    const cW=W-pL-pR,cH=H-pT-pB;
-    const labels=["\ub9e4\ucd9c\uc561"];
-    const valsPrev=[153.7068];
-    const valsCurr=[305.3729];
-    const growth=["+98.7%"];
-    const postcol='#1428A0';
-    const prevCol='#1D9E75';
-    const maxV=Math.max(...valsCurr,...valsPrev)*1.2;
-    const groupW=cW/labels.length;
-    const barW=Math.min(groupW*0.28,64);
-    const gap=groupW*0.06;
-    function py(v){ return pT+cH*(1-v/maxV); }
-    [0,25,50,75,100].forEach(v=>{
-      const val=v/100*maxV;
-      const y=py(val);
-      svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:y,y2:y,stroke:'oklch(0.91 0.005 90)','stroke-width':1}));
-    });
-    labels.forEach((lab,i)=>{
-      const gx=pL+i*groupW+groupW/2;
-      const px=gx-gap/2-barW,cx=gx+gap/2;
-      const pTop=py(valsPrev[i]),cTop=py(valsCurr[i]);
-      svg.appendChild(svgEl('rect',{x:px,y:pTop,width:barW,height:py(0)-pTop,fill:prevCol,rx:2}));
-      svg.appendChild(svgEl('rect',{x:cx,y:cTop,width:barW,height:py(0)-cTop,fill:postcol,rx:2}));
-      const t1=svgEl('text',{x:px+barW/2,y:pTop-4,'text-anchor':'middle','font-size':8,fill:'oklch(0.55 0.02 260)'});
-      t1.textContent=valsPrev[i].toFixed(1)+'조'; svg.appendChild(t1);
-      const t2=svgEl('text',{x:cx+barW/2,y:cTop-14,'text-anchor':'middle','font-size':8.5,fill:'oklch(0.2 0.02 260)','font-weight':700});
-      t2.textContent=valsCurr[i].toFixed(1)+'조'; svg.appendChild(t2);
-      const t3=svgEl('text',{x:cx+barW/2,y:cTop-4,'text-anchor':'middle','font-size':8,fill:'#1D9E75','font-weight':700});
-      t3.textContent=growth[i]; svg.appendChild(t3);
-      const t4=svgEl('text',{x:gx,y:H-10,'text-anchor':'middle','font-size':9,fill:'oklch(0.5 0.02 260)'});
-      t4.textContent=lab; svg.appendChild(t4);
-    });
-    const legend=[[prevCol,'1H25'],[postcol,'1H26']];
-    legend.forEach((l,i)=>{
-      const lx=pL+i*56;
-      svg.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
-      const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:'oklch(0.5 0.02 260)'});
-      t.textContent=l[1]; svg.appendChild(t);
-    });
-    addChartExpandButton(svg);
-  })();
-  (function(){
-    const svg=document.getElementById('spQtrChart2');
-    const W=680,H=210,pL=44,pR=20,pT=30,pB=34;
-    const cW=W-pL-pR,cH=H-pT-pB;
-    const labels=["\uc601\uc5c5\uc774\uc775","\ubc95\uc778\uc138\uc804","\ubc18\uae30\uc21c\uc774\uc775","\uc9c0\ubc30\uc8fc\uc8fc\uc21c\uc774\uc775"];
-    const valsPrev=[11.3613,14.9077,13.3393,12.9637];
-    const valsCurr=[146.7252,153.2682,118.8497,118.3711];
-    const growth=["+1191.4%","+928.1%","+791.0%","+813.1%"];
-    const postcol='#1428A0';
-    const prevCol='#1D9E75';
-    const maxV=Math.max(...valsCurr,...valsPrev)*1.2;
-    const groupW=cW/labels.length;
-    const barW=Math.min(groupW*0.28,64);
-    const gap=groupW*0.06;
-    function py(v){ return pT+cH*(1-v/maxV); }
-    [0,25,50,75,100].forEach(v=>{
-      const val=v/100*maxV;
-      const y=py(val);
-      svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:y,y2:y,stroke:'oklch(0.91 0.005 90)','stroke-width':1}));
-    });
-    labels.forEach((lab,i)=>{
-      const gx=pL+i*groupW+groupW/2;
-      const px=gx-gap/2-barW,cx=gx+gap/2;
-      const pTop=py(valsPrev[i]),cTop=py(valsCurr[i]);
-      svg.appendChild(svgEl('rect',{x:px,y:pTop,width:barW,height:py(0)-pTop,fill:prevCol,rx:2}));
-      svg.appendChild(svgEl('rect',{x:cx,y:cTop,width:barW,height:py(0)-cTop,fill:postcol,rx:2}));
-      const t1=svgEl('text',{x:px+barW/2,y:pTop-4,'text-anchor':'middle','font-size':8,fill:'oklch(0.55 0.02 260)'});
-      t1.textContent=valsPrev[i].toFixed(1)+'조'; svg.appendChild(t1);
-      const t2=svgEl('text',{x:cx+barW/2,y:cTop-14,'text-anchor':'middle','font-size':8.5,fill:'oklch(0.2 0.02 260)','font-weight':700});
-      t2.textContent=valsCurr[i].toFixed(1)+'조'; svg.appendChild(t2);
-      const t3=svgEl('text',{x:cx+barW/2,y:cTop-4,'text-anchor':'middle','font-size':8,fill:'#1D9E75','font-weight':700});
-      t3.textContent=growth[i]; svg.appendChild(t3);
-      const t4=svgEl('text',{x:gx,y:H-10,'text-anchor':'middle','font-size':9,fill:'oklch(0.5 0.02 260)'});
-      t4.textContent=lab; svg.appendChild(t4);
-    });
-    const legend=[[prevCol,'1H25'],[postcol,'1H26']];
-    legend.forEach((l,i)=>{
-      const lx=pL+i*56;
-      svg.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
-      const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:'oklch(0.5 0.02 260)'});
-      t.textContent=l[1]; svg.appendChild(t);
-    });
-    addChartExpandButton(svg);
-  })();
+  const id=_qtrCurrentMetric;
+  const vals=qtrData[id];
+  const estIdx=qtrEstimated[id]||[];
+  const accentCol=getComputedStyle(document.querySelector('.dp')).getPropertyValue('--dp-accent').trim() || '#1428A0';
+  const col=qtrMetricColor[id] || accentCol;
+  const svg=document.getElementById('spQtrChart');
+  svg.innerHTML='';
+  const W=680,H=190,pL=46,pR=16,pT=24,pB=30;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  const maxV=Math.max(...vals)*1.2;
+  const groupW=cW/qtrLabels.length;
+  const barW=Math.min(groupW*0.5,46);
+  function py(v){ return pT+cH*(1-v/maxV); }
+  [0,0.25,0.5,0.75,1].forEach(f=>{
+    const y=py(maxV*f);
+    svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:y,y2:y,stroke:'oklch(0.91 0.005 90)','stroke-width':1}));
+  });
+  qtrLabels.forEach((lab,i)=>{
+    const gx=pL+i*groupW+groupW/2;
+    const top=py(vals[i]);
+    const isEst=estIdx.includes(i);
+    svg.appendChild(svgEl('rect',{x:gx-barW/2,y:top,width:barW,height:py(0)-top,fill:col,opacity:isEst?0.45:1,rx:2}));
+    const t1=svgEl('text',{x:gx,y:top-6,'text-anchor':'middle','font-size':9.5,fill:col,'font-weight':700});
+    t1.textContent=vals[i].toFixed(1)+'조'+(isEst?'*':''); svg.appendChild(t1);
+    const t2=svgEl('text',{x:gx,y:H-10,'text-anchor':'middle','font-size':9,fill:'oklch(0.5 0.02 260)'});
+    t2.textContent=lab; svg.appendChild(t2);
+  });
+  const titleEl=document.getElementById('seQtrChartTitle');
+  if (titleEl) titleEl.textContent=qtrMetricLabel[id]+' — 2개년 분기 추이';
+  addChartExpandButton(svg);
 }
 
 // -- SVG candlestick chart data (Yahoo Finance daily, with dates for hover/period) --

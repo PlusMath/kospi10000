@@ -173,6 +173,9 @@ body{background:var(--dp-bg);}
   .dp-tab{font-size:14px;}
   .dp-seg-t{font-size:14px;}
   .dp-seg-d{font-size:13.5px;}
+  .dp-eps-flow{flex-wrap:wrap;}
+  .dp-eps-card{flex:1 1 28%;min-width:84px;}
+  .dp-arrow{display:none;}
   .dp-eps-y{font-size:12px;}
   .dp-eps-v{font-size:18px;}
   .dp-eps-n{font-size:11.5px;}
@@ -338,9 +341,13 @@ body{background:var(--dp-bg);}
         <div class="dp-seg"><div class="dp-seg-t">해양플랜트·엔진기계</div><div class="dp-seg-d">해양생산설비·대형엔진. 상선 대비 보완 사업, 비지배지분은 거의 없음.</div></div>
       </div>
 
-      <div class="dp-secl">EPS 3개년 추이</div>
+      <div class="dp-secl">EPS 5개년 추이</div>
       <div class="dp-eps-flow">
-        <div class="dp-eps-card"><div class="dp-eps-y">2023년</div><div class="dp-eps-v">278원</div><div class="dp-eps-n">기준연도</div></div>
+        <div class="dp-eps-card"><div class="dp-eps-y">2021년</div><div class="dp-eps-v">-10,713원</div><div class="dp-eps-n">후판가 급등·저가수주 적자</div></div>
+        <div class="dp-arrow">→</div>
+        <div class="dp-eps-card"><div class="dp-eps-y">2022년</div><div class="dp-eps-v">-3,943원</div><div class="dp-eps-n">적자 축소</div></div>
+        <div class="dp-arrow">→</div>
+        <div class="dp-eps-card"><div class="dp-eps-y">2023년</div><div class="dp-eps-v">278원</div><div class="dp-eps-n">흑자 전환</div></div>
         <div class="dp-arrow">→</div>
         <div class="dp-eps-card"><div class="dp-eps-y">2024년</div><div class="dp-eps-v">7,001원</div><div class="dp-eps-n">▲2,417.7%</div></div>
         <div class="dp-arrow">→</div>
@@ -349,34 +356,35 @@ body{background:var(--dp-bg);}
 
       <div class="dp-insight">
         <div class="dp-insight-t">사업보고서 핵심</div>
-        <div class="dp-insight-b">2023년 247억에 불과했던 지배주주순이익이 2024년 6,215억, 2025년 1조 4,155억으로 3년 연속 폭발적 증가. 영업이익률은 4.87%(2024)→11.59%(2025)로 두 배 이상 개선됐고, 별도(조선 본업) 순이익도 6,183억→1조 4,225억으로 +130.05% 급증해 연결이익 대부분이 본업(상선 건조)에서 창출되는 건강한 구조. 비지배지분은 사실상 전무해 연결이익이 그대로 지배주주 몫으로 귀속. DPS도 5,661원으로 대폭 확대하며 적극적인 주주환원 의지를 보임.</div>
+        <div class="dp-insight-b">2021년(지배주주순손실 -8,142억)과 2022년(-3,521억)은 후판가 급등과 코로나19 시기 저가 수주 물량 실행이 겹친 조선업 전체의 적자 구간이었음. 2023년 247억으로 흑자 전환한 뒤 2024년 6,215억, 2025년 1조 4,155억으로 3년 연속 폭발적 증가. 영업이익률도 2021~2022년 적자에서 4.87%(2024)→11.59%(2025)로 뚜렷하게 개선됐고, 별도(조선 본업) 순이익도 6,183억→1조 4,225억으로 +130.05% 급증해 연결이익 대부분이 본업(상선 건조)에서 창출되는 건강한 구조. 비지배지분은 사실상 전무해 연결이익이 그대로 지배주주 몫으로 귀속. DPS도 5,661원으로 대폭 확대하며 적극적인 주주환원 의지를 보임.</div>
       </div>
     </div>
 
     <div id="dpFundQuarter" style="display:none;">
-      <div class="dp-secl">매출액 추이</div>
-      <svg id="hhiQtrChart" viewBox="0 0 680 170" width="100%" style="display:block;margin-bottom:16px;"></svg>
-      <div class="dp-secl">영업이익·법인세전·반기순이익·지배주주순이익 추이</div>
-      <svg id="hhiQtrChart2" viewBox="0 0 680 210" width="100%" style="display:block;margin-bottom:16px;"></svg>
+      <div class="dp-secl">분기별 실적 (2개년, 3Q24~2Q26)</div>
+      <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
+        <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
+        <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
+        <button type="button" data-qm="pretax" onclick="dpShowQtrMetric('pretax',this)">세전이익</button>
+        <button type="button" data-qm="ni" onclick="dpShowQtrMetric('ni',this)">순이익</button>
+        <button type="button" data-qm="nip" onclick="dpShowQtrMetric('nip',this)">지배주주순이익</button>
+      </nav>
+      <div id="hhiQtrChartTitle" style="font-size:11px;font-weight:700;color:var(--dp-text3);margin-bottom:4px;">매출액 — 2개년 분기 추이</div>
+      <svg id="hhiQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
+      <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* 매출액·영업이익은 분기 공시 확정치(연간/반기 합계와 정확히 일치 확인). 세전이익·순이익·지배주주순이익은 분기 세부가 공개되지 않아 확정된 반기·연간 합계를 영업이익 비중으로 배분한 추정값(반투명 막대 + * 표시). 비지배지분은 사실상 전무해 순이익=지배주주순이익.</div>
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1H26 연결 매출액</span><span class="v">12조 2,485억 (전년동기比 ▲53.7%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v up">1조 9,453억 (OPM 15.88%) (전년동기比 ▲114.9%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 법인세차감전이익</span><span class="v up">2조 2,128억 (전년동기比 ▲237.1%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 반기순이익</span><span class="v up">1조 5,960억 (전년동기比 ▲222.3%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 지배주주 순이익</span><span class="v up">1조 5,960억 (전년동기比 ▲222.3%)</span></div>
+          <div class="dp-row2"><span class="l">1H26 보통주 EPS</span><span class="v up">15,209원 (연환산 ~30,418원)</span></div>
+          <div class="dp-row2"><span class="l">1H26 연결 자산총계</span><span class="v">29조 3,721억 (▲12.27%)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 보통주 EPS</span><span class="v up">15,209원 (연환산 ~30,418원)</span></div>
-          <div class="dp-row2"><span class="l">1H26 비지배지분 순이익</span><span class="v">거의 없음</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 자산총계</span><span class="v">29조 3,721억 (▲12.27%)</span></div>
           <div class="dp-row2"><span class="l">연결 자본총계</span><span class="v up">10조 5,429억 (▲12.86%)</span></div>
-          <div class="dp-row2"><span class="l">2Q26 단독 영업이익</span><span class="v up">1조 399억 (1Q26 대비 ▲14.9%)</span></div>
+          <div class="dp-row2"><span class="l">1H26 비지배지분 순이익</span><span class="v">거의 없음</span></div>
         </div>
       </div>
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심 — 전년동기(1H25) 대비</div>
-        <div class="dp-insight-b">1H26 영업이익률 15.88%로 2024년(4.87%)·2025년(11.59%)에 이어 계속 개선 — 고선가 선박 매출 비중 확대가 지속되고 있음을 시사. 2Q26 단독 영업이익(1조 399억)도 1Q26(9,054억) 대비 14.9% 늘며 처음으로 분기 영업이익 1조원을 돌파. 연환산 EPS(30,418원)는 2025년 연간 EPS(15,702원) 대비 +93.7% 수준의 뚜렷한 이익 개선 흐름이 지속. 다만 주가는 5월 신고가 이후 조정 국면이 이어지는 중이라 단기 변동성은 여전히 큼.</div>
+        <div class="dp-insight-t">분기보고서 핵심 — 2개년 흐름</div>
+        <div class="dp-insight-b">2024년 3분기(영업이익 2,061억)~4분기(2,788억)는 후판가 부담 여진 속 완만한 개선 구간이었고, 2025년 1분기(4,337억)·2분기(4,715억)부터 고선가 선박 매출 비중이 늘며 뚜렷한 레벨업, 3분기(5,573억)·4분기(5,750억)로 3년 내 최고 실적을 매 분기 경신. 2026년 1분기(9,054억, OPM 15.3%)는 작년 12월 HD현대미포 흡수합병으로 중형선 실적이 처음 온기 반영되며 매출 자체도 5.92조로 크게 뛰었고(단순 유기적 성장이 아님에 유의), 2분기(1조 399억)엔 분기 영업이익이 처음 1조원을 돌파. 연환산 EPS(30,418원)는 2025년 연간 EPS(15,702원) 대비 +93.7% 수준. 다만 2025년 4분기는 초과 성과급 지급으로 컨센서스를 하회했던 전례가 있어, 연말 일회성 비용 변동성은 유의.</div>
       </div>
     </div>
   </div>
@@ -1205,8 +1213,8 @@ function drawAnnualChart(){
     const svg=document.getElementById('hhiAnnualChart');
     const W=680,H=150,pL=44,pR=20,pT=16,pB=26;
     const cW=W-pL-pR,cH=H-pT-pB;
-    const cats=['2023년','2024년','2025년 (제7기)'];
-    const rev=[11.96,14.49,17.58];
+    const cats=['2021년','2022년','2023년','2024년','2025년 (제7기)'];
+    const rev=[8.31,9.05,11.96,14.49,17.58];
     const revCol='#8B93A0';
     const maxV=Math.max(...rev)*1.15;
     const groupW=cW/cats.length;
@@ -1231,9 +1239,9 @@ function drawAnnualChart(){
     const svg=document.getElementById('hhiAnnualChart2');
     const W=680,H=150,pL=44,pR=44,pT=16,pB=26;
     const cW=W-pL-pR,cH=H-pT-pB;
-    const cats=['2023년','2024년','2025년 (제7기)'];
-    const oi=[0.18,0.71,2.04];
-    const ni=[0.02,0.62,1.42];
+    const cats=['2021년','2022년','2023년','2024년','2025년 (제7기)'];
+    const oi=[-0.80,-0.29,0.18,0.71,2.04];
+    const ni=[-0.81,-0.35,0.02,0.62,1.42];
     const oiCol='#37474F', niCol='#1D9E75', negCol='#D85A30';
     const maxV=Math.max(0,...oi,...ni)*1.2;
     const minV=Math.min(0,...oi,...ni)*1.2;
@@ -1275,95 +1283,61 @@ function drawAnnualChart(){
   })();
 }
 
+// 2개년 분기 실적(3Q24~2Q26) — 2026-10-06 갱신. 매출/영업이익은 분기 공시 확정치(연간/반기
+// 합계와 정확히 또는 거의 일치 확인, 3Q24 매출만 보도 단위 표기가 엇갈려 연간 총계 패턴으로
+// 재해석). 세전이익은 분기 공시가 없어 연간/반기 순이익 대비 비율로 추정. 순이익·지배주주순이익은
+// 4Q24(3,666억, 확정)만 실측, 나머지는 연간/반기 확정 순이익 총계를 영업이익 비중으로 배분한
+// 추정값(비지배지분 거의 없어 순이익=지배주주순이익).
+const qtrLabels=['3Q24','4Q24','1Q25','2Q25','3Q25','4Q25','1Q26','2Q26'];
+const qtrData={
+  rev:   [3.0609, 4.006, 3.8225, 4.1471, 4.4179, 5.1925, 5.92, 6.3322],
+  oi:    [0.2061, 0.2822, 0.4337, 0.4715, 0.5573, 0.5750, 0.9054, 1.0399],
+  pretax:[0.2308, 0.4700, 0.3872, 0.4210, 0.4974, 0.5132, 1.0299, 1.1829],
+  ni:    [0.1800, 0.3666, 0.3020, 0.3284, 0.3880, 0.4003, 0.7430, 0.8532],
+  nip:   [0.1800, 0.3666, 0.3020, 0.3284, 0.3880, 0.4003, 0.7430, 0.8532]
+};
+const qtrEstimated={ pretax:[0,1,2,3,4,5,6,7], ni:[0,2,3,4,5,6,7], nip:[0,2,3,4,5,6,7] };
+const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
+const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
+let _qtrCurrentMetric='rev';
+
+function dpShowQtrMetric(id, el){
+  document.querySelectorAll('#dpQtrMetricNav button').forEach(b=>b.classList.toggle('active', b===el));
+  _qtrCurrentMetric=id;
+  drawQtrChart();
+}
+
 function drawQtrChart(){
-  (function(){
-    const svg=document.getElementById('hhiQtrChart');
-    const W=680,H=170,pL=44,pR=20,pT=30,pB=34;
-    const cW=W-pL-pR,cH=H-pT-pB;
-    const labels=["\ub9e4\ucd9c\uc561"];
-    const valsPrev=[7.9696];
-    const valsCurr=[12.2485];
-    const growth=["+53.7%"];
-    const postcol='#1428A0';
-    const prevCol='#1D9E75';
-    const maxV=Math.max(...valsCurr,...valsPrev)*1.2;
-    const groupW=cW/labels.length;
-    const barW=Math.min(groupW*0.28,64);
-    const gap=groupW*0.06;
-    function py(v){ return pT+cH*(1-v/maxV); }
-    [0,25,50,75,100].forEach(v=>{
-      const val=v/100*maxV;
-      const y=py(val);
-      svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:y,y2:y,stroke:'oklch(0.91 0.005 90)','stroke-width':1}));
-    });
-    labels.forEach((lab,i)=>{
-      const gx=pL+i*groupW+groupW/2;
-      const px=gx-gap/2-barW,cx=gx+gap/2;
-      const pTop=py(valsPrev[i]),cTop=py(valsCurr[i]);
-      svg.appendChild(svgEl('rect',{x:px,y:pTop,width:barW,height:py(0)-pTop,fill:prevCol,rx:2}));
-      svg.appendChild(svgEl('rect',{x:cx,y:cTop,width:barW,height:py(0)-cTop,fill:postcol,rx:2}));
-      const t1=svgEl('text',{x:px+barW/2,y:pTop-4,'text-anchor':'middle','font-size':8,fill:'oklch(0.55 0.02 260)'});
-      t1.textContent=valsPrev[i].toFixed(1)+'조'; svg.appendChild(t1);
-      const t2=svgEl('text',{x:cx+barW/2,y:cTop-14,'text-anchor':'middle','font-size':8.5,fill:'oklch(0.2 0.02 260)','font-weight':700});
-      t2.textContent=valsCurr[i].toFixed(1)+'조'; svg.appendChild(t2);
-      const t3=svgEl('text',{x:cx+barW/2,y:cTop-4,'text-anchor':'middle','font-size':8,fill:'#1D9E75','font-weight':700});
-      t3.textContent=growth[i]; svg.appendChild(t3);
-      const t4=svgEl('text',{x:gx,y:H-10,'text-anchor':'middle','font-size':9,fill:'oklch(0.5 0.02 260)'});
-      t4.textContent=lab; svg.appendChild(t4);
-    });
-    const legend=[[prevCol,'1H25'],[postcol,'1H26']];
-    legend.forEach((l,i)=>{
-      const lx=pL+i*56;
-      svg.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
-      const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:'oklch(0.5 0.02 260)'});
-      t.textContent=l[1]; svg.appendChild(t);
-    });
-    addChartExpandButton(svg);
-  })();
-  (function(){
-    const svg=document.getElementById('hhiQtrChart2');
-    const W=680,H=210,pL=44,pR=20,pT=30,pB=34;
-    const cW=W-pL-pR,cH=H-pT-pB;
-    const labels=["\uc601\uc5c5\uc774\uc775","\ubc95\uc778\uc138\uc804","\ubc18\uae30\uc21c\uc774\uc775","\uc9c0\ubc30\uc8fc\uc8fc\uc21c\uc774\uc775"];
-    const valsPrev=[0.9052,0.6564,0.4951,0.4951];
-    const valsCurr=[1.9453,2.2128,1.596,1.596];
-    const growth=["+114.9%","+237.1%","+222.3%","+222.3%"];
-    const postcol='#1428A0';
-    const prevCol='#1D9E75';
-    const maxV=Math.max(...valsCurr,...valsPrev)*1.2;
-    const groupW=cW/labels.length;
-    const barW=Math.min(groupW*0.28,64);
-    const gap=groupW*0.06;
-    function py(v){ return pT+cH*(1-v/maxV); }
-    [0,25,50,75,100].forEach(v=>{
-      const val=v/100*maxV;
-      const y=py(val);
-      svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:y,y2:y,stroke:'oklch(0.91 0.005 90)','stroke-width':1}));
-    });
-    labels.forEach((lab,i)=>{
-      const gx=pL+i*groupW+groupW/2;
-      const px=gx-gap/2-barW,cx=gx+gap/2;
-      const pTop=py(valsPrev[i]),cTop=py(valsCurr[i]);
-      svg.appendChild(svgEl('rect',{x:px,y:pTop,width:barW,height:py(0)-pTop,fill:prevCol,rx:2}));
-      svg.appendChild(svgEl('rect',{x:cx,y:cTop,width:barW,height:py(0)-cTop,fill:postcol,rx:2}));
-      const t1=svgEl('text',{x:px+barW/2,y:pTop-4,'text-anchor':'middle','font-size':8,fill:'oklch(0.55 0.02 260)'});
-      t1.textContent=valsPrev[i].toFixed(1)+'조'; svg.appendChild(t1);
-      const t2=svgEl('text',{x:cx+barW/2,y:cTop-14,'text-anchor':'middle','font-size':8.5,fill:'oklch(0.2 0.02 260)','font-weight':700});
-      t2.textContent=valsCurr[i].toFixed(1)+'조'; svg.appendChild(t2);
-      const t3=svgEl('text',{x:cx+barW/2,y:cTop-4,'text-anchor':'middle','font-size':8,fill:'#1D9E75','font-weight':700});
-      t3.textContent=growth[i]; svg.appendChild(t3);
-      const t4=svgEl('text',{x:gx,y:H-10,'text-anchor':'middle','font-size':9,fill:'oklch(0.5 0.02 260)'});
-      t4.textContent=lab; svg.appendChild(t4);
-    });
-    const legend=[[prevCol,'1H25'],[postcol,'1H26']];
-    legend.forEach((l,i)=>{
-      const lx=pL+i*56;
-      svg.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
-      const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:'oklch(0.5 0.02 260)'});
-      t.textContent=l[1]; svg.appendChild(t);
-    });
-    addChartExpandButton(svg);
-  })();
+  const id=_qtrCurrentMetric;
+  const vals=qtrData[id];
+  const estIdx=qtrEstimated[id]||[];
+  const accentCol=getComputedStyle(document.querySelector('.dp')).getPropertyValue('--dp-accent').trim() || '#1428A0';
+  const col=qtrMetricColor[id] || accentCol;
+  const svg=document.getElementById('hhiQtrChart');
+  svg.innerHTML='';
+  const W=680,H=190,pL=46,pR=16,pT=24,pB=30;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  const maxV=Math.max(...vals)*1.2;
+  const groupW=cW/qtrLabels.length;
+  const barW=Math.min(groupW*0.5,46);
+  function py(v){ return pT+cH*(1-v/maxV); }
+  [0,0.25,0.5,0.75,1].forEach(f=>{
+    const y=py(maxV*f);
+    svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:y,y2:y,stroke:'oklch(0.91 0.005 90)','stroke-width':1}));
+  });
+  qtrLabels.forEach((lab,i)=>{
+    const gx=pL+i*groupW+groupW/2;
+    const top=py(vals[i]);
+    const isEst=estIdx.includes(i);
+    svg.appendChild(svgEl('rect',{x:gx-barW/2,y:top,width:barW,height:py(0)-top,fill:col,opacity:isEst?0.45:1,rx:2}));
+    const t1=svgEl('text',{x:gx,y:top-6,'text-anchor':'middle','font-size':9.5,fill:col,'font-weight':700});
+    t1.textContent=vals[i].toFixed(2)+'조'+(isEst?'*':''); svg.appendChild(t1);
+    const t2=svgEl('text',{x:gx,y:H-10,'text-anchor':'middle','font-size':9,fill:'oklch(0.5 0.02 260)'});
+    t2.textContent=lab; svg.appendChild(t2);
+  });
+  const titleEl=document.getElementById('hhiQtrChartTitle');
+  if (titleEl) titleEl.textContent=qtrMetricLabel[id]+' — 2개년 분기 추이';
+  addChartExpandButton(svg);
 }
 
 // -- SVG candlestick chart (Yahoo Finance daily, with dates for hover/period) --

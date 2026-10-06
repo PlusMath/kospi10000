@@ -173,6 +173,9 @@ body{background:var(--dp-bg);}
   .dp-tab{font-size:14px;}
   .dp-seg-t{font-size:14px;}
   .dp-seg-d{font-size:13.5px;}
+  .dp-eps-flow{flex-wrap:wrap;}
+  .dp-eps-card{flex:1 1 28%;min-width:84px;}
+  .dp-arrow{display:none;}
   .dp-eps-y{font-size:12px;}
   .dp-eps-v{font-size:18px;}
   .dp-eps-n{font-size:11.5px;}
@@ -338,8 +341,12 @@ body{background:var(--dp-bg);}
         <div class="dp-seg"><div class="dp-seg-t">보유 지분증권 공정가치평가(OCI)</div><div class="dp-seg-d">2025년 평가이익 16조 8,399억. 당기손익 아닌 자본(OCI) 반영, 자본총계 급증의 핵심 원인.</div></div>
       </div>
 
-      <div class="dp-secl">지배주주순이익 3개년 추이</div>
+      <div class="dp-secl">지배주주순이익 5개년 추이</div>
       <div class="dp-eps-flow">
+        <div class="dp-eps-card"><div class="dp-eps-y">2021년</div><div class="dp-eps-v">9,994원</div><div class="dp-eps-n">1조 6,350억</div></div>
+        <div class="dp-arrow">→</div>
+        <div class="dp-eps-card"><div class="dp-eps-y">2022년</div><div class="dp-eps-v">~11,779원</div><div class="dp-eps-n">▲17.9%(추정)</div></div>
+        <div class="dp-arrow">→</div>
         <div class="dp-eps-card"><div class="dp-eps-y">2023년</div><div class="dp-eps-v">13,556원</div><div class="dp-eps-n">2조 2,183억</div></div>
         <div class="dp-arrow">→</div>
         <div class="dp-eps-card"><div class="dp-eps-y">2024년</div><div class="dp-eps-v">13,629원</div><div class="dp-eps-n">▲0.5%</div></div>
@@ -349,34 +356,36 @@ body{background:var(--dp-bg);}
 
       <div class="dp-insight">
         <div class="dp-insight-t">사업보고서 핵심</div>
-        <div class="dp-insight-b">매출액은 42조 1,032억(2024)→40조 7,422억(2025)으로 -3.23% 감소했지만 영업이익은 2조 9,834억→3조 2,927억(+10.37%)으로 본업 수익성은 개선. 보유 지분증권 공정가치평가이익이 2025년에만 16조 8,399억 발생하며 자본총계가 37조 2,585억→57조 4,969억(+54.3%)으로 급증. DPS는 2,600→2,800원(+7.7%)으로 늘었으나 배당성향은 19.10%→18.80%로 낮아져 이익 성장 대비 주주환원 확대는 더딘 편.</div>
+        <div class="dp-insight-b">매출은 34조 4,552억(2021)→43조 1,616억(2022, +25.3%)으로 급증한 뒤 41조 9,000억대(2023)~42조 1,030억(2024)에서 정체, 2025년은 40조 7,422억(-3.23%)으로 소폭 줄었음. 반면 영업이익은 1조 1,956억(2021, 영업이익률 3.47%)→2조 5,285억(2022, 영업이익률 5.86%, +111%)으로 상사·건설 마진이 레벨업된 뒤 2조 8,700억대(2023)~2조 9,834억(2024)~3조 2,927억(2025, +10.37%)으로 꾸준히 개선. 지배주주순이익은 1조 6,350억(2021)→2023년 2조 2,183억 구간은 보유 지분증권(삼성전자·삼성바이오로직스 등) 지분법손익 변동 영향이 커서 영업이익 증가율과 괴리가 있음 — 2022년 수치(~1조 7,790억, EPS ~11,779원)는 공식 분기/연간 공시에서 직접 확인하지 못해 2021·2023년 추세로 보정한 추정값(EPS 카드에 ~ 표기). 2025년에만 보유 지분증권 공정가치평가이익이 16조 8,399억 발생하며 자본총계가 37조 2,585억→57조 4,969억(+54.3%)으로 급증. DPS는 2,600→2,800원(+7.7%)으로 늘었으나 배당성향은 19.10%→18.80%로 낮아져 이익 성장 대비 주주환원 확대는 더딘 편.</div>
       </div>
     </div>
 
     <div id="dpFundQuarter" style="display:none;">
-      <div class="dp-secl">매출액 추이</div>
-      <svg id="sctQtrChart" viewBox="0 0 680 170" width="100%" style="display:block;margin-bottom:16px;"></svg>
-      <div class="dp-secl">영업이익·법인세전·반기순이익·지배주주순이익 추이</div>
-      <svg id="sctQtrChart2" viewBox="0 0 680 210" width="100%" style="display:block;margin-bottom:16px;"></svg>
+      <div class="dp-secl">분기별 실적 (2개년, 3Q24~2Q26)</div>
+      <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
+        <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
+        <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
+        <button type="button" data-qm="pretax" onclick="dpShowQtrMetric('pretax',this)">세전이익</button>
+        <button type="button" data-qm="ni" onclick="dpShowQtrMetric('ni',this)">순이익</button>
+        <button type="button" data-qm="nip" onclick="dpShowQtrMetric('nip',this)">지배주주순이익</button>
+      </nav>
+      <div id="sctQtrChartTitle" style="font-size:11px;font-weight:700;color:var(--dp-text3);margin-bottom:4px;">매출액 — 2개년 분기 추이</div>
+      <svg id="sctQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
+      <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">매출액·영업이익은 8개 분기 모두 분기 공시 확정치. 순이익(연결)은 1Q25·1Q26만 확정(1Q26 발표의 전년동기 성장률로 1Q25 역산), 2Q25·2Q26은 확정된 반기 합계에서 1Q를 뺀 정확한 값이며 나머지(반투명, *)는 영업이익 비중 배분 추정값. 세전이익(전 구간)과 지배주주순이익(전 구간)도 분기별 세부가 공시되지 않아 확정된 반기·연간 합계를 영업이익 비중으로 배분한 추정값(*) — 이 회사는 지분법손익·지분증권 평가손익 비중이 커서 분기 간 실제 편차가 아래 추정보다 클 수 있음.</div>
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1H26 연결 매출액</span><span class="v">22조 4,609억 (전년동기比 ▲13.7%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v up">1조 7,521억 (OPM 7.80%) (전년동기比 ▲18.6%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 법인세차감전이익</span><span class="v up">2조 4,223억 (전년동기比 ▲23.8%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 반기순이익</span><span class="v up">2조 14억 (전년동기比 ▲36.7%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 지배주주 순이익</span><span class="v up">1조 4,397억 (전년동기比 ▲32.6%)</span></div>
+          <div class="dp-row2"><span class="l">1H26 보통주 기본EPS</span><span class="v up">8,798원 (연환산 ~17,596원)</span></div>
+          <div class="dp-row2"><span class="l">1H26 연결 자산총계</span><span class="v">163조 7,685억 (▲89.3% 연초대비)</span></div>
+          <div class="dp-row2"><span class="l">지배기업소유주지분</span><span class="v up">105조 5,532억 (▲111.5% 연초대비)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 보통주 기본EPS</span><span class="v up">8,798원 (연환산 ~17,596원)</span></div>
-          <div class="dp-row2"><span class="l">2Q26 단독 영업이익</span><span class="v up">1조 317억 (1Q26 대비 ▲43.2%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 자산총계</span><span class="v">163조 7,685억 (▲89.3% 연초대비)</span></div>
           <div class="dp-row2"><span class="l">연결 자본총계</span><span class="v up">113조 7,086억 (▲97.8% 연초대비)</span></div>
-          <div class="dp-row2"><span class="l">지배기업소유주지분</span><span class="v up">105조 5,532억 (▲111.5% 연초대비)</span></div>
+          <div class="dp-row2"><span class="l">2Q26 단독 영업이익</span><span class="v up">1조 317억 (1Q26 대비 ▲43.2%)</span></div>
         </div>
       </div>
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심 — 전년동기(1H25) 대비</div>
-        <div class="dp-insight-b">1H26 상반기에만 기타포괄손익-공정가치측정금융자산평가이익이 대규모로 추가 발생하며 자본총계가 연초(57조 4,969억) 대비 97.8% 급증한 113조 7,086억을 기록 — 보유 지분증권(SK하이닉스 등)의 시가 상승이 자본총계 변동의 핵심 변수. 영업이익률(7.80%)은 2025년 연간(8.08%)과 유사한 수준을 유지하며 본업 자체는 안정적. 지배주주 순이익(1조 4,397억)은 전년동기 대비 32.6% 늘었고, EPS 연환산(17,596원)은 2025년 연간(14,905원) 대비 +18.1% 수준.</div>
+        <div class="dp-insight-t">분기보고서 핵심 — 2개년 흐름</div>
+        <div class="dp-insight-b">2024년 3분기(영업이익 7,360억)·4분기(6,350억)는 건설부문 둔화로 낮은 수준에 머물렀고, 2025년 1~2분기도 비슷한 흐름이 이어졌으나 3분기(9,940억, 전년동기 대비 +35%)부터 상사부문(태양광 개발 등)과 패션 호조로 뚜렷한 회복이 시작돼 4분기(8,220억)까지 이어짐. 2026년 들어 1분기(7,204억)는 건설 둔화로 주춤했지만 2분기(1조 317억)에 상사부문 영업이익이 전년동기 대비 73% 급증하며 1Q26 대비로도 43.2% 늘어 분기 기록을 경신. 자본총계는 보유 지분증권(SK하이닉스·삼성전자 등) 시가 상승으로 2025년 말 57조 4,969억→1H26 113조 7,086억(+97.8%)까지 급증해, 이 회사 실적의 상당 부분이 본업 영업이익보다 지분 가치 변동에 좌우되는 구조임을 보여줌.</div>
       </div>
     </div>
   </div>
@@ -1263,8 +1272,8 @@ function drawAnnualChart(){
     const svg=document.getElementById('sctAnnualChart');
     const W=680,H=150,pL=44,pR=20,pT=16,pB=26;
     const cW=W-pL-pR,cH=H-pT-pB;
-    const cats=['2023년','2024년','2025년'];
-    const rev=[41.90,42.10,40.74];
+    const cats=['2021년','2022년','2023년','2024년','2025년'];
+    const rev=[34.46,43.16,41.90,42.10,40.74];
     const revCol='#8B93A0';
     const maxV=Math.max(...rev)*1.15;
     const groupW=cW/cats.length;
@@ -1289,9 +1298,9 @@ function drawAnnualChart(){
     const svg=document.getElementById('sctAnnualChart2');
     const W=680,H=150,pL=44,pR=44,pT=16,pB=26;
     const cW=W-pL-pR,cH=H-pT-pB;
-    const cats=['2023년','2024년','2025년'];
-    const oi=[2.87,2.98,3.29];
-    const ni=[2.22,2.23,2.44];
+    const cats=['2021년','2022년','2023년','2024년','2025년'];
+    const oi=[1.20,2.53,2.87,2.98,3.29];
+    const ni=[1.64,1.78,2.22,2.23,2.44];
     const oiCol='#1A2E5A', niCol='#1D9E75', negCol='#D85A30';
     const maxV=Math.max(0,...oi,...ni)*1.2;
     const minV=Math.min(0,...oi,...ni)*1.2;
@@ -1333,95 +1342,55 @@ function drawAnnualChart(){
   })();
 }
 
+const qtrLabels=['3Q24','4Q24','1Q25','2Q25','3Q25','4Q25','1Q26','2Q26'];
+const qtrData={
+  rev:   [10.31, 9.993, 9.737, 10.022, 10.151, 10.832, 10.466, 11.995],
+  oi:    [0.736, 0.635, 0.724, 0.753, 0.994, 0.822, 0.720, 1.032],
+  pretax:[1.132, 0.978, 0.959, 0.997, 1.525, 1.261, 0.996, 1.426],
+  ni:    [0.962, 0.831, 0.937, 0.527, 1.296, 1.072, 1.086, 0.916],
+  nip:   [0.550, 0.475, 0.695, 0.391, 0.741, 0.613, 0.781, 0.659]
+};
+const qtrEstimated={ pretax:[0,1,2,3,4,5,6,7], ni:[0,1,4,5], nip:[0,1,2,3,4,5,6,7] };
+const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
+const qtrMetricColor={rev:'#8B93A0',oi:'#1428A0',pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
+let _qtrCurrentMetric='rev';
+
+function dpShowQtrMetric(id, el){
+  document.querySelectorAll('#dpQtrMetricNav button').forEach(b=>b.classList.toggle('active', b===el));
+  _qtrCurrentMetric=id;
+  drawQtrChart();
+}
+
 function drawQtrChart(){
-  (function(){
-    const svg=document.getElementById('sctQtrChart');
-    const W=680,H=170,pL=44,pR=20,pT=30,pB=34;
-    const cW=W-pL-pR,cH=H-pT-pB;
-    const labels=["\ub9e4\ucd9c\uc561"];
-    const valsPrev=[19.7589];
-    const valsCurr=[22.4609];
-    const growth=["+13.7%"];
-    const postcol='#1428A0';
-    const prevCol='#1D9E75';
-    const maxV=Math.max(...valsCurr,...valsPrev)*1.2;
-    const groupW=cW/labels.length;
-    const barW=Math.min(groupW*0.28,64);
-    const gap=groupW*0.06;
-    function py(v){ return pT+cH*(1-v/maxV); }
-    [0,25,50,75,100].forEach(v=>{
-      const val=v/100*maxV;
-      const y=py(val);
-      svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:y,y2:y,stroke:'oklch(0.91 0.005 90)','stroke-width':1}));
-    });
-    labels.forEach((lab,i)=>{
-      const gx=pL+i*groupW+groupW/2;
-      const px=gx-gap/2-barW,cx=gx+gap/2;
-      const pTop=py(valsPrev[i]),cTop=py(valsCurr[i]);
-      svg.appendChild(svgEl('rect',{x:px,y:pTop,width:barW,height:py(0)-pTop,fill:prevCol,rx:2}));
-      svg.appendChild(svgEl('rect',{x:cx,y:cTop,width:barW,height:py(0)-cTop,fill:postcol,rx:2}));
-      const t1=svgEl('text',{x:px+barW/2,y:pTop-4,'text-anchor':'middle','font-size':8,fill:'oklch(0.55 0.02 260)'});
-      t1.textContent=valsPrev[i].toFixed(1)+'조'; svg.appendChild(t1);
-      const t2=svgEl('text',{x:cx+barW/2,y:cTop-14,'text-anchor':'middle','font-size':8.5,fill:'oklch(0.2 0.02 260)','font-weight':700});
-      t2.textContent=valsCurr[i].toFixed(1)+'조'; svg.appendChild(t2);
-      const t3=svgEl('text',{x:cx+barW/2,y:cTop-4,'text-anchor':'middle','font-size':8,fill:'#1D9E75','font-weight':700});
-      t3.textContent=growth[i]; svg.appendChild(t3);
-      const t4=svgEl('text',{x:gx,y:H-10,'text-anchor':'middle','font-size':9,fill:'oklch(0.5 0.02 260)'});
-      t4.textContent=lab; svg.appendChild(t4);
-    });
-    const legend=[[prevCol,'1H25'],[postcol,'1H26']];
-    legend.forEach((l,i)=>{
-      const lx=pL+i*56;
-      svg.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
-      const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:'oklch(0.5 0.02 260)'});
-      t.textContent=l[1]; svg.appendChild(t);
-    });
-    addChartExpandButton(svg);
-  })();
-  (function(){
-    const svg=document.getElementById('sctQtrChart2');
-    const W=680,H=210,pL=44,pR=20,pT=30,pB=34;
-    const cW=W-pL-pR,cH=H-pT-pB;
-    const labels=["\uc601\uc5c5\uc774\uc775","\ubc95\uc778\uc138\uc804","\ubc18\uae30\uc21c\uc774\uc775","\uc9c0\ubc30\uc8fc\uc8fc\uc21c\uc774\uc775"];
-    const valsPrev=[1.477,1.9563,1.4638,1.0855];
-    const valsCurr=[1.7521,2.4223,2.0014,1.4397];
-    const growth=["+18.6%","+23.8%","+36.7%","+32.6%"];
-    const postcol='#1428A0';
-    const prevCol='#1D9E75';
-    const maxV=Math.max(...valsCurr,...valsPrev)*1.2;
-    const groupW=cW/labels.length;
-    const barW=Math.min(groupW*0.28,64);
-    const gap=groupW*0.06;
-    function py(v){ return pT+cH*(1-v/maxV); }
-    [0,25,50,75,100].forEach(v=>{
-      const val=v/100*maxV;
-      const y=py(val);
-      svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:y,y2:y,stroke:'oklch(0.91 0.005 90)','stroke-width':1}));
-    });
-    labels.forEach((lab,i)=>{
-      const gx=pL+i*groupW+groupW/2;
-      const px=gx-gap/2-barW,cx=gx+gap/2;
-      const pTop=py(valsPrev[i]),cTop=py(valsCurr[i]);
-      svg.appendChild(svgEl('rect',{x:px,y:pTop,width:barW,height:py(0)-pTop,fill:prevCol,rx:2}));
-      svg.appendChild(svgEl('rect',{x:cx,y:cTop,width:barW,height:py(0)-cTop,fill:postcol,rx:2}));
-      const t1=svgEl('text',{x:px+barW/2,y:pTop-4,'text-anchor':'middle','font-size':8,fill:'oklch(0.55 0.02 260)'});
-      t1.textContent=valsPrev[i].toFixed(1)+'조'; svg.appendChild(t1);
-      const t2=svgEl('text',{x:cx+barW/2,y:cTop-14,'text-anchor':'middle','font-size':8.5,fill:'oklch(0.2 0.02 260)','font-weight':700});
-      t2.textContent=valsCurr[i].toFixed(1)+'조'; svg.appendChild(t2);
-      const t3=svgEl('text',{x:cx+barW/2,y:cTop-4,'text-anchor':'middle','font-size':8,fill:'#1D9E75','font-weight':700});
-      t3.textContent=growth[i]; svg.appendChild(t3);
-      const t4=svgEl('text',{x:gx,y:H-10,'text-anchor':'middle','font-size':9,fill:'oklch(0.5 0.02 260)'});
-      t4.textContent=lab; svg.appendChild(t4);
-    });
-    const legend=[[prevCol,'1H25'],[postcol,'1H26']];
-    legend.forEach((l,i)=>{
-      const lx=pL+i*56;
-      svg.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
-      const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:'oklch(0.5 0.02 260)'});
-      t.textContent=l[1]; svg.appendChild(t);
-    });
-    addChartExpandButton(svg);
-  })();
+  const id=_qtrCurrentMetric;
+  const vals=qtrData[id];
+  const estIdx=qtrEstimated[id]||[];
+  const col=qtrMetricColor[id];
+  const svg=document.getElementById('sctQtrChart');
+  svg.innerHTML='';
+  const W=680,H=190,pL=46,pR=16,pT=24,pB=30;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  const maxV=Math.max(...vals)*1.2;
+  const groupW=cW/qtrLabels.length;
+  const barW=Math.min(groupW*0.5,46);
+  function py(v){ return pT+cH*(1-v/maxV); }
+  [0,0.25,0.5,0.75,1].forEach(f=>{
+    const y=py(maxV*f);
+    svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:y,y2:y,stroke:'oklch(0.91 0.005 90)','stroke-width':1}));
+  });
+  qtrLabels.forEach((lab,i)=>{
+    const gx=pL+i*groupW+groupW/2;
+    const top=py(vals[i]);
+    const isEst=estIdx.includes(i);
+    svg.appendChild(svgEl('rect',{x:gx-barW/2,y:top,width:barW,height:py(0)-top,fill:col,opacity:isEst?0.45:1,rx:2}));
+    const t1=svgEl('text',{x:gx,y:top-6,'text-anchor':'middle','font-size':9.5,fill:col,'font-weight':700});
+    t1.textContent=vals[i].toFixed(2)+'조'+(isEst?'*':''); svg.appendChild(t1);
+    const t2=svgEl('text',{x:gx,y:H-10,'text-anchor':'middle','font-size':9,fill:'oklch(0.5 0.02 260)'});
+    t2.textContent=lab; svg.appendChild(t2);
+  });
+  const titleEl=document.getElementById('sctQtrChartTitle');
+  if (titleEl) titleEl.textContent=qtrMetricLabel[id]+' — 2개년 분기 추이';
+  addChartExpandButton(svg);
 }
 
 // -- SVG candlestick chart (Yahoo Finance daily, with dates for hover/period) --
