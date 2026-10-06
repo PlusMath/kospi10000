@@ -1033,9 +1033,9 @@ function drawAnnualChart(){
   // 직접 비교가 불가능하므로 막대를 그리지 않고 null로 비움(아래 사업보고서 핵심 해설 참고).
   // 2021년(제1기)은 2021-11 출범 후 2개월짜리 결산이라 연간 비교 대상에서 제외.
   const cats=['2022년 (제2기)','2023년','2024년','2025년 (제5기)'];
-  const rev=[null,0.20,0.16,0.14];
-  const oi=[0.1628,-2.33,3.92,8.80];
-  const ni=[0.2561,-1.29,3.71,8.82];
+  const rev=[null, 2.28, 1.91, 1.41];
+  const oi=[null, -2.34, 3.91, 8.80];
+  const ni=[null, -1.29, 3.71, 8.82];
   const maxV=Math.max(...oi,...ni)*1.12;
   const minV=Math.min(...oi,...ni)*1.4;
   function py(v){ return pT+cH*(1-(v-minV)/(maxV-minV)); }
@@ -1058,19 +1058,25 @@ function drawAnnualChart(){
       const t1=svgEl('text',{x:rx+barW/2,y:py(0)-4,'text-anchor':'middle','font-size':8.5,fill:revCol});
       t1.textContent='비교불가'; svg.appendChild(t1);
     }
-    const oTop=py(oi[i]);
-    svg.appendChild(svgEl('rect',{x:ox,y:Math.min(oTop,py(0)),width:barW,height:Math.abs(py(0)-oTop),fill:oiCol,rx:2}));
-    const t2=svgEl('text',{x:ox+barW/2,y:oi[i]<0?py(0)-4:oTop-4,'text-anchor':'middle','font-size':9,fill:oiCol,'font-weight':600});
-    t2.textContent=oi[i].toFixed(2)+'조'; svg.appendChild(t2);
+    if (oi[i] != null) {
+      const oTop=py(oi[i]);
+      svg.appendChild(svgEl('rect',{x:ox,y:Math.min(oTop,py(0)),width:barW,height:Math.abs(py(0)-oTop),fill:oiCol,rx:2}));
+      const t2=svgEl('text',{x:ox+barW/2,y:oi[i]<0?py(0)-4:oTop-4,'text-anchor':'middle','font-size':9,fill:oiCol,'font-weight':600});
+      t2.textContent=oi[i].toFixed(2)+'조'; svg.appendChild(t2);
+    } else {
+      const t2=svgEl('text',{x:ox+barW/2,y:py(0)-4,'text-anchor':'middle','font-size':8.5,fill:oiCol});
+      t2.textContent='비교불가'; svg.appendChild(t2);
+    }
     const t3=svgEl('text',{x:gx,y:H-6,'text-anchor':'middle','font-size':10,fill:cssVar('--dp-text2')});
     t3.textContent=cat; svg.appendChild(t3);
-    pts.push([gx, py(ni[i])]);
+    if (ni[i] != null) pts.push([gx, py(ni[i]), i]);
   });
   svg.appendChild(svgEl('polyline',{points:pts.map(p=>p.join(',')).join(' '),fill:'none',stroke:niCol,'stroke-width':2.5}));
-  pts.forEach((p,i)=>{
+  pts.forEach((p)=>{
+    const v=ni[p[2]];
     svg.appendChild(svgEl('circle',{cx:p[0],cy:p[1],r:4,fill:niCol}));
-    const t=svgEl('text',{x:p[0],y:p[1]+(ni[i]<0?14:-9),'text-anchor':'middle','font-size':9,fill:niCol,'font-weight':600});
-    t.textContent=ni[i].toFixed(2)+'조'; svg.appendChild(t);
+    const t=svgEl('text',{x:p[0],y:p[1]+(v<0?14:-9),'text-anchor':'middle','font-size':9,fill:niCol,'font-weight':600});
+    t.textContent=v.toFixed(2)+'조'; svg.appendChild(t);
   });
   const legend=[[revCol,'영업수익'],[oiCol,'영업이익'],[niCol,'지배주주순이익']];
   legend.forEach((l,i)=>{
@@ -1089,13 +1095,13 @@ function drawAnnualChart(){
 // qtrEstimated로 표시, 반투명 막대 + '*'.
 const qtrLabels=['3Q24','4Q24','1Q25','2Q25','3Q25','4Q25','1Q26','2Q26'];
 const qtrData={
-  rev:   [0.410, 0.530, 0.3508, 0.3508, 0.4079, 0.478, 0.3145, 0.3145],
-  oi:    [1.231, 1.590, 0.9117, 2.1426, 2.6455, 3.1002, 8.2783, 19.2354],
-  pretax:[1.287, 1.662, 0.9568, 2.2486, 2.764, 3.240, 8.605, 19.992],
-  ni:    [1.1292, 1.4592, 0.9132, 2.1462, 2.655, 3.108, 8.3748, 18.6750],
-  nip:   [1.1292, 1.4592, 0.9123, 2.1439, 2.655, 3.109, 8.374, 18.682]
+  rev: [0.4575, 0.4823, 0.4028, 0.4066, 0.4079, 0.1942, 0.3003, 0.3285],
+  oi: [1.1620, 1.6520, 1.6523, 1.4011, 2.6455, 3.0985, 8.2783, 19.2354],
+  pretax: [1.1861, 1.5365, 1.6874, 1.5219, 2.5483, 3.7497, 8.9297, 19.6678],
+  ni: [1.1292, 1.4592, 1.6123, 1.4471, 2.4824, 3.2769, 8.3747, 18.6750],
+  nip: [1.1365, 1.4919, 1.6160, 1.4402, 2.4853, 3.2826, 8.3810, 18.6748]
 };
-const qtrEstimated={ rev:[0,1,2,3,5,6,7], oi:[0,1,2,3], pretax:[0,1,2,3,4,5,6,7], ni:[2,3,4,5], nip:[0,1,2,3,4,5,6,7] };
+const qtrEstimated={};
 const qtrMetricLabel={rev:'영업수익',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
 const qtrMetricColor={rev:'#8B93A0',oi:'#C2185B',pretax:'#7C5CBF',ni:'#1D9E75',nip:'#1428A0'};
 let _qtrCurrentMetric='rev';
