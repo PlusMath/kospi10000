@@ -240,14 +240,51 @@ body{background:var(--dp-bg);}
   <div class="dp-stat"><div class="dp-stat-l">고점 대비</div><div class="dp-stat-v" style="color:var(--dp-down);">-5.0%</div></div>
 </div>
 
-<div class="dp-summary" id="dpLogicBox">
-  <div class="dp-summary-l">핵심 투자 논리</div>
-  <div class="dp-logic-list" id="dpLogicList"></div>
-  <div class="dp-logic-chart-l">1년 후 예상 주가 (채택한 논리 기준)</div>
-  <div class="dp-logic-chart-formula" id="dpLogicChartFormula"></div>
-  <div class="dp-logic-chart-summary" id="dpLogicChartSummary"></div>
-  <svg id="dpLogicChart" viewBox="0 0 680 220" width="100%" style="display:block;"></svg>
-  <div class="dp-logic-chart-note">각 포인트 옆 범위는 실적 발표·업계 전망 등 실제 자료를 근거로 한 독립 민감도(그 포인트만 변하고 나머지는 유지된다고 가정)이며, 예측값이 아닌 조건부 범위입니다. 토글 시에는 구간의 중간값으로 계산하며, 실제 주가는 환율·수급 등에 따라 범위를 벗어날 수 있습니다.</div>
+<div class="dp-summary" id="dpBuffettBox" data-iv-low="121067" data-iv-high="182518" data-buy="90801">
+  <style>
+    #dpBuffettBox .dpb-sub{font-size:12px;color:var(--dp-text3);margin:-2px 0 10px;}
+    #dpBuffettBox .dpb-row{display:flex;gap:8px;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--dp-accent-soft2);font-size:12.5px;}
+    #dpBuffettBox .dpb-row:last-child{border-bottom:none;}
+    #dpBuffettBox .dpb-badge{flex-shrink:0;font-size:11px;font-weight:800;border-radius:5px;padding:2px 6px;}
+    #dpBuffettBox .dpb-badge.ok{color:var(--dp-up);background:oklch(0.55 0.2 25 / 0.1);}
+    #dpBuffettBox .dpb-badge.ng{color:var(--dp-down);background:oklch(0.52 0.14 250 / 0.1);}
+    #dpBuffettBox .dpb-name{flex-shrink:0;font-weight:700;width:86px;}
+    #dpBuffettBox .dpb-txt{color:var(--dp-text3);min-width:0;}
+    #dpBuffettBox .dpb-h{font-size:12px;font-weight:700;color:var(--dp-text3);margin:14px 0 6px;padding-top:12px;border-top:1px dashed var(--dp-accent-soft2);}
+    #dpBuffettBox .dpb-nums{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;}
+    #dpBuffettBox .dpb-num{background:var(--dp-card);border:1px solid var(--dp-border);border-radius:8px;padding:8px;}
+    #dpBuffettBox .dpb-num .l{font-size:10.5px;color:var(--dp-text4);}
+    #dpBuffettBox .dpb-num .v{font-size:14px;font-weight:800;margin-top:2px;}
+    #dpBuffettBox .dpb-bar{position:relative;height:30px;margin:6px 0 22px;}
+    #dpBuffettBox .dpb-track{position:absolute;left:0;right:0;top:12px;height:6px;border-radius:3px;background:var(--dp-border);}
+    #dpBuffettBox .dpb-band{position:absolute;top:10px;height:10px;border-radius:5px;background:oklch(0.62 0.12 150 / 0.45);}
+    #dpBuffettBox .dpb-mark{position:absolute;top:2px;width:2px;height:26px;transform:translateX(-1px);}
+    #dpBuffettBox .dpb-mark span{position:absolute;top:28px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:10px;font-weight:700;}
+    #dpBuffettBox .dpb-verdict{font-size:13px;font-weight:800;margin-bottom:4px;}
+    @media (max-width:640px){
+      #dpBuffettBox .dpb-nums{grid-template-columns:repeat(2,1fr);}
+      #dpBuffettBox .dpb-row{flex-wrap:wrap;font-size:13.5px;}
+      #dpBuffettBox .dpb-name{width:auto;}
+      #dpBuffettBox .dpb-txt{flex-basis:100%;}
+    }
+  </style>
+  <div class="dp-summary-l">버핏식 내재가치 평가</div>
+  <div class="dpb-sub">DART 연결 재무제표 2015~2025년 기준 · 품질 점검 3/5 통과 · 할인율 10% · 안전마진 25%</div>
+      <div class="dpb-row"><span class="dpb-badge ng">미달</span><span class="dpb-name">ROE 꾸준함</span><span class="dpb-txt">10년 ROE 9.8~18.4%, 평균 13.1%, 15% 이상 3/11년</span></div>
+      <div class="dpb-row"><span class="dpb-badge ok">통과</span><span class="dpb-name">부채</span><span class="dpb-txt">부채비율 52%, 순현금 +0.90조</span></div>
+      <div class="dpb-row"><span class="dpb-badge ok">통과</span><span class="dpb-name">마진 안정성</span><span class="dpb-txt">영업이익률 19.9~33.1% (표준편차 4.8%p)</span></div>
+      <div class="dpb-row"><span class="dpb-badge ok">통과</span><span class="dpb-name">이익의 질</span><span class="dpb-txt">10년 영업현금흐름/순이익 1.02배</span></div>
+      <div class="dpb-row"><span class="dpb-badge ng">미달</span><span class="dpb-name">1원 테스트</span><span class="dpb-txt">유보이익 5.1조 → 시가총액 변화 +4.0조</span></div>
+  <div class="dpb-h">내재가치와 현재가 위치</div>
+  <div class="dpb-verdict" id="dpbVerdict"></div>
+  <div class="dpb-nums">
+    <div class="dpb-num"><div class="l">안전마진 매수가</div><div class="v">90,801원</div></div>
+    <div class="dpb-num"><div class="l">내재가치 하단</div><div class="v">121,067원</div></div>
+    <div class="dpb-num"><div class="l">내재가치 상단</div><div class="v">182,518원</div></div>
+    <div class="dpb-num"><div class="l">현재가</div><div class="v" id="dpbPrice">-</div></div>
+  </div>
+  <div class="dpb-bar" id="dpbBar"><div class="dpb-track"></div></div>
+  <div class="dp-logic-chart-note">주주이익은 최근 3년 평균 지배주주순이익(유지보수 설비투자≈감가상각 가정)을 썼고, 최근 해외 공장 증설 투자는 성장 투자로 보고 빼지 않았다. 증설 투자까지 빼면 최근 3년 주주이익은 0.22조로 내재가치가 크게 낮아지므로, 증설이 이익 성장으로 이어지는지가 핵심 확인 포인트다. 성장률은 0%(하단)~평균 ROE×이익 유보율(상단, 상한 6%). 1원 테스트는 자사주 소각으로 줄어든 주식 수를 반영하지 않아 KT&G에 불리하게 계산됐을 수 있다. 주가 예측이 아니라 재무제표로 추정한 기업 가치이며, 투자 권고가 아니다.</div>
 </div>
 
 <!-- dp-news-summary:start --><div class="dp-news-summary">
@@ -775,206 +812,37 @@ body{background:var(--dp-bg);}
 const SECTION_IDS = ['tech','fund','valuation','timeline','thesis','consensus','news'];
 let _dpTechDrawn = false, _dpAnnualDrawn = false, _dpQtrDrawn = false; let _dpNewsInit = false; let _dpMetricChartInit = false;
 
-// -- 핵심 투자 논리 (yes/no 토글로 1년 후 예상 주가 차트에 반영/제외) --
-// "KOSPI 41~50위 종목별 상승·하락 3개와 가격 시나리오"(2026-09-14)를 반영. 상승 3개·하락 3개의
-// 서로 겹치지 않는 독립 포인트로 구성했다. 각 포인트는 그 포인트만 변하고 나머지는
-// 유지된다는 "독립 민감도"이며, 내부적으로 EPS 변화율과 적용 PER 변화율로 나뉜다.
-// 목표가 = 오늘가 × (1+선택 포인트 EPS 변화율 합) × (1+선택 포인트 PER 변화율 합)
-// 로 계산해 중복 없이 EPS·PER 두 축을 한 번씩만 반영한다. 배지의 범위(예: +15~31%)는
-// 해당 포인트만 단독으로 변했을 때의 독립 영향 범위이며, 토글 계산에는 중간값을 쓴다.
-const DP_PRICE_TODAY = 176900;
-const DP_PRICE_TODAY_LABEL = '오늘 (2026.10.02)';
-const DP_PRICE_TARGET_LABEL = '1년 후 (2027.10.02)';
-const DP_DIR_LABELS = { up: '상승 포인트', down: '하락 포인트' };
-const DP_DIR_ARROW = { up: '▲', down: '▼' };
-const DP_LOGIC_ITEMS = [
-  { id: 'core_improve46', direction: 'up', title: '본업 개선', sub: '2025년 매출·영업이익이 각각 11.4%, 13.0% 증가한 흐름이 이어지는 경우', rangeLabel: '+3~6%', epsImpact: 0, perImpact: 0.0632 },
-  { id: 'dividend_up46', direction: 'up', title: '주주환원 확대', sub: '주당배당금이 5,400원에서 6,000원으로 늘어난 정책이 지속되는 경우', rangeLabel: '+3~7%', epsImpact: 0, perImpact: 0.0743 },
-  { id: 'low_minority46', direction: 'up', title: '지배주주 귀속 구조', sub: '비지배지분 비율이 작아 연결 이익의 소수주주 배분 부담이 낮은 구조가 유지되는 경우', rangeLabel: '+4~9%', epsImpact: 0, perImpact: 0.0854 },
-  { id: 'profit_gap46', direction: 'down', title: '순이익 괴리', sub: '2025년 지배주주순이익이 6.5% 감소한 흐름이 지속되는 경우', rangeLabel: '-2~-5%', epsImpact: 0, perImpact: -0.0496 },
-  { id: 'dividend_burden46', direction: 'down', title: '배당 여력 부담', sub: '배당성향 57.6% 수준에서 이익 감소가 이어지면 배당 부담이 커지는 경우', rangeLabel: '-7~-15%', epsImpact: 0, perImpact: -0.1453 },
-  { id: 'regulatory_exposure46', direction: 'down', title: '규제 노출', sub: '담배 소비규제·건강 트렌드가 장기 판매량에 부정적 영향을 주는 경우', rangeLabel: '-3~-8%', epsImpact: 0, perImpact: -0.0766 },
-];
-const dpLogicState = {};
-DP_LOGIC_ITEMS.forEach((item) => { dpLogicState[item.id] = item.direction === 'up'; });
-
-function dpRenderLogicList() {
-  const list = document.getElementById('dpLogicList');
-  if (!list) return;
-  list.innerHTML = '';
-  let lastDir = null;
-  DP_LOGIC_ITEMS.forEach((item) => {
-    if (item.direction !== lastDir) {
-      lastDir = item.direction;
-      const dh = document.createElement('div');
-      dh.className = 'dp-logic-dir-h ' + item.direction;
-      dh.innerHTML = '<span class="arrow">' + DP_DIR_ARROW[item.direction] + '</span> ' + DP_DIR_LABELS[item.direction];
-      list.appendChild(dh);
-    }
-    const row = document.createElement('div');
-    row.className = 'dp-logic-item';
-    const info = document.createElement('span');
-    info.className = 'dp-logic-info';
-    const impact = document.createElement('span');
-    impact.className = 'dp-logic-impact' + (item.direction === 'down' ? ' down' : '');
-    impact.textContent = item.rangeLabel;
-    const text = document.createElement('span');
-    text.className = 'dp-logic-text';
-    const txt = document.createElement('div');
-    txt.className = 'dp-logic-txt';
-    txt.textContent = item.title;
-    const sub = document.createElement('div');
-    sub.className = 'dp-logic-sub';
-    sub.textContent = item.sub;
-    text.appendChild(txt);
-    text.appendChild(sub);
-    info.appendChild(impact);
-    info.appendChild(text);
-    const toggle = document.createElement('span');
-    toggle.className = 'dp-logic-toggle';
-    const yesBtn = document.createElement('button');
-    yesBtn.type = 'button';
-    yesBtn.className = 'dp-logic-btn yes';
-    yesBtn.textContent = 'Yes';
-    yesBtn.onclick = () => dpSetLogic(item.id, true);
-    const noBtn = document.createElement('button');
-    noBtn.type = 'button';
-    noBtn.className = 'dp-logic-btn no';
-    noBtn.textContent = 'No';
-    noBtn.onclick = () => dpSetLogic(item.id, false);
-    toggle.appendChild(yesBtn);
-    toggle.appendChild(noBtn);
-    row.appendChild(info);
-    row.appendChild(toggle);
-    list.appendChild(row);
-  });
-  dpRenderLogicChart();
-}
-function dpSetLogic(id, value) {
-  dpLogicState[id] = value;
-  dpRenderLogicChart();
-}
-function dpComputeLogicTarget() {
-  let epsFactor = 1, perFactor = 1;
-  DP_LOGIC_ITEMS.forEach((item) => {
-    if (!dpLogicState[item.id]) return;
-    epsFactor += item.epsImpact;
-    perFactor += item.perImpact;
-  });
-  // 여러 하락 포인트가 겹치면 배수가 0 이하로 내려갈 수 있어, 실제 주가처럼
-  // 완전히 0/음수로 떨어지지 않도록 축별 최소값(5%)을 둔다.
-  epsFactor = Math.max(epsFactor, 0.05);
-  perFactor = Math.max(perFactor, 0.05);
-  return { epsFactor, perFactor, target: DP_PRICE_TODAY * epsFactor * perFactor };
-}
-function dpRenderLogicChart() {
-  const NEUTRAL = 'oklch(0.55 0.02 260)';
-  DP_LOGIC_ITEMS.forEach((item, i) => {
-    const row = document.querySelectorAll('#dpLogicList .dp-logic-item')[i];
-    if (!row) return;
-    const yesBtn = row.querySelector('.dp-logic-btn.yes');
-    const noBtn = row.querySelector('.dp-logic-btn.no');
-    const isYes = dpLogicState[item.id];
-    const yesColor = item.direction === 'up' ? 'var(--dp-up)' : 'var(--dp-down)';
-    yesBtn.classList.toggle('active', isYes);
-    yesBtn.style.background = isYes ? yesColor : '';
-    yesBtn.style.borderColor = isYes ? yesColor : '';
-    noBtn.classList.toggle('active', !isYes);
-    noBtn.style.background = !isYes ? NEUTRAL : '';
-    noBtn.style.borderColor = !isYes ? NEUTRAL : '';
-  });
-
-  const { target } = dpComputeLogicTarget();
-  const pct = ((target - DP_PRICE_TODAY) / DP_PRICE_TODAY * 100).toFixed(1);
-  const pctColor = target === DP_PRICE_TODAY ? NEUTRAL : (target > DP_PRICE_TODAY ? 'var(--dp-up)' : 'var(--dp-down)');
-  const pctSign = target >= DP_PRICE_TODAY ? '+' : '';
-  const upCount = DP_LOGIC_ITEMS.filter((item) => item.direction === 'up' && dpLogicState[item.id]).length;
-  const downCount = DP_LOGIC_ITEMS.filter((item) => item.direction === 'down' && dpLogicState[item.id]).length;
-  const formula = document.getElementById('dpLogicChartFormula');
-  formula.textContent = '채택한 논리 — 상승 ' + upCount + '개 · 하락 ' + downCount + '개';
-  const summary = document.getElementById('dpLogicChartSummary');
-  summary.innerHTML = Math.round(target).toLocaleString() + '원 <span class="dp-logic-chart-pct" style="color:' + pctColor + ';">(' + pctSign + pct + '%)</span>';
-
-  // 오늘→목표가를 잇되 실제 시세처럼 오르내리는 경로 생성 (시드 고정 랜덤워크 + 브릿지 보정으로 시작/끝 가격은 정확히 고정)
-  const N = 26;
-  const adoptedCount = DP_LOGIC_ITEMS.filter((item) => dpLogicState[item.id]).length;
-  const seed = Math.round(target) * 1000 + adoptedCount;
-  let s = seed >>> 0;
-  function rand() {
-    s |= 0; s = (s + 0x6D2B79F5) | 0;
-    let t = Math.imul(s ^ (s >>> 15), 1 | s);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+// -- 버핏식 내재가치: 현재가(.dp-price)를 읽어 내재가치 범위 막대 위에 위치 표시 --
+(function () {
+  const box = document.getElementById('dpBuffettBox');
+  const pEl = document.querySelector('.dp-price');
+  if (!box || !pEl) return;
+  const price = parseFloat(pEl.textContent.replace(/[^0-9.]/g, ''));
+  const low = +box.dataset.ivLow, high = +box.dataset.ivHigh, buy = +box.dataset.buy;
+  document.getElementById('dpbPrice').textContent = price.toLocaleString() + '원';
+  let verdict, color;
+  if (price <= buy) { verdict = '안전마진 매수가 이하 — 버핏식 매수 구간'; color = 'var(--dp-up)'; }
+  else if (price < low) { verdict = '내재가치 하단 아래 — 저평가이나 안전마진은 부족'; color = 'var(--dp-up)'; }
+  else if (price <= high) { verdict = '내재가치 범위 안 — 적정 가치 수준'; color = 'var(--dp-text2)'; }
+  else { verdict = '내재가치 상단 초과 — 고평가'; color = 'var(--dp-down)'; }
+  const vEl = document.getElementById('dpbVerdict');
+  vEl.textContent = verdict; vEl.style.color = color;
+  const max = Math.max(high, price) * 1.12;
+  const pct = (x) => Math.max(0, Math.min(100, x / max * 100)) + '%';
+  const bar = document.getElementById('dpbBar');
+  const band = document.createElement('div');
+  band.className = 'dpb-band'; band.style.left = pct(low);
+  band.style.width = (Math.max(0, high - low) / max * 100) + '%';
+  bar.appendChild(band);
+  function mark(x, label, col) {
+    const m = document.createElement('div');
+    m.className = 'dpb-mark'; m.style.left = pct(x); m.style.background = col;
+    const s = document.createElement('span'); s.textContent = label; s.style.color = col;
+    m.appendChild(s); bar.appendChild(m);
   }
-  const walk = [0];
-  for (let i = 1; i <= N; i++) walk.push(walk[i - 1] + (rand() * 2 - 1));
-  const walkEnd = walk[N];
-  const bridge = walk.map((v, i) => v - (i / N) * walkEnd);
-  const maxAbsBridge = Math.max(...bridge.map(Math.abs)) || 1;
-  const amplitude = Math.max(Math.abs(target - DP_PRICE_TODAY) * 0.35, DP_PRICE_TODAY * 0.05);
-  const priceFloor = DP_PRICE_TODAY * 0.01;
-  const series = bridge.map((b, i) => {
-    const drift = DP_PRICE_TODAY + (target - DP_PRICE_TODAY) * (i / N);
-    return Math.max(drift + (b / maxAbsBridge) * amplitude, priceFloor);
-  });
-  series[0] = DP_PRICE_TODAY;
-  series[N] = target;
-
-  const svg = document.getElementById('dpLogicChart');
-  svg.innerHTML = '';
-  const W = 680, H = 220, pL = 56, pR = 16, pT = 20, pB = 30;
-  const cW = W - pL - pR, cH = H - pT - pB;
-  const seriesMin = Math.min(...series);
-  const seriesMax = Math.max(...series);
-  const pad = (seriesMax - seriesMin) * 0.15 || DP_PRICE_TODAY * 0.05;
-  const minY = Math.max(seriesMin - pad, 0);
-  const maxY = seriesMax + pad;
-  function py(v) { return pT + cH * (1 - (v - minY) / (maxY - minY)); }
-  function px(frac) { return pL + cW * frac; }
-
-  [0, 0.25, 0.5, 0.75, 1].forEach((f) => {
-    const v = minY + (maxY - minY) * f;
-    const y = py(v);
-    svg.appendChild(svgEl('line', { x1: pL, x2: W - pR, y1: y, y2: y, stroke: 'oklch(0.91 0.005 90)', 'stroke-width': 1 }));
-    const t = svgEl('text', { x: pL - 8, y: y + 3, 'text-anchor': 'end', 'font-size': 9, fill: 'oklch(0.55 0.02 260)' });
-    t.textContent = Math.round(v).toLocaleString() + '원';
-    svg.appendChild(t);
-  });
-
-  // 오늘 가격 기준선
-  const todayY = py(DP_PRICE_TODAY);
-  svg.appendChild(svgEl('line', { x1: pL, x2: W - pR, y1: todayY, y2: todayY, stroke: 'oklch(0.75 0.01 90)', 'stroke-width': 1, 'stroke-dasharray': '4,3' }));
-
-  const points = series.map((v, i) => [px(i / N), py(v)]);
-  const lineColor = target === DP_PRICE_TODAY ? 'oklch(0.55 0.02 260)' : (target > DP_PRICE_TODAY ? 'var(--dp-up)' : 'var(--dp-down)');
-  const linePath = points.map((p, i) => (i === 0 ? 'M' : 'L') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
-  const areaBaseY = py(minY).toFixed(1);
-  const areaPath = linePath + ` L${points[points.length - 1][0].toFixed(1)},${areaBaseY} L${points[0][0].toFixed(1)},${areaBaseY} Z`;
-  svg.appendChild(svgEl('path', { d: areaPath, fill: lineColor, opacity: 0.08 }));
-  svg.appendChild(svgEl('path', { d: linePath, fill: 'none', stroke: lineColor, 'stroke-width': 2, 'stroke-linejoin': 'round' }));
-
-  // 시작/끝 포인트 + 라벨
-  const first = points[0], last = points[points.length - 1];
-  svg.appendChild(svgEl('circle', { cx: first[0], cy: first[1], r: 4, fill: 'oklch(0.5 0.02 260)' }));
-  svg.appendChild(svgEl('circle', { cx: last[0], cy: last[1], r: 4.5, fill: lineColor }));
-  const startLabelY = first[1] < pT + 14 ? first[1] + 16 : first[1] - 10;
-  const startLabel = svgEl('text', { x: first[0], y: startLabelY, 'text-anchor': 'start', 'font-size': 10, 'font-weight': 700, fill: 'oklch(0.4 0.02 260)' });
-  startLabel.textContent = DP_PRICE_TODAY.toLocaleString() + '원';
-  svg.appendChild(startLabel);
-  const endLabelY = last[1] < pT + 14 ? last[1] + 16 : last[1] - 10;
-  const endLabel = svgEl('text', { x: last[0], y: endLabelY, 'text-anchor': 'end', 'font-size': 11, 'font-weight': 800, fill: lineColor });
-  endLabel.textContent = Math.round(target).toLocaleString() + '원';
-  svg.appendChild(endLabel);
-
-  // x축 라벨
-  const xt1 = svgEl('text', { x: pL, y: H - 10, 'text-anchor': 'start', 'font-size': 9.5, fill: 'oklch(0.5 0.02 260)' });
-  xt1.textContent = DP_PRICE_TODAY_LABEL;
-  svg.appendChild(xt1);
-  const xt2 = svgEl('text', { x: W - pR, y: H - 10, 'text-anchor': 'end', 'font-size': 9.5, fill: 'oklch(0.5 0.02 260)' });
-  xt2.textContent = DP_PRICE_TARGET_LABEL;
-  svg.appendChild(xt2);
-}
-dpRenderLogicList();
+  mark(buy, '매수가', 'oklch(0.55 0.15 150)');
+  mark(price, '현재가', 'var(--dp-accent)');
+})();
 
 
 function dpEnsureLazyDraw(id) {
