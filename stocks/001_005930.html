@@ -281,7 +281,7 @@ body{background:var(--dp-bg);}
   <div class="dp-stat"><div class="dp-stat-l">고점 대비</div><div class="dp-stat-v" style="color:var(--dp-down);">-34.3%</div></div>
 </div>
 
-<div class="dp-summary" id="dpBuffettBox" data-iv-low="47481" data-iv-high="139366" data-buy="47481">
+<div class="dp-summary" id="dpBuffettBox" data-hist='[["2021-01",82000],["2021-02",82500],["2021-03",81400],["2021-04",81500],["2021-05",80500],["2021-06",80700],["2021-07",78500],["2021-08",76700],["2021-09",74100],["2021-10",69800],["2021-11",71300],["2021-12",78300],["2022-01",73300],["2022-02",71900],["2022-03",69600],["2022-04",67400],["2022-05",67400],["2022-06",57000],["2022-07",61400],["2022-08",59700],["2022-09",53100],["2022-10",59400],["2022-11",62200],["2022-12",55300],["2023-01",61400],["2023-02",60600],["2023-03",64000],["2023-04",65500],["2023-05",71400],["2023-06",72200],["2023-07",69800],["2023-08",66900],["2023-09",68400],["2023-10",66900],["2023-11",72800],["2023-12",78500],["2024-01",72700],["2024-02",73400],["2024-03",82400],["2024-04",77500],["2024-05",73500],["2024-06",81500],["2024-07",83900],["2024-08",74300],["2024-09",61500],["2024-10",59200],["2024-11",54200],["2024-12",53200],["2025-01",52400],["2025-02",54500],["2025-03",57800],["2025-04",55500],["2025-05",56200],["2025-06",59800],["2025-07",71400],["2025-08",69700],["2025-09",83900],["2025-10",107500],["2025-11",100500],["2025-12",119900],["2026-01",160500],["2026-02",216500],["2026-03",167200],["2026-04",220500],["2026-05",317000],["2026-06",334000],["2026-07",262500],["2026-08",260000],["2026-09",268500],["2026-10",272000]]' data-iv-low="47481" data-iv-high="139366" data-buy="47481">
   <style>
     #dpBuffettBox .dpb-sub{font-size:12px;color:var(--dp-text3);margin:-2px 0 10px;}
     #dpBuffettBox .dpb-row{display:flex;gap:8px;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--dp-accent-soft2);font-size:12.5px;}
@@ -305,11 +305,9 @@ body{background:var(--dp-bg);}
     #dpBuffettBox .dpb-num{background:var(--dp-card);border:1px solid var(--dp-border);border-radius:8px;padding:8px;}
     #dpBuffettBox .dpb-num .l{font-size:10.5px;color:var(--dp-text4);}
     #dpBuffettBox .dpb-num .v{font-size:14px;font-weight:800;margin-top:2px;}
-    #dpBuffettBox .dpb-bar{position:relative;height:30px;margin:6px 0 22px;}
-    #dpBuffettBox .dpb-track{position:absolute;left:0;right:0;top:12px;height:6px;border-radius:3px;background:var(--dp-border);}
-    #dpBuffettBox .dpb-band{position:absolute;top:10px;height:10px;border-radius:5px;background:oklch(0.62 0.12 150 / 0.45);}
-    #dpBuffettBox .dpb-mark{position:absolute;top:2px;width:2px;height:26px;transform:translateX(-1px);}
-    #dpBuffettBox .dpb-mark span{position:absolute;top:28px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:10px;font-weight:700;}
+    #dpBuffettBox .dpb-chart{display:block;width:100%;height:auto;margin:4px 0 8px;}
+    #dpBuffettBox .dpb-legend{display:flex;gap:14px;font-size:11.5px;color:var(--dp-text3);margin-bottom:6px;}
+    #dpBuffettBox .dpb-legend i{display:inline-block;width:14px;height:8px;border-radius:2px;margin-right:4px;vertical-align:middle;}
     #dpBuffettBox .dpb-verdict{font-size:13px;font-weight:800;margin-bottom:4px;}
     @media (max-width:640px){
       #dpBuffettBox .dpb-nums{grid-template-columns:repeat(3,1fr);}
@@ -339,7 +337,8 @@ body{background:var(--dp-bg);}
     <div class="dpb-num"><div class="l">내재가치 상단</div><div class="v">139,366원</div></div>
     <div class="dpb-num"><div class="l">현재가</div><div class="v" id="dpbPrice">-</div></div>
   </div>
-  <div class="dpb-bar" id="dpbBar"><div class="dpb-track"></div></div>
+  <div class="dpb-legend"><span><i style="background:var(--dp-accent);height:3px"></i>월말 주가 (최근 5년)</span><span><i style="background:oklch(0.62 0.12 150 / 0.35)"></i>내재가치 하단~상단 (현재 추정치)</span></div>
+  <svg class="dpb-chart" id="dpbChart" viewBox="0 0 600 240" role="img" aria-label="최근 5년 주가와 내재가치 범위"></svg>
   <div class="dp-logic-chart-note">반도체 업황에 따라 이익이 크게 출렁여 방식마다 값 차이가 크다(신뢰도 낮음). DCF 상단은 최근 4분기 호황 이익이 계속된다고 가정한 값이며, 정상화 PER·RIM은 10년 사이클 평균으로 호황 이익을 눌러 본다. 현재가가 범위 위에 있다면 지금의 호황이 오래 이어진다는 기대가 주가에 들어 있다는 뜻이다. 가중 내재가치는 방식별 하단·상단을 종목 유형에 따른 가중치로 평균한 값이다. 주가 예측이 아니라 재무제표로 추정한 기업 가치이며, 투자 권고가 아니다.</div>
 </div>
 
@@ -1036,13 +1035,13 @@ body{background:var(--dp-bg);}
 const SECTION_IDS = ['tech','fund','valuation','timeline','thesis','consensus','news'];
 let _dpTechDrawn = false, _dpAnnualDrawn = false, _dpQtrDrawn = false; let _dpNewsInit = false; let _dpMetricChartInit = false;
 
-// -- 버핏식 내재가치: 현재가(.dp-price)를 읽어 내재가치 범위 막대 위에 위치 표시 --
+// -- 버핏식 내재가치: 5년 월간 주가 선 그래프 위에 내재가치 하단~상단 밴드 표시 --
 (function () {
   const box = document.getElementById('dpBuffettBox');
   const pEl = document.querySelector('.dp-price');
   if (!box || !pEl) return;
   const price = parseFloat(pEl.textContent.replace(/[^0-9.]/g, ''));
-  const low = +box.dataset.ivLow, high = +box.dataset.ivHigh, buy = +box.dataset.buy;
+  const low = +box.dataset.ivLow, high = +box.dataset.ivHigh;
   document.getElementById('dpbPrice').textContent = price.toLocaleString() + '원';
   let verdict, color;
   if (price < low) { verdict = '내재가치 하단 아래 — 저평가'; color = 'var(--dp-up)'; }
@@ -1050,20 +1049,53 @@ let _dpTechDrawn = false, _dpAnnualDrawn = false, _dpQtrDrawn = false; let _dpNe
   else { verdict = '내재가치 상단 초과 — 고평가'; color = 'var(--dp-down)'; }
   const vEl = document.getElementById('dpbVerdict');
   vEl.textContent = verdict; vEl.style.color = color;
-  const max = Math.max(high, price) * 1.12;
-  const pct = (x) => Math.max(0, Math.min(100, x / max * 100)) + '%';
-  const bar = document.getElementById('dpbBar');
-  const band = document.createElement('div');
-  band.className = 'dpb-band'; band.style.left = pct(low);
-  band.style.width = (Math.max(0, high - low) / max * 100) + '%';
-  bar.appendChild(band);
-  function mark(x, label, col) {
-    const m = document.createElement('div');
-    m.className = 'dpb-mark'; m.style.left = pct(x); m.style.background = col;
-    const s = document.createElement('span'); s.textContent = label; s.style.color = col;
-    m.appendChild(s); bar.appendChild(m);
+  const svg = document.getElementById('dpbChart');
+  const hist = JSON.parse(box.dataset.hist);
+  const pts = hist.map(h => ({ d: h[0], c: h[1] }));
+  const lastD = pts[pts.length - 1].d;
+  const today = new Date().toISOString().slice(0, 7);
+  if (today > lastD) pts.push({ d: today, c: price }); else pts[pts.length - 1].c = price;
+  const W = Math.max(300, Math.min(760, Math.round(svg.getBoundingClientRect().width) || 600));
+  const H = W < 480 ? 230 : 250, pL = 40, pR = 92, pT = 34, pB = 24, cW = W - pL - pR, cH = H - pT - pB;
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+  const vals = pts.map(p => p.c).concat([low, high]);
+  const vMin = Math.min(...vals) * 0.92, vMax = Math.max(...vals) * 1.06;
+  const x = i => pL + cW * i / (pts.length - 1);
+  const y = v => pT + cH * (1 - (v - vMin) / (vMax - vMin));
+  const NS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs, text) {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    svg.appendChild(e); return e;
   }
-  mark(price, '현재가', 'var(--dp-accent)');
+  const fmtK = v => v >= 10000 ? (+(v / 10000).toFixed(1)).toLocaleString() + '만' : Math.round(v).toLocaleString();
+  const step = Math.pow(10, Math.floor(Math.log10((vMax - vMin) / 4)));
+  const tick = [1, 2, 2.5, 5, 10].map(m => m * step).find(s => (vMax - vMin) / s <= 5);
+  for (let v = Math.ceil(vMin / tick) * tick; v <= vMax; v += tick) {
+    el('line', { x1: pL, x2: W - pR, y1: y(v), y2: y(v), style: 'stroke:var(--dp-border)', 'stroke-width': 1 });
+    el('text', { x: pL - 6, y: y(v) + 4, 'text-anchor': 'end', 'font-size': 11, style: 'fill:var(--dp-text4)' }, fmtK(v));
+  }
+  el('rect', { x: pL, y: y(high), width: cW, height: Math.max(1, y(low) - y(high)), style: 'fill:oklch(0.62 0.12 150 / 0.18)' });
+  [[high, '상단'], [low, '하단']].forEach(([v, lab]) => {
+    el('line', { x1: pL, x2: W - pR, y1: y(v), y2: y(v), style: 'stroke:oklch(0.55 0.13 150)', 'stroke-width': 1.2, 'stroke-dasharray': '4 3' });
+    el('text', { x: W - pR + 6, y: y(v) + (lab === '상단' ? -2 : 11), 'font-size': 11, 'font-weight': 700, style: 'fill:oklch(0.5 0.13 150)' }, lab + ' ' + Math.round(v).toLocaleString());
+  });
+  let prevY = '';
+  pts.forEach((p, i) => {
+    const yr = p.d.slice(0, 4);
+    if (yr !== prevY && p.d.slice(5, 7) === '01') {
+      el('text', { x: x(i), y: H - 8, 'text-anchor': 'middle', 'font-size': 11, style: 'fill:var(--dp-text4)' }, yr);
+      el('line', { x1: x(i), x2: x(i), y1: pT, y2: pT + cH, style: 'stroke:var(--dp-border)', 'stroke-width': 1, 'stroke-dasharray': '2 3' });
+    }
+    prevY = yr;
+  });
+  el('polyline', { points: pts.map((p, i) => x(i) + ',' + y(p.c)).join(' '), fill: 'none', style: 'stroke:var(--dp-accent)', 'stroke-width': 2, 'stroke-linejoin': 'round' });
+  const lx = x(pts.length - 1), ly = y(price);
+  el('circle', { cx: lx, cy: ly, r: 4, style: 'fill:var(--dp-accent)' });
+  const curY = Math.abs(ly - y(high)) < 14 || Math.abs(ly - y(low)) < 14 ? ly + (ly < y(high) ? -10 : 18) : ly + 4;
+  el('text', { x: lx + 6, y: curY, 'font-size': 11, 'font-weight': 800, style: 'fill:var(--dp-accent)' }, '현재 ' + Math.round(price).toLocaleString());
+  if (typeof addChartExpandButton === 'function') addChartExpandButton(svg);
 })();
 
 function dpEnsureLazyDraw(id) {
