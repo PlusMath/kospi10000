@@ -240,14 +240,72 @@ body{background:var(--dp-bg);}
   <div class="dp-stat"><div class="dp-stat-l">고점 대비</div><div class="dp-stat-v" style="color:var(--dp-down);">-37.6%</div></div>
 </div>
 
-<div class="dp-summary" id="dpLogicBox">
-  <div class="dp-summary-l">핵심 투자 논리</div>
-  <div class="dp-logic-list" id="dpLogicList"></div>
-  <div class="dp-logic-chart-l">1년 후 예상 주가 (채택한 논리 기준)</div>
-  <div class="dp-logic-chart-formula" id="dpLogicChartFormula"></div>
-  <div class="dp-logic-chart-summary" id="dpLogicChartSummary"></div>
-  <svg id="dpLogicChart" viewBox="0 0 680 220" width="100%" style="display:block;"></svg>
-  <div class="dp-logic-chart-note">각 포인트 옆 범위는 실적 발표·업계 전망 등 실제 자료를 근거로 한 독립 민감도(그 포인트만 변하고 나머지는 유지된다고 가정)이며, 예측값이 아닌 조건부 범위입니다. 토글 시에는 구간의 중간값으로 계산하며, 실제 주가는 환율·수급 등에 따라 범위를 벗어날 수 있습니다.</div>
+<div class="dp-summary" id="dpBuffettBox" data-hist='[["2021-01",56754],["2021-02",53558],["2021-03",54422],["2021-04",55545],["2021-05",56754],["2021-06",54508],["2021-07",53212],["2021-08",53990],["2021-09",53126],["2021-10",51744],["2021-11",49930],["2021-12",56327],["2022-01",51338],["2022-02",51338],["2022-03",52971],["2022-04",55420],["2022-05",54785],["2022-06",50794],["2022-07",52426],["2022-08",51519],["2022-09",49252],["2022-10",54240],["2022-11",52971],["2022-12",54476],["2023-01",49810],["2023-02",50190],["2023-03",48190],["2023-04",54857],["2023-05",56476],["2023-06",57524],["2023-07",69524],["2023-08",69333],["2023-09",72190],["2023-10",54667],["2023-11",58381],["2023-12",68800],["2024-01",59200],["2024-02",67400],["2024-03",76700],["2024-04",72400],["2024-05",68800],["2024-06",80900],["2024-07",94400],["2024-08",141000],["2024-09",142600],["2024-10",138700],["2024-11",115400],["2024-12",119500],["2025-01",129600],["2025-02",121900],["2025-03",109200],["2025-04",113800],["2025-05",104300],["2025-06",104200],["2025-07",118100],["2025-08",113500],["2025-09",119100],["2025-10",118000],["2025-11",122000],["2025-12",112400],["2026-01",108000],["2026-02",110200],["2026-03",94800],["2026-04",91600],["2026-05",85000],["2026-06",70200],["2026-07",73500],["2026-08",83700],["2026-09",72800],["2026-10",72000]]' data-bands='[["2020-12",23298,34299],["2021-03",24259,35327],["2021-06",22433,33524],["2021-09",22629,33744],["2021-12",23446,36348],["2022-03",22616,35359],["2022-06",23016,35877],["2022-09",23703,36706],["2022-12",24709,37905],["2023-03",24020,37014],["2023-06",23562,36568],["2023-09",23630,36700],["2023-12",23023,35682],["2024-03",22747,35388],["2024-06",22176,34842],["2024-09",22879,35584],["2024-12",22553,34959],["2025-03",22652,35048],["2025-06",22688,35093],["2025-09",22894,35317],["2025-12",26677,39825],["2026-03",26662,39776],["2026-06",27155,40309]]' data-iv-low="27155" data-iv-high="40309" data-buy="27155">
+  <style>
+    #dpBuffettBox .dpb-sub{font-size:12px;color:var(--dp-text3);margin:-2px 0 10px;}
+    #dpBuffettBox .dpb-row{display:flex;gap:8px;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--dp-accent-soft2);font-size:12.5px;}
+    #dpBuffettBox .dpb-row:last-child{border-bottom:none;}
+    #dpBuffettBox .dpb-badge{flex-shrink:0;font-size:11px;font-weight:800;border-radius:5px;padding:2px 6px;}
+    #dpBuffettBox .dpb-badge.ok{color:var(--dp-up);background:oklch(0.55 0.2 25 / 0.1);}
+    #dpBuffettBox .dpb-badge.ng{color:var(--dp-down);background:oklch(0.52 0.14 250 / 0.1);}
+    #dpBuffettBox .dpb-name{flex-shrink:0;font-weight:700;width:86px;}
+    #dpBuffettBox .dpb-txt{color:var(--dp-text3);min-width:0;}
+    #dpBuffettBox .dpb-h{font-size:12px;font-weight:700;color:var(--dp-text3);margin:14px 0 6px;padding-top:12px;border-top:1px dashed var(--dp-accent-soft2);}
+    #dpBuffettBox .dpb-type{display:inline-block;font-size:11.5px;font-weight:800;border-radius:5px;padding:2px 7px;margin-right:6px;background:var(--dp-accent-soft2);color:var(--dp-accent);}
+    #dpBuffettBox .dpb-m{padding:7px 0;border-bottom:1px solid var(--dp-accent-soft2);}
+    #dpBuffettBox .dpb-m-top{display:flex;align-items:center;gap:8px;font-size:12.5px;}
+    #dpBuffettBox .dpb-m-n{font-weight:700;width:76px;flex-shrink:0;}
+    #dpBuffettBox .dpb-m-v{font-weight:700;flex:1;min-width:0;}
+    #dpBuffettBox .dpb-m-w{display:flex;align-items:center;gap:5px;width:96px;flex-shrink:0;}
+    #dpBuffettBox .dpb-m-w i{display:block;height:6px;border-radius:3px;background:var(--dp-accent);max-width:60px;}
+    #dpBuffettBox .dpb-m-w b{font-size:11px;color:var(--dp-text3);}
+    #dpBuffettBox .dpb-m-note{font-size:11.5px;color:var(--dp-text4);margin-top:3px;}
+    #dpBuffettBox .dpb-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0;}
+    #dpBuffettBox .dpb-num{background:var(--dp-card);border:1px solid var(--dp-border);border-radius:8px;padding:8px;}
+    #dpBuffettBox .dpb-num .l{font-size:10.5px;color:var(--dp-text4);}
+    #dpBuffettBox .dpb-num .v{font-size:14px;font-weight:800;margin-top:2px;}
+    #dpBuffettBox .dpb-sub + .dpb-h{border-top:none;margin-top:4px;padding-top:0;}
+    #dpBuffettBox .dpb-chart{display:block;width:100%;height:auto;margin:4px 0 8px;}
+    #dpBuffettBox .dpb-legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:11.5px;color:var(--dp-text3);margin-bottom:6px;}
+    #dpBuffettBox .dpb-legend i{display:inline-block;width:14px;height:8px;border-radius:2px;margin-right:4px;vertical-align:middle;}
+    #dpBuffettBox .dpb-ctl{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:4px;}
+    #dpBuffettBox .dpb-ctl .dpb-legend{margin-bottom:0;}
+    #dpBuffettBox .dpb-rng{display:flex;gap:4px;}
+    #dpBuffettBox .dpb-rng button{font:inherit;font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;border:1px solid var(--dp-border);background:var(--dp-card);color:var(--dp-text3);cursor:pointer;}
+    #dpBuffettBox .dpb-rng button.on{background:var(--dp-accent);border-color:var(--dp-accent);color:#fff;}
+    #dpBuffettBox .dpb-chart{touch-action:pan-y;}
+    #dpBuffettBox .dpb-readout{font-size:12.5px;color:var(--dp-text2);min-height:18px;margin:-2px 0 4px;}
+    #dpBuffettBox .dpb-cap{font-size:11.5px;color:var(--dp-text4);margin-bottom:8px;}
+    #dpBuffettBox .dpb-verdict{font-size:13px;font-weight:800;margin-bottom:4px;}
+    @media (max-width:640px){
+      #dpBuffettBox .dpb-nums{grid-template-columns:repeat(3,1fr);}
+      #dpBuffettBox .dpb-row{flex-wrap:wrap;font-size:13.5px;}
+      #dpBuffettBox .dpb-name{width:auto;}
+      #dpBuffettBox .dpb-txt{flex-basis:100%;}
+      #dpBuffettBox .dpb-m-top{flex-wrap:wrap;font-size:13.5px;}
+      #dpBuffettBox .dpb-m-v{flex-basis:calc(100% - 180px);}
+      #dpBuffettBox .dpb-m-note{font-size:12.5px;}
+    }
+  </style>
+  <div class="dp-summary-l">내재가치 평가</div>
+  <div class="dpb-sub">DART 연결 재무제표 2015~2025년 + 2026년 반기보고서 기준 · 할인율 12% · 안전마진 미적용</div>
+
+  <div class="dpb-h"><span class="dpb-type">안정형</span>평가 방식별 내재가치 <span style="font-weight:400">(영업이익률 표준편차 2.1%p, 적자 연도 없음)</span></div>
+      <div class="dpb-m"><div class="dpb-m-top"><span class="dpb-m-n">DCF</span><span class="dpb-m-v">22,025 ~ 28,814원</span><span class="dpb-m-w"><i style="width:40%"></i><b>40%</b></span></div><div class="dpb-m-note">주주이익=최근 3년 평균 순이익 0.13조, 성장률 0~5.1%</div></div>
+      <div class="dpb-m"><div class="dpb-m-top"><span class="dpb-m-n">RIM</span><span class="dpb-m-v">24,189 ~ 27,644원</span><span class="dpb-m-w"><i style="width:30%"></i><b>30%</b></span></div><div class="dpb-m-note">BPS 31,923원, ROE 6.2~8.9%가 10년에 걸쳐 요구수익률로 수렴</div></div>
+      <div class="dpb-m"><div class="dpb-m-top"><span class="dpb-m-n">정상화 PER</span><span class="dpb-m-v">36,961 ~ 68,299원</span><span class="dpb-m-w"><i style="width:30%"></i><b>30%</b></span></div><div class="dpb-m-note">11년 평균 EPS 1,547원 × 과거 PER 23.9~44.1배</div></div>
+  <div class="dpb-h">가중 내재가치와 현재가 위치 · 방식 간 일치도 <span style="color:oklch(0.62 0.16 60)">낮음</span></div>
+  <div class="dpb-verdict" id="dpbVerdict"></div>
+  <div class="dpb-nums">
+    <div class="dpb-num"><div class="l">내재가치 하단</div><div class="v">27,155원</div></div>
+    <div class="dpb-num"><div class="l">내재가치 상단</div><div class="v">40,309원</div></div>
+    <div class="dpb-num"><div class="l">현재가</div><div class="v" id="dpbPrice">-</div></div>
+  </div>
+  <div class="dpb-ctl"><div class="dpb-legend"><span><i style="background:var(--dp-accent);height:3px"></i>월말 주가</span><span><i style="background:oklch(0.68 0.13 150 / 0.5)"></i>1분기</span><span><i style="background:oklch(0.68 0.13 195 / 0.5)"></i>반기</span><span><i style="background:oklch(0.68 0.13 300 / 0.5)"></i>3분기</span><span><i style="background:oklch(0.68 0.13 60 / 0.5)"></i>사업보고서</span></div><div class="dpb-rng"><button type="button" data-m="12">1년</button><button type="button" data-m="36">3년</button><button type="button" class="on" data-m="0">5년</button></div></div>
+  <svg class="dpb-chart" id="dpbChart" viewBox="0 0 600 240" role="img" aria-label="주가와 분기별 내재가치 범위"></svg>
+  <div class="dpb-readout" id="dpbReadout"></div>
+  <div class="dpb-cap">밴드 색은 내재가치 계산에 쓴 재무제표(분기 말 기준)를 나타내며, 다음 분기 말까지 유지된다. 그래프를 누르거나 마우스를 올리면 그 시점 값을 볼 수 있다.</div>
+  <div class="dp-logic-chart-note">이익이 안정적인 기업이라 DCF·RIM·정상화 PER을 4:3:3으로 가중했다. 평가 방식 간 결과 차이가 커 신뢰도가 낮다. 가중 내재가치는 방식별 하단·상단을 종목 유형에 따른 가중치로 평균한 값이다. 주가 예측이 아니라 재무제표로 추정한 기업 가치이며, 투자 권고가 아니다.</div>
 </div>
 
 <!-- dp-news-summary:start --><div class="dp-news-summary">
@@ -722,207 +780,123 @@ body{background:var(--dp-bg);}
 const SECTION_IDS = ['tech','fund','valuation','timeline','thesis','consensus','news'];
 let _dpTechDrawn = false, _dpAnnualDrawn = false, _dpQtrDrawn = false; let _dpNewsInit = false; let _dpMetricChartInit = false;
 
-// -- 핵심 투자 논리 (yes/no 토글로 1년 후 예상 주가 차트에 반영/제외) --
-// "KOSPI 81~100위 종목별 상승·하락 3개와 가격 시나리오"(2026-09-14)를 반영. 상승 3개·하락 3개의
-// 서로 겹치지 않는 독립 포인트로 구성했다. 각 포인트는 그 포인트만 변하고 나머지는
-// 유지된다는 "독립 민감도"이며, 내부적으로 EPS 변화율과 적용 PER 변화율로 나뉜다.
-// 목표가 = 오늘가 × (1+선택 포인트 EPS 변화율 합) × (1+선택 포인트 PER 변화율 합)
-// 로 계산해 중복 없이 EPS·PER 두 축을 한 번씩만 반영한다. 배지의 범위는 해당 포인트만
-// 단독으로 변했을 때의 독립 영향 범위이며(문서 집계치를 sub 텍스트 데이터 기반으로
-// 가중 재분배), 토글 계산에는 중간값을 쓴다.
-const DP_PRICE_TODAY = 72000;
-const DP_PRICE_TODAY_LABEL = '오늘 (2026.10.12)';
-const DP_PRICE_TARGET_LABEL = '1년 후 (2027.10.12)';
-const DP_DIR_LABELS = { up: '상승 포인트', down: '하락 포인트' };
-const DP_DIR_ARROW = { up: '▲', down: '▼' };
-const DP_LOGIC_ITEMS = [
-  { id: 'newdrug95', direction: 'up', title: '신약 매출 반영', sub: '2025년 순이익 174.5%, 상반기 79.1% 증가한 신약 수익 반영이 이어지는 경우', rangeLabel: '+5~11%', epsImpact: 0, perImpact: 0.1083 },
-  { id: 'lazertinib95', direction: 'up', title: '렉라자·리브리반트 해외 확대', sub: '렉라자·리브리반트의 해외 판매 확대가 기술료·로열티 성장으로 이어지는 경우', rangeLabel: '+2~4%', epsImpact: 0, perImpact: 0.0368 },
-  { id: 'payout95', direction: 'up', title: '배당 여력 확대', sub: '배당성향이 53%에서 23%로 낮아진 만큼 추가 환원 여력이 확인되는 경우', rangeLabel: '+3~6%', epsImpact: 0, perImpact: 0.0597 },
-  { id: 'milestone95', direction: 'down', title: '마일스톤 인식 불규칙', sub: '기술이전 마일스톤이 허가·판매 조건 충족 시점에 따라 분기별로 불규칙하게 인식되는 경우', rangeLabel: '-3~-7%', epsImpact: 0, perImpact: -0.0741 },
-  { id: 'drugdep95', direction: 'down', title: '품목 의존도', sub: '특정 항암제의 판매·경쟁약물·급여 결정에 대한 의존도가 커지는 경우', rangeLabel: '-4~-9%', epsImpact: 0, perImpact: -0.0872 },
-  { id: 'distribution95', direction: 'down', title: '유통 마진 희석', sub: '상품 유통 사업의 낮은 마진 비중이 늘어 매출 증가만큼 영업이익이 늘지 않는 경우', rangeLabel: '-5~-10%', epsImpact: 0, perImpact: -0.1003 },
-];
-const dpLogicState = {};
-DP_LOGIC_ITEMS.forEach((item) => { dpLogicState[item.id] = item.direction === 'up'; });
+// -- 버핏식 내재가치: 월간 주가 선 그래프 위에 분기별 내재가치 하단~상단 밴드(분기별 색) 표시, 기간 선택 --
+(function () {
+  const box = document.getElementById('dpBuffettBox');
+  const pEl = document.querySelector('.dp-price');
+  if (!box || !pEl) return;
+  const price = parseFloat(pEl.textContent.replace(/[^0-9.]/g, ''));
+  const low = +box.dataset.ivLow, high = +box.dataset.ivHigh;
+  document.getElementById('dpbPrice').textContent = price.toLocaleString() + '원';
+  let verdict, color;
+  if (price < low) { verdict = '내재가치 하단 아래 — 저평가'; color = 'var(--dp-up)'; }
+  else if (price <= high) { verdict = '내재가치 범위 안 — 적정 가치 수준'; color = 'var(--dp-text2)'; }
+  else { verdict = '내재가치 상단 초과 — 고평가'; color = 'var(--dp-down)'; }
+  if (box.dataset.hold) { verdict = '평가 보류 — 적자·고성장 단계라 장부가치 기준 참고값만 제시'; color = 'var(--dp-text3)'; }
+  const vEl = document.getElementById('dpbVerdict');
+  vEl.textContent = verdict; vEl.style.color = color;
+  const svg = document.getElementById('dpbChart');
+  const readout = document.getElementById('dpbReadout');
+  const all = JSON.parse(box.dataset.hist).map(h => ({ d: h[0], c: h[1] }));
+  const bands = JSON.parse(box.dataset.bands); // [quarter-end 'YYYY-MM', low, high]
+  const today = new Date().toISOString().slice(0, 7);
+  if (today > all[all.length - 1].d) all.push({ d: today, c: price }); else all[all.length - 1].c = price;
+  // 분기별 색: 1Q 초록 · 2Q 청록 · 3Q 보라 · 4Q(사업보고서) 주황
+  const QHUE = { '03': 150, '06': 195, '09': 300, '12': 60 };
+  const QNAME = { '03': '1분기', '06': '반기', '09': '3분기', '12': '사업보고서' };
+  const mNum = d => (+d.slice(0, 4)) * 12 + (+d.slice(5, 7)) - 1;
+  const NS = 'http://www.w3.org/2000/svg';
+  const fmtK = v => v >= 10000 ? (+(v / 10000).toFixed(1)).toLocaleString() + '만' : Math.round(v).toLocaleString();
+  const won = v => Math.round(v).toLocaleString() + '원';
+  const bandAt = d => { let b = null; bands.forEach(x => { if (x[0] <= d) b = x; }); return b; };
+  let state = null;
 
-function dpRenderLogicList() {
-  const list = document.getElementById('dpLogicList');
-  if (!list) return;
-  list.innerHTML = '';
-  let lastDir = null;
-  DP_LOGIC_ITEMS.forEach((item) => {
-    if (item.direction !== lastDir) {
-      lastDir = item.direction;
-      const dh = document.createElement('div');
-      dh.className = 'dp-logic-dir-h ' + item.direction;
-      dh.innerHTML = '<span class="arrow">' + DP_DIR_ARROW[item.direction] + '</span> ' + DP_DIR_LABELS[item.direction];
-      list.appendChild(dh);
+  function draw(months) {
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    const pts = months ? all.slice(Math.max(0, all.length - months - 1)) : all;
+    const n = pts.length, m0 = mNum(pts[0].d), m1 = mNum(pts[n - 1].d);
+    const segs = [];
+    bands.forEach((b, i) => {
+      const s = Math.max(mNum(b[0]), m0), e = Math.min(i + 1 < bands.length ? mNum(bands[i + 1][0]) : m1, m1);
+      if (e > s || (i === bands.length - 1 && e >= s)) segs.push({ s: s - m0, e: Math.max(e, s) - m0, lo: b[1], hi: b[2], q: b[0] });
+    });
+    const W = Math.max(300, Math.min(760, Math.round(svg.getBoundingClientRect().width) || 600));
+    const H = W < 480 ? 230 : 250, pL = 40, pR = 92, pT = 34, pB = 24, cW = W - pL - pR, cH = H - pT - pB;
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    const vals = pts.map(p => p.c).concat(segs.map(s => s.lo), segs.map(s => s.hi));
+    const vMin = Math.min(...vals) * 0.92, vMax = Math.max(...vals) * 1.06;
+    const x = i => pL + cW * i / (n - 1);
+    const y = v => pT + cH * (1 - (v - vMin) / (vMax - vMin));
+    function el(tag, attrs, text) {
+      const e = document.createElementNS(NS, tag);
+      for (const k in attrs) e.setAttribute(k, attrs[k]);
+      if (text != null) e.textContent = text;
+      svg.appendChild(e); return e;
     }
-    const row = document.createElement('div');
-    row.className = 'dp-logic-item';
-    const info = document.createElement('span');
-    info.className = 'dp-logic-info';
-    const impact = document.createElement('span');
-    impact.className = 'dp-logic-impact' + (item.direction === 'down' ? ' down' : '');
-    impact.textContent = item.rangeLabel;
-    const text = document.createElement('span');
-    text.className = 'dp-logic-text';
-    const txt = document.createElement('div');
-    txt.className = 'dp-logic-txt';
-    txt.textContent = item.title;
-    const sub = document.createElement('div');
-    sub.className = 'dp-logic-sub';
-    sub.textContent = item.sub;
-    text.appendChild(txt);
-    text.appendChild(sub);
-    info.appendChild(impact);
-    info.appendChild(text);
-    const toggle = document.createElement('span');
-    toggle.className = 'dp-logic-toggle';
-    const yesBtn = document.createElement('button');
-    yesBtn.type = 'button';
-    yesBtn.className = 'dp-logic-btn yes';
-    yesBtn.textContent = 'Yes';
-    yesBtn.onclick = () => dpSetLogic(item.id, true);
-    const noBtn = document.createElement('button');
-    noBtn.type = 'button';
-    noBtn.className = 'dp-logic-btn no';
-    noBtn.textContent = 'No';
-    noBtn.onclick = () => dpSetLogic(item.id, false);
-    toggle.appendChild(yesBtn);
-    toggle.appendChild(noBtn);
-    row.appendChild(info);
-    row.appendChild(toggle);
-    list.appendChild(row);
-  });
-  dpRenderLogicChart();
-}
-function dpSetLogic(id, value) {
-  dpLogicState[id] = value;
-  dpRenderLogicChart();
-}
-function dpComputeLogicTarget() {
-  let epsFactor = 1, perFactor = 1;
-  DP_LOGIC_ITEMS.forEach((item) => {
-    if (!dpLogicState[item.id]) return;
-    epsFactor += item.epsImpact;
-    perFactor += item.perImpact;
-  });
-  // 여러 하락 포인트가 겹치면 배수가 0 이하로 내려갈 수 있어, 실제 주가처럼
-  // 완전히 0/음수로 떨어지지 않도록 축별 최소값(5%)을 둔다.
-  epsFactor = Math.max(epsFactor, 0.05);
-  perFactor = Math.max(perFactor, 0.05);
-  return { epsFactor, perFactor, target: DP_PRICE_TODAY * epsFactor * perFactor };
-}
-function dpRenderLogicChart() {
-  const NEUTRAL = 'oklch(0.55 0.02 260)';
-  DP_LOGIC_ITEMS.forEach((item, i) => {
-    const row = document.querySelectorAll('#dpLogicList .dp-logic-item')[i];
-    if (!row) return;
-    const yesBtn = row.querySelector('.dp-logic-btn.yes');
-    const noBtn = row.querySelector('.dp-logic-btn.no');
-    const isYes = dpLogicState[item.id];
-    const yesColor = item.direction === 'up' ? 'var(--dp-up)' : 'var(--dp-down)';
-    yesBtn.classList.toggle('active', isYes);
-    yesBtn.style.background = isYes ? yesColor : '';
-    yesBtn.style.borderColor = isYes ? yesColor : '';
-    noBtn.classList.toggle('active', !isYes);
-    noBtn.style.background = !isYes ? NEUTRAL : '';
-    noBtn.style.borderColor = !isYes ? NEUTRAL : '';
-  });
-
-  const { target } = dpComputeLogicTarget();
-  const pct = ((target - DP_PRICE_TODAY) / DP_PRICE_TODAY * 100).toFixed(1);
-  const pctColor = target === DP_PRICE_TODAY ? NEUTRAL : (target > DP_PRICE_TODAY ? 'var(--dp-up)' : 'var(--dp-down)');
-  const pctSign = target >= DP_PRICE_TODAY ? '+' : '';
-  const upCount = DP_LOGIC_ITEMS.filter((item) => item.direction === 'up' && dpLogicState[item.id]).length;
-  const downCount = DP_LOGIC_ITEMS.filter((item) => item.direction === 'down' && dpLogicState[item.id]).length;
-  const formula = document.getElementById('dpLogicChartFormula');
-  formula.textContent = '채택한 논리 — 상승 ' + upCount + '개 · 하락 ' + downCount + '개';
-  const summary = document.getElementById('dpLogicChartSummary');
-  summary.innerHTML = Math.round(target).toLocaleString() + '원 <span class="dp-logic-chart-pct" style="color:' + pctColor + ';">(' + pctSign + pct + '%)</span>';
-
-  // 오늘→목표가를 잇되 실제 시세처럼 오르내리는 경로 생성 (시드 고정 랜덤워크 + 브릿지 보정으로 시작/끝 가격은 정확히 고정)
-  const N = 26;
-  const adoptedCount = DP_LOGIC_ITEMS.filter((item) => dpLogicState[item.id]).length;
-  const seed = Math.round(target) * 1000 + adoptedCount;
-  let s = seed >>> 0;
-  function rand() {
-    s |= 0; s = (s + 0x6D2B79F5) | 0;
-    let t = Math.imul(s ^ (s >>> 15), 1 | s);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    const step = Math.pow(10, Math.floor(Math.log10((vMax - vMin) / 4)));
+    const tick = [1, 2, 2.5, 5, 10].map(m => m * step).find(s => (vMax - vMin) / s <= 5);
+    for (let v = Math.ceil(vMin / tick) * tick; v <= vMax; v += tick) {
+      el('line', { x1: pL, x2: W - pR, y1: y(v), y2: y(v), style: 'stroke:var(--dp-border)', 'stroke-width': 1 });
+      el('text', { x: pL - 6, y: y(v) + 4, 'text-anchor': 'end', 'font-size': 11, style: 'fill:var(--dp-text4)' }, fmtK(v));
+    }
+    segs.forEach(s => {
+      const h = QHUE[s.q.slice(5, 7)], x0 = x(s.s), x1 = Math.max(x(s.e), x0 + 3);
+      el('rect', { x: x0, y: y(s.hi), width: x1 - x0, height: Math.max(1, y(s.lo) - y(s.hi)), style: `fill:oklch(0.68 0.13 ${h} / 0.28)` });
+      [s.hi, s.lo].forEach(v => el('line', { x1: x0, x2: x1, y1: y(v), y2: y(v), style: `stroke:oklch(0.55 0.14 ${h})`, 'stroke-width': 1.5 }));
+    });
+    const last = segs[segs.length - 1];
+    [[last.hi, '상단', -2], [last.lo, '하단', 11]].forEach(([v, lab, dy]) =>
+      el('text', { x: W - pR + 6, y: y(v) + dy, 'font-size': 11, 'font-weight': 700, style: 'fill:oklch(0.5 0.13 150)' }, lab + ' ' + Math.round(v).toLocaleString()));
+    const short = n <= 14;
+    pts.forEach((p, i) => {
+      const mm = p.d.slice(5, 7);
+      const yearMark = mm === '01';
+      if (short ? ['01', '04', '07', '10'].includes(mm) : yearMark) {
+        el('text', { x: x(i), y: H - 8, 'text-anchor': 'middle', 'font-size': 11, style: 'fill:var(--dp-text4)' }, short ? p.d.slice(2, 4) + '.' + mm : p.d.slice(0, 4));
+        el('line', { x1: x(i), x2: x(i), y1: pT, y2: pT + cH, style: 'stroke:var(--dp-border)', 'stroke-width': 1, 'stroke-dasharray': '2 3' });
+      }
+    });
+    el('polyline', { points: pts.map((p, i) => x(i) + ',' + y(p.c)).join(' '), fill: 'none', style: 'stroke:var(--dp-accent)', 'stroke-width': 2, 'stroke-linejoin': 'round' });
+    const lx = x(n - 1), ly = y(price);
+    el('circle', { cx: lx, cy: ly, r: 4, style: 'fill:var(--dp-accent)' });
+    const near = Math.abs(ly - y(last.hi)) < 14 || Math.abs(ly - y(last.lo)) < 14;
+    el('text', { x: lx + 6, y: near ? ly + (ly < y(last.hi) ? -10 : 18) : ly + 4, 'font-size': 11, 'font-weight': 800, style: 'fill:var(--dp-accent)' }, '현재 ' + Math.round(price).toLocaleString());
+    const cross = el('line', { x1: 0, x2: 0, y1: pT, y2: pT + cH, style: 'stroke:var(--dp-text4);visibility:hidden', 'stroke-width': 1 });
+    const dot = el('circle', { r: 3.5, style: 'fill:var(--dp-accent);visibility:hidden' });
+    state = { pts, n, x, y, cW, pL, W, cross, dot };
   }
-  const walk = [0];
-  for (let i = 1; i <= N; i++) walk.push(walk[i - 1] + (rand() * 2 - 1));
-  const walkEnd = walk[N];
-  const bridge = walk.map((v, i) => v - (i / N) * walkEnd);
-  const maxAbsBridge = Math.max(...bridge.map(Math.abs)) || 1;
-  const amplitude = Math.max(Math.abs(target - DP_PRICE_TODAY) * 0.35, DP_PRICE_TODAY * 0.05);
-  const priceFloor = DP_PRICE_TODAY * 0.01;
-  const series = bridge.map((b, i) => {
-    const drift = DP_PRICE_TODAY + (target - DP_PRICE_TODAY) * (i / N);
-    return Math.max(drift + (b / maxAbsBridge) * amplitude, priceFloor);
-  });
-  series[0] = DP_PRICE_TODAY;
-  series[N] = target;
 
-  const svg = document.getElementById('dpLogicChart');
-  svg.innerHTML = '';
-  const W = 680, H = 220, pL = 56, pR = 16, pT = 20, pB = 30;
-  const cW = W - pL - pR, cH = H - pT - pB;
-  const seriesMin = Math.min(...series);
-  const seriesMax = Math.max(...series);
-  const pad = (seriesMax - seriesMin) * 0.15 || DP_PRICE_TODAY * 0.05;
-  const minY = Math.max(seriesMin - pad, 0);
-  const maxY = seriesMax + pad;
-  function py(v) { return pT + cH * (1 - (v - minY) / (maxY - minY)); }
-  function px(frac) { return pL + cW * frac; }
+  function show(i) {
+    const s = state, p = s.pts[i], b = bandAt(p.d);
+    s.cross.setAttribute('x1', s.x(i)); s.cross.setAttribute('x2', s.x(i)); s.cross.style.visibility = 'visible';
+    s.dot.setAttribute('cx', s.x(i)); s.dot.setAttribute('cy', s.y(p.c)); s.dot.style.visibility = 'visible';
+    let txt = `<b>${p.d.replace('-', '.')}</b> 주가 ${won(p.c)}`;
+    if (b) {
+      const h = QHUE[b[0].slice(5, 7)];
+      txt += ` · <span style="color:oklch(0.5 0.14 ${h});font-weight:700">${b[0].slice(0, 4)}년 ${QNAME[b[0].slice(5, 7)]} 기준</span> 내재가치 ${won(b[1])} ~ ${won(b[2])}`;
+    }
+    readout.innerHTML = txt;
+  }
+  function onMove(ev) {
+    const r = svg.getBoundingClientRect(), s = state;
+    const vx = (ev.clientX - r.left) * (s.W / r.width);
+    const i = Math.max(0, Math.min(s.n - 1, Math.round((vx - s.pL) / s.cW * (s.n - 1))));
+    show(i);
+  }
+  svg.addEventListener('pointermove', onMove);
+  svg.addEventListener('pointerdown', onMove);
+  svg.addEventListener('pointerleave', () => { state.cross.style.visibility = 'hidden'; state.dot.style.visibility = 'hidden'; show(state.n - 1); state.cross.style.visibility = 'hidden'; state.dot.style.visibility = 'hidden'; });
 
-  [0, 0.25, 0.5, 0.75, 1].forEach((f) => {
-    const v = minY + (maxY - minY) * f;
-    const y = py(v);
-    svg.appendChild(svgEl('line', { x1: pL, x2: W - pR, y1: y, y2: y, stroke: 'oklch(0.91 0.005 90)', 'stroke-width': 1 }));
-    const t = svgEl('text', { x: pL - 8, y: y + 3, 'text-anchor': 'end', 'font-size': 9, fill: 'oklch(0.55 0.02 260)' });
-    t.textContent = Math.round(v).toLocaleString() + '원';
-    svg.appendChild(t);
-  });
-
-  // 오늘 가격 기준선
-  const todayY = py(DP_PRICE_TODAY);
-  svg.appendChild(svgEl('line', { x1: pL, x2: W - pR, y1: todayY, y2: todayY, stroke: 'oklch(0.75 0.01 90)', 'stroke-width': 1, 'stroke-dasharray': '4,3' }));
-
-  const points = series.map((v, i) => [px(i / N), py(v)]);
-  const lineColor = target === DP_PRICE_TODAY ? 'oklch(0.55 0.02 260)' : (target > DP_PRICE_TODAY ? 'var(--dp-up)' : 'var(--dp-down)');
-  const linePath = points.map((p, i) => (i === 0 ? 'M' : 'L') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
-  const areaBaseY = py(minY).toFixed(1);
-  const areaPath = linePath + ` L${points[points.length - 1][0].toFixed(1)},${areaBaseY} L${points[0][0].toFixed(1)},${areaBaseY} Z`;
-  svg.appendChild(svgEl('path', { d: areaPath, fill: lineColor, opacity: 0.08 }));
-  svg.appendChild(svgEl('path', { d: linePath, fill: 'none', stroke: lineColor, 'stroke-width': 2, 'stroke-linejoin': 'round' }));
-
-  // 시작/끝 포인트 + 라벨
-  const first = points[0], last = points[points.length - 1];
-  svg.appendChild(svgEl('circle', { cx: first[0], cy: first[1], r: 4, fill: 'oklch(0.5 0.02 260)' }));
-  svg.appendChild(svgEl('circle', { cx: last[0], cy: last[1], r: 4.5, fill: lineColor }));
-  const startLabelY = first[1] < pT + 14 ? first[1] + 16 : first[1] - 10;
-  const startLabel = svgEl('text', { x: first[0], y: startLabelY, 'text-anchor': 'start', 'font-size': 10, 'font-weight': 700, fill: 'oklch(0.4 0.02 260)' });
-  startLabel.textContent = DP_PRICE_TODAY.toLocaleString() + '원';
-  svg.appendChild(startLabel);
-  const endLabelY = last[1] < pT + 14 ? last[1] + 16 : last[1] - 10;
-  const endLabel = svgEl('text', { x: last[0], y: endLabelY, 'text-anchor': 'end', 'font-size': 11, 'font-weight': 800, fill: lineColor });
-  endLabel.textContent = Math.round(target).toLocaleString() + '원';
-  svg.appendChild(endLabel);
-
-  // x축 라벨
-  const xt1 = svgEl('text', { x: pL, y: H - 10, 'text-anchor': 'start', 'font-size': 9.5, fill: 'oklch(0.5 0.02 260)' });
-  xt1.textContent = DP_PRICE_TODAY_LABEL;
-  svg.appendChild(xt1);
-  const xt2 = svgEl('text', { x: W - pR, y: H - 10, 'text-anchor': 'end', 'font-size': 9.5, fill: 'oklch(0.5 0.02 260)' });
-  xt2.textContent = DP_PRICE_TARGET_LABEL;
-  svg.appendChild(xt2);
-}
-dpRenderLogicList();
+  const btns = box.querySelectorAll('.dpb-rng button');
+  btns.forEach(btn => btn.addEventListener('click', () => {
+    btns.forEach(b => b.classList.toggle('on', b === btn));
+    draw(+btn.dataset.m || 0);
+    show(state.n - 1); state.cross.style.visibility = 'hidden'; state.dot.style.visibility = 'hidden';
+  }));
+  draw(0);
+  show(state.n - 1); state.cross.style.visibility = 'hidden'; state.dot.style.visibility = 'hidden';
+  if (typeof addChartExpandButton === 'function') addChartExpandButton(svg);
+})();
 
 
 function dpEnsureLazyDraw(id) {
