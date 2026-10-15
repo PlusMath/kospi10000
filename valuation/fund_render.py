@@ -12,6 +12,8 @@ from fund_report import annual, quarters, src_code, TYPES
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STOCKS = os.path.join(ROOT, 'stocks')
 QM = [('rev', '매출액'), ('oi', '영업이익'), ('pretax', '세전이익'), ('ni', '순이익'), ('nip', '지배주주순이익')]
+# 사업연도가 온전하지 않은 해 제외(SK스퀘어: 2021년 11월 분할 신설 → 2021년은 2개월치)
+MIN_YEAR = {'402340': 2022}
 JS_START, JS_END = '// -- fund-report:start (valuation/fund_render.py)', '// -- fund-report:end'
 
 
@@ -238,6 +240,7 @@ def transform(path, code, dry=False):
     raw = open(path, 'rb').read().decode('utf-8')
     t = raw.replace('\r\n', '\n')
     A, Q = annual(code), quarters(code)
+    A = {y: r for y, r in A.items() if y >= MIN_YEAR.get(code, 0)}
     Q = [(l, r) for l, r in Q if any(v is not None for v in r.values())] if len(A) < 2 else Q
     if not A or len(Q) < 2:
         return 'skip: DART 데이터 부족'
