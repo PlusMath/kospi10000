@@ -355,7 +355,13 @@ body{background:var(--dp-bg);}
     </div>
 
     <div id="dpFundAnnual">
-      <svg id="lgdAnnualChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:16px;"></svg>
+<!-- fund5y:start -->
+      <div class="dp-secl">매출액 추이</div>
+      <svg id="fundAnnualChart" viewBox="0 0 680 150" width="100%" style="display:block;margin-bottom:16px;"></svg>
+      <div class="dp-secl">영업이익·지배주주순이익 추이</div>
+      <svg id="fundAnnualChart2" viewBox="0 0 680 160" width="100%" style="display:block;margin-bottom:6px;"></svg>
+      <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 연결 재무제표, 2021~2025년 사업보고서 기준</div>
+<!-- fund5y:end -->
       <div class="dp-g2">
         <div>
           <div class="dp-row2"><span class="l">연결 매출액</span><span class="v">25조 8,101억 (▼3.0%)</span></div>
@@ -378,23 +384,42 @@ body{background:var(--dp-bg);}
         <div class="dp-seg"><div class="dp-seg-t">1Q26 손익 괴리</div><div class="dp-seg-d">영업이익 1,467억(흑자 확대, +338%), 순손익 -5,707억(적자 확대).</div></div>
       </div>
 
-      <div class="dp-secl">EPS 3개년 추이</div>
+      <!-- fund5y-eps:start -->
+      <div class="dp-secl">EPS 5개년 추이</div>
+      <style>@media (max-width:640px){#dpFundAnnual .dp-eps-flow{flex-wrap:wrap;}#dpFundAnnual .dp-eps-card{flex:1 1 28%;min-width:84px;}#dpFundAnnual .dp-arrow{display:none;}}</style>
       <div class="dp-eps-flow">
-        <div class="dp-eps-card"><div class="dp-eps-y">2023년</div><div class="dp-eps-v">-7,177원</div><div class="dp-eps-n">적자</div></div>
+        <div class="dp-eps-card"><div class="dp-eps-y">2021년</div><div class="dp-eps-v">3,315원</div><div class="dp-eps-n">순이익 1조 1,862억</div></div>
         <div class="dp-arrow">→</div>
-        <div class="dp-eps-card"><div class="dp-eps-y">2024년</div><div class="dp-eps-v">-5,438원</div><div class="dp-eps-n">적자 지속</div></div>
+        <div class="dp-eps-card"><div class="dp-eps-y">2022년</div><div class="dp-eps-v">-8,584원</div><div class="dp-eps-n">적자전환</div></div>
+        <div class="dp-arrow">→</div>
+        <div class="dp-eps-card"><div class="dp-eps-y">2023년</div><div class="dp-eps-v">-7,640원</div><div class="dp-eps-n">적자축소</div></div>
+        <div class="dp-arrow">→</div>
+        <div class="dp-eps-card"><div class="dp-eps-y">2024년</div><div class="dp-eps-v">-5,438원</div><div class="dp-eps-n">적자축소</div></div>
         <div class="dp-arrow">→</div>
         <div class="dp-eps-card now"><div class="dp-eps-y">2025년</div><div class="dp-eps-v">453원</div><div class="dp-eps-n">흑자전환</div></div>
       </div>
+<!-- fund5y-eps:end -->
 
       <div class="dp-insight">
         <div class="dp-insight-t">사업보고서 핵심</div>
-        <div class="dp-insight-b">지배주주순손익이 -2조 7,337억(2023)→-2조 5,626억(2024)→+2,263억(2025, 흑자전환)으로 극적인 반전에 성공. LCD 저수익 사업 축소와 OLED 중심 포트폴리오 전환, 비용구조 개선이 맞물린 결과로, 부채총계도 -23.0% 줄며 재무 건전성이 크게 개선됨. 매출 자체는 -3.0% 소폭 감소했지만 "양보다 질" 위주의 사업 재편이 수익성 개선으로 이어진 모습.</div>
+        <div class="dp-insight-b"><span class="fund5y-s">5개년(2021~2025) DART 기준 매출 29조 8,780억→25조 8,101억(연평균 -3.6%), 영업이익 2조 2,306억→5,170억, 지배주주순이익 1조 1,862억→2,263억. 영업이익은 2021년(2조 2,306억)이 최고, 2023년(-2조 5,102억)이 최저.</span> 지배주주순손익이 -2조 7,337억(2023)→-2조 5,626억(2024)→+2,263억(2025, 흑자전환)으로 극적인 반전에 성공. LCD 저수익 사업 축소와 OLED 중심 포트폴리오 전환, 비용구조 개선이 맞물린 결과로, 부채총계도 -23.0% 줄며 재무 건전성이 크게 개선됨. 매출 자체는 -3.0% 소폭 감소했지만 "양보다 질" 위주의 사업 재편이 수익성 개선으로 이어진 모습.</div>
       </div>
     </div>
 
     <div id="dpFundQuarter" style="display:none;">
-      <svg id="lgdQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:16px;"></svg>
+<!-- fundq:start -->
+      <div class="dp-secl">분기별 실적 (8개 분기, 3Q24~2Q26)</div>
+      <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
+        <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
+        <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
+        <button type="button" data-qm="pretax" onclick="dpShowQtrMetric('pretax',this)">세전이익</button>
+        <button type="button" data-qm="ni" onclick="dpShowQtrMetric('ni',this)">순이익</button>
+        <button type="button" data-qm="nip" onclick="dpShowQtrMetric('nip',this)">지배주주순이익</button>
+      </nav>
+      <div id="fundQtrChartTitle" style="font-size:11px;font-weight:700;color:var(--dp-text3);margin-bottom:4px;">매출액 — 분기 추이</div>
+      <svg id="fundQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
+      <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 분기·반기·사업보고서의 3개월 단독 실적. 4분기는 사업보고서 연간 실적에서 3분기 누적을 뺀 값. 분기 이름 아래 ▲▼는 전년 동기 대비 증감.</div>
+<!-- fundq:end -->
       <div class="dp-g2">
         <div>
           <div class="dp-row2"><span class="l">1Q26 연결 매출액</span><span class="v" style="color:var(--dp-down);">5조 5,340억 (▼8.7% YoY)</span></div>
@@ -405,6 +430,12 @@ body{background:var(--dp-bg);}
           <div class="dp-row2"><span class="l">1Q26 기본EPS</span><span class="v" style="color:var(--dp-down);">-1,141원 (전년동기 -525원)</span></div>
         </div>
       </div>
+      <!-- fundq-insight:start -->
+      <div class="dp-insight" style="margin-bottom:10px;">
+        <div class="dp-insight-t">분기 실적 — 2개년 흐름</div>
+        <div class="dp-insight-b">최근 8개 분기(3Q24~2Q26) 영업이익은 -806억→-1,077억. 2Q26 영업이익은 전년 동기(2Q25) -1,160억 대비 적자축소, 직전 분기(1Q26) 대비 적자전환. 이 기간 분기 최고는 3Q25(4,310억).</div>
+      </div>
+<!-- fundq-insight:end -->
       <div class="dp-insight">
         <div class="dp-insight-t">분기보고서 핵심</div>
         <div class="dp-insight-b">1Q26 영업이익은 1,467억원으로 전년 동기(335억원) 대비 +338.4% 큰 폭 개선되며 본업 수익성 회복이 확인됨. 그러나 금융비용(5,296억원, 전년 동기 3,370억원)과 기타영업외비용(8,383억원, 전년 동기 3,427억원)이 크게 늘면서 지배주주 순손실이 오히려 -5,707억원으로 확대(전년 동기 -2,627억원). 원/달러 환율 변동에 따른 외화 관련 손실 등 비영업적 요인이 실적 개선을 상쇄한 것으로 추정되며, 실제 영업 체력과 회계상 순손익 사이의 괴리에 유의할 필요.</div>
@@ -1139,68 +1170,79 @@ function svgEl(tag,attrs){
   return e;
 }
 
+// -- fund-report:start (valuation/fund_render.py)
+const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[29878043000000.0,26151781000000.0,21330819000000.0,26615347000000.0,25810082000000.0],"oi":[2230608000000.0,-2085047000000.0,-2510164000000.0,-560596000000.0,516977000000.0],"nip":[1186182000000.0,-3071565000000.0,-2733742000000.0,-2562606000000.0,226312000000.0],"qLabels":["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26"],"q":{"rev":[6821301000000.0,7832872000000.0,6065298000000.0,5586956000000.0,6956978000000.0,7200850000000.0,5534002000000.0,5612063000000.0],"oi":[-80599000000.0,83108000000.0,33464000000.0,-116033000000.0,431037000000.0,168509000000.0,146719000000.0,-107728000000.0],"pretax":[-207212000000.0,-562351000000.0,-148495000000.0,991898000000.0,29881000000.0,-371595000000.0,-522211000000.0,-459142000000.0],"ni":[-338108000000.0,-839118000000.0,-237032000000.0,890771000000.0,1247000000.0,-351179000000.0,-575714000000.0,-418831000000.0],"nip":[-355159000000.0,-917763000000.0,-262725000000.0,865812000000.0,-20658000000.0,-356117000000.0,-570691000000.0,-404641000000.0]}};
+const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
+const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
+let _qtrCurrentMetric=(document.querySelector('#dpQtrMetricNav button')||{dataset:{qm:'oi'}}).dataset.qm;
+function fundUnit(vals){ const m=Math.max(...vals.filter(v=>v!=null).map(Math.abs),0); return m>=1e12?[1e12,'조']:[1e8,'억']; }
+function fundFmt(v,u){ if(v==null) return '—'; const x=v/u[0]; return (u[1]==='조'?(Math.abs(x)>=10?x.toFixed(1):x.toFixed(2)):Math.round(x).toLocaleString())+u[1]; }
+function fundAxis(svg,W,pL,pR,py,lo,hi){
+  const g=oklchGrid();
+  [0,0.25,0.5,0.75,1].forEach(f=>{ const y=py(lo+(hi-lo)*f); svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:y,y2:y,stroke:g,'stroke-width':1})); });
+  if(lo<0) svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:py(0),y2:py(0),stroke:'oklch(0.6 0.01 260)','stroke-width':1}));
+}
+function oklchGrid(){ return 'oklch(0.91 0.005 90)'; }
+function fundRange(vals,padTop){ const v=vals.filter(x=>x!=null); let hi=Math.max(0,...v), lo=Math.min(0,...v); const span=(hi-lo)||1; return [lo<0?lo-span*0.12:0, hi+span*padTop]; }
+function fundBars(svg,o){
+  const {W,H,pL,pR,pT,pB,cats,vals,col,u,barF,maxBar,font,yoy}=o;
+  const cW=W-pL-pR,cH=H-pT-pB, [lo,hi]=fundRange(o.rangeVals||vals,o.pad||0.18);
+  const py=v=>pT+cH*(1-(v-lo)/(hi-lo));
+  fundAxis(svg,W,pL,pR,py,lo,hi);
+  const gw=cW/cats.length, bw=Math.min(gw*barF,maxBar);
+  cats.forEach((c,i)=>{
+    const gx=pL+i*gw+gw/2, v=vals[i];
+    if(v!=null){
+      const y0=py(0), y1=py(v);
+      svg.appendChild(svgEl('rect',{x:gx-bw/2,y:Math.min(y0,y1),width:bw,height:Math.max(1,Math.abs(y1-y0)),fill:v<0?'#D85A30':col,rx:2}));
+    }
+    const ty=v==null?py(0)-6:(v>=0?py(v)-6:py(v)+12);
+    const t=svgEl('text',{x:gx,y:ty,'text-anchor':'middle','font-size':font,fill:v!=null&&v<0?'#D85A30':col,'font-weight':700});
+    t.textContent=fundFmt(v,u); svg.appendChild(t);
+    if(yoy&&yoy[i]){ const t3=svgEl('text',{x:gx,y:H-pB+24,'text-anchor':'middle','font-size':8.5,fill:'oklch(0.55 0.02 260)'}); t3.textContent=yoy[i]; svg.appendChild(t3); }
+    const t2=svgEl('text',{x:gx,y:H-pB+13,'text-anchor':'middle','font-size':10,fill:'oklch(0.5 0.02 260)'});
+    t2.textContent=c; svg.appendChild(t2);
+  });
+  return py;
+}
+function fundYoy(a,b){ if(a==null||b==null) return ''; if(a>0&&b>0){ const r=(b/a-1)*100; return (r>=0?'▲':'▼')+Math.abs(r).toFixed(Math.abs(r)<10?1:0)+'%'; } if(a<=0&&b>0) return '흑전'; if(a>0&&b<=0) return '적전'; return '적지'; }
 function drawAnnualChart(){
-  const svg=document.getElementById('lgdAnnualChart');
-  const W=680,H=190,pL=44,pR=44,pT=16,pB=26;
-  const cW=W-pL-pR,cH=H-pT-pB;
-  const cats=['2023년','2024년','2025년'];
-  const oi=[-25102,-5606,5170];
-  const ni=[-27337,-25626,2263];
-  const maxV=Math.max(...ni)*1.2;
-  const minV=Math.min(...ni)*1.1;
-  function py(v){ return pT+cH*(1-(v-minV)/(maxV-minV)); }
-  const zeroY=py(0);
-  svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:zeroY,y2:zeroY,stroke:cssVar('--color-border-tertiary'),'stroke-width':1}));
-  const oiCol='#A6093D', niCol='#1D9E75';
-  cats.forEach((cat,i)=>{
-    const gx=pL+i*(cW/cats.length)+(cW/cats.length)/2;
-    const barW=Math.min((cW/cats.length)*0.26,64);
-    const ox=gx-barW-2, nx=gx+2;
-    const oTop=py(Math.max(oi[i],0)); const oBot=py(Math.min(oi[i],0));
-    svg.appendChild(svgEl('rect',{x:ox,y:Math.min(oTop,oBot),width:barW,height:Math.max(Math.abs(oBot-oTop),2),fill:oiCol,rx:2}));
-    const nTop=py(Math.max(ni[i],0)); const nBot=py(Math.min(ni[i],0));
-    svg.appendChild(svgEl('rect',{x:nx,y:Math.min(nTop,nBot),width:barW,height:Math.max(Math.abs(nBot-nTop),2),fill:niCol,rx:2}));
-    const t1=svgEl('text',{x:ox+barW/2,y:oi[i]>=0?oTop-4:oBot+14,'text-anchor':'middle','font-size':9,fill:oiCol,'font-weight':600});
-    t1.textContent=Math.round(oi[i])+'억'; svg.appendChild(t1);
-    const t2=svgEl('text',{x:nx+barW/2,y:ni[i]>=0?nTop-4:nBot+14,'text-anchor':'middle','font-size':9,fill:niCol,'font-weight':600});
-    t2.textContent=Math.round(ni[i])+'억'; svg.appendChild(t2);
-    const t3=svgEl('text',{x:gx,y:H-6,'text-anchor':'middle','font-size':10,fill:cssVar('--color-text-secondary')});
-    t3.textContent=cat; svg.appendChild(t3);
-  });
-  const legend=[[oiCol,'영업손익'],[niCol,'지배주주순손익']];
-  legend.forEach((l,i)=>{
-    const lx=pL+i*100;
-    svg.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
-    const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:cssVar('--color-text-secondary')});
-    t.textContent=l[1]; svg.appendChild(t);
-  });
-  addChartExpandButton(svg);
+  const accent=getComputedStyle(document.querySelector('.dp')).getPropertyValue('--dp-accent').trim()||'#1428A0';
+  const s1=document.getElementById('fundAnnualChart');
+  if(s1){ s1.innerHTML=''; fundBars(s1,{W:680,H:150,pL:24,pR:24,pT:18,pB:26,cats:FUND.cats,vals:FUND.rev,col:'#8B93A0',u:fundUnit(FUND.rev),barF:0.4,maxBar:64,font:10}); addChartExpandButton(s1); }
+  const s2=document.getElementById('fundAnnualChart2'); if(!s2) return;
+  s2.innerHTML='';
+  const u=fundUnit([...FUND.oi,...FUND.nip]), niCol='#1D9E75';
+  const W=680,H=160,pL=24,pR=24,pT=22,pB=26, rv=[...FUND.oi,...FUND.nip];
+  const py2=fundBars(s2,{W,H,pL,pR,pT,pB,cats:FUND.cats,vals:FUND.oi,col:accent,u,barF:0.3,maxBar:56,font:9,pad:0.25,rangeVals:rv});
+  const gw=(W-pL-pR)/FUND.cats.length, pts=[];
+  FUND.nip.forEach((v,i)=>{ if(v!=null) pts.push([pL+i*gw+gw/2+gw*0.22,py2(v),v]); });
+  if(pts.length>1) s2.appendChild(svgEl('polyline',{points:pts.map(p=>p[0]+','+p[1]).join(' '),fill:'none',stroke:niCol,'stroke-width':2.5}));
+  pts.forEach(p=>{ s2.appendChild(svgEl('circle',{cx:p[0],cy:p[1],r:4,fill:niCol}));
+    const t=svgEl('text',{x:p[0]+6,y:p[1]-8,'text-anchor':'start','font-size':9,fill:niCol,'font-weight':600}); t.textContent=fundFmt(p[2],u); s2.appendChild(t); });
+  [[accent,'영업이익'],[niCol,'지배주주순이익']].forEach((l,i)=>{ const lx=pL+i*90;
+    s2.appendChild(svgEl('rect',{x:lx,y:2,width:9,height:9,fill:l[0],rx:2}));
+    const t=svgEl('text',{x:lx+12,y:10,'font-size':9,fill:'oklch(0.5 0.02 260)'}); t.textContent=l[1]; s2.appendChild(t); });
+  addChartExpandButton(s2);
 }
-
+function dpShowQtrMetric(id, el){
+  document.querySelectorAll('#dpQtrMetricNav button').forEach(b=>b.classList.toggle('active', b===el));
+  _qtrCurrentMetric=id;
+  drawQtrChart();
+}
 function drawQtrChart(){
-  const svg=document.getElementById('lgdQtrChart');
-  const W=680,H=190,pL=44,pR=20,pT=20,pB=30;
-  const cW=W-pL-pR,cH=H-pT-pB;
-  const labels=['1Q26 영업이익','1Q26 지배주주순손익'];
-  const vals=[1467,-5707];
-  const cols=['#A6093D','#D85A30'];
-  const maxV=2000;
-  const minV=-6500;
-  function py(v){ return pT+cH*(1-(v-minV)/(maxV-minV)); }
-  svg.appendChild(svgEl('line',{x1:pL,x2:W-pR,y1:py(0),y2:py(0),stroke:cssVar('--color-border-tertiary'),'stroke-width':1}));
-  labels.forEach((lab,i)=>{
-    const gx=pL+i*(cW/labels.length)+(cW/labels.length)/2;
-    const barW=Math.min((cW/labels.length)*0.4,64);
-    const top=py(Math.max(vals[i],0));
-    const bot=py(Math.min(vals[i],0));
-    svg.appendChild(svgEl('rect',{x:gx-barW/2,y:top,width:barW,height:Math.max(bot-top,2),fill:cols[i],rx:3}));
-    const t1=svgEl('text',{x:gx,y:vals[i]>=0?top-6:bot+16,'text-anchor':'middle','font-size':10,fill:cols[i],'font-weight':600});
-    t1.textContent=Math.round(vals[i])+'억'; svg.appendChild(t1);
-    const t2=svgEl('text',{x:gx,y:H-8,'text-anchor':'middle','font-size':9,fill:cssVar('--color-text-secondary')});
-    t2.textContent=lab; svg.appendChild(t2);
-  });
+  const id=_qtrCurrentMetric, vals=FUND.q[id];
+  const accent=getComputedStyle(document.querySelector('.dp')).getPropertyValue('--dp-accent').trim()||'#1428A0';
+  const svg=document.getElementById('fundQtrChart'); if(!svg) return;
+  svg.innerHTML='';
+  const yoy=vals.map((v,i)=>i>=4?fundYoy(vals[i-4],v):'');
+  fundBars(svg,{W:680,H:190,pL:20,pR:20,pT:22,pB:36,cats:FUND.qLabels,vals,col:qtrMetricColor[id]||accent,u:fundUnit(vals),barF:0.5,maxBar:46,font:9.5,yoy});
+  const t=document.getElementById('fundQtrChartTitle'); if(t) t.textContent=qtrMetricLabel[id]+' — 분기 추이';
   addChartExpandButton(svg);
 }
+// -- fund-report:end
+
+
 
 // ── SVG 캔들차트 (Yahoo Finance 일봉 실데이터) ────────────────────────
 const data=[
