@@ -350,6 +350,102 @@ def transform(path, code, dry=False):
     return '\n    '.join(['ok'] + log)
 
 
+# ── 예전(Chart.js) 템플릿: 079 삼양식품 · 101 농심 ──
+LEGACY_ACCENT = {'003230': '#D04B20', '004370': '#E65100'}
+LG_CSS = """<style>
+.fundlg{--dp-accent:%s;--dp-accent-soft:color-mix(in srgb,%s 8%%,transparent);--dp-up:%s;--dp-card:var(--color-background-primary,#fff);
+  --dp-border:var(--color-border-tertiary,#e5e3dc);--dp-text2:var(--color-text-secondary,#555);--dp-text3:var(--color-text-secondary,#666);--dp-text4:var(--color-text-tertiary,#888);margin-bottom:12px;}
+.fundlg .dp-secl{font-size:12px;font-weight:700;color:var(--dp-text4);margin-bottom:8px;}
+.fundlg .dp-eps-flow{display:flex;align-items:stretch;gap:8px;margin-bottom:12px;}
+.fundlg .dp-eps-card{flex:1;text-align:center;background:var(--color-background-secondary,#f7f6f2);border:1px solid var(--dp-border);border-radius:10px;padding:10px 6px;}
+.fundlg .dp-eps-card.now{background:var(--dp-accent-soft);border-color:var(--dp-accent);}
+.fundlg .dp-eps-y{font-size:10.5px;color:var(--dp-text3);margin-bottom:4px;}
+.fundlg .dp-eps-v{font-size:15px;font-weight:800;}
+.fundlg .dp-eps-n{font-size:10px;color:var(--dp-text4);margin-top:4px;}
+.fundlg .dp-arrow{display:flex;align-items:center;font-size:16px;color:var(--dp-up);font-weight:700;}
+.fundlg .dp-sidenav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
+.fundlg .dp-sidenav button{flex:1 1 0;padding:8px 6px;font-size:12px;font-weight:700;color:var(--dp-text2);border:1px solid var(--dp-border);border-radius:8px;background:var(--dp-card);font-family:inherit;cursor:pointer;word-break:keep-all;}
+.fundlg .dp-sidenav button.active{background:var(--dp-accent);border-color:var(--dp-accent);color:#fff;}
+.fundlg .fundlg-s{font-size:12px;line-height:1.65;color:var(--dp-text2);background:var(--color-background-secondary,#f7f6f2);border-radius:8px;padding:9px 11px;margin-bottom:12px;}
+@media (max-width:640px){.fundlg .dp-eps-flow{flex-wrap:wrap;}.fundlg .dp-eps-card{flex:1 1 28%%;min-width:84px;}.fundlg .dp-arrow{display:none;}
+  .fundlg .dp-sidenav{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;}.fundlg .dp-sidenav button{padding:8px 4px;font-size:11px;}}
+</style>"""
+
+
+def _lg_js(A, Q, accent):
+    js = js_block(A, Q)
+    js = js.replace("getComputedStyle(document.querySelector('.dp')).getPropertyValue('--dp-accent').trim()||'#1428A0'", repr(accent))
+    js = re.sub(r'addChartExpandButton\((\w+)\);', r"if(typeof addChartExpandButton==='function') addChartExpandButton(\1);", js)
+    helper = ("function svgEl(tag,attrs){ const e=document.createElementNS('http://www.w3.org/2000/svg',tag);"
+              " for(const k in attrs) e.setAttribute(k,attrs[k]); return e; }\n")
+    return js.replace(JS_START + '\n', JS_START + '\n' + helper, 1)
+
+
+def _lg_sub(t, tag, body):
+    """<!-- tag:start --> … <!-- tag:end --> 사이 교체(없으면 None)."""
+    s, e = f'<!-- {tag}:start -->', f'<!-- {tag}:end -->'
+    if s not in t:
+        return None
+    i, j = t.index(s), t.index(e) + len(e)
+    return t[:i] + f'{s}\n{body}\n{e}' + t[j:]
+
+
+def legacy(path, code, dry=False):
+    raw = open(path, 'rb').read().decode('utf-8')
+    t = raw.replace('\r\n', '\n')
+    A, Q = annual(code), quarters(code)
+    acc = LEGACY_ACCENT[code]
+    css = LG_CSS % (acc, acc, acc)
+    a_body = '\n'.join([f'<div class="fundlg">', annual_charts_html(A), eps_html(code, A),
+                        f'      <div class="fundlg-s">{html.escape(annual_sentence(A))}</div>', '</div>'])
+    q_body = '\n'.join(['<div class="fundlg">', qtr_html(Q),
+                        f'      <div class="fundlg-s"><b>분기 실적 — 2개년 흐름</b> · {html.escape(qtr_sentence(Q))}</div>', '</div>'])
+    js = _lg_js(A, Q, acc)
+
+    if code == '003230':
+        # 사업보고서 / 반기보고서 탭의 Chart.js 캔버스 → 표준 SVG 차트
+        for tag, cid, body in (('fundlg-a', 'plChart', css + '\n' + a_body), ('fundlg-q', 'qplChart', q_body)):
+            r = _lg_sub(t, tag, body)
+            if r is None:
+                m = re.search(rf'<div style="position:relative;[^"]*"><canvas id="{cid}"></canvas></div>', t)
+                if not m:
+                    return f'skip: {cid} 없음'
+                r = t[:m.start()] + f'<!-- {tag}:start -->\n{body}\n<!-- {tag}:end -->' + t[m.end():]
+            t = r
+        if JS_START in t:
+            i, j = t.index(JS_START), t.index(JS_END) + len(JS_END)
+            t = t[:i] + js + t[j:]
+        else:
+            i = t.index('let plC, qC;')
+            j = _func_span(t, 'renderQuarter')[1]
+            t = t[:i] + js + '\nfunction renderAnnual(){ drawAnnualChart(); }\nfunction renderQuarter(){ drawQtrChart(); }' + t[j:]
+        # 목표주가 차트가 Chart.js 로드 전에 실행되던 문제: 라이브러리를 그 앞으로
+        lib = '<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>\n'
+        tp = t.find("<script>\n// 증권사 목표주가 차트")
+        if 0 <= tp < t.find(lib):
+            t = t.replace(lib, '', 1)
+            t = t[:tp] + lib + t[tp:]
+    elif code == '004370':
+        body = css + '\n' + a_body + '\n' + q_body
+        r = _lg_sub(t, 'fundlg', body)
+        if r is None:
+            m = re.search(r'<div style="position:relative;[^"]*">\s*<canvas id="nongRevChart"></canvas>\s*</div>', t)
+            if not m:
+                return 'skip: nongRevChart 없음'
+            r = t[:m.start()] + f'<!-- fundlg:start -->\n{body}\n<!-- fundlg:end -->' + t[m.end():]
+        t = r
+        if JS_START in t:
+            i, j = t.index(JS_START), t.index(JS_END) + len(JS_END)
+            t = t[:i] + js + t[j:]
+        else:
+            i = t.index('// ── 매출/영업이익 차트')
+            j = t.index('// ── OPM 피어 비교')
+            t = t[:i] + js + '\ndrawAnnualChart(); drawQtrChart();\n\n' + t[j:]
+    if not dry:
+        open(path, 'wb').write(t.replace('\n', '\r\n').encode('utf-8'))
+    return 'ok (legacy)'
+
+
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith('--')]
     dry = '--dry' in sys.argv
@@ -358,7 +454,8 @@ def main():
         code = f[4:-5]
         if args and code not in args and f[:3] not in args:
             continue
-        print(f, transform(os.path.join(STOCKS, f), code, dry))
+        p = os.path.join(STOCKS, f)
+        print(f, legacy(p, code, dry) if code in LEGACY_ACCENT else transform(p, code, dry))
 
 
 if __name__ == '__main__':
