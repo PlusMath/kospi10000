@@ -2902,7 +2902,7 @@
     let scorePage = 1;
     let changePage = 1;
     let changeSortMode = 'desc'; // 'desc' (상승률 큰 순) | 'asc' (하락률 큰 순)
-    let scoreSortMode = 'total'; // 'fundamental' | 'technical' | 'total'
+    let scoreSortMode = 'total'; // 'fundamental' | 'technical' | 'total' | 'intrinsic'
     let searchQuery = '';
     const RANK_PAGE_SIZE = 10;
 
@@ -2919,6 +2919,33 @@
         .then((data) => { technicalScoreData = data; return data; })
         .catch(() => { technicalScoreData = {}; return technicalScoreData; });
       return technicalScoreLoadPromise;
+    }
+    // ── 내재가치(data/intrinsic_value.json, valuation/run_daily.py가 매일 종목 페이지의
+    //     최신 분기 내재가치 하단·상단을 모아 저장) — 내재가치 매력순을 처음 볼 때 한 번만 fetch. ──
+    let intrinsicData = null;
+    let intrinsicLoadPromise = null;
+    function loadIntrinsicData() {
+      if (intrinsicData) return Promise.resolve(intrinsicData);
+      if (intrinsicLoadPromise) return intrinsicLoadPromise;
+      intrinsicLoadPromise = fetch(`data/intrinsic_value.json?v=${Date.now()}`, { cache: 'no-store' })
+        .then((res) => { if (!res.ok) throw new Error('no data'); return res.json(); })
+        .then((data) => { intrinsicData = data.stocks || {}; return intrinsicData; })
+        .catch(() => { intrinsicData = {}; return intrinsicData; });
+      return intrinsicLoadPromise;
+    }
+    // 내재가치 매력 점수(절대평가): 주가 ÷ 내재가치(하단·상단 기하평균) 비율 하나로만 계산.
+    // 0.5배 이하 100 · 0.71배 75 · 1배 50 · 2배 25 · 4배 이상 0 (로그 눈금, 고평가 쪽은 2배마다 -25).
+    function intrinsicScore(price, entry) {
+      if (!entry || entry.hold || !(price > 0) || !(entry.low > 0) || !(entry.high > 0)) return null;
+      const value = Math.sqrt(entry.low * entry.high);
+      const x = Math.log(value / price);
+      const s = x >= 0 ? 50 + 50 * x / Math.log(2) : 50 + 50 * x / Math.log(4);
+      return { score: Math.round(Math.max(0, Math.min(100, s))), ratio: price / value, value };
+    }
+    function intrinsicTier(score) {
+      if (score >= 50) return 'tier-cheap';
+      if (score >= 25) return 'tier-mid';
+      return 'tier-expensive';
     }
     // 종목 상세 페이지의 scoring.classify_grade와 동일한 등급 문자열 → 색상 티어.
     function tscoreGradeTier(grade) {
@@ -3370,10 +3397,11 @@
     function scoreSortLabel(mode) {
       if (mode === 'technical') return '기술적 매력순';
       if (mode === 'fundamental') return '기본적 매력순';
+      if (mode === 'intrinsic') return '내재가치 매력순';
       return '총점순';
     }
 
-    function createScoreRow(displayRank, stock, vscoreVal, tscoreEntry, totalVal) {
+    function createScoreRow(displayRank, stock, vscoreVal, tscoreEntry, totalVal, ivVal) {
       const row = document.createElement('div');
       row.className = 'score-row';
       row.setAttribute('role', 'row');
@@ -3389,7 +3417,16 @@
         <div class="sr2-name" role="cell">${stock.name}<small>${stock.code}</small></div>
         <div class="sr2-price" role="cell">${live ? fmtWon(live.price) : '—'}</div>
         <div class="sr2-change ${hasChange ? (live.change >= 0 ? 'up' : 'dn') : ''}" role="cell">${hasChange ? fmtChange(live.change) : '—'}</div>
-        <div class="score-badge-group dual" role="cell">
+        ${ivVal ? `<div class="score-badge-group dual" role="cell">
+          <div class="score-mini ${intrinsicTier(ivVal.score)}" title="내재가치 매력(절대평가, 100점 만점)">
+            <span class="score-mini-l">내재</span>
+            <span class="score-mini-v">${ivVal.score}</span>
+          </div>
+          <div class="score-mini" title="주가 ÷ 내재가치(${fmtWon(Math.round(ivVal.value))})">
+            <span class="score-mini-l">주가/가치</span>
+            <span class="score-mini-v">${ivVal.ratio.toFixed(2)}배</span>
+          </div>
+        </div>` : `<div class="score-badge-group dual" role="cell">
           <div class="score-mini ${vTier}" title="기본적 매력(밸류에이션)">
             <span class="score-mini-l">기본</span>
             <span class="score-mini-v">${vscoreVal != null ? vscoreVal : '—'}</span>
@@ -3402,7 +3439,7 @@
             <span class="score-mini-l">총점</span>
             <span class="score-mini-v">${totalVal != null ? totalVal : '—'}</span>
           </div>
-        </div>
+        </div>`}
         <div class="sr2-star" role="cell"><button type="button" class="star-btn ${isFav ? 'active' : ''}" aria-label="즐겨찾기">${isFav ? '★' : '☆'}</button></div>
       `;
 
@@ -3421,7 +3458,7 @@
 
       const sortBar = document.createElement('div');
       sortBar.className = 'score-sort-bar';
-      ['technical', 'fundamental', 'total'].forEach((mode) => {
+      ['technical', 'fundamental', 'total', 'intrinsic'].forEach((mode) => {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'score-sort-btn' + (scoreSortMode === mode ? ' active' : '');
@@ -3436,8 +3473,19 @@
       });
       stockArea.appendChild(sortBar);
 
+      // 내재가치 매력순은 intrinsic_value.json만 필요하다.
+      if (scoreSortMode === 'intrinsic' && !intrinsicData) {
+        const loading = document.createElement('p');
+        loading.className = 'score-view-note';
+        loading.textContent = '내재가치 데이터를 불러오는 중...';
+        stockArea.appendChild(loading);
+        loadIntrinsicData().then(() => {
+          if (currentView === 'score') renderScoreView();
+        });
+        return;
+      }
       // 기본적 매력순만 볼 때는 technical_score.json이 필요 없어 fetch를 미룬다.
-      if (scoreSortMode !== 'fundamental' && !technicalScoreData) {
+      if (scoreSortMode !== 'fundamental' && scoreSortMode !== 'intrinsic' && !technicalScoreData) {
         const loading = document.createElement('p');
         loading.className = 'score-view-note';
         loading.textContent = '기술적 매력도 데이터를 불러오는 중...';
@@ -3455,12 +3503,17 @@
         const vscoreVal = s.vscore != null ? s.vscore : null;
         const tscoreEntry = hasT ? tEntry : null;
         const totalVal = (vscoreVal != null && tscoreEntry != null) ? (vscoreVal + tscoreEntry.technical_score) : null;
-        return { stock: s, vscoreVal, tscoreEntry, totalVal };
+        const live = stockLive[s.code];
+        const ivVal = scoreSortMode === 'intrinsic' && intrinsicData ? intrinsicScore(live && live.price, intrinsicData[s.code]) : null;
+        return { stock: s, vscoreVal, tscoreEntry, totalVal, ivVal };
       });
 
       let scored;
       if (scoreSortMode === 'fundamental') {
         scored = combined.filter((c) => c.vscoreVal != null).sort((a, b) => b.vscoreVal - a.vscoreVal);
+      } else if (scoreSortMode === 'intrinsic') {
+        // 같은 점수(0점·100점 구간 포함)는 주가/가치 비율이 낮은 쪽이 위
+        scored = combined.filter((c) => c.ivVal != null).sort((a, b) => b.ivVal.score - a.ivVal.score || a.ivVal.ratio - b.ivVal.ratio);
       } else if (scoreSortMode === 'technical') {
         scored = combined.filter((c) => c.tscoreEntry != null).sort((a, b) => b.tscoreEntry.technical_score - a.tscoreEntry.technical_score);
       } else {
@@ -3490,12 +3543,12 @@
         <div role="columnheader">종목명</div>
         <div role="columnheader" style="text-align:right;">현재가</div>
         <div role="columnheader" style="text-align:right;">등락률</div>
-        <div role="columnheader" style="text-align:right;white-space:nowrap;">기본 · 기술 · 총점</div>
+        <div role="columnheader" style="text-align:right;white-space:nowrap;">${scoreSortMode === 'intrinsic' ? '내재 · 주가/가치' : '기본 · 기술 · 총점'}</div>
         <div role="columnheader"></div>
       `;
       table.appendChild(head);
 
-      pageItems.forEach((c, i) => table.appendChild(createScoreRow(start + i + 1, c.stock, c.vscoreVal, c.tscoreEntry, c.totalVal)));
+      pageItems.forEach((c, i) => table.appendChild(createScoreRow(start + i + 1, c.stock, c.vscoreVal, c.tscoreEntry, c.totalVal, c.ivVal)));
 
       stockArea.appendChild(table);
 
@@ -3511,7 +3564,12 @@
 
       const note = document.createElement('p');
       note.className = 'score-view-note';
-      note.textContent = '기본적 매력(밸류에이션, 업종 내 상대순위 1차 버전)과 기술적 매력(눌림목매매 기준) 점수를 함께 표시합니다. ' +
+      note.textContent = scoreSortMode === 'intrinsic' ? (
+        '내재가치 매력은 다른 종목과 비교하지 않는 절대평가입니다. 종목 페이지의 최신 분기 내재가치(하단·상단의 기하평균)와 현재가의 비율로만 계산하며, ' +
+        '주가가 내재가치의 0.5배 이하면 100점, 0.71배 75점, 1배 50점, 2배 25점, 4배 이상 0점입니다. ' +
+        `적자·고성장 단계라 평가 보류인 종목과 내재가치가 없는 종목은 제외됩니다` + (excludedCount > 0 ? `(제외 ${excludedCount}개).` : '.') +
+        ' 재무제표로 추정한 값이며 주가 상승을 의미하지 않고, 투자 권고가 아닙니다.') :
+        '기본적 매력(밸류에이션, 업종 내 상대순위 1차 버전)과 기술적 매력(눌림목매매 기준) 점수를 함께 표시합니다. ' +
         `총점은 두 점수의 합(200점 만점)입니다. 현재 "${scoreSortLabel(scoreSortMode)}" 기준으로, 그 정렬에 필요한 점수가 없는 종목은 목록에서 제외됩니다` +
         (excludedCount > 0 ? `(제외 ${excludedCount}개).` : '.') +
         ' 저평가·기술적 매력이 곧 주가 상승을 의미하지는 않으며, 투자 권고가 아닙니다.';

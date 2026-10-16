@@ -25,11 +25,36 @@ def stock_pages():
     return out
 
 
+def export_iv():
+    """메인 페이지 '내재가치 매력순'용: 종목 페이지 박스(#dpBuffettBox)의 최신 분기 내재가치 하단·상단을
+    data/intrinsic_value.json으로 모은다. 점수(주가÷내재가치)는 메인 페이지가 실시간 가격으로 계산."""
+    out = {}
+    for s in stock_pages():
+        t = open(s['file'], encoding='utf-8').read()
+        m = re.search(r'id="dpBuffettBox"([^>]*)>', t)
+        if not m or 'data-iv-low' not in m.group(1):
+            continue
+        a = m.group(1)
+        g = lambda k: re.search(k + r'="([^"]*)"', a).group(1)
+        bands = re.search(r"data-bands='([^']*)'", a)
+        q = json.loads(bands.group(1))[-1][0] if bands else None
+        out[s['code']] = {'low': int(float(g('data-iv-low'))), 'high': int(float(g('data-iv-high'))),
+                          'hold': 'data-hold=' in a, 'q': q}
+    path = os.path.join(REPO, 'data', 'intrinsic_value.json')
+    json.dump({'generated_at': time.strftime('%Y-%m-%d %H:%M:%S'), 'stocks': out},
+              open(path, 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
+    return len(out)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--code', nargs='*', help='이 종목만 처리')
     ap.add_argument('--skip-fetch', action='store_true', help='캐시만으로 계산·반영')
+    ap.add_argument('--export-only', action='store_true', help='data/intrinsic_value.json만 다시 만듦')
     a = ap.parse_args()
+    if a.export_only:
+        log.info('intrinsic_value.json %d종목', export_iv())
+        return
     t0 = time.time()
     stocks = stock_pages()
     if a.code:
@@ -86,6 +111,7 @@ def main():
                            if 'quarters' in (r := res.get(s['code']) or {}) else {'error': r.get('error')})
                for s in stocks}
     json.dump(summary, open(os.path.join(fetch.CACHE, 'last_result.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=0)
+    log.info('intrinsic_value.json %d종목', export_iv())
     log.info('완료: %d종목 %s, %.0f초 소요', len(stocks), ' '.join(f'{k}={v}' for k, v in sorted(counts.items())), time.time() - t0)
 
 
