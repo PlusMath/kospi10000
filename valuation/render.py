@@ -109,7 +109,9 @@ def make_box(page_code, r, legacy=False, price_sel=None, price=None):
     if cf == '낮음' and page_code not in CUSTOM_NOTE:
         note += ' 평가 방식 간 결과 차이가 커 신뢰도가 낮다.'
     if r['code'] != page_code:
-        note += ' 우선주는 보통주와 같은 주당 내재가치를 적용했다(의결권·배당 차이 미반영).'
+        note += (f' 우선주는 보통주 주당 내재가치에 직전 5년 평균 우선주/보통주 주가 비율({lt["pref_factor"]:.2f}배)을 곱했다'
+                 '(의결권·유동성 차이로 생기는 상시 할인 반영, 방식별 범위도 같은 비율로 환산, 근거 수치는 보통주 기준).'
+                 if lt.get('pref_factor') else ' 우선주는 보통주와 같은 주당 내재가치를 적용했다(의결권·배당 차이 미반영).')
     qy, qm = lt['q'].split('-')
     hold = r['type'] == '고성장·적자'
     mrows = '\n'.join(

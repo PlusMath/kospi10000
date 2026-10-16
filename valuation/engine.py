@@ -514,5 +514,28 @@ def run_all(stocks, log=print):
         if 'error' in r and not r['error'].startswith(('KeyError', 'TypeError', 'ValueError', 'ZeroDivisionError')):
             r['permanent'] = cache_complete(code)
         r['page_code'] = s['code']
+        if code != s['code'] and 'quarters' in r:
+            pref_discount(s['code'], code, r)
         res[s['code']] = r
     return res
+
+
+def pref_ratio(pref, common, ym, n=60):
+    """우선주/보통주 월말 종가 비율의 직전 n개월 평균(ym 이하만 사용 — 그 시점에 알 수 있던 값)."""
+    a, b = px_series(pref), px_series(common)
+    v = [a[k] / b[k] for k in sorted(set(a) & set(b)) if k <= ym and b[k]][-n:]
+    return sum(v) / len(v) if len(v) >= 12 else None
+
+
+def pref_discount(pref, common, r):
+    """우선주: 보통주 주당 내재가치 × 직전 5년 평균 우선주/보통주 가격 비율(의결권·유동성 차이로 생기는 상시 할인)."""
+    import copy
+    r['quarters'] = copy.deepcopy(r['quarters'])
+    for v in r['quarters']:
+        f = pref_ratio(pref, common, v['q'])
+        if f is None:
+            continue
+        v['pref_factor'] = f
+        v['low'], v['high'] = v['low'] * f, v['high'] * f
+        for m in v.get('methods') or []:
+            m['low'], m['high'] = m['low'] * f, m['high'] * f
