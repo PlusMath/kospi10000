@@ -16,14 +16,18 @@ WEIGHTS = {
     '지주·투자':   {'NAV': 60, 'RIM': 20, '정상화 PER': 20},
     '규제·유틸리티': {'RIM': 40, '정상화 PER': 30, '배당할인': 30},
     '고성장·적자': {'RIM': 50, 'PBR-ROE': 50},               # 이익 기반 평가 제외, 참고용
+    '저수익·회복': {'이익환원': 100},                       # 장기 평균 ROE ≤ 0이지만 최근 흑자인 성숙 기업
 }
+EARN_G = 0.025   # 이익환원 상단의 영구 성장률(DCF 잔존가치 성장률과 같음)
 TYPES = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'types.json'), encoding='utf-8'))
 FIN, HOLD, UTIL, PREF = set(TYPES['금융']), set(TYPES['지주·투자']), set(TYPES['규제·유틸리티']), TYPES['우선주']
 IS = ('IS', 'CIS')
 CAPEX = ['PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities',
          'PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities']
 DEBT = ['ShorttermBorrowings', 'ShortTermBorrowings', 'CurrentPortionOfLongtermBorrowings', 'LongTermBorrowingsGross',
-        'BondsIssued', 'NoncurrentPortionOfNoncurrentBondsIssued', 'ConvertibleBondsNet']
+        'BondsIssued', 'NoncurrentPortionOfNoncurrentBondsIssued', 'ConvertibleBondsNet',
+        # 차입금·사채를 한 줄로 묶어 공시하는 회사(롯데쇼핑 등) — 빠지면 순현금이 부풀려짐
+        'CurrentBorrowingsAndCurrentPortionOfNoncurrentBorrowings', 'LongtermBorrowings']
 THIS_YEAR = datetime.date.today().year
 
 
@@ -208,13 +212,20 @@ def classify(code, rows):
     nips = [rows[y]['nip'] for y in ys]
     roe = roe_series(rows, ys)
     roe_avg = st.mean(roe) if roe else 0
-    if nips[-1] < 0 or roe_avg <= 0:
-        return '고성장·적자', ('최근 연도 적자' if nips[-1] < 0 else f'평균 ROE {roe_avg*100:.1f}%')
+    if nips[-1] < 0:
+        return '고성장·적자', '최근 연도 적자'
     revs = [rows[y]['rev'] for y in ys if rows[y]['rev']]
+    cagr = None
     if len(revs) >= 4 and revs[0] > 0 and revs[-1] > 0:
         cagr = (revs[-1] / revs[0]) ** (1 / (len(revs) - 1)) - 1
-        if cagr > 0.15 and roe_avg < R:
+    if roe_avg <= 0:
+        # 장기 평균 ROE가 0 이하: 고성장이면 미래 이익을 알 수 없어 장부가치 참고값만, 성숙 기업이면
+        # 장부가치가 이익으로 이어지지 않으므로(RIM은 ROE가 요구수익률로 회복된다고 가정해 과대평가) 현재 이익으로 평가
+        if cagr is not None and cagr > 0.15:
             return '고성장·적자', f'매출 연평균 {cagr*100:.0f}% 성장, 평균 ROE {roe_avg*100:.1f}%'
+        return '저수익·회복', f'평균 ROE {roe_avg*100:.1f}%, 최근 연도 흑자'
+    if cagr is not None and cagr > 0.15 and roe_avg < R:
+        return '고성장·적자', f'매출 연평균 {cagr*100:.0f}% 성장, 평균 ROE {roe_avg*100:.1f}%'
     mv = [rows[y]['oi'] / rows[y]['rev'] * 100 for y in ys if rows[y]['rev'] and rows[y]['oi'] is not None]
     sd = st.pstdev(mv) if len(mv) >= 3 else 0
     losses = sum(1 for v in nips if v < 0)
@@ -384,6 +395,13 @@ def value_at(typ, rows, ys, px, qb, ttm, shares, nav=None):
         pb = lambda x: max(0.0, (x - g) / (R - g))
         m['PBR-ROE'] = (bps * pb(r_lo), bps * pb(r_hi),
                         f'BPS {bps:,.0f}원 × 적정 PBR {pb(r_lo):.2f}~{pb(r_hi):.2f}배 (ROE {r_lo*100:.1f}~{r_hi*100:.1f}%, 성장률 {g*100:.1f}%)')
+    if '이익환원' in w and ttm and ttm.get('nip') is not None and ttm['nip'] > 0:
+        # 현재 이익을 영구 이익으로 보고 할인: 하단=최근 3년 평균·최근 4분기 중 작은 값(성장 0%), 상단=큰 값(성장 2.5%)
+        ni3 = st.mean([rows[y]['nip'] for y in ys[-3:]])
+        e_lo = min(ttm['nip'], ni3) if ni3 > 0 else ttm['nip']
+        e_hi = max(ttm['nip'], ni3)
+        m['이익환원'] = (e_lo / R / shares + nc_ps, e_hi * (1 + EARN_G) / (R - EARN_G) / shares + nc_ps,
+                       f'최근 3년 평균 순이익 {_won(ni3)} ~ 최근 4분기 {_won(ttm["nip"])}이 계속된다고 보고 할인, 성장률 0~{EARN_G*100:.1f}%')
     if '배당할인' in w:
         dps = rows[ys[-1]]['div'] / shares
         if dps > 0:
@@ -402,6 +420,10 @@ def value_at(typ, rows, ys, px, qb, ttm, shares, nav=None):
             'missing': [k for k in w if k not in m]}
 
 
+def _won(v):
+    return f'{v/1e12:.2f}조' if abs(v) >= 1e12 else f'{v/1e8:,.0f}억'
+
+
 def split_multiple(r):
     """최신/과거 주식 수 비율이 분할(2·5·10배 등) 또는 병합으로 보이면 그 배수, 아니면 1."""
     if r >= 1.8:
@@ -413,11 +435,11 @@ def split_multiple(r):
     return 1
 
 
-def run(code, factor=None):
+def run(code, factor=None, force=None):
     rows, L = load(code)
     if len(rows) < 3:
         return {'code': code, 'error': f'연간 재무 이력 부족({len(rows)}년)'}
-    typ, why = classify(code, rows)
+    typ, why = force or classify(code, rows)
     px = code if px_series(code) else None
     ofs = _load(_p('ofs', f'{code}.json'), {}) or {}
     ofs_L = lambda y, q: (ofs.get(f'{y}_{RC[q]}') or {}).get('list') or []
@@ -482,13 +504,17 @@ def run(code, factor=None):
             v['q'] = f'{y}-{q*3:02d}'
             v['fy'] = fy
             out.append(v)
+        elif typ == '저수익·회복' and out:
+            out.append({'q': f'{y}-{q*3:02d}', 'fy': fy, 'gap': True})   # 최근 4분기 적자: 이익 기반 가치 없음(그래프 공백)
+    if typ == '저수익·회복' and (not out or out[-1].get('gap')):
+        return run(code, factor, force=('고성장·적자', '최근 4분기 적자'))
     if not out:
         return {'code': code, 'error': '평가 가능한 분기 없음'}
     nb = (NAVER.get(code) or {}).get('bps')
     if factor == 1.0 and nb and out[-1].get('bps'):
         ratio = out[-1]['bps'] / nb
         if not (0.7 < ratio < 1.45):
-            return run(code, factor * ratio)
+            return run(code, factor * ratio, force)
     return {'code': code, 'type': typ, 'type_why': why, 'first_year': min(rows), 'quarters': out}
 
 
@@ -533,7 +559,7 @@ def pref_discount(pref, common, r):
     r['quarters'] = copy.deepcopy(r['quarters'])
     for v in r['quarters']:
         f = pref_ratio(pref, common, v['q'])
-        if f is None:
+        if f is None or v.get('gap'):
             continue
         v['pref_factor'] = f
         v['low'], v['high'] = v['low'] * f, v['high'] * f

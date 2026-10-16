@@ -25,10 +25,14 @@ TYPE_NOTE = {
     '지주·투자': '지주·투자회사라 보유 지분의 시장가치를 반영한 NAV(순자산가치)에 60%, RIM·정상화 PER에 20%씩 가중했다. '
               'NAV는 별도 재무제표 자본에 상장 자회사 지분의 시가와 장부가 차이를 더한 값이며, 한국 지주사의 통상적인 할인(30~50%)을 적용했다. 비상장 자회사는 장부가로 반영된다.',
     '규제·유틸리티': '요금 규제를 받는 기업이라 RIM·정상화 PER·배당할인으로 평가했다(4:3:3).',
+    '저수익·회복': '장기 평균 ROE가 0 이하로 장부가치가 이익으로 이어지지 않은 성숙 기업이라, 장부가치 기반 평가(RIM·적정 PBR)는 빼고 '
+              '지금의 이익이 계속된다고 보는 이익환원 방식으로만 평가했다(ROE가 요구수익률로 회복된다는 가정 없음). '
+              '하단은 최근 3년 평균 순이익과 최근 4분기 순이익 중 작은 값(성장 0%), 상단은 큰 값에 영구 성장률 2.5%를 적용했다. '
+              '최근 4분기가 적자였던 시점은 이익 기반 가치를 낼 수 없어 그래프를 비워 뒀다.',
     '고성장·적자': '적자이거나 이익이 아직 안정되지 않은 단계라 이익 기반 평가(DCF·PER)는 빼고 장부가치 기반(RIM·적정 PBR)만 참고용으로 계산했다. 성장 기업의 미래 가치는 반영되지 않는다.',
 }
 QNAME = {'03': '1분기', '06': '반기', '09': '3분기', '12': '사업'}
-CONF_COLOR = {'높음': 'oklch(0.55 0.15 150)', '보통': 'var(--dp-text2)', '낮음': 'oklch(0.62 0.16 60)'}
+CONF_COLOR = {'단일 방식': 'var(--dp-text2)', '높음': 'oklch(0.55 0.15 150)', '보통': 'var(--dp-text2)', '낮음': 'oklch(0.62 0.16 60)'}
 
 STYLE = '''  <style>
     #dpBuffettBox .dpb-sub{font-size:12px;color:var(--dp-text3);margin:-2px 0 10px;}
@@ -102,7 +106,7 @@ def fmt(v):
 def make_box(page_code, r, legacy=False, price_sel=None, price=None):
     q = r['quarters']
     lt = q[-1]
-    cf = conf(lt['spread'])
+    cf = '단일 방식' if len(lt['methods']) == 1 else conf(lt['spread'])
     note = CUSTOM_NOTE.get(page_code) or TYPE_NOTE[r['type']]
     if lt.get('missing'):
         note += f" 데이터 부족으로 {', '.join(lt['missing'])}은(는) 계산에서 빠졌고 나머지 방식의 가중치를 비례 배분했다."
@@ -119,7 +123,7 @@ def make_box(page_code, r, legacy=False, price_sel=None, price=None):
         f'<span class="dpb-m-v">{fmt(x["low"])} ~ {fmt(x["high"])}원</span>'
         f'<span class="dpb-m-w"><i style="width:{x["w"]}%"></i><b>{x["w"]}%</b></span></div>'
         f'<div class="dpb-m-note">{html.escape(x["note"])}</div></div>' for x in lt['methods'])
-    bands = [[v['q'], round(v['low']), round(v['high'])] for v in q]
+    bands = [[v['q'], None, None] if v.get('gap') else [v['q'], round(v['low']), round(v['high'])] for v in q]
     attrs = (f" data-hist='{json.dumps(hist(page_code, THIS_YEAR - 5), separators=(',', ':'))}'"
              f" data-bands='{json.dumps(bands, separators=(',', ':'))}'"
              f' data-iv-low="{lt["low"]:.0f}" data-iv-high="{lt["high"]:.0f}"')
