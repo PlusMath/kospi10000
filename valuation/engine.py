@@ -126,7 +126,9 @@ def flow(L, q, col='thstrm'):
         r['ni'] = r['nip']
     r['ocf'] = get(L, ['CashFlowsFromUsedInOperatingActivities'], ('CF',), f'{col}_amount')
     r['capex'] = sum(abs(get(L, [n], ('CF',), f'{col}_amount') or 0) for n in CAPEX)
-    dv = get(L, ['DividendsPaidClassifiedAsFinancingActivities', 'DividendsPaid'], ('CF',), f'{col}_amount')
+    # 배당금 지급 계정은 회사마다 다름: 지배기업 소유주 배당으로 공시(우리금융·삼성물산 등), 영업활동으로 분류(DB하이텍·일진전기 등)
+    dv = get(L, ['DividendsPaidClassifiedAsFinancingActivities', 'DividendsPaidToEquityHoldersOfParentClassifiedAsFinancingActivities',
+                 'DividendsPaidClassifiedAsOperatingActivities', 'DividendsPaid'], ('CF',), f'{col}_amount')
     r['div'] = abs(dv) if dv else 0
     return r
 
