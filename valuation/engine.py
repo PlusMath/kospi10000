@@ -12,7 +12,9 @@ HOLD_DISCOUNT = (0.5, 0.3)   # 지주사 할인 50%(하단) ~ 30%(상단)
 WEIGHTS = {
     '안정':        {'DCF': 40, 'RIM': 30, '정상화 PER': 30},
     '경기민감':    {'DCF': 30, 'RIM': 30, '정상화 PER': 40},
-    '금융':        {'RIM': 50, 'PBR-ROE': 30, '배당할인': 20},
+    # 배당할인은 제외: 유보이익으로 성장하는 금융회사에선 이론상 적정 PBR과 같은 값이어야 하는데, 성장률 상한(4%)과
+    # 자사주 매입 미반영으로 RIM의 1/5~1/10 수준까지 낮게 나와 가치를 체계적으로 끌어내렸음(2026-10-16 전 종목 검증)
+    '금융':        {'RIM': 60, 'PBR-ROE': 40},
     '지주·투자':   {'NAV': 60, 'RIM': 20, '정상화 PER': 20},
     '규제·유틸리티': {'RIM': 40, '정상화 PER': 30, '배당할인': 30},
     '고성장·적자': {'RIM': 50, 'PBR-ROE': 50},               # 이익 기반 평가 제외, 참고용
@@ -21,6 +23,7 @@ WEIGHTS = {
 EARN_G = 0.025   # 이익환원 상단의 영구 성장률(DCF 잔존가치 성장률과 같음)
 TYPES = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'types.json'), encoding='utf-8'))
 FIN, HOLD, UTIL, PREF = set(TYPES['금융']), set(TYPES['지주·투자']), set(TYPES['규제·유틸리티']), TYPES['우선주']
+MERGED = set(TYPES.get('합병', {}))
 IS = ('IS', 'CIS')
 CAPEX = ['PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities',
          'PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities']
@@ -336,10 +339,21 @@ def nav_at(code, y, q, shares, ofs_L, latest=False):
             f'주당 NAV {nav:,.0f}원(별도 자본 {eq_sep/1e12:.1f}조 + 상장 자회사 {n_listed}곳 지분 시가 {mv_tot/1e12:.1f}조 반영) × 지주사 할인 50~30%')
 
 
-def value_at(typ, rows, ys, px, qb, ttm, shares, nav=None):
+def value_at(typ, rows, ys, px, qb, ttm, shares, nav=None, merged=False):
     roe = roe_series(rows, ys)
     if not roe or not shares or shares <= 0 or not qb['eq']:
         return None
+    if merged:
+        # 합병 종목: 주식 수가 지금과 크게 다른(±20% 밖, 액면분할 제외) 해의 이익·현금흐름·배당을 지금 주식 수 기준으로 환산
+        # (그해 주당 이익을 유지) — 합병 전 이익 ÷ 합병 후 주식 수로 주당 이익·과거 PER이 낮게 잡히는 것을 막음
+        def fx(y):
+            s = rows[y].get('shares')
+            if not s or s <= 0:
+                return 1.0
+            s *= split_multiple(shares / s)
+            return 1.0 if 0.8 < shares / s < 1.25 else shares / s
+        rows = {y: ({**r, **{k: r[k] * fx(y) for k in ('nip', 'ni', 'ocf', 'capex', 'div') if r.get(k) is not None}}
+                    if y in ys else r) for y, r in rows.items()}
     roe_avg, roe_rec3 = st.mean(roe), st.mean(roe[-3:])
     pays = [rows[y]['div'] / rows[y]['nip'] for y in ys if rows[y]['nip'] > 0]
     payout = max(0.0, min(0.9, st.mean(pays))) if pays else 0.0
@@ -501,7 +515,7 @@ def run(code, factor=None, force=None):
         last = i == len(items) - 1
         # 최신 분기의 NAV는 보유 지분을 현재 주가로 평가(지분 시가는 매일 알 수 있으므로)
         nav = nav_at(code, y, q, shares, ofs_L, latest=last) if typ == '지주·투자' else None
-        v = value_at(typ, rows, ys, px, qb, ttm, shares, nav)
+        v = value_at(typ, rows, ys, px, qb, ttm, shares, nav, merged=code in MERGED)
         if v:
             v['q'] = f'{y}-{q*3:02d}'
             v['fy'] = fy

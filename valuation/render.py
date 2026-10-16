@@ -2,7 +2,7 @@
 import os, re, json, html
 
 from fetch import CACHE
-from engine import px_series, THIS_YEAR
+from engine import px_series, THIS_YEAR, MERGED
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 CHART_JS = open(os.path.join(ROOT, 'chart.js'), encoding='utf-8').read().strip()
@@ -21,7 +21,8 @@ CUSTOM_NOTE = {
 TYPE_NOTE = {
     '안정': '이익이 안정적인 기업이라 DCF·RIM·정상화 PER을 4:3:3으로 가중했다.',
     '경기민감': '업황에 따라 이익 변동이 커 10년 평균 이익 기반의 정상화 PER 비중을 높였다(DCF·RIM·정상화 PER 3:3:4). DCF 상단은 최근 4분기 이익이 계속된다고 가정한 값이다.',
-    '금융': '금융회사는 영업현금흐름·설비투자 개념이 맞지 않아 DCF 대신 RIM·적정 PBR·배당할인으로 평가했다(5:3:2).',
+    '금융': '금융회사는 영업현금흐름·설비투자 개념이 맞지 않아 DCF 대신 RIM·적정 PBR로 평가했다(6:4). '
+            '배당할인은 이익을 유보해 성장하는 구조와 자사주 매입을 반영하지 못해 가치를 과소평가하므로 쓰지 않았다.',
     '지주·투자': '지주·투자회사라 보유 지분의 시장가치를 반영한 NAV(순자산가치)에 60%, RIM·정상화 PER에 20%씩 가중했다. '
               'NAV는 별도 재무제표 자본에 상장 자회사 지분의 시가와 장부가 차이를 더한 값이며, 한국 지주사의 통상적인 할인(30~50%)을 적용했다. 비상장 자회사는 장부가로 반영된다.',
     '규제·유틸리티': '요금 규제를 받는 기업이라 RIM·정상화 PER·배당할인으로 평가했다(4:3:3).',
@@ -110,6 +111,8 @@ def make_box(page_code, r, legacy=False, price_sel=None, price=None):
     note = CUSTOM_NOTE.get(page_code) or TYPE_NOTE[r['type']]
     if lt.get('missing'):
         note += f" 데이터 부족으로 {', '.join(lt['missing'])}은(는) 계산에서 빠졌고 나머지 방식의 가중치를 비례 배분했다."
+    if r['code'] in MERGED:
+        note += ' 합병으로 주식 수가 크게 늘어, 합병 전 연도 이익·배당은 그해 주당 기준을 유지하도록 지금 주식 수로 환산했다.'
     if cf == '낮음' and page_code not in CUSTOM_NOTE:
         note += ' 평가 방식 간 결과 차이가 커 신뢰도가 낮다.'
     if r['code'] != page_code:
