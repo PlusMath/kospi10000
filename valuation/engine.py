@@ -25,6 +25,7 @@ EARN_G = 0.025   # 이익환원 상단의 영구 성장률(DCF 잔존가치 성�
 TYPES = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'types.json'), encoding='utf-8'))
 FIN, HOLD, UTIL, PREF = set(TYPES['금융']), set(TYPES['지주·투자']), set(TYPES['규제·유틸리티']), TYPES['우선주']
 MERGED = set(TYPES.get('합병', {}))
+EXCLUDE = TYPES.get('평가제외', {})
 IS = ('IS', 'CIS')
 CAPEX = ['PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities',
          'PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities']
@@ -469,6 +470,8 @@ def split_multiple(r):
 
 
 def run(code, factor=None, force=None):
+    if code in EXCLUDE:
+        return {'code': code, 'error': EXCLUDE[code], 'excluded': True}
     rows, L = load(code)
     if len(rows) < 3:
         return {'code': code, 'error': f'연간 재무 이력 부족({len(rows)}년)'}

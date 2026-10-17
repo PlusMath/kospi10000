@@ -155,10 +155,12 @@ def make_box(page_code, r, legacy=False, price_sel=None, price=None):
 </div>'''.replace('\n\n', '\n')
 
 
-def error_box(msg, legacy=False):
+def error_box(msg, legacy=False, excluded=False):
+    note = (f'평가하지 않는 종목이다: {html.escape(msg)}.' if excluded else
+            f'내재가치를 계산하지 못했다: {html.escape(msg)}. 상장 기간이나 DART 재무 이력이 짧은 종목은 이력이 쌓이면 평가한다.')
     return ('<div class="dp-summary" id="dpBuffettBox">\n' + (LEGACY_STYLE + '\n' if legacy else '') +
             '  <div class="dp-summary-l">내재가치 평가</div>\n'
-            f'  <div class="dp-logic-chart-note">내재가치를 계산하지 못했다: {html.escape(msg)}. 상장 기간이나 DART 재무 이력이 짧은 종목은 이력이 쌓이면 평가한다.</div>\n'
+            f'  <div class="dp-logic-chart-note">{note}</div>\n'
             '</div>')
 
 
@@ -189,7 +191,7 @@ def apply(path, page_code, r):
     if not ok and 'data-bands=' in t and not (r or {}).get('permanent'):
         # 수집 실패 같은 일시적 오류로 이미 게시된 정상 평가를 오류 박스로 덮어쓰지 않음
         return 'kept'
-    box = make_box(page_code, r, legacy, price_sel, price) if ok else error_box((r or {}).get('error', '데이터 없음'), legacy)
+    box = make_box(page_code, r, legacy, price_sel, price) if ok else error_box((r or {}).get('error', '데이터 없음'), legacy, (r or {}).get('excluded'))
     script = CHART_JS if ok else ''
     if 'id="dpBuffettBox"' in t:
         s = t.index('<div class="dp-summary" id="dpBuffettBox"')
