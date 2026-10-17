@@ -73,6 +73,7 @@ def main():
                 continue
             new_reports += fetch.refresh_fs(c, corp, log=log.warning)
             fetch.refresh_alot(c, corp)
+            fetch.refresh_shr(c, corp)
             if c in hold:
                 fetch.refresh_fs(c, corp, fs_div_dir='ofs', fs_div='OFS', log=log.warning)
                 fetch.refresh_inv(c, corp)

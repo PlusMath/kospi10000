@@ -8,6 +8,7 @@ import os, re, json, math, datetime, statistics as st
 from fetch import CACHE, RC
 
 R = 0.12
+DEBUG = bool(os.environ.get('IV_DEBUG'))
 HOLD_DISCOUNT = (0.5, 0.3)   # 지주사 할인 50%(하단) ~ 30%(상단)
 WEIGHTS = {
     '안정':        {'DCF': 40, 'RIM': 30, '정상화 PER': 30},
@@ -170,6 +171,18 @@ def alot_rows(code):
 
 def _shares(r):
     return r['nip'] / r['eps'] if r.get('eps') and r.get('nip') and r['nip'] / r['eps'] > 0 else None
+
+
+def dart_shares(code):
+    """{(연도, 분기): 유통주식 수(발행 − 자기주식, 보통·우선 합계)} — 공시에 숫자가 있는 보고서만."""
+    out = {}
+    for k, v in (_load(_p('shr', f'{code}.json'), {}) or {}).items():
+        y, rc = k.split('_')
+        rows = {x.get('se'): num(x.get('distb_stock_co')) for x in v.get('list') or []}
+        n = rows.get('합계') or rows.get('보통주')
+        if n:
+            out[(int(y), {c: q for q, c in RC.items()}[rc])] = n
+    return out
 
 
 def load(code):
@@ -466,6 +479,7 @@ def run(code, factor=None, force=None):
     out = []
     full = {y for y in rows if not rows[y].get('lite')}
     target = (NAVER.get(code) or {}).get('shares')
+    dsh = dart_shares(code)
 
     def pick(cands):
         if target:
@@ -508,6 +522,12 @@ def run(code, factor=None, force=None):
                 shares = ref
             if shares:
                 shares *= factor
+                # 유상증자·합병·대규모 소각 직후에는 가중평균 EPS로 역산한 주식 수가 기말 주식 수와 벌어짐 → 공시된 유통주식 수 사용.
+                # 단 기말 뒤 무상증자·분할로 EPS만 소급 조정된 경우(공시 주식 수가 현재 주식 수와 더 멂)는 제외
+                d = dsh.get((y, q))
+                if d and not (0.93 < shares / d < 1.07) and (not target or abs(math.log(d / target)) < abs(math.log(shares / target))):
+                    if DEBUG: print('SHR', code, y, q, round(shares), round(d))
+                    shares = d
                 items.append((y, q, fy, ys, qb, ttm, shares))
     # 이후 액면분할·병합: 차트 주가(Yahoo)는 분할 조정돼 있으므로, 최신 주식 수와 거의 정수배로
     # 차이 나는 과거 분기는 그 배수만큼 주식 수를 맞춘다(유상증자 같은 비정수 변화는 그대로 둠)

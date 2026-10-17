@@ -6,6 +6,7 @@
 - inv/{code}.json     지주·투자회사의 타법인 출자현황(사업·반기보고서)
 - alot/{code}.json    전체 재무제표가 없는 해(금융사 2015~2020 등)의 배당에 관한 사항
 - px/{code}.json      Yahoo 월간 종가(분할 조정), USDKRW 포함
+- shr/{code}.json     주식의 총수 현황(2025~ 사업·분기보고서)
 - naver.json          네이버 현재 주식 수·BPS (매일 갱신)
 - corp.json           DART 고유번호 ↔ 종목코드 (30일마다 갱신)
 """
@@ -164,6 +165,27 @@ def refresh_inv(code, corp, today=None):
                     or old.get('checked') == str(today)):
             continue
         d = dart('otrCprInvstmntSttus', corp_code=corp, bsns_year=y, reprt_code=rc)
+        if d.get('status') in ('000', '013'):
+            d['checked'] = str(today)
+            out[k] = d
+        time.sleep(0.12)
+    _save(path, out)
+
+
+def refresh_shr(code, corp, today=None, since=2025):
+    """주식의 총수 현황(유통주식 수 = 발행 − 자기주식). 유상증자 직후 가중평균 EPS로 역산한 주식 수 보정용."""
+    today = today or datetime.date.today()
+    path = _p('shr', f'{code}.json')
+    out = _load(path, {})
+    for y, rc in report_jobs(today):
+        if y < since:
+            continue
+        k = f'{y}_{rc}'
+        old = out.get(k)
+        if old and (old.get('status') == '000' or (old.get('status') == '013' and not _recent(y, rc, today))
+                    or old.get('checked') == str(today)):
+            continue
+        d = dart('stockTotqySttus', corp_code=corp, bsns_year=y, reprt_code=rc)
         if d.get('status') in ('000', '013'):
             d['checked'] = str(today)
             out[k] = d
