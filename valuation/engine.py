@@ -373,8 +373,12 @@ def value_at(typ, rows, ys, px, qb, ttm, shares, nav=None, merged=False):
                 hi_oe = lo_oe
                 if ttm and ttm.get('ocf') is not None:
                     hi_oe = max(lo_oe, (ttm['ocf'] - ttm['capex']) * (ttm['nip'] / ttm['ni'] if ttm['ni'] else 1))
+                hi_src = ''
+                # 최근 현금흐름이 설비·운전자본 투자로 눌려 있으면 상단을 최근 4분기 순이익으로(순이익 기준 분기와 같은 상단)
+                if ttm and ttm.get('nip') is not None and ttm['nip'] > hi_oe:
+                    hi_oe, hi_src = ttm['nip'], ' 순이익'
                 m['DCF'] = (dcf(lo_oe, 0.03) / shares + nc_ps, dcf(hi_oe, 0.03) / shares + nc_ps,
-                            f'주주이익(영업현금흐름−설비투자) {len(oe)}년 평균 {lo_oe/1e12:.2f}조 ~ 최근 4분기 {hi_oe/1e12:.2f}조, 성장률 3%')
+                            f'주주이익(영업현금흐름−설비투자) {len(oe)}년 평균 {lo_oe/1e12:.2f}조 ~ 최근 4분기{hi_src} {hi_oe/1e12:.2f}조, 성장률 3%')
             elif ni_avg > 0:
                 # 현금흐름 기준 주주이익이 순이익과 크게 어긋남(성장 투자·리스 상환 등) → 순이익 기준
                 hi_ni = max(ni_avg, ttm['nip']) if ttm and ttm.get('nip') is not None else ni_avg
