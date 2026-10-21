@@ -393,6 +393,13 @@ def value_at(typ, rows, ys, px, qb, ttm, shares, nav=None, merged=False):
     nc_ps = max(0.0, (qb['cash'] - qb['debt']) / shares)
     bps = qb['eq'] / shares
     p75 = pctl(roe, 0.75)
+    # 최근 4분기 순이익이 세후 영업이익의 1.5배를 넘으면 보유 주식 평가이익·자산 처분이익 같은 일회성 이익으로 보고
+    # 세후 영업이익(법인세 24%)으로 바꿔 쓴다. KCC(삼성물산 등 당기손익-공정가치 지분 평가이익)가 최근 4분기
+    # 순이익 3.66조·ROE 33%로 잡혀 DCF·RIM 상단이 주가의 7배까지 나왔음(2026-10-22)
+    one_off = None
+    if ttm and ttm.get('nip') is not None and (ttm.get('oi') or 0) > 0 and ttm['nip'] > 1.5 * ttm['oi'] * 0.76:
+        one_off = ttm['nip']
+        ttm = {**ttm, 'nip': ttm['oi'] * 0.76}
     m = {}
     w = WEIGHTS[typ]
     if 'DCF' in w:
@@ -460,6 +467,10 @@ def value_at(typ, rows, ys, px, qb, ttm, shares, nav=None, merged=False):
         if dps > 0:
             gh = max(0.0, min(0.04, roe_avg * (1 - payout)))
             m['배당할인'] = (dps / R, dps * (1 + gh) / (R - gh), f'주당 배당 {dps:,.0f}원, 배당 성장률 0~{gh*100:.1f}%')
+    if one_off is not None:
+        for k in ('DCF', 'RIM'):
+            if k in m and typ == '경기민감':
+                m[k] = (m[k][0], m[k][1], m[k][2] + f' (최근 4분기 순이익 {_won(one_off)}은 일회성 이익 포함으로 보고 세후 영업이익 {_won(ttm["nip"])}으로 대체)')
     keys = [k for k in w if k in m]
     if not keys:
         return None
@@ -536,6 +547,11 @@ def run(code, factor=None, force=None):
                         ttm = {k: a[k] + c[k] - p[k] for k in ('nip', 'ni', 'ocf', 'capex')}
                     except TypeError:
                         ttm = None
+                if ttm is not None:
+                    try:
+                        ttm['oi'] = a['oi'] + c['oi'] - p['oi']
+                    except (TypeError, KeyError):
+                        ttm['oi'] = None
             # 주식 수 = 순이익/EPS. 이익이 작은 해는 오차가 커서 최근 4년 중 현재 주식 수(네이버)에 가장 가까운 해를 기준으로 삼음
             cands = [k for k in ys[-4:] if rows[k].get('shares')] or [k for k in sorted(rows) if rows[k].get('shares')]
             ref = rows[pick(cands)]['shares'] if cands else None
