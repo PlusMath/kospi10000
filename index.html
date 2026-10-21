@@ -1372,7 +1372,7 @@
       </div>
     </div>
     <nav class="market-switch" aria-label="시장 선택">
-      <span class="market-switch-btn active">🇰🇷 KOSPI Top 100</span>
+      <span class="market-switch-btn active">🇰🇷 KOSPI Top 200</span>
       <span class="fav-count">★ <span id="favCount">0</span></span>
       <button type="button" class="movers-toggle-btn" id="moversToggleBtn" aria-expanded="false">🔔 5%+ 변동 <span id="moversToggleCount">0</span></button>
       <a href="portfolio.html" class="auth-btn">내 보유종목</a>
@@ -1381,10 +1381,10 @@
   </header>
 
   <main class="page-wrap">
-    <h2 class="section-title" id="mainTitle">KOSPI Top 100</h2>
+    <h2 class="section-title" id="mainTitle">KOSPI Top 200</h2>
     <p class="data-note" style="margin:0 0 0;text-align:left;max-width:none;">
-      기준: 매일경제 마켓 코스피 시가총액 순위 상위 100개 종목.
-      KODEX, TIGER, ACE, RISE 등 ETF/ETN은 기업 분석 목적에 맞지 않아 제외하고, 일반 주식과 우선주 중심으로 100개를 정리했습니다. 각 종목 상세 페이지의 등락률을 기준으로 자동 분류합니다. 투자 권고가 아닙니다.
+      기준: 매일경제 마켓 코스피 시가총액 순위 상위 200개 종목.
+      KODEX, TIGER, ACE, RISE 등 ETF/ETN은 기업 분석 목적에 맞지 않아 제외하고, 일반 주식과 우선주 중심으로 200개를 정리했습니다. 각 종목 상세 페이지의 등락률을 기준으로 자동 분류합니다. 투자 권고가 아닙니다.
     </p>
 
     <div class="stat-grid" id="statGrid"></div>
@@ -3925,10 +3925,15 @@
       }
 ];
 
-    // 순위별 뷰 및 "대상 종목" 통계 카드는 top-100만 대상으로 함 — 100위 밖 종목
-    // (금호타이어·드림텍 등, rank>100)은 업종별/매력도별/등락률별 뷰에는 나오되
-    // 순위별 뷰에는 나오지 않도록 stocks(전체)와 stocks100(상위 100)을 분리.
-    const stocks100 = stocks.filter((s) => s.rank <= 100);
+    // 순위별 뷰 및 "대상 종목" 통계 카드는 실시간 시가총액 상위 200개만 대상으로 함 — 그 밖의
+    // 종목(드림텍 등)은 업종별/매력도별/등락률별 뷰에는 나오되 순위별 뷰에는 나오지 않도록
+    // stocks(전체)와 stocksTop(시총 상위 TOP_N)을 분리. 사이트 번호(rank)가 아니라 시총으로 자른다.
+    const TOP_N = 200;
+    const stocksTop = stocks
+      .map((s) => ({ s, cap: stockLive[s.code] && s.sharesOut ? stockLive[s.code].price * s.sharesOut : null }))
+      .sort((a, b) => (a.cap != null && b.cap != null) ? b.cap - a.cap : (a.cap != null ? -1 : b.cap != null ? 1 : a.s.rank - b.s.rank))
+      .slice(0, TOP_N)
+      .map((x) => x.s);
 
     const industryOrder = [
       "반도체·전자",
@@ -4125,7 +4130,7 @@
     // 시가총액(marketCapOf) 내림차순으로 매긴 실시간 순위. 라이브 시총이 없는 종목은
     // 뒤로 밀리되, 서로간에는 정적 rank(초기 선정 기준)로 정렬해 순서가 흔들리지 않게 함.
     function computeLiveRanks() {
-      const withCap = stocks100.map((s) => ({ code: s.code, cap: marketCapOf(s), staticRank: s.rank }));
+      const withCap = stocksTop.map((s) => ({ code: s.code, cap: marketCapOf(s), staticRank: s.rank }));
       withCap.sort((a, b) => {
         if (a.cap != null && b.cap != null) return b.cap - a.cap;
         if (a.cap != null) return -1;
@@ -4141,16 +4146,16 @@
 
     function getVisibleIndustries() {
       return industryOrder.filter((industry) =>
-        stocks100.some((stock) => stock.industry === industry)
+        stocksTop.some((stock) => stock.industry === industry)
       );
     }
 
     // ── 통계 카드 ──
-    // "대상 종목" 카드와 같은 모집단(top 100, stocks[])을 기준으로 세어야 카드 숫자와
-    // 클릭 시 뜨는 팝업 목록의 개수가 항상 일치한다(stockLive 자체는 top100 밖 종목도
+    // "대상 종목" 카드와 같은 모집단(시총 상위 200, stocksTop)을 기준으로 세어야 카드 숫자와
+    // 클릭 시 뜨는 팝업 목록의 개수가 항상 일치한다(stockLive 자체는 상위 200 밖 종목도
     // 포함할 수 있어 그걸 그대로 세면 숫자가 안 맞을 수 있음).
     function getMovers(direction) {
-      return stocks100
+      return stocksTop
         .map((s) => ({ stock: s, live: stockLive[s.code] }))
         .filter((x) => x.live && typeof x.live.change === 'number' && (direction === 'up' ? x.live.change >= 5 : x.live.change <= -5))
         .sort((a, b) => (direction === 'up' ? b.live.change - a.live.change : a.live.change - b.live.change));
@@ -4162,7 +4167,7 @@
       statGrid.innerHTML = `
         <div class="stat-card">
           <div class="stat-label">대상 종목</div>
-          <div class="stat-value">${stocks100.length}<span class="stat-unit"> 개</span></div>
+          <div class="stat-value">${stocksTop.length}<span class="stat-unit"> 개</span></div>
         </div>
         <div class="stat-card">
           <div class="stat-label">해당 업종</div>
@@ -4281,9 +4286,9 @@
 
     function renderRankView() {
       stockArea.innerHTML = '';
-      mainTitle.textContent = 'KOSPI Top 100';
+      mainTitle.textContent = 'KOSPI Top 200';
 
-      const base = [...stocks100]
+      const base = [...stocksTop]
         .filter((s) => !favOnlyActive || favorites.has(s.code))
         .filter(matchesSearch)
         .sort((a, b) => rankOf(a) - rankOf(b));
@@ -4338,7 +4343,7 @@
 
     function renderChangeView() {
       stockArea.innerHTML = '';
-      mainTitle.textContent = 'KOSPI Top 100';
+      mainTitle.textContent = 'KOSPI Top 200';
 
       const sortBar = document.createElement('div');
       sortBar.className = 'score-sort-bar';
@@ -4439,7 +4444,7 @@
 
     function renderSectorView() {
       stockArea.innerHTML = '';
-      mainTitle.textContent = 'KOSPI Top 100';
+      mainTitle.textContent = 'KOSPI Top 200';
 
       const base = stocks.filter((s) => !favOnlyActive || favorites.has(s.code)).filter(matchesSearch);
 
@@ -4536,7 +4541,7 @@
 
     function renderScoreView() {
       stockArea.innerHTML = '';
-      mainTitle.textContent = 'KOSPI Top 100';
+      mainTitle.textContent = 'KOSPI Top 200';
 
       const sortBar = document.createElement('div');
       sortBar.className = 'score-sort-bar';
