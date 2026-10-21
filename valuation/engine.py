@@ -140,7 +140,14 @@ def flow(L, q, col='thstrm'):
 
 def bal(L, col='thstrm'):
     f = f'{col}_amount'
-    eq = get(L, ['EquityAttributableToOwnersOfParent'], ('BS',), f) or get(L, ['Equity'], ('BS',), f)
+    eq = get(L, ['EquityAttributableToOwnersOfParent'], ('BS',), f)
+    total = get(L, ['Equity'], ('BS',), f) or next((num(x.get(f)) for x in L if x.get('sj_div') == 'BS' and x.get('account_nm', '').strip() == '자본총계'), None)
+    cap = get(L, ['IssuedCapital'], ('BS',), f)
+    # 지배지분 계정 ID가 납입자본·자본금 행에 붙어 공시된 경우(현대백화점 2017~2022): 자본총계 − 비지배지분으로 대체
+    if eq and cap and abs(eq - cap) < 1 and total and total > 2 * cap:
+        eq = None
+    if eq is None and total:
+        eq = total - (get(L, ['NoncontrollingInterests'], ('BS',), f) or 0)
     return {'eq': eq, 'cash': get(L, ['CashAndCashEquivalents'], ('BS',), f) or 0,
             'debt': sum(get(L, [n], ('BS',), f) or 0 for n in DEBT)}
 
@@ -261,9 +268,20 @@ def dcf(oe, g1, years=10, g2=0.025, r=R):
     return v + cf * (1 + g2) / (r - g2) / (1 + r) ** years
 
 
-def rim(bps, roe_start, payout, r=R, years=10):
-    """초과 ROE가 10년에 걸쳐 선형으로 0이 되고, BPS는 유보이익만큼 증가."""
+def rim(bps, roe_start, payout, r=R, years=10, persist=True):
+    """ROE가 요구수익률보다 높으면 초과 ROE가 10년에 걸쳐 선형으로 0이 되고(경쟁으로 초과이익 소멸),
+    낮으면 그 ROE가 10년간 그대로 유지된다고 본다(이후 초과손실 0. 영구 유지로 하면 금융·유틸리티가 일괄
+    고평가로 뒤집혀 10년 유지로 절충). 낮은 ROE도 요구수익률로 회복된다고 가정하면 ROE 0%여도
+    BPS의 0.55배가 나와 저ROE 종목(PBR 0.2~0.4배)을 체계적으로 저평가로 판정했음(2026-10-22).
+    고성장·적자형(persist=False)은 이익 회복을 전제로 한 참고값이라 기존처럼 요구수익률로 수렴시킨다.
+    BPS는 유보이익만큼 증가."""
     v = b = bps
+    if persist and roe_start < r:
+        g = roe_start * (1 - payout)
+        for t in range(1, years + 1):
+            v += (roe_start - r) * b / (1 + r) ** t
+            b *= 1 + g
+        return v
     for t in range(1, years + 1):
         roe = r + (roe_start - r) * (1 - (t - 1) / years)
         v += (roe - r) * b / (1 + r) ** t
@@ -412,8 +430,9 @@ def value_at(typ, rows, ys, px, qb, ttm, shares, nav=None, merged=False):
     if 'NAV' in w and nav:
         m['NAV'] = nav
     if 'RIM' in w and bps > 0:
-        m['RIM'] = (max(0, rim(bps, r_lo, payout)), max(0, rim(bps, r_hi, payout)),
-                    f'BPS {bps:,.0f}원, ROE {r_lo*100:.1f}~{r_hi*100:.1f}%가 10년에 걸쳐 요구수익률로 수렴')
+        pst = typ != '고성장·적자'
+        m['RIM'] = (max(0, rim(bps, r_lo, payout, persist=pst)), max(0, rim(bps, r_hi, payout, persist=pst)),
+                    f'BPS {bps:,.0f}원, ROE {r_lo*100:.1f}~{r_hi*100:.1f}%' + ('(요구수익률 12% 미만이면 10년간 그 수준 유지)' if pst and r_lo < R else '가 10년에 걸쳐 요구수익률로 수렴'))
     if '정상화 PER' in w and px:
         pers = []
         for y in ys:
