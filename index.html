@@ -262,6 +262,10 @@
     .theses-panel { display: none; position: fixed; top: 84px; right: 48px; z-index: 51; width: min(680px, calc(100vw - 32px)); max-height: calc(100vh - 104px); overflow-y: auto; margin: 0; border-radius: 20px; box-shadow: 0 20px 50px rgba(15, 23, 42, 0.22); }
     .theses-panel.open { display: block; }
     .theses-panel .theses-head { align-items: flex-start; }
+    .theses-datenav { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; }
+    .theses-datenav[hidden] { display: none; }
+    .theses-datenav button, .theses-datenav select { font-family: inherit; font-size: 12.5px; border: 1px solid var(--color-border); background: var(--color-card-bg); color: var(--color-text); border-radius: 6px; padding: 3px 8px; cursor: pointer; }
+    .theses-datenav button:disabled { opacity: .35; cursor: default; }
     .theses-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
     .theses-note { font-size: 12px; color: var(--color-text-secondary); margin: 0 0 14px; line-height: 1.6; }
     .thesis { border-top: 1px solid var(--color-border); padding: 12px 0; }
@@ -1447,6 +1451,11 @@
         <div>
           <p class="market-summary-eyebrow">오늘의 투자논리</p>
           <div class="market-summary-date" id="thesesDate"></div>
+          <div class="theses-datenav" id="thesesDateNav" hidden>
+            <button type="button" id="thesesPrev" aria-label="이전 날짜">◀</button>
+            <select id="thesesDateSel" aria-label="날짜 선택"></select>
+            <button type="button" id="thesesNext" aria-label="다음 날짜">▶</button>
+          </div>
         </div>
         <button type="button" class="movers-close-btn" id="thesesCloseBtn" aria-label="닫기">✕</button>
       </div>
@@ -4889,15 +4898,48 @@
     function thesesEsc(s) { return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
     function thesesPct(v) { return (typeof v === 'number') ? `${v > 0 ? '+' : ''}${v.toFixed(2)}%` : ''; }
     function thesesUpDown(v) { return (v || 0) >= 0 ? 'up' : 'down'; }
+    const thesesCache = {};
+    let thesesDates = [];
+    async function thesesFetch(url) {
+      try { const r = await fetch(`${url}?v=${Date.now()}`); return r.ok ? await r.json() : null; } catch (e) { return null; }
+    }
     async function renderTheses() {
-      let d;
-      try {
-        const r = await fetch(`data/theses/latest.json?v=${Date.now()}`);
-        if (!r.ok) return;
-        d = await r.json();
-      } catch (e) { return; }
+      const d = await thesesFetch('data/theses/latest.json');
       if (!d || !Array.isArray(d.theses) || !d.theses.length) return;
+      thesesCache[d.date] = d;
       document.getElementById('thesesToggleCount').textContent = d.theses.length;
+      const idx = await thesesFetch('data/theses/dates.json');
+      thesesDates = (idx && Array.isArray(idx.dates) && idx.dates.length) ? idx.dates : [d.date];
+      if (!thesesDates.includes(d.date)) thesesDates.unshift(d.date);
+      const sel = document.getElementById('thesesDateSel');
+      sel.innerHTML = thesesDates.map((x) => `<option value="${x}">${x}</option>`).join('');
+      sel.addEventListener('change', () => showThesesDate(sel.value));
+      document.getElementById('thesesPrev').addEventListener('click', () => stepThesesDate(1));
+      document.getElementById('thesesNext').addEventListener('click', () => stepThesesDate(-1));
+      document.getElementById('thesesDateNav').hidden = false;
+      renderThesesData(d);
+      document.getElementById('thesesToggleBtn').hidden = false;
+    }
+    // thesesDates는 최신순: ◀(이전 날짜) = 인덱스 +1
+    function stepThesesDate(delta) {
+      const i = thesesDates.indexOf(document.getElementById('thesesDateSel').value) + delta;
+      if (i >= 0 && i < thesesDates.length) showThesesDate(thesesDates[i]);
+    }
+    async function showThesesDate(date) {
+      let d = thesesCache[date];
+      if (!d) {
+        d = await thesesFetch(`data/theses/history/${date}.json`);
+        if (!d) return;
+        thesesCache[date] = d;
+      }
+      renderThesesData(d);
+    }
+    function renderThesesData(d) {
+      const sel = document.getElementById('thesesDateSel');
+      sel.value = d.date;
+      const i = thesesDates.indexOf(d.date);
+      document.getElementById('thesesPrev').disabled = i < 0 || i >= thesesDates.length - 1;
+      document.getElementById('thesesNext').disabled = i <= 0;
       document.getElementById('thesesDate').textContent = `${d.date} 기준 · 뉴스 ${d.newsCount}건 분석`;
       document.getElementById('thesesNote').textContent = d.note || '';
       document.getElementById('thesesList').innerHTML = d.theses.map((th, i) => {
@@ -4924,6 +4966,7 @@
       }).join('');
       const tr = (d.track || []).slice(-12).reverse();
       const trEl = document.getElementById('thesesTrack');
+      trEl.hidden = true;
       if (tr.length) {
         trEl.innerHTML = `<div class="thesis-label" style="margin-top:0">지난 투자논리 성과 (제시일 종가 대비 · 피해 논리는 하락을 성과로 계산)</div>` +
           `<table><thead><tr><th>제시일</th><th>논리</th><th class="num">종목 평균</th><th class="num">코스피 대비</th></tr></thead><tbody>` +
@@ -4932,7 +4975,7 @@
           `</tbody></table>`;
         trEl.hidden = false;
       }
-      document.getElementById('thesesToggleBtn').hidden = false;
+      document.getElementById('thesesCard').scrollTop = 0;
     }
 
     const thesesToggleBtn = document.getElementById('thesesToggleBtn');

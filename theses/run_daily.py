@@ -414,6 +414,9 @@ def main():
                    '관련 기사 언급 수·업종·내재가치·기술적 점수로 계산해 선정합니다.'}
     save(os.path.join(HIST, f'{today.isoformat()}.json'), out)
     save(os.path.join(OUT, 'latest.json'), out)
+    # 날짜 선택용 목록(최신순): 메인 패널이 이 목록으로 history/{date}.json을 불러온다
+    dates = sorted((os.path.basename(f)[:-5] for f in glob.glob(os.path.join(HIST, '*.json'))), reverse=True)
+    save(os.path.join(OUT, 'dates.json'), {'dates': dates})
     log(f'완료: 논리 {len(theses)}개')
     return 0
 
