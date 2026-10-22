@@ -389,7 +389,12 @@ def main():
         log('저장된 논리 재사용')
     else:
         log('투자논리 생성(claude)')
-        res = ask_claude(build_prompt(today, news, ind_moves, sorted(ind_chg)))
+        prompt = build_prompt(today, news, ind_moves, sorted(ind_chg))
+        try:
+            res = ask_claude(prompt)
+        except (ValueError, RuntimeError) as e:          # 응답 JSON 깨짐(따옴표 미이스케이프 등)·인코딩 이상은 1회 재시도
+            log(f'WARN claude 응답 처리 실패, 재시도: {e}')
+            res = ask_claude(prompt)
         save(raw_path, {'news': news, 'res': res})
     theses = []
     idx = name_index(uni)
