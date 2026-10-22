@@ -257,6 +257,45 @@
       font-size: 11.5px;
       margin-left: 4px;
     }
+    /* 오늘의 투자논리 */
+    .theses-card { background: var(--color-card-bg); border: 1px solid var(--color-border); border-radius: var(--radius-card); padding: 22px 24px; margin: 0 0 28px; }
+    .theses-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
+    .theses-note { font-size: 12px; color: var(--color-text-secondary); margin: 0 0 14px; line-height: 1.6; }
+    .thesis { border-top: 1px solid var(--color-border); padding: 12px 0; }
+    .thesis > summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .thesis > summary::-webkit-details-marker { display: none; }
+    .thesis > summary::before { content: '▸'; color: var(--color-text-secondary); font-size: 12px; transition: transform .15s; }
+    .thesis[open] > summary::before { transform: rotate(90deg); }
+    .thesis-title { font-size: 15.5px; font-weight: 800; color: var(--color-text); }
+    .thesis-badge { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 999px; border: 1px solid currentColor; }
+    .thesis-badge.pos { color: var(--color-up); }
+    .thesis-badge.neg { color: var(--color-down); }
+    .thesis-badge.hz { color: var(--color-text-secondary); }
+    .thesis-body { padding: 8px 0 0 20px; }
+    .thesis-summary { margin: 0 0 10px; font-size: 13.5px; line-height: 1.7; color: var(--color-text-secondary); }
+    .thesis-label { font-size: 11.5px; font-weight: 700; color: var(--color-text-secondary); margin: 10px 0 6px; }
+    .thesis-inds { display: flex; flex-wrap: wrap; gap: 6px; font-size: 12px; color: var(--color-text-secondary); }
+    .thesis-inds .up { color: var(--color-up); } .thesis-inds .down { color: var(--color-down); }
+    .thesis-picks { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+    .thesis-pick { display: block; border: 1px solid var(--color-border); border-radius: 10px; padding: 8px 10px; text-decoration: none; color: var(--color-text); }
+    .thesis-pick:hover { border-color: var(--color-accent); }
+    .thesis-pick .pk-top { display: flex; justify-content: space-between; gap: 6px; font-weight: 700; font-size: 13.5px; }
+    .thesis-pick .pk-why { font-size: 11px; color: var(--color-text-secondary); margin-top: 3px; line-height: 1.45; }
+    .thesis-pick .up { color: var(--color-up); } .thesis-pick .down { color: var(--color-down); }
+    .thesis-ev { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+    .thesis-ev a { font-size: 12.5px; color: var(--color-accent); text-decoration: none; font-weight: 600; }
+    .thesis-ev a:hover { text-decoration: underline; }
+    .thesis-ev .ref-src { color: var(--color-text-secondary); font-size: 11.5px; margin-left: 4px; }
+    .thesis-risk { font-size: 12.5px; line-height: 1.6; color: var(--color-text-secondary); margin: 0; }
+    .theses-track { margin-top: 14px; border-top: 1px solid var(--color-border); padding-top: 12px; overflow-x: auto; }
+    .theses-track table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    .theses-track td, .theses-track th { padding: 4px 6px; text-align: left; border-bottom: 1px solid var(--color-border); }
+    .theses-track th { font-weight: 700; color: var(--color-text-secondary); font-size: 11.5px; }
+    .theses-track .num { text-align: right; font-variant-numeric: tabular-nums; }
+    .theses-track .up { color: var(--color-up); } .theses-track .down { color: var(--color-down); }
+    .theses-track .sub { color: var(--color-text-secondary); font-size: 11px; }
+    @media (max-width: 640px) { .theses-card { padding: 16px; margin: 0 0 20px; } .thesis-body { padding-left: 0; } .thesis-picks { grid-template-columns: 1fr 1fr; } }
+
 
     .stat-label {
       font-size: 13px;
@@ -1397,6 +1436,16 @@
       <h3 class="market-summary-headline" id="marketSummaryHeadline"></h3>
       <p class="market-summary-body" id="marketSummaryBody"></p>
       <ul class="market-summary-refs" id="marketSummaryRefs"></ul>
+    </section>
+
+    <section class="theses-card" id="thesesCard" hidden>
+      <div class="theses-head">
+        <p class="market-summary-eyebrow">오늘의 투자논리</p>
+        <div class="market-summary-date" id="thesesDate"></div>
+      </div>
+      <p class="theses-note" id="thesesNote"></p>
+      <div id="thesesList"></div>
+      <div class="theses-track" id="thesesTrack" hidden></div>
     </section>
 
     <div class="modal-backdrop" id="moverModalBackdrop">
@@ -4828,6 +4877,56 @@
       card.hidden = false;
     }
 
+    // ── 오늘의 투자논리 (data/theses/latest.json — theses/run_daily.py가 매일 생성) ──
+    function thesesEsc(s) { return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+    function thesesPct(v) { return (typeof v === 'number') ? `${v > 0 ? '+' : ''}${v.toFixed(2)}%` : ''; }
+    function thesesUpDown(v) { return (v || 0) >= 0 ? 'up' : 'down'; }
+    async function renderTheses() {
+      const card = document.getElementById('thesesCard');
+      let d;
+      try {
+        const r = await fetch(`data/theses/latest.json?v=${Date.now()}`);
+        if (!r.ok) return;
+        d = await r.json();
+      } catch (e) { return; }
+      if (!d || !Array.isArray(d.theses) || !d.theses.length) return;
+      document.getElementById('thesesDate').textContent = `${d.date} 기준 · 뉴스 ${d.newsCount}건 분석`;
+      document.getElementById('thesesNote').textContent = d.note || '';
+      document.getElementById('thesesList').innerHTML = d.theses.map((th, i) => {
+        const neg = th.direction === 'negative';
+        const inds = Object.entries(th.indChg || {})
+          .map(([k, v]) => `<span>${thesesEsc(k)} <b class="${thesesUpDown(v)}">${thesesPct(v)}</b></span>`).join('<span>·</span>');
+        const picks = (th.picks || []).map((p) => {
+          const href = p.page ? p.page : `https://finance.naver.com/item/main.naver?code=${p.code}`;
+          const ext = p.page ? '' : ' target="_blank" rel="noopener noreferrer"';
+          return `<a class="thesis-pick" href="${href}"${ext}><div class="pk-top"><span>${thesesEsc(p.name)}</span>` +
+            `<span class="${thesesUpDown(p.chg)}">${thesesPct(p.chg)}</span></div><div class="pk-why">${thesesEsc(p.why)}</div></a>`;
+        }).join('');
+        const ev = (th.evidence || []).slice(0, 4).map((e) =>
+          `<li><a href="${thesesEsc(e.link)}" target="_blank" rel="noopener noreferrer">${thesesEsc(e.title)}</a>` +
+          `<span class="ref-src">· ${thesesEsc(e.domain)} ${thesesEsc(e.pub)}</span></li>`).join('');
+        return `<details class="thesis"${i === 0 ? ' open' : ''}><summary><span class="thesis-title">${thesesEsc(th.title)}</span>` +
+          `<span class="thesis-badge ${neg ? 'neg' : 'pos'}">${neg ? '피해' : '수혜'}</span>` +
+          (th.horizon ? `<span class="thesis-badge hz">${thesesEsc(th.horizon)}</span>` : '') + `</summary>` +
+          `<div class="thesis-body"><p class="thesis-summary">${thesesEsc(th.summary)}</p>` +
+          (inds ? `<div class="thesis-label">관련 업종 (오늘 등락)</div><div class="thesis-inds">${inds}</div>` : '') +
+          `<div class="thesis-label">${neg ? '영향 가능 종목' : '관련 종목'} (기사 언급·업종·내재가치·기술적 점수로 산출)</div><div class="thesis-picks">${picks}</div>` +
+          `<div class="thesis-label">근거 기사</div><ul class="thesis-ev">${ev}</ul>` +
+          `<div class="thesis-label">리스크</div><p class="thesis-risk">${thesesEsc(th.risks)}</p></div></details>`;
+      }).join('');
+      const tr = (d.track || []).slice(-12).reverse();
+      const trEl = document.getElementById('thesesTrack');
+      if (tr.length) {
+        trEl.innerHTML = `<div class="thesis-label" style="margin-top:0">지난 투자논리 성과 (제시일 종가 대비 · 피해 논리는 하락을 성과로 계산)</div>` +
+          `<table><thead><tr><th>제시일</th><th>논리</th><th class="num">종목 평균</th><th class="num">코스피 대비</th></tr></thead><tbody>` +
+          tr.map((x) => `<tr><td>${thesesEsc(x.date.slice(5))}</td><td>${thesesEsc(x.title)} <span class="sub">${x.direction === 'negative' ? '피해' : '수혜'}·${x.n}종목</span></td>` +
+            `<td class="num ${thesesUpDown(x.ret)}">${thesesPct(x.ret)}</td><td class="num ${x.excess == null ? '' : thesesUpDown(x.excess)}">${x.excess == null ? '-' : thesesPct(x.excess)}</td></tr>`).join('') +
+          `</tbody></table>`;
+        trEl.hidden = false;
+      }
+      card.hidden = false;
+    }
+
     const INDEX_ORDER = ['KOSPI', 'SP500', 'DOW', 'RUSSELL2000', 'NIKKEI', 'USDKRW', 'JPYKRW'];
     const INDEX_PAGE_MAP = {
       KOSPI: 'indices/kospi.html', SP500: 'indices/sp500.html', DOW: 'indices/dow.html',
@@ -4861,6 +4960,7 @@
     renderStatCards();
     renderMarketIndices();
     renderMarketSummary();
+    renderTheses();
     renderDailyMovers();
     renderRankView();
 
