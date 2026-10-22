@@ -4341,7 +4341,10 @@
       };
 
       nav.appendChild(makeBtn('← 이전', page - 1, { disabled: page <= 1 }));
-      for (let p = 1; p <= totalPages; p++) {
+      // 페이지 번호는 10개 단위 묶음(1~10, 11~20 …)으로 현재 페이지가 속한 묶음만 표시
+      const blockStart = Math.floor((page - 1) / 10) * 10 + 1;
+      const blockEnd = Math.min(totalPages, blockStart + 9);
+      for (let p = blockStart; p <= blockEnd; p++) {
         nav.appendChild(makeBtn(String(p), p, { active: p === page }));
       }
       nav.appendChild(makeBtn('다음 →', page + 1, { disabled: page >= totalPages }));
