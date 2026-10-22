@@ -259,6 +259,9 @@
     }
     /* 오늘의 투자논리 */
     .theses-card { background: var(--color-card-bg); border: 1px solid var(--color-border); border-radius: var(--radius-card); padding: 22px 24px; margin: 0 0 28px; }
+    .theses-panel { display: none; position: fixed; top: 84px; right: 48px; z-index: 51; width: min(680px, calc(100vw - 32px)); max-height: calc(100vh - 104px); overflow-y: auto; margin: 0; border-radius: 20px; box-shadow: 0 20px 50px rgba(15, 23, 42, 0.22); }
+    .theses-panel.open { display: block; }
+    .theses-panel .theses-head { align-items: flex-start; }
     .theses-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
     .theses-note { font-size: 12px; color: var(--color-text-secondary); margin: 0 0 14px; line-height: 1.6; }
     .thesis { border-top: 1px solid var(--color-border); padding: 12px 0; }
@@ -294,7 +297,7 @@
     .theses-track .num { text-align: right; font-variant-numeric: tabular-nums; }
     .theses-track .up { color: var(--color-up); } .theses-track .down { color: var(--color-down); }
     .theses-track .sub { color: var(--color-text-secondary); font-size: 11px; }
-    @media (max-width: 640px) { .theses-card { padding: 16px; margin: 0 0 20px; } .thesis-body { padding-left: 0; } .thesis-picks { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 768px) { .theses-panel { top: 60px; right: 8px; left: 8px; width: auto; max-height: calc(100vh - 76px); } .theses-card { padding: 16px; } .thesis-body { padding-left: 0; } .thesis-picks { grid-template-columns: 1fr 1fr; } .thesis-pick { min-width: 0; } }
 
 
     .stat-label {
@@ -1413,6 +1416,7 @@
     <nav class="market-switch" aria-label="시장 선택">
       <span class="market-switch-btn active">🇰🇷 KOSPI Top 200</span>
       <span class="fav-count">★ <span id="favCount">0</span></span>
+      <button type="button" class="movers-toggle-btn theses-toggle-btn" id="thesesToggleBtn" aria-expanded="false" hidden>💡 투자논리 <span id="thesesToggleCount">0</span></button>
       <button type="button" class="movers-toggle-btn" id="moversToggleBtn" aria-expanded="false">🔔 5%+ 변동 <span id="moversToggleCount">0</span></button>
       <a href="portfolio.html" class="auth-btn">내 보유종목</a>
       <a href="#" class="auth-btn" id="authBtn">로그인</a>
@@ -1438,10 +1442,13 @@
       <ul class="market-summary-refs" id="marketSummaryRefs"></ul>
     </section>
 
-    <section class="theses-card" id="thesesCard" hidden>
+    <section class="theses-card theses-panel" id="thesesCard" aria-label="오늘의 투자논리">
       <div class="theses-head">
-        <p class="market-summary-eyebrow">오늘의 투자논리</p>
-        <div class="market-summary-date" id="thesesDate"></div>
+        <div>
+          <p class="market-summary-eyebrow">오늘의 투자논리</p>
+          <div class="market-summary-date" id="thesesDate"></div>
+        </div>
+        <button type="button" class="movers-close-btn" id="thesesCloseBtn" aria-label="닫기">✕</button>
       </div>
       <p class="theses-note" id="thesesNote"></p>
       <div id="thesesList"></div>
@@ -4827,6 +4834,7 @@
 
     function setMoversPanelOpen(open) {
       moversPanel.classList.toggle('open', open);
+      if (open) { const tp = document.getElementById('thesesCard'); if (tp) { tp.classList.remove('open'); document.getElementById('thesesToggleBtn').setAttribute('aria-expanded', 'false'); } }
       moversToggleBtn.setAttribute('aria-expanded', String(open));
     }
 
@@ -4882,7 +4890,6 @@
     function thesesPct(v) { return (typeof v === 'number') ? `${v > 0 ? '+' : ''}${v.toFixed(2)}%` : ''; }
     function thesesUpDown(v) { return (v || 0) >= 0 ? 'up' : 'down'; }
     async function renderTheses() {
-      const card = document.getElementById('thesesCard');
       let d;
       try {
         const r = await fetch(`data/theses/latest.json?v=${Date.now()}`);
@@ -4890,6 +4897,7 @@
         d = await r.json();
       } catch (e) { return; }
       if (!d || !Array.isArray(d.theses) || !d.theses.length) return;
+      document.getElementById('thesesToggleCount').textContent = d.theses.length;
       document.getElementById('thesesDate').textContent = `${d.date} 기준 · 뉴스 ${d.newsCount}건 분석`;
       document.getElementById('thesesNote').textContent = d.note || '';
       document.getElementById('thesesList').innerHTML = d.theses.map((th, i) => {
@@ -4924,8 +4932,24 @@
           `</tbody></table>`;
         trEl.hidden = false;
       }
-      card.hidden = false;
+      document.getElementById('thesesToggleBtn').hidden = false;
     }
+
+    const thesesToggleBtn = document.getElementById('thesesToggleBtn');
+    const thesesPanel = document.getElementById('thesesCard');
+    function setThesesPanelOpen(open) {
+      thesesPanel.classList.toggle('open', open);
+      thesesToggleBtn.setAttribute('aria-expanded', String(open));
+      if (open && typeof setMoversPanelOpen === 'function') setMoversPanelOpen(false);
+    }
+    thesesToggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setThesesPanelOpen(!thesesPanel.classList.contains('open'));
+    });
+    document.getElementById('thesesCloseBtn').addEventListener('click', () => setThesesPanelOpen(false));
+    document.addEventListener('click', (e) => {
+      if (thesesPanel.classList.contains('open') && !thesesPanel.contains(e.target)) setThesesPanelOpen(false);
+    });
 
     const INDEX_ORDER = ['KOSPI', 'SP500', 'DOW', 'RUSSELL2000', 'NIKKEI', 'USDKRW', 'JPYKRW'];
     const INDEX_PAGE_MAP = {
