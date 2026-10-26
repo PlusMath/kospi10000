@@ -1503,7 +1503,7 @@
           <h2 class="daily-movers-title" id="dailyMoversTitle">전일 대비 5% 이상 변동 종목</h2>
         </div>
         <div style="display:flex;align-items:center;gap:10px;">
-          <div class="daily-movers-date">2026년 10월 23일 종가 기준</div>
+          <div class="daily-movers-date">2026년 10월 26일 종가 기준</div>
           <button type="button" class="movers-close-btn" id="moversCloseBtn" aria-label="닫기">✕</button>
         </div>
       </div>
@@ -1511,15 +1511,15 @@
       <div class="mover-summary" aria-label="변동 종목 요약">
         <div class="mover-summary-card">
           <span class="mover-summary-label">대상 종목</span>
-          <strong class="mover-summary-value">6개</strong>
+          <strong class="mover-summary-value">8개</strong>
         </div>
         <div class="mover-summary-card">
           <span class="mover-summary-label">해당 업종</span>
-          <strong class="mover-summary-value">5개</strong>
+          <strong class="mover-summary-value">6개</strong>
         </div>
         <div class="mover-summary-card">
           <span class="mover-summary-label">5% 이상 하락</span>
-          <strong class="mover-summary-value">4개</strong>
+          <strong class="mover-summary-value">8개</strong>
         </div>
       </div>
 
@@ -1537,228 +1537,230 @@
 
   <script>
     const dailyMovers = [
-      { name: "삼성E&A", code: "028050", industry: "건설·인프라", close: "59,800원", change: 7.94, page: "stocks/074_028050.html" },
-      { name: "삼성바이오로직스", code: "207940", industry: "바이오·헬스케어", close: "1,466,000원", change: 7.71, page: "stocks/013_207940.html" },
-      { name: "산일전기", code: "062040", industry: "전력·기계·인프라", close: "165,200원", change: -5, page: "stocks/081_062040.html" },
-      { name: "HD현대건설기계", code: "267270", industry: "전력·기계·인프라", close: "89,300원", change: -5, page: "stocks/082_267270.html" },
-      { name: "S-Oil", code: "010950", industry: "화학·정유·에너지", close: "132,400원", change: -5.29, page: "stocks/063_010950.html" },
-      { name: "한화시스템", code: "272210", industry: "방산·항공우주", close: "66,300원", change: -10.28, page: "stocks/045_272210.html" }
+      { name: "HD현대중공업", code: "329180", industry: "조선·해양", close: "289,500원", change: -5.08, page: "stocks/007_329180.html" },
+      { name: "두산", code: "000150", industry: "지주·복합기업", close: "901,000원", change: -6.54, page: "stocks/035_000150.html" },
+      { name: "GS", code: "078930", industry: "지주·복합기업", close: "78,700원", change: -8.06, page: "stocks/098_078930.html" },
+      { name: "삼양식품", code: "003230", industry: "소비재·식품·유통", close: "1,116,000원", change: -8.9, page: "stocks/079_003230.html" },
+      { name: "HD현대건설기계", code: "267270", industry: "전력·기계·인프라", close: "81,000원", change: -9.29, page: "stocks/082_267270.html" },
+      { name: "LIG디펜스앤에어로스페이스", code: "079550", industry: "방산·항공우주", close: "429,000원", change: -9.78, page: "stocks/047_079550.html" },
+      { name: "HD현대마린솔루션", code: "443060", industry: "조선·해양", close: "169,600원", change: -13.69, page: "stocks/073_443060.html" },
+      { name: "BNK금융지주", code: "138930", industry: "금융·은행·증권", close: "11,780원", change: -13.83, page: "stocks/087_138930.html" }
     ];
 
     const stockLive = {
-      "005930": { price: 215500, change: 0.47 },
-      "000660": { price: 1277000, change: 4.42 },
-      "402340": { price: 775000, change: 3.2 },
-      "005935": { price: 167900, change: 0.48 },
-      "005380": { price: 295500, change: -1.99 },
-      "373220": { price: 383000, change: -1.79 },
-      "329180": { price: 305000, change: -1.29 },
-      "034020": { price: 59400, change: -3.57 },
-      "009150": { price: 1122000, change: -2.01 },
-      "000270": { price: 106900, change: -1.75 },
-      "028260": { price: 288000, change: -0.17 },
-      "012450": { price: 792000, change: -2.34 },
-      "207940": { price: 1466000, change: 7.71 },
-      "032830": { price: 245000, change: 1.45 },
-      "012330": { price: 328500, change: -2.52 },
-      "105560": { price: 153000, change: -3.29 },
-      "006400": { price: 490500, change: -4.2 },
-      "267260": { price: 470000, change: -4.08 },
-      "055550": { price: 88100, change: -2.44 },
-      "010120": { price: 156900, change: -2.79 },
-      "068270": { price: 194400, change: 0.05 },
-      "006800": { price: 24400, change: -2.01 },
-      "034730": { price: 465500, change: 0.87 },
-      "298040": { price: 1877000, change: -2.44 },
-      "042700": { price: 191000, change: -0.1 },
-      "005490": { price: 275500, change: -3.67 },
-      "042660": { price: 55300, change: -3.32 },
-      "086790": { price: 116300, change: -3 },
-      "009540": { price: 248000, change: -1.59 },
-      "035420": { price: 173600, change: -1.59 },
-      "010130": { price: 854000, change: -4.15 },
-      "066570": { price: 157100, change: -1.81 },
-      "051910": { price: 229000, change: -3.78 },
-      "010140": { price: 16830, change: -2.83 },
-      "000150": { price: 964000, change: -4.46 },
-      "015760": { price: 28650, change: -0.52 },
-      "267250": { price: 137800, change: -3.3 },
-      "064350": { price: 82700, change: -3.27 },
-      "316140": { price: 30100, change: -3.68 },
-      "017670": { price: 74500, change: -2.23 },
-      "003670": { price: 160800, change: -3.6 },
-      "000810": { price: 602000, change: -0.99 },
-      "096770": { price: 138100, change: -2.54 },
-      "086280": { price: 175900, change: -1.24 },
-      "272210": { price: 66300, change: -10.28 },
-      "033780": { price: 189400, change: -2.27 },
-      "079550": { price: 475500, change: -1.55 },
-      "307950": { price: 324500, change: -1.37 },
-      "035720": { price: 29950, change: -1.32 },
-      "011200": { price: 22650, change: 0 },
-      "000720": { price: 92500, change: -0.54 },
-      "138040": { price: 127800, change: -2.14 },
-      "011070": { price: 379000, change: -4.05 },
-      "003550": { price: 99000, change: -1.88 },
-      "024110": { price: 19460, change: -1.96 },
-      "006260": { price: 216500, change: -2.7 },
-      "047810": { price: 102200, change: -3.49 },
-      "278470": { price: 284500, change: -2.23 },
-      "030200": { price: 46800, change: -1.58 },
-      "071050": { price: 145200, change: -1.49 },
-      "018260": { price: 213500, change: 3.14 },
-      "259960": { price: 185600, change: -3.23 },
-      "010950": { price: 132400, change: -5.29 },
-      "047050": { price: 51500, change: -2.83 },
-      "0126Z0": { price: 332000, change: 1.22 },
-      "001440": { price: 21300, change: -3.18 },
-      "005940": { price: 23300, change: -1.27 },
-      "047040": { price: 14700, change: 1.17 },
-      "016360": { price: 77600, change: 0.13 },
-      "039490": { price: 214500, change: -0.92 },
-      "005830": { price: 184200, change: -1.55 },
-      "323410": { price: 19990, change: -0.3 },
-      "443060": { price: 196500, change: -2.48 },
-      "028050": { price: 59800, change: 7.94 },
-      "352820": { price: 176500, change: -0.4 },
-      "000880": { price: 93400, change: -4.3 },
-      "005387": { price: 159500, change: -1.36 },
-      "007660": { price: 87000, change: -3.76 },
-      "003230": { price: 1225000, change: -0.08 },
-      "003490": { price: 25800, change: -2.46 },
-      "062040": { price: 165200, change: -5 },
-      "267270": { price: 89300, change: -5 },
-      "000500": { price: 228500, change: -4.79 },
-      "000990": { price: 97800, change: -1.11 },
-      "029780": { price: 42150, change: 0.96 },
-      "326030": { price: 76900, change: 2.67 },
-      "180640": { price: 120100, change: -0.5 },
-      "009830": { price: 28450, change: -2.23 },
-      "138930": { price: 13670, change: -1.94 },
-      "161390": { price: 60100, change: -2.44 },
-      "064400": { price: 72800, change: -0.14 },
-      "034220": { price: 7150, change: -1.11 },
-      "175330": { price: 25150, change: -3.64 },
-      "353200": { price: 124200, change: -2.59 },
-      "090430": { price: 128800, change: -3.52 },
-      "377300": { price: 34050, change: -2.01 },
-      "066970": { price: 85900, change: -5.81 },
-      "271560": { price: 111300, change: -1.15 },
-      "000100": { price: 84700, change: 0.83 },
-      "241560": { price: 49400, change: -1.2 },
-      "021240": { price: 106000, change: -0.09 },
-      "078930": { price: 85600, change: -2.84 },
-      "036570": { price: 205000, change: -3.07 },
-      "103590": { price: 57700, change: -3.19 },
-      "032640": { price: 14160, change: -1.87 },
-      "004370": { price: 402500, change: 0.75 },
-      "192650": { price: 6820, change: -5.15 },
-      "073240": { price: 5250, change: -2.78 },
-      "066575": { price: 58300, change: -1.85 },
-      "023530": { price: 83600, change: -2.9 },
-      "004170": { price: 255000, change: -2.67 },
-      "011790": { price: 82200, change: -4.08 },
-      "128940": { price: 361500, change: -2.43 },
-      "088980": { price: 9720, change: -0.21 },
-      "051900": { price: 263500, change: -2.04 },
-      "088350": { price: 4025, change: -2.31 },
-      "018880": { price: 3680, change: -1.21 },
-      "052690": { price: 93600, change: -3.01 },
-      "454910": { price: 56300, change: -3.26 },
-      "005385": { price: 158000, change: -2.23 },
-      "004020": { price: 26850, change: -1.47 },
-      "010060": { price: 194100, change: -3.91 },
-      "012750": { price: 96000, change: -0.72 },
-      "002380": { price: 380000, change: -1.17 },
-      "001450": { price: 42300, change: -1.74 },
-      "001040": { price: 118200, change: -0.42 },
-      "028670": { price: 6200, change: -1.9 },
-      "192820": { price: 272500, change: 0 },
-      "036460": { price: 36600, change: 0.14 },
-      "111770": { price: 69000, change: -3.5 },
-      "008930": { price: 41600, change: -3.03 },
-      "082740": { price: 32250, change: -4.59 },
-      "161890": { price: 122500, change: -1.84 },
-      "035250": { price: 14160, change: -0.7 },
-      "022100": { price: 18990, change: -2.86 },
-      "031210": { price: 42800, change: 3.01 },
-      "251270": { price: 34000, change: -1.31 },
-      "302440": { price: 33150, change: -4.19 },
-      "011780": { price: 108200, change: -1.73 },
-      "097950": { price: 174000, change: 1.28 },
-      "383220": { price: 62900, change: -2.48 },
-      "017800": { price: 65800, change: -2.08 },
-      "026960": { price: 27700, change: -0.18 },
-      "139130": { price: 15750, change: -3.96 },
-      "457190": { price: 72100, change: -7.8 },
-      "020150": { price: 50000, change: -5.12 },
-      "003690": { price: 14110, change: -1.95 },
-      "014680": { price: 212500, change: -2.52 },
-      "018670": { price: 259000, change: -4.6 },
-      "000240": { price: 23100, change: -3.35 },
-      "006360": { price: 29500, change: 0.34 },
-      "007340": { price: 41050, change: -0.85 },
-      "282330": { price: 131900, change: -2.15 },
-      "011170": { price: 48150, change: -4.08 },
-      "085620": { price: 16680, change: -1.13 },
-      "336260": { price: 31600, change: -5.53 },
-      "375500": { price: 59900, change: 2.39 },
-      "450080": { price: 29850, change: -3.71 },
-      "005440": { price: 10990, change: -9.02 },
-      "009970": { price: 162800, change: -3.78 },
-      "005850": { price: 49400, change: -1.4 },
-      "030000": { price: 19390, change: -0.97 },
-      "004990": { price: 21700, change: -1.36 },
-      "009420": { price: 40200, change: -0.25 },
-      "483650": { price: 151600, change: -7.56 },
-      "112610": { price: 43750, change: -2.13 },
-      "279570": { price: 5180, change: -0.77 },
-      "281820": { price: 94600, change: 3.28 },
-      "004800": { price: 116800, change: -3.15 },
-      "001720": { price: 120200, change: -1.07 },
-      "139480": { price: 69500, change: -2.11 },
-      "489790": { price: 38700, change: -0.13 },
-      "081660": { price: 36550, change: -0.81 },
-      "002790": { price: 24550, change: -2.77 },
-      "204320": { price: 37350, change: -1.84 },
-      "229640": { price: 57200, change: -2.22 },
-      "051600": { price: 40900, change: -0.85 },
-      "462870": { price: 30250, change: -2.89 },
-      "089860": { price: 50800, change: 1.91 },
-      "103140": { price: 59500, change: -1.65 },
-      "007070": { price: 21050, change: -1.64 },
-      "001120": { price: 42800, change: -1.15 },
-      "069960": { price: 75400, change: -1.31 },
-      "181710": { price: 51300, change: -7.9 },
-      "006040": { price: 34450, change: -1.57 },
-      "395400": { price: 5440, change: 3.23 },
-      "000120": { price: 64800, change: -2.26 },
-      "439260": { price: 37050, change: -2.5 },
-      "007810": { price: 67800, change: -4.51 },
-      "023590": { price: 32400, change: -2.11 },
-      "006280": { price: 132200, change: 0.92 },
-      "008770": { price: 35900, change: -1.91 },
-      "020560": { price: 6930, change: -2.67 },
-      "120110": { price: 41650, change: -4.14 },
-      "361610": { price: 15810, change: -2.89 },
-      "475150": { price: 40350, change: -1.1 },
-      "294870": { price: 21950, change: 4.52 },
-      "071970": { price: 36150, change: -3.47 },
-      "001800": { price: 22700, change: -1.09 },
-      "005070": { price: 38650, change: -5.04 },
-      "000155": { price: 330000, change: -3.79 },
-      "322000": { price: 107400, change: 0.19 }
+      "005930": { price: 213000, change: -1.16 },
+      "000660": { price: 1275000, change: -0.16 },
+      "402340": { price: 769000, change: -0.77 },
+      "005935": { price: 164200, change: -2.2 },
+      "005380": { price: 288000, change: -2.54 },
+      "373220": { price: 375000, change: -2.09 },
+      "329180": { price: 289500, change: -5.08 },
+      "034020": { price: 57600, change: -3.03 },
+      "009150": { price: 1118000, change: -0.36 },
+      "000270": { price: 105100, change: -1.68 },
+      "028260": { price: 292000, change: 1.39 },
+      "012450": { price: 760000, change: -4.04 },
+      "207940": { price: 1452000, change: -0.95 },
+      "032830": { price: 246500, change: 0.61 },
+      "012330": { price: 326000, change: -0.76 },
+      "105560": { price: 147200, change: -3.79 },
+      "006400": { price: 483500, change: -1.43 },
+      "267260": { price: 447000, change: -4.89 },
+      "055550": { price: 85500, change: -2.95 },
+      "010120": { price: 152900, change: -2.55 },
+      "068270": { price: 190000, change: -2.26 },
+      "006800": { price: 24000, change: -1.64 },
+      "034730": { price: 465500, change: 0 },
+      "298040": { price: 1853000, change: -1.28 },
+      "042700": { price: 184000, change: -3.66 },
+      "005490": { price: 269500, change: -2.18 },
+      "042660": { price: 53000, change: -4.16 },
+      "086790": { price: 112400, change: -3.35 },
+      "009540": { price: 243000, change: -2.02 },
+      "035420": { price: 174200, change: 0.35 },
+      "010130": { price: 845000, change: -1.05 },
+      "066570": { price: 156000, change: -0.7 },
+      "051910": { price: 225000, change: -1.75 },
+      "010140": { price: 16300, change: -3.15 },
+      "000150": { price: 901000, change: -6.54 },
+      "015760": { price: 28000, change: -2.27 },
+      "267250": { price: 132200, change: -4.06 },
+      "064350": { price: 79100, change: -4.35 },
+      "316140": { price: 29250, change: -2.82 },
+      "017670": { price: 72100, change: -3.22 },
+      "003670": { price: 156500, change: -2.67 },
+      "000810": { price: 595000, change: -1.16 },
+      "096770": { price: 137000, change: -0.8 },
+      "086280": { price: 176200, change: 0.17 },
+      "272210": { price: 63700, change: -3.92 },
+      "033780": { price: 188900, change: -0.26 },
+      "079550": { price: 429000, change: -9.78 },
+      "307950": { price: 312500, change: -3.7 },
+      "035720": { price: 29550, change: -1.34 },
+      "011200": { price: 22550, change: -0.44 },
+      "000720": { price: 90700, change: -1.95 },
+      "138040": { price: 125200, change: -2.03 },
+      "011070": { price: 367000, change: -3.17 },
+      "003550": { price: 98800, change: -0.2 },
+      "024110": { price: 19140, change: -1.64 },
+      "006260": { price: 209500, change: -3.23 },
+      "047810": { price: 97800, change: -4.31 },
+      "278470": { price: 282000, change: -0.88 },
+      "030200": { price: 45700, change: -2.35 },
+      "071050": { price: 145100, change: -0.07 },
+      "018260": { price: 213000, change: -0.23 },
+      "259960": { price: 183500, change: -1.13 },
+      "010950": { price: 127700, change: -3.55 },
+      "047050": { price: 49550, change: -3.79 },
+      "0126Z0": { price: 317500, change: -4.37 },
+      "001440": { price: 20450, change: -3.99 },
+      "005940": { price: 22550, change: -3.22 },
+      "047040": { price: 14220, change: -3.27 },
+      "016360": { price: 76300, change: -1.68 },
+      "039490": { price: 210500, change: -1.86 },
+      "005830": { price: 179700, change: -2.44 },
+      "323410": { price: 19620, change: -1.85 },
+      "443060": { price: 169600, change: -13.69 },
+      "028050": { price: 59800, change: 0 },
+      "352820": { price: 174100, change: -1.36 },
+      "000880": { price: 91200, change: -2.36 },
+      "005387": { price: 153500, change: -3.76 },
+      "007660": { price: 83500, change: -4.02 },
+      "003230": { price: 1116000, change: -8.9 },
+      "003490": { price: 25100, change: -2.71 },
+      "062040": { price: 159600, change: -3.39 },
+      "267270": { price: 81000, change: -9.29 },
+      "000500": { price: 227000, change: -0.66 },
+      "000990": { price: 93100, change: -4.81 },
+      "029780": { price: 41550, change: -1.42 },
+      "326030": { price: 75800, change: -1.43 },
+      "180640": { price: 119500, change: -0.5 },
+      "009830": { price: 26500, change: -6.85 },
+      "138930": { price: 11780, change: -13.83 },
+      "161390": { price: 58200, change: -3.16 },
+      "064400": { price: 73500, change: 0.96 },
+      "034220": { price: 7320, change: 2.38 },
+      "175330": { price: 24150, change: -3.98 },
+      "353200": { price: 119700, change: -3.62 },
+      "090430": { price: 125700, change: -2.41 },
+      "377300": { price: 32850, change: -3.52 },
+      "066970": { price: 83200, change: -3.14 },
+      "271560": { price: 113000, change: 1.53 },
+      "000100": { price: 81700, change: -3.54 },
+      "241560": { price: 48550, change: -1.72 },
+      "021240": { price: 103800, change: -2.08 },
+      "078930": { price: 78700, change: -8.06 },
+      "036570": { price: 201500, change: -1.71 },
+      "103590": { price: 54800, change: -5.03 },
+      "032640": { price: 14030, change: -0.92 },
+      "004370": { price: 393000, change: -2.36 },
+      "192650": { price: 6550, change: -3.96 },
+      "073240": { price: 5100, change: -2.86 },
+      "066575": { price: 58000, change: -0.51 },
+      "023530": { price: 81400, change: -2.63 },
+      "004170": { price: 245000, change: -3.92 },
+      "011790": { price: 79100, change: -3.77 },
+      "128940": { price: 352500, change: -2.49 },
+      "088980": { price: 9620, change: -1.03 },
+      "051900": { price: 257500, change: -2.28 },
+      "088350": { price: 4000, change: -0.62 },
+      "018880": { price: 3605, change: -2.04 },
+      "052690": { price: 91200, change: -2.56 },
+      "454910": { price: 56300, change: 0 },
+      "005385": { price: 153700, change: -2.72 },
+      "004020": { price: 26300, change: -2.05 },
+      "010060": { price: 182700, change: -5.87 },
+      "012750": { price: 93300, change: -2.81 },
+      "002380": { price: 368000, change: -3.16 },
+      "001450": { price: 41750, change: -1.3 },
+      "001040": { price: 115400, change: -2.37 },
+      "028670": { price: 6000, change: -3.23 },
+      "192820": { price: 268000, change: -1.65 },
+      "036460": { price: 36050, change: -1.5 },
+      "111770": { price: 67400, change: -2.32 },
+      "008930": { price: 42250, change: 1.56 },
+      "082740": { price: 31050, change: -3.72 },
+      "161890": { price: 117400, change: -4.16 },
+      "035250": { price: 13870, change: -2.05 },
+      "022100": { price: 18610, change: -2 },
+      "031210": { price: 42700, change: -0.23 },
+      "251270": { price: 33550, change: -1.32 },
+      "302440": { price: 32000, change: -3.47 },
+      "011780": { price: 102500, change: -5.27 },
+      "097950": { price: 169900, change: -2.36 },
+      "383220": { price: 60200, change: -4.29 },
+      "017800": { price: 66600, change: 1.22 },
+      "026960": { price: 27300, change: -1.44 },
+      "139130": { price: 15090, change: -4.19 },
+      "457190": { price: 70400, change: -2.36 },
+      "020150": { price: 46350, change: -7.3 },
+      "003690": { price: 13660, change: -3.19 },
+      "014680": { price: 204000, change: -4 },
+      "018670": { price: 251000, change: -3.09 },
+      "000240": { price: 22900, change: -0.87 },
+      "006360": { price: 28150, change: -4.58 },
+      "007340": { price: 39450, change: -3.9 },
+      "282330": { price: 127700, change: -3.18 },
+      "011170": { price: 46600, change: -3.22 },
+      "085620": { price: 17080, change: 2.4 },
+      "336260": { price: 29950, change: -5.22 },
+      "375500": { price: 56500, change: -5.68 },
+      "450080": { price: 28450, change: -4.69 },
+      "005440": { price: 10820, change: -1.55 },
+      "009970": { price: 160900, change: -1.17 },
+      "005850": { price: 48750, change: -1.32 },
+      "030000": { price: 19170, change: -1.13 },
+      "004990": { price: 21100, change: -2.76 },
+      "009420": { price: 38550, change: -4.1 },
+      "483650": { price: 149300, change: -1.52 },
+      "112610": { price: 40550, change: -7.31 },
+      "279570": { price: 5100, change: -1.54 },
+      "281820": { price: 86400, change: -8.67 },
+      "004800": { price: 115100, change: -1.46 },
+      "001720": { price: 118400, change: -1.5 },
+      "139480": { price: 66600, change: -4.17 },
+      "489790": { price: 37200, change: -3.88 },
+      "081660": { price: 36150, change: -1.09 },
+      "002790": { price: 23950, change: -2.44 },
+      "204320": { price: 36700, change: -1.74 },
+      "229640": { price: 54200, change: -5.24 },
+      "051600": { price: 40100, change: -1.96 },
+      "462870": { price: 29450, change: -2.64 },
+      "089860": { price: 49750, change: -2.07 },
+      "103140": { price: 57200, change: -3.87 },
+      "007070": { price: 20700, change: -1.66 },
+      "001120": { price: 41200, change: -3.74 },
+      "069960": { price: 73100, change: -3.05 },
+      "181710": { price: 49100, change: -4.29 },
+      "006040": { price: 33850, change: -1.74 },
+      "395400": { price: 5350, change: -1.65 },
+      "000120": { price: 64100, change: -1.08 },
+      "439260": { price: 36300, change: -2.02 },
+      "007810": { price: 66400, change: -2.06 },
+      "023590": { price: 31850, change: -1.7 },
+      "006280": { price: 129600, change: -1.97 },
+      "008770": { price: 34800, change: -3.06 },
+      "020560": { price: 6760, change: -2.45 },
+      "120110": { price: 39800, change: -4.44 },
+      "361610": { price: 15710, change: -0.63 },
+      "475150": { price: 38300, change: -5.08 },
+      "294870": { price: 22300, change: 1.59 },
+      "071970": { price: 34950, change: -3.32 },
+      "001800": { price: 22350, change: -1.54 },
+      "005070": { price: 37150, change: -3.88 },
+      "000155": { price: 309000, change: -6.36 },
+      "322000": { price: 96300, change: -10.34 }
     };
 
     // Claude API로 생성한 하루 시황 요약 카드 — update_daily_charts.ps1이 매일 실제 종가·등락률
     // 통계와 당일 상위 변동종목의 실제 뉴스 헤드라인만 근거로 재생성. 생성 실패(API 키 없음/응답
     // 파싱 실패 등) 시에는 이 블록을 건드리지 않고 마지막 성공분을 그대로 둠 — 그래서 날짜는
     // 항상 "이 요약이 실제로 생성된 날"을 의미하며, 오늘 날짜인 척 허위로 표시하지 않는다.
-    const marketSummary = {"date":"2026년 10월 23일","headline":"코스피 대부분 하락, 172종목 약세","body":"2026년 10월 23일 코스피 상위 100종목 집계(202개)에서 28개가 올랐고 172개가 내렸으며, 2개는 보합으로 마감해 평균 등락률은 -1.88%였다. 상승 종목 중에서는 역대 최대 수주잔고가 보도된 삼성E\u0026A가 7.94% 올라 59,800원, 삼성바이오로직스가 7.71% 오른 1,466,000원을 기록했고, 수주 목표 74% 달성이 전해진 IPARK현대산업개발도 4.52% 상승했다. 반면 방산전자·위성 사업 점검 소식이 나온 한화시스템이 10.28% 내렸고, 현대지에프홀딩스가 9.02%, NHN이 7.9% 하락했다.","refs":[{"title":"[한게임 바둑축제] \"전국 바둑 고수들 성수로 모여라\"…NHN, \u0027한게임 바둑...","link":"https://www.cbci.co.kr/news/articleView.html?idxno=618094","source":"cbci.co.kr"},{"title":"한화시스템 9.74% 내려…방산전자·위성 사업 점검","link":"https://www.job-post.co.kr/news/articleView.html?idxno=234171","source":"job-post.co.kr"},{"title":"삼성바이오로직스 주가, 10월 23일 1,466,000원대 강한 오름세","link":"https://www.joongangenews.com/news/articleView.html?idxno=557817","source":"joongangenews.com"},{"title":"\"역대 최대 수주잔고 27조·영업이익 1.4조…삼성E\u0026A, 8만원 고지 넘나\"","link":"https://www.newsquest.co.kr/news/articleView.html?idxno=303346","source":"newsquest.co.kr"}]};
+    const marketSummary = {"date":"2026년 10월 26일","headline":"코스피 급락, 188종목 하락","body":"2026년 10월 26일 코스피 상위 202개 종목 가운데 11개가 오르고 188개가 내렸으며, 3개는 보합이었다. 평균 등락률은 -2.72%로 하락 종목이 압도적으로 많았다. 하락폭은 BNK금융지주(-13.83%, 11,780원), HD현대마린솔루션(-13.69%, 169,600원), HD현대에너지솔루션(-10.34%, 96,300원)이 컸고, BNK금융지주는 3분기 순이익이 28% 줄었다는 소식이 전해졌다. 상승 종목 중에서는 미래에셋생명(+2.4%), LG디스플레이(+2.38%), IPARK현대산업개발(+1.59%)이 이름을 올렸다.","refs":[{"title":"[속보] HD현대에너지솔루션, 3분기 영업이익 204억원…전년 동기 대비 3...","link":"https://www.cbci.co.kr/news/articleView.html?idxno=619398","source":"cbci.co.kr"},{"title":"BNK금융지주 3분기 순익 28%↓…부산·경남은행 실적 뒷걸음(종합)","link":"https://www.edaily.co.kr/News/Read?newsId=03470246645616856\u0026mediaCodeNo=257\u0026utm_source=naver\u0026utm_medium=referral\u0026utm_campaign=news_syndication\u0026utm_content=original_article","source":"이데일리"},{"title":"키움證 \"LG디스플레이, 환율·칩플레이션 부담 지속…추가 하락은 제한...","link":"https://www.news1.kr/finance/general-stock/6331345","source":"뉴스1"},{"title":"미래에셋생명, 개인형IRP \u0027보증형실적배당보험\u0027 모집액 717억원 돌파","link":"https://www.news1.kr/finance/insurance-card/6331672","source":"뉴스1"}]};
 
     // 코스피·해외 주요 지수 및 환율 — update_daily_charts.ps1이 매일 Yahoo Finance에서
     // 실제 값을 가져와 재생성. 실패 시(그날은) 이 블록을 건드리지 않고 마지막 성공분 유지.
-    const marketIndices = {"KOSPI":{"name":"코스피","value":5550.3,"change":0.3},"SP500":{"name":"S\u0026P500","value":7623.68,"change":-0.52},"DOW":{"name":"다우존스","value":52215.16,"change":-1.23},"RUSSELL2000":{"name":"러셀2000","value":2775.9,"change":-0.29},"NIKKEI":{"name":"닛케이225","value":62693.16,"change":-0.34},"USDKRW":{"name":"달러환율","value":1325.4,"change":-0.04},"JPYKRW":{"name":"엔환율(100엔)","value":841.7,"change":-0.66}};
+    const marketIndices = {"KOSPI":{"name":"코스피","value":5469.47,"change":-1.46},"SP500":{"name":"S\u0026P500","value":7623.68,"change":-0.52},"DOW":{"name":"다우존스","value":52215.16,"change":-1.23},"RUSSELL2000":{"name":"러셀2000","value":2775.9,"change":-0.29},"NIKKEI":{"name":"닛케이225","value":62189.65,"change":-0.8},"USDKRW":{"name":"달러환율","value":1322.73,"change":-0.25},"JPYKRW":{"name":"엔환율(100엔)","value":840.4,"change":-0.82}};
 
     const stocks = [
       {
@@ -1770,7 +1772,7 @@
             "image": "images/001_samsung-electronics.png",
             "page": "stocks/001_005930.html",
             "sharesOut": 5846278608,
-            "vscore": 72
+            "vscore": 71
       },
       {
             "rank": 2,
@@ -1880,7 +1882,7 @@
             "image": "images/011_samsung-ct.png",
             "page": "stocks/011_028260.html",
             "sharesOut": 162167581,
-            "vscore": 30
+            "vscore": 29
       },
       {
             "rank": 12,
@@ -1891,7 +1893,7 @@
             "image": "images/012_hanwha-aerospace.png",
             "page": "stocks/012_012450.html",
             "sharesOut": 51563401,
-            "vscore": 50
+            "vscore": 49
       },
       {
             "rank": 13,
@@ -1935,7 +1937,7 @@
             "image": "images/016_kb-financial.png",
             "page": "stocks/016_105560.html",
             "sharesOut": 354687734,
-            "vscore": 42
+            "vscore": 43
       },
       {
             "rank": 17,
@@ -1957,7 +1959,7 @@
             "image": "images/018_hd-hyundai-electric.png",
             "page": "stocks/018_267260.html",
             "sharesOut": 36047135,
-            "vscore": 53
+            "vscore": 54
       },
       {
             "rank": 19,
@@ -1968,7 +1970,7 @@
             "image": "images/019_shinhan-financial.png",
             "page": "stocks/019_055550.html",
             "sharesOut": 469450239,
-            "vscore": 47
+            "vscore": 48
       },
       {
             "rank": 20,
@@ -2012,7 +2014,7 @@
             "image": "images/023_sk.png",
             "page": "stocks/023_034730.html",
             "sharesOut": 72502703,
-            "vscore": 69
+            "vscore": 68
       },
       {
             "rank": 24,
@@ -2023,7 +2025,7 @@
             "image": "images/024_hyosung-heavy-industries.png",
             "page": "stocks/024_298040.html",
             "sharesOut": 9324548,
-            "vscore": 48
+            "vscore": 47
       },
       {
             "rank": 25,
@@ -2045,7 +2047,7 @@
             "image": "images/026_posco-holdings.png",
             "page": "stocks/026_005490.html",
             "sharesOut": 79241527,
-            "vscore": 68
+            "vscore": 69
       },
       {
             "rank": 27,
@@ -2056,7 +2058,7 @@
             "image": "images/027_hanwha-ocean.png",
             "page": "stocks/027_042660.html",
             "sharesOut": 306413394,
-            "vscore": 45
+            "vscore": 46
       },
       {
             "rank": 28,
@@ -2078,7 +2080,7 @@
             "image": "images/029_hd-korea-shipbuilding.png",
             "page": "stocks/029_009540.html",
             "sharesOut": 70773116,
-            "vscore": 75
+            "vscore": 74
       },
       {
             "rank": 30,
@@ -2100,7 +2102,7 @@
             "image": "images/031_korea-zinc.png",
             "page": "stocks/031_010130.html",
             "sharesOut": 20872969,
-            "vscore": 45
+            "vscore": 46
       },
       {
             "rank": 32,
@@ -2166,7 +2168,7 @@
             "image": "images/037_hd-hyundai.png",
             "page": "stocks/037_267250.html",
             "sharesOut": 78993085,
-            "vscore": 72
+            "vscore": 73
       },
       {
             "rank": 38,
@@ -2199,7 +2201,7 @@
             "image": "images/040_sk-telecom.png",
             "page": "stocks/040_017670.html",
             "sharesOut": 214790053,
-            "vscore": 48
+            "vscore": 49
       },
       {
             "rank": 41,
@@ -2254,7 +2256,7 @@
             "image": "images/045_hanwha-systems.png",
             "page": "stocks/045_272210.html",
             "sharesOut": 188919389,
-            "vscore": 24
+            "vscore": 25
       },
       {
             "rank": 46,
@@ -2276,7 +2278,7 @@
             "image": "images/047_lig-nex1.png",
             "page": "stocks/047_079550.html",
             "sharesOut": 22000000,
-            "vscore": 34
+            "vscore": 35
       },
       {
             "rank": 48,
@@ -2353,7 +2355,7 @@
             "image": "images/054_lg-corp.png",
             "page": "stocks/054_003550.html",
             "sharesOut": 151192004,
-            "vscore": 51
+            "vscore": 50
       },
       {
             "rank": 55,
@@ -2419,7 +2421,7 @@
             "image": "images/060_korea-investment-holdings.png",
             "page": "stocks/060_071050.html",
             "sharesOut": 55725992,
-            "vscore": 74
+            "vscore": 73
       },
       {
             "rank": 61,
@@ -2430,7 +2432,7 @@
             "image": "images/061_samsung-sds.png",
             "page": "stocks/061_018260.html",
             "sharesOut": 77377800,
-            "vscore": 50
+            "vscore": 49
       },
       {
             "rank": 62,
@@ -2463,7 +2465,7 @@
             "image": "images/064_posco-international.png",
             "page": "stocks/064_047050.html",
             "sharesOut": 175922788,
-            "vscore": 55
+            "vscore": 56
       },
       {
             "rank": 65,
@@ -2562,7 +2564,7 @@
             "image": "images/073_hd-hyundai-marine-solution.png",
             "page": "stocks/073_443060.html",
             "sharesOut": 44833460,
-            "vscore": 41
+            "vscore": 43
       },
       {
             "rank": 74,
@@ -2573,7 +2575,7 @@
             "image": "images/074_samsung-ea.png",
             "page": "stocks/074_028050.html",
             "sharesOut": 196000000,
-            "vscore": 36
+            "vscore": 39
       },
       {
             "rank": 75,
@@ -2606,7 +2608,7 @@
             "image": "images/077_hyundai-motor-preferred-2b.png",
             "page": "stocks/077_005387.html",
             "sharesOut": 34963930,
-            "vscore": 61
+            "vscore": 62
       },
       {
             "rank": 78,
@@ -2617,7 +2619,7 @@
             "image": "images/078_isupetasys.png",
             "page": "stocks/078_007660.html",
             "sharesOut": 73409219,
-            "vscore": 38
+            "vscore": 39
       },
       {
             "rank": 79,
@@ -2716,7 +2718,7 @@
             "image": "images/087_hanwha-solutions.png",
             "page": "stocks/087_009830.html",
             "sharesOut": 171892536,
-            "vscore": 35
+            "vscore": 36
       },
       {
             "rank": 88,
@@ -2837,7 +2839,7 @@
             "image": "images/098_gs.png",
             "page": "stocks/098_078930.html",
             "sharesOut": 92895495,
-            "vscore": 72
+            "vscore": 74
       },
       {
             "rank": 106,
@@ -2848,7 +2850,7 @@
             "image": "images/099_iljin-electric.png",
             "page": "stocks/099_103590.html",
             "sharesOut": 47685390,
-            "vscore": 60
+            "vscore": 61
       },
       {
             "rank": 100,
@@ -2859,7 +2861,7 @@
             "image": "images/100_lg-uplus.png",
             "page": "stocks/100_032640.html",
             "sharesOut": 424427732,
-            "vscore": 53
+            "vscore": 54
       },
       {
             "rank": 101,
@@ -2892,7 +2894,7 @@
             "image": "images/087_bnk-financial-group.png",
             "page": "stocks/087_138930.html",
             "sharesOut": 310327033,
-            "vscore": 53
+            "vscore": 56
       },
       {
             "rank": 90,
@@ -2914,7 +2916,7 @@
             "image": "images/094_orion.png",
             "page": "stocks/094_271560.html",
             "sharesOut": 39528788,
-            "vscore": 46
+            "vscore": 45
       },
       {
             "rank": 99,
@@ -2958,7 +2960,7 @@
             "image": "images/109_lg-electronics-pfd.png",
             "page": "stocks/109_066575.html",
             "sharesOut": 17185992,
-            "vscore": 70
+            "vscore": 69
       },
       {
             "rank": 110,
@@ -2969,7 +2971,7 @@
             "image": "images/110_lotte-shopping.png",
             "page": "stocks/110_023530.html",
             "sharesOut": 28288755,
-            "vscore": 74
+            "vscore": 75
       },
       {
             "rank": 111,
@@ -2980,7 +2982,7 @@
             "image": "images/111_shinsegae.png",
             "page": "stocks/111_004170.html",
             "sharesOut": 9445181,
-            "vscore": 64
+            "vscore": 65
       },
       {
             "rank": 112,
@@ -3002,7 +3004,7 @@
             "image": "images/113_hanmi.png",
             "page": "stocks/113_128940.html",
             "sharesOut": 12810991,
-            "vscore": 47
+            "vscore": 46
       },
       {
             "rank": 114,
@@ -3046,7 +3048,7 @@
             "image": "images/117_hanon.png",
             "page": "stocks/117_018880.html",
             "sharesOut": 1026251342,
-            "vscore": 21
+            "vscore": 22
       },
       {
             "rank": 118,
@@ -3079,7 +3081,7 @@
             "image": "images/120_hyundai-motor-preferred.png",
             "page": "stocks/120_005385.html",
             "sharesOut": 22840000,
-            "vscore": 59
+            "vscore": 60
       },
       {
             "rank": 121,
@@ -3101,7 +3103,7 @@
             "image": "images/122_oci.png",
             "page": "stocks/122_010060.html",
             "sharesOut": 18670232,
-            "vscore": 36
+            "vscore": 38
       },
       {
             "rank": 123,
@@ -3145,7 +3147,7 @@
             "image": "images/126_cj.png",
             "page": "stocks/126_001040.html",
             "sharesOut": 29176998,
-            "vscore": 44
+            "vscore": 45
       },
       {
             "rank": 127,
@@ -3167,7 +3169,7 @@
             "image": "images/128_cosmax.png",
             "page": "stocks/128_192820.html",
             "sharesOut": 11349509,
-            "vscore": 48
+            "vscore": 47
       },
       {
             "rank": 129,
@@ -3222,7 +3224,7 @@
             "image": "images/133_kolmar.png",
             "page": "stocks/133_161890.html",
             "sharesOut": 23605077,
-            "vscore": 48
+            "vscore": 49
       },
       {
             "rank": 134,
@@ -3244,7 +3246,7 @@
             "image": "images/135_poscodx.png",
             "page": "stocks/135_022100.html",
             "sharesOut": 152034729,
-            "vscore": 17
+            "vscore": 16
       },
       {
             "rank": 136,
@@ -3288,7 +3290,7 @@
             "image": "images/139_kumhopc.png",
             "page": "stocks/139_011780.html",
             "sharesOut": 25157325,
-            "vscore": 72
+            "vscore": 74
       },
       {
             "rank": 140,
@@ -3299,7 +3301,7 @@
             "image": "images/140_cjcj.png",
             "page": "stocks/140_097950.html",
             "sharesOut": 15054186,
-            "vscore": 46
+            "vscore": 47
       },
       {
             "rank": 141,
@@ -3310,7 +3312,7 @@
             "image": "images/141_fnf.png",
             "page": "stocks/141_383220.html",
             "sharesOut": 38307075,
-            "vscore": 67
+            "vscore": 68
       },
       {
             "rank": 142,
@@ -3321,7 +3323,7 @@
             "image": "images/142_hdelev.png",
             "page": "stocks/142_017800.html",
             "sharesOut": 39092385,
-            "vscore": 51
+            "vscore": 50
       },
       {
             "rank": 143,
@@ -3398,7 +3400,7 @@
             "image": "images/149_skgas.png",
             "page": "stocks/149_018670.html",
             "sharesOut": 9257244,
-            "vscore": 60
+            "vscore": 61
       },
       {
             "rank": 155,
@@ -3431,7 +3433,7 @@
             "image": "images/157_dlenc.png",
             "page": "stocks/157_375500.html",
             "sharesOut": 38693623,
-            "vscore": 60
+            "vscore": 61
       },
       {
             "rank": 158,
@@ -3442,7 +3444,7 @@
             "image": "images/158_ecomat.png",
             "page": "stocks/158_450080.html",
             "sharesOut": 70813870,
-            "vscore": 19
+            "vscore": 20
       },
       {
             "rank": 159,
@@ -3475,7 +3477,7 @@
             "image": "images/151_gsenc.png",
             "page": "stocks/151_006360.html",
             "sharesOut": 85581490,
-            "vscore": 37
+            "vscore": 38
       },
       {
             "rank": 152,
@@ -3497,7 +3499,7 @@
             "image": "images/153_bgf.png",
             "page": "stocks/153_282330.html",
             "sharesOut": 17283906,
-            "vscore": 45
+            "vscore": 46
       },
       {
             "rank": 154,
@@ -3585,7 +3587,7 @@
             "image": "images/166_cswind.png",
             "page": "stocks/166_112610.html",
             "sharesOut": 42171403,
-            "vscore": 68
+            "vscore": 69
       },
       {
             "rank": 167,
@@ -3607,7 +3609,7 @@
             "image": "images/168_kctech.png",
             "page": "stocks/168_281820.html",
             "sharesOut": 19798661,
-            "vscore": 27
+            "vscore": 28
       },
       {
             "rank": 169,
@@ -3651,7 +3653,7 @@
             "image": "images/172_hwvision.png",
             "page": "stocks/172_489790.html",
             "sharesOut": 50488390,
-            "vscore": 47
+            "vscore": 48
       },
       {
             "rank": 173,
@@ -3706,7 +3708,7 @@
             "image": "images/177_kps.png",
             "page": "stocks/177_051600.html",
             "sharesOut": 45000000,
-            "vscore": 73
+            "vscore": 74
       },
       {
             "rank": 178,
@@ -3728,7 +3730,7 @@
             "image": "images/179_lotterental.png",
             "page": "stocks/179_089860.html",
             "sharesOut": 36309388,
-            "vscore": 38
+            "vscore": 39
       },
       {
             "rank": 180,
@@ -3772,7 +3774,7 @@
             "image": "images/183_hdstore.png",
             "page": "stocks/183_069960.html",
             "sharesOut": 21564912,
-            "vscore": 64
+            "vscore": 65
       },
       {
             "rank": 184,
@@ -3827,7 +3829,7 @@
             "image": "images/188_daehan.png",
             "page": "stocks/188_439260.html",
             "sharesOut": 38088730,
-            "vscore": 64
+            "vscore": 63
       },
       {
             "rank": 189,
@@ -3871,7 +3873,7 @@
             "image": "images/192_shilla.png",
             "page": "stocks/192_008770.html",
             "sharesOut": 39248121,
-            "vscore": 20
+            "vscore": 21
       },
       {
             "rank": 193,
@@ -3893,7 +3895,7 @@
             "image": "images/194_kolonind.png",
             "page": "stocks/194_120110.html",
             "sharesOut": 29946032,
-            "vscore": 73
+            "vscore": 75
       },
       {
             "rank": 195,
@@ -3915,7 +3917,7 @@
             "image": "images/196_sketernix.png",
             "page": "stocks/196_475150.html",
             "sharesOut": 34067004,
-            "vscore": 11
+            "vscore": 12
       },
       {
             "rank": 197,
@@ -3926,7 +3928,7 @@
             "image": "images/197_hdcdev.png",
             "page": "stocks/197_294870.html",
             "sharesOut": 65907330,
-            "vscore": 69
+            "vscore": 68
       },
       {
             "rank": 198,
