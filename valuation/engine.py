@@ -22,6 +22,18 @@ WEIGHTS = {
     '저수익·회복': {'이익환원': 100},                       # 장기 평균 ROE ≤ 0이지만 최근 흑자인 성숙 기업
 }
 PER_CAP = 30.0   # 정상화 PER에 쓰는 연도별 과거 PER 상한
+# 정상화 PER의 평균 EPS·과거 PER 범위 가중: None=단순 평균, 'linear'=최근일수록 1,2,3…, 숫자=반감기(년) 지수 가중.
+# 단순 평균은 이익이 구조적으로 줄어든 기업(이마트: 11년 평균 EPS의 대부분이 2015~2018년 몫)을 과거 수준으로 되돌린다고
+# 가정해 반감기 5년(5년 전 이익은 절반 비중)으로 바꿈. 3년은 최근 3년 평균에 가까워져 경기 정상화 의미가 약해짐(2026-10-27)
+EPS_WEIGHT = 5
+
+
+def eps_weights(ys):
+    if EPS_WEIGHT == 'linear':
+        return [i + 1 for i in range(len(ys))]
+    if EPS_WEIGHT:
+        return [0.5 ** ((ys[-1] - y) / EPS_WEIGHT) for y in ys]
+    return [1] * len(ys)
 EARN_G = 0.025  # 이익환원 상단의 영구 성장률(DCF 잔존가치 성장률과 같음)
 TYPES = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'types.json'), encoding='utf-8'))
 FIN, HOLD, UTIL, PREF = set(TYPES['금융']), set(TYPES['지주·투자']), set(TYPES['규제·유틸리티']), TYPES['우선주']
@@ -299,6 +311,23 @@ def rim(bps, roe_start, payout, r=R, years=10, persist=True):
     return v
 
 
+def wpctl(vals, ws, p):
+    """가중 백분위. 가중치가 모두 같으면 pctl과 같은 값(선형 보간, 양끝 = 최소·최대)."""
+    s = sorted(zip(vals, ws))
+    if len(s) == 1:
+        return s[0][0]
+    tot, last = sum(w for _, w in s), s[-1][1]
+    pos, acc = [], 0.0
+    for v, w in s:
+        pos.append(acc / (tot - last))
+        acc += w
+    for i in range(1, len(s)):
+        if p <= pos[i]:
+            f = (p - pos[i - 1]) / (pos[i] - pos[i - 1]) if pos[i] > pos[i - 1] else 0
+            return s[i - 1][0] + (s[i][0] - s[i - 1][0]) * f
+    return s[-1][0]
+
+
 def pctl(vals, p):
     s = sorted(vals)
     k = (len(s) - 1) * p
@@ -479,17 +508,20 @@ def value_at(typ, rows, ys, px, qb, ttm, shares, nav=None, merged=False, code=No
         m['RIM'] = (max(0, rim(bps, r_lo, payout, persist=pst)), max(0, rim(bps, r_hi, payout, persist=pst)),
                     f'BPS {bps:,.0f}원, ROE {r_lo*100:.1f}~{r_hi*100:.1f}%' + ('(요구수익률 12% 미만이면 10년간 그 수준 유지)' if pst and r_lo < R else '가 10년에 걸쳐 요구수익률로 수렴') + roe_note + adj_note)
     if '정상화 PER' in w and px:
-        pers = []
+        pers, pws = [], []
+        wy = dict(zip(ys, eps_weights(ys)))
         for y in ys:
             p = px_at(px, y, 12)
             if p and rows[y]['nip'] > 0:
                 # 이익이 바닥이던 해의 PER(CJ대한통운 2015~2021년 최대 80배)이 평균 EPS에 곱해져 상단이 주가의 6배까지
                 # 나왔음 → 연도별 PER을 30배로 자름(2026-10-26)
                 pers.append(min(PER_CAP, p / (rows[y]['nip'] / shares)))
-        eps_n = st.mean([rows[y]['nip'] for y in ys]) / shares
+                pws.append(wy[y])
+        eps_n = sum(wy[y] * rows[y]['nip'] for y in ys) / sum(wy.values()) / shares
         if len(pers) >= 3 and eps_n > 0:
-            pl, ph = pctl(pers, 0.25), pctl(pers, 0.75)
-            m['정상화 PER'] = (eps_n * pl, eps_n * ph, f'{len(ys)}년 평균 EPS {eps_n:,.0f}원 × 과거 PER {pl:.1f}~{ph:.1f}배' + (f'(연도별 {PER_CAP:.0f}배 상한)' if ph >= PER_CAP else '') + adj_note)
+            pl, ph = wpctl(pers, pws, 0.25), wpctl(pers, pws, 0.75)
+            wl = f'{len(ys)}년 가중평균(반감기 {EPS_WEIGHT}년)' if EPS_WEIGHT else f'{len(ys)}년 평균'
+            m['정상화 PER'] = (eps_n * pl, eps_n * ph, f'{wl} EPS {eps_n:,.0f}원 × 과거 PER {pl:.1f}~{ph:.1f}배' + (f'(연도별 {PER_CAP:.0f}배 상한)' if ph >= PER_CAP else '') + adj_note)
     if 'PBR-ROE' in w and bps > 0:
         g = max(0.0, min(0.03, roe_avg * (1 - payout)))
         pb = lambda x: max(0.0, (x - g) / (R - g))
