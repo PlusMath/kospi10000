@@ -4785,12 +4785,28 @@
       rerenderCurrentView();
     });
 
+    // 5%+ 변동 패널은 통계 카드(5% 이상 상승/하락)와 같은 getMovers()로 만든다 — 모집단(실시간 시총 상위 200)과
+    // 등락률이 항상 일치하도록. 파이프라인이 계속 갱신하는 const dailyMovers(상위 100 기준)는 화면에 쓰지 않음.
+    function getPanelMovers() {
+      return [...getMovers('up'), ...getMovers('down')].map(({ stock, live }) => ({
+        name: stock.name, code: stock.code, industry: stock.industry, page: stock.page,
+        change: live.change, close: `${Math.round(live.price).toLocaleString('ko-KR')}원`,
+      }));
+    }
+
     function renderDailyMovers() {
       const container = document.getElementById('dailyMoverGroups');
       if (!container) return;
       container.innerHTML = '';
+      const movers = getPanelMovers();
+      const sv = document.querySelectorAll('.daily-movers .mover-summary-value');
+      if (sv.length === 3) {
+        sv[0].textContent = `${movers.length}개`;
+        sv[1].textContent = `${new Set(movers.map((m) => m.industry)).size}개`;
+        sv[2].textContent = `${movers.filter((m) => m.change <= -5).length}개`;
+      }
 
-      const grouped = dailyMovers.reduce((groups, stock) => {
+      const grouped = movers.reduce((groups, stock) => {
         if (!groups[stock.industry]) groups[stock.industry] = [];
         groups[stock.industry].push(stock);
         return groups;
@@ -4857,8 +4873,9 @@
     });
 
     function updateMoversToggleBadge() {
-      moversToggleCount.textContent = dailyMovers.length;
-      moversToggleBtn.classList.toggle('has-alerts', dailyMovers.length > 0);
+      const n = getPanelMovers().length;
+      moversToggleCount.textContent = n;
+      moversToggleBtn.classList.toggle('has-alerts', n > 0);
     }
 
     function renderMarketSummary() {
