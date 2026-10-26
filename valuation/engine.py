@@ -26,6 +26,7 @@ EARN_G = 0.025  # 이익환원 상단의 영구 성장률(DCF 잔존가치 성�
 TYPES = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'types.json'), encoding='utf-8'))
 FIN, HOLD, UTIL, PREF = set(TYPES['금융']), set(TYPES['지주·투자']), set(TYPES['규제·유틸리티']), TYPES['우선주']
 MERGED = set(TYPES.get('합병', {}))
+INSURER, BROKER = set(TYPES.get('보험', [])), set(TYPES.get('증권', []))
 EXCLUDE = TYPES.get('평가제외', {})
 IS = ('IS', 'CIS')
 CAPEX = ['PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities',
@@ -372,7 +373,7 @@ def nav_at(code, y, q, shares, ofs_L, latest=False):
             f'주당 NAV {nav:,.0f}원(별도 자본 {eq_sep/1e12:.1f}조 + 상장 자회사 {n_listed}곳 지분 시가 {mv_tot/1e12:.1f}조 반영) × 지주사 할인 50~30%')
 
 
-def value_at(typ, rows, ys, px, qb, ttm, shares, nav=None, merged=False):
+def value_at(typ, rows, ys, px, qb, ttm, shares, nav=None, merged=False, code=None):
     # 과거 연도의 일회성 이익을 걷어낸다: 순이익/영업이익 비율이 그 회사의 평소 비율(중앙값, 최소 세후 0.76)의 2배를 넘는
     # 해는 영업이익 × 평소 비율로 대체. 이마트(2021·2022 순이익이 영업이익의 5~8배)·효성(2018 인적분할 처분이익 3.4조,
     # ROE 137%)이 평균 EPS·ROE에 그대로 들어가 내재가치가 주가의 2.5~3배로 나왔음(2026-10-26). 고정 배수(세후 영업이익의
@@ -452,12 +453,23 @@ def value_at(typ, rows, ys, px, qb, ttm, shares, nav=None, merged=False):
         r_lo, r_hi = roe_avg, max(roe_avg, p75, ttm_roe or -1)
     else:
         r_lo, r_hi = min(roe_avg, roe_rec3), max(roe_avg, roe_rec3, p75)
+    roe_note = ''
+    if code in BROKER and r_hi > roe_avg:
+        # 증권: 이익이 증시 거래대금을 따라 출렁여 호황기 ROE(한국금융지주 2025년 17%)를 상단에 쓰면 고점 이익을 영구화함
+        # → 상단을 장기 평균으로 제한(2026-10-26)
+        r_hi = max(r_lo, roe_avg)
+        roe_note = ' (증권업: ROE 상단을 장기 평균으로 제한)'
+    if code in INSURER and rows[ys[-1]]['div'] <= 0:
+        # 보험: 무배당이면 회계 이익이 해약환급금준비금·K-ICS로 자본에 묶여 주주에게 돌아오지 않음(한화생명 5년,
+        # 현대해상 2025년 무배당, PBR 0.2~0.5배) → 낙관 시나리오를 빼고 ROE를 범위 하단으로 고정(2026-10-26)
+        r_hi = r_lo
+        roe_note = f' ({ys[-1]}년 무배당 보험사: ROE를 범위 하단으로 고정)'
     if 'NAV' in w and nav:
         m['NAV'] = nav
     if 'RIM' in w and bps > 0:
         pst = typ != '고성장·적자'
         m['RIM'] = (max(0, rim(bps, r_lo, payout, persist=pst)), max(0, rim(bps, r_hi, payout, persist=pst)),
-                    f'BPS {bps:,.0f}원, ROE {r_lo*100:.1f}~{r_hi*100:.1f}%' + ('(요구수익률 12% 미만이면 10년간 그 수준 유지)' if pst and r_lo < R else '가 10년에 걸쳐 요구수익률로 수렴') + adj_note)
+                    f'BPS {bps:,.0f}원, ROE {r_lo*100:.1f}~{r_hi*100:.1f}%' + ('(요구수익률 12% 미만이면 10년간 그 수준 유지)' if pst and r_lo < R else '가 10년에 걸쳐 요구수익률로 수렴') + roe_note + adj_note)
     if '정상화 PER' in w and px:
         pers = []
         for y in ys:
@@ -474,7 +486,7 @@ def value_at(typ, rows, ys, px, qb, ttm, shares, nav=None, merged=False):
         g = max(0.0, min(0.03, roe_avg * (1 - payout)))
         pb = lambda x: max(0.0, (x - g) / (R - g))
         m['PBR-ROE'] = (bps * pb(r_lo), bps * pb(r_hi),
-                        f'BPS {bps:,.0f}원 × 적정 PBR {pb(r_lo):.2f}~{pb(r_hi):.2f}배 (ROE {r_lo*100:.1f}~{r_hi*100:.1f}%, 성장률 {g*100:.1f}%)')
+                        f'BPS {bps:,.0f}원 × 적정 PBR {pb(r_lo):.2f}~{pb(r_hi):.2f}배 (ROE {r_lo*100:.1f}~{r_hi*100:.1f}%, 성장률 {g*100:.1f}%)' + roe_note)
     if '이익환원' in w and ttm and ttm.get('nip') is not None and ttm['nip'] > 0:
         # 현재 이익을 영구 이익으로 보고 할인: 하단=최근 3년 평균·최근 4분기 중 작은 값(성장 0%), 상단=큰 값(성장 2.5%)
         ni3 = st.mean([rows[y]['nip'] for y in ys[-3:]])
@@ -597,7 +609,7 @@ def run(code, factor=None, force=None):
         last = i == len(items) - 1
         # 최신 분기의 NAV는 보유 지분을 현재 주가로 평가(지분 시가는 매일 알 수 있으므로)
         nav = nav_at(code, y, q, shares, ofs_L, latest=last) if typ == '지주·투자' else None
-        v = value_at(typ, rows, ys, px, qb, ttm, shares, nav, merged=code in MERGED)
+        v = value_at(typ, rows, ys, px, qb, ttm, shares, nav, merged=code in MERGED, code=code)
         if v:
             v['q'] = f'{y}-{q*3:02d}'
             v['fy'] = fy
