@@ -21,7 +21,8 @@ WEIGHTS = {
     '고성장·적자': {'RIM': 50, 'PBR-ROE': 50},               # 이익 기반 평가 제외, 참고용
     '저수익·회복': {'이익환원': 100},                       # 장기 평균 ROE ≤ 0이지만 최근 흑자인 성숙 기업
 }
-EARN_G = 0.025   # 이익환원 상단의 영구 성장률(DCF 잔존가치 성장률과 같음)
+PER_CAP = 30.0   # 정상화 PER에 쓰는 연도별 과거 PER 상한
+EARN_G = 0.025  # 이익환원 상단의 영구 성장률(DCF 잔존가치 성장률과 같음)
 TYPES = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'types.json'), encoding='utf-8'))
 FIN, HOLD, UTIL, PREF = set(TYPES['금융']), set(TYPES['지주·투자']), set(TYPES['규제·유틸리티']), TYPES['우선주']
 MERGED = set(TYPES.get('합병', {}))
@@ -372,6 +373,23 @@ def nav_at(code, y, q, shares, ofs_L, latest=False):
 
 
 def value_at(typ, rows, ys, px, qb, ttm, shares, nav=None, merged=False):
+    # 과거 연도의 일회성 이익을 걷어낸다: 순이익/영업이익 비율이 그 회사의 평소 비율(중앙값, 최소 세후 0.76)의 2배를 넘는
+    # 해는 영업이익 × 평소 비율로 대체. 이마트(2021·2022 순이익이 영업이익의 5~8배)·효성(2018 인적분할 처분이익 3.4조,
+    # ROE 137%)이 평균 EPS·ROE에 그대로 들어가 내재가치가 주가의 2.5~3배로 나왔음(2026-10-26). 고정 배수(세후 영업이익의
+    # 1.5배)로 자르면 지분법이익이 매년 큰 현대모비스·동서·유한양행까지 깎여 회사별 평소 비율을 기준으로 삼음.
+    # 손실도 대칭으로: 영업흑자인데 평소 순이익 규모 이상 순손실(손상차손·평가손)인 해도 같은 값으로 대체 — 이익만 걷어내면
+    # 카카오(2019·2023 손상차손)처럼 평균 EPS가 117원까지 내려감. 이자 부담으로 인한 소폭 적자(금호타이어)는 그대로
+    conv_r = [rows[y]['nip'] / rows[y]['oi'] for y in ys if (rows[y].get('oi') or 0) > 0]
+    base = max(0.76, st.median(conv_r)) if conv_r else None
+    def _adj(r):
+        oi = r.get('oi') or 0
+        if base is None or oi <= 0 or -base * oi <= r['nip'] <= 2 * base * oi:
+            return r
+        f = base * oi / r['nip']
+        return {**r, 'nip': r['nip'] * f, 'ni': r['ni'] * f if r.get('ni') is not None else None}
+    adj_ys = [y for y in ys if _adj(rows[y]) is not rows[y]]
+    rows = {y: (_adj(r) if y in ys else r) for y, r in rows.items()}
+    adj_note = f' (일회성 손익이 큰 {"·".join(str(y) for y in adj_ys)}년은 영업이익 기준으로 보정)' if adj_ys else ''
     roe = roe_series(rows, ys)
     if not roe or not shares or shares <= 0 or not qb['eq']:
         return None
@@ -439,17 +457,19 @@ def value_at(typ, rows, ys, px, qb, ttm, shares, nav=None, merged=False):
     if 'RIM' in w and bps > 0:
         pst = typ != '고성장·적자'
         m['RIM'] = (max(0, rim(bps, r_lo, payout, persist=pst)), max(0, rim(bps, r_hi, payout, persist=pst)),
-                    f'BPS {bps:,.0f}원, ROE {r_lo*100:.1f}~{r_hi*100:.1f}%' + ('(요구수익률 12% 미만이면 10년간 그 수준 유지)' if pst and r_lo < R else '가 10년에 걸쳐 요구수익률로 수렴'))
+                    f'BPS {bps:,.0f}원, ROE {r_lo*100:.1f}~{r_hi*100:.1f}%' + ('(요구수익률 12% 미만이면 10년간 그 수준 유지)' if pst and r_lo < R else '가 10년에 걸쳐 요구수익률로 수렴') + adj_note)
     if '정상화 PER' in w and px:
         pers = []
         for y in ys:
             p = px_at(px, y, 12)
             if p and rows[y]['nip'] > 0:
-                pers.append(p / (rows[y]['nip'] / shares))
+                # 이익이 바닥이던 해의 PER(CJ대한통운 2015~2021년 최대 80배)이 평균 EPS에 곱해져 상단이 주가의 6배까지
+                # 나왔음 → 연도별 PER을 30배로 자름(2026-10-26)
+                pers.append(min(PER_CAP, p / (rows[y]['nip'] / shares)))
         eps_n = st.mean([rows[y]['nip'] for y in ys]) / shares
         if len(pers) >= 3 and eps_n > 0:
             pl, ph = pctl(pers, 0.25), pctl(pers, 0.75)
-            m['정상화 PER'] = (eps_n * pl, eps_n * ph, f'{len(ys)}년 평균 EPS {eps_n:,.0f}원 × 과거 PER {pl:.1f}~{ph:.1f}배')
+            m['정상화 PER'] = (eps_n * pl, eps_n * ph, f'{len(ys)}년 평균 EPS {eps_n:,.0f}원 × 과거 PER {pl:.1f}~{ph:.1f}배' + (f'(연도별 {PER_CAP:.0f}배 상한)' if ph >= PER_CAP else '') + adj_note)
     if 'PBR-ROE' in w and bps > 0:
         g = max(0.0, min(0.03, roe_avg * (1 - payout)))
         pb = lambda x: max(0.0, (x - g) / (R - g))
