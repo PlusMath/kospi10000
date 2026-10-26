@@ -29,6 +29,7 @@ MERGED = set(TYPES.get('합병', {}))
 INSURER, BROKER = set(TYPES.get('보험', [])), set(TYPES.get('증권', []))
 EXCLUDE = TYPES.get('평가제외', {})
 IS = ('IS', 'CIS')
+LEASE = ['PaymentsOfLeaseLiabilitiesClassifiedAsFinancingActivities', 'PaymentsOfFinanceLeaseLiabilitiesClassifiedAsFinancingActivities']
 CAPEX = ['PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities',
          'PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities']
 DEBT = ['ShorttermBorrowings', 'ShortTermBorrowings', 'CurrentPortionOfLongtermBorrowings', 'LongTermBorrowingsGross',
@@ -133,6 +134,13 @@ def flow(L, q, col='thstrm'):
         r['ni'] = r['nip']
     r['ocf'] = get(L, ['CashFlowsFromUsedInOperatingActivities'], ('CF',), f'{col}_amount')
     r['capex'] = sum(abs(get(L, [n], ('CF',), f'{col}_amount') or 0) for n in CAPEX)
+    # IFRS16 리스부채 상환은 재무활동이라 영업현금흐름에서 빠져 있음 → 매장·항공기 리스가 큰 회사의 주주이익이 부풀려짐
+    # (이마트: 리스 상환 연 5,000억대를 빼지 않아 주주이익 0.41조 → DCF가 주가의 2.6배, 2026-10-26). 설비투자처럼 차감
+    ls = get(L, LEASE, ('CF',), f'{col}_amount')
+    if ls is None:
+        ls = next((num(x.get(f'{col}_amount')) for x in L if x.get('sj_div') == 'CF' and x.get('account_id', '').startswith('-')
+                   and '리스부채' in x.get('account_nm', '') and ('상환' in x.get('account_nm', '') or '지급' in x.get('account_nm', ''))), None)
+    r['capex'] += abs(ls or 0)
     # 배당금 지급 계정은 회사마다 다름: 지배기업 소유주 배당으로 공시(우리금융·삼성물산 등), 영업활동으로 분류(DB하이텍·일진전기 등)
     dv = get(L, ['DividendsPaidClassifiedAsFinancingActivities', 'DividendsPaidToEquityHoldersOfParentClassifiedAsFinancingActivities',
                  'DividendsPaidClassifiedAsOperatingActivities', 'DividendsPaid'], ('CF',), f'{col}_amount')
@@ -436,7 +444,7 @@ def value_at(typ, rows, ys, px, qb, ttm, shares, nav=None, merged=False, code=No
                 if ttm and ttm.get('nip') is not None and ttm['nip'] > hi_oe:
                     hi_oe, hi_src = ttm['nip'], ' 순이익'
                 m['DCF'] = (dcf(lo_oe, 0.03) / shares + nc_ps, dcf(hi_oe, 0.03) / shares + nc_ps,
-                            f'주주이익(영업현금흐름−설비투자) {len(oe)}년 평균 {lo_oe/1e12:.2f}조 ~ 최근 4분기{hi_src} {hi_oe/1e12:.2f}조, 성장률 3%')
+                            f'주주이익(영업현금흐름−설비투자−리스 상환) {len(oe)}년 평균 {lo_oe/1e12:.2f}조 ~ 최근 4분기{hi_src} {hi_oe/1e12:.2f}조, 성장률 3%')
             elif ni_avg > 0:
                 # 현금흐름 기준 주주이익이 순이익과 크게 어긋남(성장 투자·리스 상환 등) → 순이익 기준
                 hi_ni = max(ni_avg, ttm['nip']) if ttm and ttm.get('nip') is not None else ni_avg
