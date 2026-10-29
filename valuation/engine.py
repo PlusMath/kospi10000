@@ -515,7 +515,13 @@ def value_at(typ, rows, ys, px, qb, ttm, shares, nav=None, merged=False, code=No
             if p and rows[y]['nip'] > 0:
                 # 이익이 바닥이던 해의 PER(CJ대한통운 2015~2021년 최대 80배)이 평균 EPS에 곱해져 상단이 주가의 6배까지
                 # 나왔음 → 연도별 PER을 30배로 자름(2026-10-26)
-                pers.append(min(PER_CAP, p / (rows[y]['nip'] / shares)))
+                # 그해 시가총액 기준(분할은 보정한 그해 주식 수): 현재 주식 수를 쓰면 합병·증자·소각 전 해의 PER이 틀어짐
+                # (포스코인터내셔널 2023 합병, 2026-10-29). 합병 종목은 위에서 이익을 현재 주식 수 기준으로 환산했으므로 그대로
+                sy = rows[y].get('shares')
+                sy = sy * split_multiple(shares / sy) if sy and sy > 0 and not merged else shares
+                if not (1 / 3 < sy / shares < 3):
+                    sy = shares
+                pers.append(min(PER_CAP, p * sy / rows[y]['nip']))
                 pws.append(wy[y])
         eps_n = sum(wy[y] * rows[y]['nip'] for y in ys) / sum(wy.values()) / shares
         if len(pers) >= 3 and eps_n > 0:
