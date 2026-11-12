@@ -1103,21 +1103,25 @@ function dpShowMetricChart(metricId, el) {
   if (rows.length === 0) return;
   const W = 300, H = 240, pL = 8, pR = 8, pT = 18, pB = 46;
   const cW = W - pL - pR, cH = H - pT - pB;
-  const maxAbs = Math.max(...rows.map((r) => Math.abs(r.num))) * 1.15 || 1;
+  rows.sort((a, b) => b.num - a.num);   // 음수(EPS 감소·ROE 적자)는 0 아래 막대 — 절댓값 막대면 -39%가 +26%보다 높게 보였음
+  const hi = Math.max(0, ...rows.map((r) => r.num)), lo = Math.min(0, ...rows.map((r) => r.num));
+  const pad = (hi - lo) * 0.15, top0 = hi > 0 ? hi + pad : 0, bot0 = lo < 0 ? lo - pad : 0, span = (top0 - bot0) || 1;
   const groupW = cW / rows.length;
   const barW = Math.min(34, groupW * 0.5);
-  function py(v) { return pT + cH * (1 - Math.abs(v) / maxAbs); }
+  function py(v) { return pT + cH * (top0 - v) / span; }
   [0, 0.25, 0.5, 0.75, 1].forEach((f) => {
     const y = pT + cH * (1 - f);
     svg.appendChild(svgEl('line', { x1: pL, x2: W - pR, y1: y, y2: y, stroke: 'oklch(0.91 0.005 90)', 'stroke-width': 1 }));
   });
+  if (lo < 0) svg.appendChild(svgEl('line', { x1: pL, x2: W - pR, y1: py(0), y2: py(0), stroke: 'oklch(0.7 0.01 90)', 'stroke-width': 1 }));
   rows.forEach((r, i) => {
     const gx = pL + i * groupW + groupW / 2;
     const top = py(r.num);
     const base = pT + cH;
     const color = r.isSelf ? 'var(--dp-accent)' : 'oklch(0.75 0.01 90)';
-    svg.appendChild(svgEl('rect', { x: gx - barW / 2, y: top, width: barW, height: Math.max(base - top, 1), fill: color, rx: 3 }));
-    const t1 = svgEl('text', { x: gx, y: top - 6, 'text-anchor': 'middle', 'font-size': 10, 'font-weight': r.isSelf ? 800 : 600, fill: r.isSelf ? 'var(--dp-accent)' : 'oklch(0.5 0.02 260)' });
+    const zero = py(0);
+    svg.appendChild(svgEl('rect', { x: gx - barW / 2, y: Math.min(top, zero), width: barW, height: Math.max(Math.abs(zero - top), 1), fill: color, rx: 3 }));
+    const t1 = svgEl('text', { x: gx, y: r.num < 0 ? top + 12 : top - 6, 'text-anchor': 'middle', 'font-size': 10, 'font-weight': r.isSelf ? 800 : 600, fill: r.isSelf ? 'var(--dp-accent)' : 'oklch(0.5 0.02 260)' });
     t1.textContent = r.val;
     svg.appendChild(t1);
     const label = r.name.length > 5 ? r.name.slice(0, 5) + '…' : r.name;

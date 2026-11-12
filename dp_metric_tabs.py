@@ -43,30 +43,33 @@ def fix(s):
         blk = s[a:b].strip().replace('<div class="dp-gauge">', f'<div class="dp-gauge dp-metric-detail" data-metric="{mid}">', 1)
         s = cut_out(s, a, b)
         gauges.append(blk)
-        pm = re.search(r'[ \t]*<!-- dp-peercmp-' + mid + r':start -->.*?<!-- dp-peercmp-' + mid + r':end -->', s, re.S)
-        if pm:
-            si = s.rindex('<div', 0, s.index('id="dpPeerDataSource"'))
-            se = close_div(s, si)
-            if not (si < pm.start() < se):
-                peers.append(pm.group().strip())
-                s = cut_out(s, pm.start(), pm.end())
         moved.append((mid, label))
-    if not moved:
+    if moved:
+        # 게이지 → dp-metrics-detail-left 안 맨 끝
+        li = s.index('<div class="dp-metrics-detail-left">')
+        cut = last_line_start(s, li, close_div(s, li) - len('</div>'))
+        s = s[:cut] + ''.join(f'        {g}{nl}' for g in gauges) + s[cut:]
+        # 버튼 → nav 끝
+        ni = s.index('id="dpMetricNav"')
+        cut = last_line_start(s, ni, s.index('</nav>', ni))
+        s = s[:cut] + ''.join(f'      <button type="button" data-metric="{mid}" onclick="dpShowMetricChart(\'{mid}\',this)">{label}</button>{nl}' for mid, label in moved) + s[cut:]
+    # 업종 비교 블록 → dpPeerDataSource 안: 데이터 영역에 같은 지표 블록이 없으면 처음 삽입 때 게이지 바로 뒤에 들어가
+    # 화면에 펼쳐진 채 남고 차트도 비었음(크래프톤 등 33개). 일일 스크립트는 문서 앞쪽 블록부터 갱신하므로 바깥 블록이 최신
+    if 'id="dpPeerDataSource"' in s:
+        for pm in reversed(list(re.finditer(r'[ \t]*<!-- dp-peercmp-(\w+):start -->.*?<!-- dp-peercmp-\1:end -->', s[:s.index('id="dpPeerDataSource"')], re.S))):
+            s = cut_out(s, pm.start(), pm.end())
+            peers.insert(0, (pm.group(1), pm.group().strip()))
+        if peers:
+            si = s.rindex('<div', 0, s.index('id="dpPeerDataSource"'))
+            for mid, _ in peers:
+                old = re.search(r'[ \t]*<!-- dp-peercmp-' + mid + r':start -->.*?<!-- dp-peercmp-' + mid + r':end -->', s[si:], re.S)
+                if old:
+                    s = cut_out(s, si + old.start(), si + old.end())
+            cut = last_line_start(s, si, close_div(s, si) - len('</div>'))
+            s = s[:cut] + ''.join(f'      {p}{nl}' for _, p in peers) + s[cut:]
+    if not moved and not peers:
         return s, 'ok'
-    # 게이지 → dp-metrics-detail-left 안 맨 끝
-    li = s.index('<div class="dp-metrics-detail-left">')
-    cut = last_line_start(s, li, close_div(s, li) - len('</div>'))
-    s = s[:cut] + ''.join(f'        {g}{nl}' for g in gauges) + s[cut:]
-    # 업종 비교 블록 → dpPeerDataSource 안 맨 끝
-    if peers:
-        si = s.rindex('<div', 0, s.index('id="dpPeerDataSource"'))
-        cut = last_line_start(s, si, close_div(s, si) - len('</div>'))
-        s = s[:cut] + ''.join(f'      {p}{nl}' for p in peers) + s[cut:]
-    # 버튼 → nav 끝
-    ni = s.index('id="dpMetricNav"')
-    cut = last_line_start(s, ni, s.index('</nav>', ni))
-    s = s[:cut] + ''.join(f'      <button type="button" data-metric="{mid}" onclick="dpShowMetricChart(\'{mid}\',this)">{label}</button>{nl}' for mid, label in moved) + s[cut:]
-    return s, 'fixed:' + ','.join(m for m, _ in moved)
+    return s, 'fixed:' + ','.join([m for m, _ in moved] + ['peer-' + m for m, _ in peers])
 
 
 if __name__ == '__main__':
