@@ -102,6 +102,11 @@ def _recent(y, rc, today):
     return today <= deadline
 
 
+def _stale(old, y, today):
+    """12월 결산이 아닌 회사(신영증권 3월 결산)는 공시가 위 기한과 어긋남 — 최근 2년치 013은 2주마다 재조회."""
+    return y >= today.year - 1 and old.get('checked', '') <= str(today - datetime.timedelta(days=14))
+
+
 def refresh_fs(code, corp, fs_div_dir='fs', fs_div='CFS', today=None, log=print):
     today = today or datetime.date.today()
     path = _p(fs_div_dir, f'{code}.json')
@@ -112,7 +117,7 @@ def refresh_fs(code, corp, fs_div_dir='fs', fs_div='CFS', today=None, log=print)
         old = out.get(k)
         if old and old.get('status') == '000':
             continue
-        if old and old.get('status') == '013' and not _recent(y, rc, today):
+        if old and old.get('status') == '013' and not _recent(y, rc, today) and not _stale(old, y, today):
             continue
         if old and old.get('checked') == str(today):
             continue
@@ -161,7 +166,7 @@ def refresh_inv(code, corp, today=None):
             continue
         k = f'{y}_{rc}'
         old = out.get(k)
-        if old and (old.get('status') == '000' or (old.get('status') == '013' and not _recent(y, rc, today))
+        if old and (old.get('status') == '000' or (old.get('status') == '013' and not _recent(y, rc, today) and not _stale(old, y, today))
                     or old.get('checked') == str(today)):
             continue
         d = dart('otrCprInvstmntSttus', corp_code=corp, bsns_year=y, reprt_code=rc)
@@ -182,7 +187,7 @@ def refresh_shr(code, corp, today=None, since=2025):
             continue
         k = f'{y}_{rc}'
         old = out.get(k)
-        if old and (old.get('status') == '000' or (old.get('status') == '013' and not _recent(y, rc, today))
+        if old and (old.get('status') == '000' or (old.get('status') == '013' and not _recent(y, rc, today) and not _stale(old, y, today))
                     or old.get('checked') == str(today)):
             continue
         d = dart('stockTotqySttus', corp_code=corp, bsns_year=y, reprt_code=rc)

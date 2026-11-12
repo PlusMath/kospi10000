@@ -410,7 +410,7 @@ def nav_at(code, y, q, shares, ofs_L, latest=False):
             f'주당 NAV {nav:,.0f}원(별도 자본 {eq_sep/1e12:.1f}조 + 상장 자회사 {n_listed}곳 지분 시가 {mv_tot/1e12:.1f}조 반영) × 지주사 할인 50~30%')
 
 
-def value_at(typ, rows, ys, px, qb, ttm, shares, nav=None, merged=False, code=None):
+def value_at(typ, rows, ys, px, qb, ttm, shares, nav=None, merged=False, code=None, q=None):
     # 과거 연도의 일회성 이익을 걷어낸다: 순이익/영업이익 비율이 그 회사의 평소 비율(중앙값, 최소 세후 0.76)의 2배를 넘는
     # 해는 영업이익 × 평소 비율로 대체. 이마트(2021·2022 순이익이 영업이익의 5~8배)·효성(2018 인적분할 처분이익 3.4조,
     # ROE 137%)이 평균 EPS·ROE에 그대로 들어가 내재가치가 주가의 2.5~3배로 나왔음(2026-10-26). 고정 배수(세후 영업이익의
@@ -523,10 +523,19 @@ def value_at(typ, rows, ys, px, qb, ttm, shares, nav=None, merged=False, code=No
                     sy = shares
                 pers.append(min(PER_CAP, p * sy / rows[y]['nip']))
                 pws.append(wy[y])
-        eps_n = sum(wy[y] * rows[y]['nip'] for y in ys) / sum(wy.values()) / shares
+        # 최근 4분기 이익을 연간 실적 뒤의 한 시점(예: 6월말 기준 → 직전 결산연도 + 0.5년)으로 붙임: 연간 실적만 쓰면 올해
+        # 이익 체급이 바뀐 기업(SK하이닉스 2026 반도체 호황)의 평균 EPS가 2025년 수준에 묶여 DCF·RIM의 3분의 1에 그쳤음.
+        # 반감기 가중이라 비중은 전체의 13%가량 — 11년 경기 평균 성격은 유지. 과거 PER 범위는 연간 실적만(2026-11-12)
+        pts = [(y, rows[y]['nip']) for y in ys]
+        if isinstance(EPS_WEIGHT, (int, float)) and q in (1, 2, 3) and ttm and ttm.get('nip') is not None:
+            pts.append((ys[-1] + q / 4, ttm['nip']))
+        ws = [0.5 ** ((pts[-1][0] - t) / EPS_WEIGHT) for t, _ in pts] if isinstance(EPS_WEIGHT, (int, float)) else list(wy.values())
+        eps_n = sum(wt * n for wt, (_, n) in zip(ws, pts)) / sum(ws) / shares
         if len(pers) >= 3 and eps_n > 0:
             pl, ph = wpctl(pers, pws, 0.25), wpctl(pers, pws, 0.75)
             wl = f'{len(ys)}년 가중평균(반감기 {EPS_WEIGHT}년)' if EPS_WEIGHT else f'{len(ys)}년 평균'
+            if len(pts) > len(ys):
+                wl += '+최근 4분기'
             m['정상화 PER'] = (eps_n * pl, eps_n * ph, f'{wl} EPS {eps_n:,.0f}원 × 과거 PER {pl:.1f}~{ph:.1f}배' + (f'(연도별 {PER_CAP:.0f}배 상한)' if ph >= PER_CAP else '') + adj_note)
     if 'PBR-ROE' in w and bps > 0:
         g = max(0.0, min(0.03, roe_avg * (1 - payout)))
@@ -655,7 +664,7 @@ def run(code, factor=None, force=None):
         last = i == len(items) - 1
         # 최신 분기의 NAV는 보유 지분을 현재 주가로 평가(지분 시가는 매일 알 수 있으므로)
         nav = nav_at(code, y, q, shares, ofs_L, latest=last) if typ == '지주·투자' else None
-        v = value_at(typ, rows, ys, px, qb, ttm, shares, nav, merged=code in MERGED, code=code)
+        v = value_at(typ, rows, ys, px, qb, ttm, shares, nav, merged=code in MERGED, code=code, q=q)
         if v:
             v['q'] = f'{y}-{q*3:02d}'
             v['fy'] = fy
