@@ -1,0 +1,203 @@
+/* 가치를말하다 다크 테마 (시안 E). 각 페이지 <head> 끝에서 불러온다 — 이 줄만 빼면 원래 테마로 돌아감.
+   토큰은 html:root(:root보다 우선)로 덮고, 기존 CSS의 밝은 리터럴 색은 아래 자동 생성 규칙이 덮는다.
+   gen_theme.py로 다시 만든다(수동 부분 = 이 머리말). */
+@import url('https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700;800;900&display=swap');
+
+html:root{
+  --t-bg:oklch(0.15 0.018 285);
+  --t-card:oklch(0.245 0.026 285);
+  --t-card2:oklch(0.29 0.028 285);
+  --t-edge:oklch(0.36 0.03 285);
+  --t-line:oklch(0.33 0.022 285);
+  --t-fg:oklch(0.94 0.008 285);
+  --t-fg2:oklch(0.82 0.014 285);
+  --t-mute:oklch(0.68 0.02 285);
+  --t-accent:oklch(0.76 0.13 290);
+  --t-up:oklch(0.7 0.18 25);
+  --t-down:oklch(0.72 0.13 250);
+  --t-good:oklch(0.76 0.14 155);
+  --t-shadow:0 6px 18px oklch(0.05 0.02 285 / .45);
+  --t-font:'Gothic A1','Noto Sans KR',system-ui,sans-serif;
+  color-scheme:dark;
+
+  /* 메인(index·portfolio) 토큰 */
+  --color-accent:var(--t-accent);
+  --color-accent-soft:oklch(0.76 0.13 290 / .15);
+  --color-up:var(--t-up);
+  --color-down:var(--t-down);
+  --color-star-active:oklch(0.82 0.15 85);
+  --color-star-inactive:oklch(0.45 0.02 285);
+  --color-bg:var(--t-bg);
+  --color-card-bg:var(--t-card);
+  --color-border:var(--t-edge);
+  --color-text:var(--t-fg);
+  --color-text-secondary:var(--t-mute);
+  --shadow-active-tab:0 1px 3px oklch(0 0 0 / .4);
+
+  /* 종목 상세 토큰 */
+  --dp-accent:var(--t-accent);
+  --dp-accent-soft:oklch(0.76 0.13 290 / .1);
+  --dp-accent-soft2:oklch(0.76 0.13 290 / .2);
+  --dp-up:var(--t-up);
+  --dp-down:var(--t-down);
+  --dp-bg:var(--t-bg);
+  --dp-card:var(--t-card);
+  --dp-border:var(--t-edge);
+  --dp-border2:var(--t-line);
+  --dp-text:var(--t-fg);
+  --dp-text2:var(--t-fg2);
+  --dp-text3:var(--t-mute);
+  --dp-text4:var(--t-mute);
+}
+html body{background:var(--t-bg) !important;color:var(--t-fg);font-family:var(--t-font) !important}
+html body button,html body input,html body select,html body textarea{font-family:inherit}
+html body .box{background:var(--t-bg) !important}
+
+/* SVG 차트(JS가 속성으로 넣는 밝은 격자·글자색) */
+svg [stroke="oklch(0.85 0.005 90)"],svg [stroke="oklch(0.7 0.01 90)"],svg [stroke="oklch(0.9 0.005 90)"],svg [stroke="oklch(0.91 0.005 90)"],svg [stroke="oklch(0.93 0.004 90)"],svg [stroke="#e5e5e5"],svg [stroke="#eee"],svg [stroke="#ddd"]{stroke:var(--t-line)}
+svg text[fill="oklch(0.55 0.02 260)"],svg text[fill="oklch(0.5 0.02 260)"],svg text[fill="oklch(0.45 0.02 260)"],svg text[fill="#888"],svg text[fill="#666"],svg text[fill="#999"],svg text[fill="#9a9a95"]{fill:var(--t-mute)}
+svg text[fill="oklch(0.18 0.02 260)"],svg text[fill="oklch(0.2 0.02 260)"],svg text[fill="#333"],svg text[fill="#222"],svg text[fill="#111"],svg text[fill="#000"]{fill:var(--t-fg)}
+html body .kc-period-btn.active{background:var(--t-accent) !important;color:var(--t-bg) !important}
+svg text[fill="#B02E3C"]{fill:var(--t-up)}
+html body .mover-change.dn{color:var(--t-down) !important}
+html body .mover-change.up{color:var(--t-up) !important}
+/* 구형 레이아웃(삼양식품·농심): 상세 박스가 자체 범위에서 토큰을 다시 정의함 */
+html body .fundlg,html body #dpBuffettBox{
+  --dp-accent:var(--t-accent);--dp-accent-soft:oklch(0.76 0.13 290 / .1);--dp-up:var(--t-up);--dp-down:var(--t-down);
+  --dp-card:var(--t-card);--dp-bg:var(--t-bg);--dp-border:var(--t-edge);--dp-border2:var(--t-line);
+  --dp-text:var(--t-fg);--dp-text2:var(--t-fg2);--dp-text3:var(--t-mute);--dp-text4:var(--t-mute);
+}
+html body .b-fire,html body .b-red,html body .ev-dn{color:var(--t-up) !important}
+html body .b-blue{color:var(--t-down) !important}
+
+
+/* ---- 자동 생성: 기존 밝은 리터럴 색 덮어쓰기 ---- */
+#dpBuffettBox .dpb-rng button.on{color:var(--t-bg) !important}
+.account-tab.active{color:var(--t-bg) !important}
+.b-amber{background:var(--t-card2) !important}
+.b-blue{background:var(--t-card2) !important}
+.b-fire{background:var(--t-card2) !important}
+.b-gray{background:var(--t-card2) !important;color:var(--t-mute) !important}
+.b-green{background:var(--t-card2) !important}
+.b-nong{background:var(--t-card2) !important}
+.b-red{background:var(--t-card2) !important}
+.btn-primary{color:var(--t-bg) !important}
+.daily-movers{border: 1px solid var(--t-line) !important;background:var(--t-card) !important;box-shadow: 0 20px 50px oklch(0.05 0.02 285 / .5) !important}
+.daily-movers-date{color:var(--t-mute) !important}
+.daily-movers-note{color:var(--t-mute) !important}
+.data-note{color:var(--t-mute) !important}
+.dp a{color:var(--t-accent) !important}
+.dp-eps-card{background:var(--t-card2) !important}
+.dp-footer-note{color:var(--t-mute) !important}
+.dp-gauge-track{background:var(--t-card2) !important}
+.dp-insight-b{color:var(--t-fg) !important}
+.dp-logic-txt{color:var(--t-fg) !important}
+.dp-metrics-detail-right{background:var(--t-card2) !important}
+.dp-peercmp{background:var(--t-card2) !important}
+.dp-peercmp-track{background:var(--t-card2) !important}
+.dp-seg{background:var(--t-card2) !important}
+.dp-seg-d{color:var(--t-mute) !important}
+.dp-share{background:var(--t-card2) !important}
+.dp-sidenav button.active{color:var(--t-bg) !important}
+.dp-summary-b{color:var(--t-fg) !important}
+.dp-tab.active{color:var(--t-bg) !important}
+.dp-tl-body{color:var(--t-mute) !important}
+.dp-tscore-track{background:var(--t-card2) !important}
+.dp-vscore-track{background:var(--t-card2) !important}
+.ev-1{background:var(--t-card2) !important}
+.ev-2{background:var(--t-card2) !important;color:var(--t-mute) !important}
+.ev-3{background:var(--t-card2) !important;color:var(--t-mute) !important}
+.ev-4{background:var(--t-card2) !important}
+.ev-5{background:var(--t-card2) !important}
+.ev-dn{background:var(--t-card2) !important}
+.ev-neu{background:var(--t-card2) !important;color:var(--t-mute) !important}
+.ev-up{background:var(--t-card2) !important}
+.fundlg .dp-eps-card{background:var(--t-card2) !important}
+.fundlg .dp-sidenav button.active{color:var(--t-bg) !important}
+.fundlg .fundlg-s{background:var(--t-card2) !important}
+.gate-card a{color:var(--t-bg) !important}
+.hl{background:var(--t-card2) !important}
+.holdings-head{background:var(--t-card2) !important}
+.idx-cmp-card{background:var(--t-card2) !important}
+.idx-ret-item{background:var(--t-card2) !important}
+.idx-vol-badge{background:var(--t-card2) !important}
+.logo-badge{color:var(--t-bg) !important}
+.modal-card{box-shadow: 0 20px 60px oklch(0.05 0.02 285 / .5) !important}
+.modal-row:hover{background:var(--t-card2) !important}
+.mover-close{color:var(--t-mute) !important}
+.mover-group{border: 1px solid var(--t-line) !important;background:var(--t-card) !important}
+.mover-group summary::after{color:var(--t-mute) !important}
+.mover-group-count{color:var(--t-mute) !important}
+.mover-item{border-top: 1px solid var(--t-line) !important}
+.mover-name{color:var(--t-fg) !important}
+.mover-summary-card{border: 1px solid var(--t-line) !important;background:var(--t-card) !important}
+.mover-summary-label{color:var(--t-mute) !important}
+.mover-summary-value{color:var(--t-fg) !important}
+.page-btn.active{color:var(--t-bg) !important}
+.page-btn:hover:not(:disabled){background:var(--t-card2) !important}
+.rank-row:hover{background:var(--t-card2) !important}
+.rank-table-head{background:var(--t-card2) !important}
+.rr-rank{background:var(--t-card2) !important}
+.score-mini{background:var(--t-card2) !important}
+.score-row:hover{background:var(--t-card2) !important}
+.score-sort-btn.active{color:var(--t-bg) !important}
+.score-table-head{background:var(--t-card2) !important}
+.sector-row:hover{background:var(--t-card2) !important}
+.sr2-rank{background:var(--t-card2) !important}
+.tag-big{background:var(--t-card2) !important}
+.tag-neg{background:var(--t-card2) !important}
+.tag-neu{background:var(--t-card2) !important;color:var(--t-mute) !important}
+.tag-pos{background:var(--t-card2) !important}
+.theses-panel{box-shadow: 0 20px 50px oklch(0.05 0.02 285 / .5) !important}
+.tl-dot{border:2px solid var(--t-line) !important}
+.view-toggle{background:var(--t-card2) !important}
+.warn{background:var(--t-card2) !important}
+.wrap{background:var(--t-card) !important}
+footer{color:var(--t-mute) !important}
+#dpBuffettBox .dpb-num,
+#dpBuffettBox .dpb-rng button,
+.account-tab,
+.card,
+.dp-acc,
+.dp-logic-btn,
+.dp-news-date-select,
+.dp-news-summary,
+.dp-sidenav button,
+.dp-tab,
+.dp-tscore-grade,
+.dp-tscore-item,
+.dp-vscore-grade,
+.dp-vscore-item,
+.fav-only-btn,
+.fundlg .dp-sidenav button,
+.gate-card,
+.holdings-card,
+.index-card,
+.market-summary-card,
+.modal-card,
+.page-btn,
+.rank-table,
+.score-sort-btn,
+.sector-list,
+.stat-card,
+.stock-search-input,
+.summary-card,
+.theses-card,
+.theses-datenav button, .theses-datenav select{box-shadow:var(--t-shadow)}
+[style*="background:#E3F2FD"],[style*="background: #E3F2FD"]{background:var(--t-card2) !important}
+[style*="background:#E6F1FB"],[style*="background: #E6F1FB"]{background:var(--t-card2) !important}
+[style*="background:#EAF3DE"],[style*="background: #EAF3DE"]{background:var(--t-card2) !important}
+[style*="background:#F1EFE8"],[style*="background: #F1EFE8"]{background:var(--t-card2) !important}
+[style*="background:#FAEEDA"],[style*="background: #FAEEDA"]{background:var(--t-card2) !important}
+[style*="background:#FCBCBC"],[style*="background: #FCBCBC"]{background:var(--t-card2) !important}
+[style*="background:#FCEBEB"],[style*="background: #FCEBEB"]{background:var(--t-card2) !important}
+[style*="background:#FFF0EB"],[style*="background: #FFF0EB"]{background:var(--t-card2) !important}
+[style*="background:#FFF3E0"],[style*="background: #FFF3E0"]{background:var(--t-card2) !important}
+[style*="background:oklch(0.95 0.004 90)"],[style*="background: oklch(0.95 0.004 90)"]{background:var(--t-card2) !important}
+[style*="background:oklch(0.98 0.004 90)"],[style*="background: oklch(0.98 0.004 90)"]{background:var(--t-card2) !important}
+[style*="background:rgba(255,255,255,0.6)"],[style*="background: rgba(255,255,255,0.6)"]{background:var(--t-card) !important}
+[style*="box-shadow:0 2px 10px rgba(0,0,0,.18)"],[style*="box-shadow: 0 2px 10px rgba(0,0,0,.18)"]{box-shadow:0 2px 10px oklch(0.05 0.02 285 / .5) !important}
+[style*="color:#27500A"],[style*="color: #27500A"]{color:var(--t-mute) !important}
+[style*="color:#412402"],[style*="color: #412402"]{color:var(--t-fg) !important}
+[style*="color:#444441"],[style*="color: #444441"]{color:var(--t-mute) !important}
+[style*="color:#5F5E5A"],[style*="color: #5F5E5A"]{color:var(--t-mute) !important}
