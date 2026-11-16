@@ -1463,6 +1463,17 @@
 
   <main class="page-wrap">
     <h2 class="section-title sr-title" id="mainTitle">KOSPI Top 200</h2>
+    <div class="lead">
+      <section class="market-summary-card" id="marketSummaryCard" hidden>
+        <p class="market-summary-eyebrow">오늘의 시황</p>
+        <div class="market-summary-date" id="marketSummaryDate"></div>
+        <h3 class="market-summary-headline" id="marketSummaryHeadline"></h3>
+        <p class="market-summary-body" id="marketSummaryBody"></p>
+        <button type="button" class="ms-more" id="marketSummaryMore" aria-expanded="false">더보기</button>
+        <ul class="market-summary-refs" id="marketSummaryRefs"></ul>
+      </section>
+      <aside class="lead-stats" id="leadStats" aria-label="오늘의 시장"></aside>
+    </div>
     <div class="top-band">
       <div class="stat-grid" id="statGrid"></div>
       <details class="data-basis">
@@ -1473,13 +1484,6 @@
 
     <div class="index-grid" id="indexGrid"></div>
 
-    <section class="market-summary-card" id="marketSummaryCard" hidden>
-      <p class="market-summary-eyebrow">오늘의 시황</p>
-      <div class="market-summary-date" id="marketSummaryDate"></div>
-      <h3 class="market-summary-headline" id="marketSummaryHeadline"></h3>
-      <p class="market-summary-body" id="marketSummaryBody"></p>
-      <ul class="market-summary-refs" id="marketSummaryRefs"></ul>
-    </section>
 
     <section class="theses-card theses-panel" id="thesesCard" aria-label="오늘의 투자논리">
       <div class="theses-head">
@@ -4988,6 +4992,38 @@
       moversToggleBtn.classList.toggle('has-alerts', n > 0);
     }
 
+    function renderLeadStats() {
+      const el = document.getElementById('leadStats');
+      if (!el) return;
+      const k = marketIndices && marketIndices.KOSPI;
+      let up = 0, flat = 0, dn = 0, under = intrinsicData ? 0 : null;
+      stocksTop.forEach((s) => {
+        const l = stockLive[s.code];
+        if (!l || typeof l.change !== 'number') return;
+        if (l.change > 0) up++; else if (l.change < 0) dn++; else flat++;
+        if (under !== null) { const v = ivVerdict(s, l); if (v && v[0] === 'v-under') under++; }
+      });
+      const tot = up + flat + dn || 1, w = (n) => (n / tot * 100).toFixed(1);
+      let kHtml = '';
+      if (k && typeof k.value === 'number') {
+        const c = typeof k.change === 'number' ? k.change : 0;
+        const cls = c > 0 ? 'ls-up' : c < 0 ? 'ls-dn' : '';
+        kHtml = `<a class="ls-kospi" href="indices/kospi.html"><span>KOSPI</span><b>${k.value.toLocaleString('ko-KR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</b><em class="${cls}">${c > 0 ? '▲' : c < 0 ? '▼' : ''}${Math.abs(c).toFixed(2)}%</em></a>`;
+      }
+      el.innerHTML = kHtml
+        + `<div class="ls-item"><span>내재가치 하단 아래 거래</span><b>${under === null ? '–' : under}</b> 종목</div>`
+        + `<div class="ls-item"><span>상승 비율</span><b>${Math.round(up / tot * 100)}</b>%</div>`
+        + `<div class="ls-breadth"><span>상승 ${up} · 보합 ${flat} · 하락 ${dn}</span>`
+        + `<div class="ls-bar" role="img" aria-label="상승 ${up}, 보합 ${flat}, 하락 ${dn}"><i class="u" style="width:${w(up)}%"></i><i style="width:${w(flat)}%"></i><i class="d" style="width:${w(dn)}%"></i></div></div>`;
+    }
+
+    document.getElementById('marketSummaryMore').addEventListener('click', (e) => {
+      const card = document.getElementById('marketSummaryCard');
+      const open = card.classList.toggle('expanded');
+      e.currentTarget.textContent = open ? '접기' : '더보기';
+      e.currentTarget.setAttribute('aria-expanded', String(open));
+    });
+
     function renderMarketSummary() {
       const card = document.getElementById('marketSummaryCard');
       if (!marketSummary || !marketSummary.headline || !marketSummary.body) {
@@ -5119,7 +5155,7 @@
       if (thesesPanel.classList.contains('open') && !thesesPanel.contains(e.target)) setThesesPanelOpen(false);
     });
 
-    const INDEX_ORDER = ['KOSPI', 'SP500', 'DOW', 'RUSSELL2000', 'NIKKEI', 'USDKRW', 'JPYKRW'];
+    const INDEX_ORDER = ['SP500', 'DOW', 'RUSSELL2000', 'NIKKEI', 'USDKRW', 'JPYKRW'];
     const INDEX_PAGE_MAP = {
       KOSPI: 'indices/kospi.html', SP500: 'indices/sp500.html', DOW: 'indices/dow.html',
       RUSSELL2000: 'indices/russell2000.html', NIKKEI: 'indices/nikkei.html',
@@ -5157,12 +5193,14 @@
     renderStatCards();
     renderMarketIndices();
     renderMarketSummary();
+    renderLeadStats();
     renderTheses();
     renderDailyMovers();
     renderRankView();
     renderSideCards();
     loadIntrinsicData().then(() => {
       renderSideCards();
+      renderLeadStats();
       if (currentView === 'rank' || currentView === 'change') rerenderCurrentView();
     });
 
