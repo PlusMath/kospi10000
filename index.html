@@ -1443,6 +1443,7 @@
       <img src="images/ad_kmong_807696.jpg" alt="나만의 주식 분석 사이트 맞춤 제작" style="display:block;width:160px;height:160px;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.18);">
     </a>
   </div>
+  <div class="ticker"><div class="index-grid" id="indexGrid" aria-label="주요 지수·환율"></div></div>
   <header class="mast">
     <div class="mast-in">
       <div class="mast-brand">
@@ -1481,8 +1482,6 @@
         <p>기준: 매일경제 마켓 코스피 시가총액 순위 상위 200개 종목. KODEX, TIGER, ACE, RISE 등 ETF/ETN은 기업 분석 목적에 맞지 않아 제외하고, 일반 주식과 우선주 중심으로 200개를 정리했습니다. 각 종목 상세 페이지의 등락률을 기준으로 자동 분류합니다. 투자 권고가 아닙니다.</p>
       </details>
     </div>
-
-    <div class="index-grid" id="indexGrid"></div>
 
 
     <section class="theses-card theses-panel" id="thesesCard" aria-label="오늘의 투자논리">
@@ -5183,6 +5182,12 @@
       }).join('');
     }
 
+    // 지수 띠가 헤더 위에 있어 헤더 아래 끝 위치가 스크롤에 따라 바뀜 → 드롭다운 패널 top에 반영
+    (function () {
+      const h = document.querySelector('header.mast');
+      const set = () => document.documentElement.style.setProperty('--mast-b', Math.max(0, h.getBoundingClientRect().bottom) + 'px');
+      set(); addEventListener('scroll', set, { passive: true }); addEventListener('resize', set);
+    })();
     (function () {
       const d = document.querySelector('.daily-movers-date');
       const t = d && d.textContent.trim().replace(/\s*기준$/, '');

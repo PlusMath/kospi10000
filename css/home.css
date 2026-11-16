@@ -72,9 +72,6 @@ header.mast {
 .mast-nav .sep:hover { background: var(--t-line); }
 .mast-nav .auth-btn { border: 1px solid var(--t-line); }
 
-/* 드롭다운 패널(투자논리·5% 변동)을 새 헤더 높이 아래로 */
-.theses-panel, .daily-movers { top: 70px; }
-
 /* 본문 시작 */
 .page-wrap { padding-top: 26px; }
 .sr-title {
@@ -117,35 +114,39 @@ header.mast {
 .data-basis summary:hover { color: var(--t-fg); }
 .data-basis p { margin: 8px 0 0; line-height: 1.6; text-align: left; }
 
-/* 지수 띠 */
-.index-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 10px 0;
-  margin: 0 0 26px;
-}
-.index-card {
+/* 지수 띠: 페이지 맨 위 얇은 시세 줄 (KOSPI는 아래 오른쪽 카드) */
+.ticker { border-bottom: 1px solid var(--t-line); background: var(--t-card); }
+.ticker .index-grid {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 7px 48px;
   display: flex;
-  flex-wrap: wrap;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.ticker .index-grid::-webkit-scrollbar { display: none; }
+.ticker .index-card {
+  display: flex;
   align-items: baseline;
-  column-gap: 8px;
-  row-gap: 2px;
-  min-width: 0;
+  gap: 6px;
+  flex: 0 0 auto;
   background: none;
   border: 0;
   border-left: 1px solid var(--t-line);
   border-radius: 0;
   box-shadow: none;
-  padding: 2px 14px;
-  text-align: left;
+  padding: 0 16px;
+  text-decoration: none;
   white-space: nowrap;
 }
-.index-card:first-child { border-left: 0; padding-left: 0; }
-.index-card:hover { transform: none; }
-.index-card:hover .index-label { color: var(--t-accent); }
-.index-card .index-label { display: block; flex-basis: 100%; margin: 0; font-size: 12px; }
-.index-card .index-value { display: inline; font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; }
-.index-card .index-change { display: inline; font-size: 12px; font-variant-numeric: tabular-nums; }
+.ticker .index-card:first-child { border-left: 0; padding-left: 0; }
+.ticker .index-card:hover { transform: none; }
+.ticker .index-card:hover .index-label { color: var(--t-accent); }
+.ticker .index-label { display: inline; margin: 0; font-size: 12px; }
+.ticker .index-value { display: inline; font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.ticker .index-change { display: inline; font-size: 12px; font-variant-numeric: tabular-nums; }
+.theses-panel, .daily-movers { top: calc(var(--mast-b, 70px) + 8px); max-height: calc(100vh - var(--mast-b, 70px) - 24px); }
 
 @media (max-width: 768px) {
   .mast-in { padding: 10px 16px; }
@@ -160,7 +161,7 @@ header.mast {
   }
   .mast-nav::-webkit-scrollbar { display: none; }
   .mast-nav > * { flex: 0 0 auto; font-size: 13px; padding: 6px 11px; }
-  .theses-panel, .daily-movers { top: 96px; right: 16px; }
+  .theses-panel, .daily-movers { right: 16px; }
 
   .page-wrap { padding-top: 16px; }
   .top-band { align-items: stretch; }
@@ -171,9 +172,8 @@ header.mast {
   .data-basis { max-width: none; width: 100%; }
   .data-basis summary { text-align: left; }
 
-  .index-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 0; margin-bottom: 18px; }
-  .index-card { padding: 2px 12px; }
-  .index-card:nth-child(odd) { border-left: 0; padding-left: 0; }
+  .ticker .index-grid { padding: 6px 16px; }
+  .ticker .index-card { padding: 0 12px; }
 }
 
 /* 오늘의 시황(왼쪽, 작게) + 오늘의 시장 카드(오른쪽, KOSPI) */
