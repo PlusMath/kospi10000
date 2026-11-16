@@ -16,6 +16,8 @@
       --color-accent-soft: oklch(0.47 0.14 258 / 0.09);
       --color-up: oklch(0.56 0.19 25);
       --color-down: oklch(0.55 0.16 240);
+      --color-good: oklch(0.55 0.13 155);
+      --color-good-soft: oklch(0.55 0.13 155 / 0.14);
       --color-star-active: oklch(0.72 0.16 80);
       --color-star-inactive: oklch(0.82 0.008 90);
       --color-bg: oklch(0.98 0.004 90);
@@ -125,7 +127,7 @@
     }
 
     .page-wrap {
-      max-width: 1000px;
+      max-width: 1240px;
       margin: 0 auto;
       padding: 40px 48px 64px;
     }
@@ -598,8 +600,8 @@
     .rank-table-head,
     .rank-row {
       display: grid;
-      grid-template-columns: 44px minmax(140px, 1.6fr) 130px 100px 84px 108px 36px;
-      grid-template-areas: "rank name industry price change mcap star";
+      grid-template-columns: 40px minmax(150px, 1.6fr) 104px 76px 120px 70px 84px 32px;
+      grid-template-areas: "rank name price change range verdict mcap star";
       align-items: center;
       gap: 8px 14px;
       padding: 13px 20px;
@@ -633,6 +635,54 @@
     .rr-change { grid-area: change; font-size: 14px; font-weight: 700; text-align: right; }
     .rr-mcap { grid-area: mcap; font-size: 14px; color: var(--color-text-secondary); text-align: right; }
     .rr-star { grid-area: star; text-align: center; }
+    .rr-name .rr-ind { display: block; margin: 3px 0 0; font-size: 11.5px; font-weight: 500; color: var(--color-text-secondary); }
+    .rr-name .rr-ind { margin-left: 0; }
+    .rr-range { grid-area: range; }
+    .rr-verdict { grid-area: verdict; text-align: center; }
+
+    /* ── 내재가치 범위 막대(초록 = 가중 내재가치 하단~상단, 동그라미 = 현재가) ── */
+    .iv-rng { position: relative; height: 6px; border-radius: 3px; background: var(--color-border); }
+    .iv-rng i { position: absolute; top: 0; bottom: 0; border-radius: 3px; background: var(--color-good); }
+    .iv-rng b { position: absolute; top: -3px; width: 12px; height: 12px; margin-left: -6px; border-radius: 50%; background: var(--color-card-bg); border: 3px solid var(--color-text); }
+    .iv-none { display: block; text-align: center; font-size: 12px; color: var(--color-text-secondary); }
+    .verdict { display: inline-block; font-size: 11.5px; font-weight: 800; padding: 3px 8px; border-radius: 7px; white-space: nowrap; }
+    .v-under { background: var(--color-good); color: var(--color-card-bg); }
+    .v-fair { background: var(--color-good-soft); color: var(--color-good); }
+    .v-over { background: var(--color-border); color: var(--color-text-secondary); }
+    .v-hold { color: var(--color-text-secondary); }
+
+    /* ── 표 + 미니 카드 사이드바 ── */
+    .cov-layout { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 18px; align-items: start; }
+    .cov-main { min-width: 0; }
+    .side-cards { display: flex; flex-direction: column; gap: 10px; position: sticky; top: 88px; }
+    .side-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin: 2px 2px 0; }
+    .side-head h3 { margin: 0; font-size: 14px; font-weight: 800; }
+    .side-tabs { display: flex; gap: 4px; }
+    .side-tabs button { font: inherit; font-size: 12px; font-weight: 700; border: 0; border-radius: 999px; padding: 5px 10px; cursor: pointer; background: var(--color-card-bg); color: var(--color-text-secondary); }
+    .side-tabs button.active { background: var(--color-accent); color: var(--color-bg); }
+    .mini { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; padding: 12px 14px; border-radius: 16px; background: var(--color-card-bg); border: 1px solid var(--color-border); text-decoration: none; color: inherit; transition: transform .15s; }
+    .mini:hover { transform: translateY(-2px); }
+    .mini:focus-visible, .side-tabs button:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) { .mini { transition: none; } .mini:hover { transform: none; } }
+    .mini-n { font-size: 14px; font-weight: 800; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .mini-m { font-size: 11px; color: var(--color-text-secondary); }
+    .mini-p { text-align: right; font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .mini-c { text-align: right; font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .mini .iv-rng { grid-column: 1 / -1; margin: 10px 0 6px; }
+    .mini-g { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 11px; color: var(--color-text-secondary); font-variant-numeric: tabular-nums; }
+    .mini-score { font-weight: 800; font-size: 11px; border-radius: 6px; padding: 2px 7px; white-space: nowrap; }
+    .ms-hi { background: var(--color-good); color: var(--color-card-bg); }
+    .ms-mid { background: var(--color-accent-soft); color: var(--color-accent); }
+    .ms-lo { background: var(--color-border); color: var(--color-text-secondary); }
+    .side-empty { font-size: 13px; color: var(--color-text-secondary); padding: 12px 4px; }
+    @media (max-width: 1080px) {
+      .cov-layout { grid-template-columns: 1fr; }
+      .side-cards { position: static; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+      .side-head { grid-column: 1 / -1; }
+    }
+    @media (max-width: 768px) {
+      .rr-range, .rr-verdict { display: none; }
+    }
 
     .industry-badge {
       display: inline-block;
@@ -1475,6 +1525,8 @@
       </div>
     </div>
 
+    <div class="cov-layout">
+    <div class="cov-main">
     <div class="toolbar">
       <div class="view-toggle" aria-label="보기 방식 선택">
         <button class="view-btn active" type="button" id="rankViewBtn">순위별 보기</button>
@@ -1496,6 +1548,9 @@
     </div>
 
     <section id="stockArea"></section>
+    </div>
+    <aside class="side-cards" id="sideCards" aria-label="눈여겨볼 종목"></aside>
+    </div>
 
     <section class="daily-movers" aria-labelledby="dailyMoversTitle">
       <div class="daily-movers-header">
@@ -4287,6 +4342,67 @@
       if (e.key === 'Escape') closeMoverModal();
     });
 
+    // ── 내재가치 범위 막대·판단 배지 (intrinsic_value.json 로드 전엔 비움) ──
+    function ivEntry(stock, live) {
+      const e = intrinsicData && intrinsicData[stock.code];
+      if (!e || !(e.low > 0) || !(e.high > 0) || !live || !(live.price > 0)) return null;
+      return e;
+    }
+    function ivRangeHtml(stock, live) {
+      const e = ivEntry(stock, live);
+      if (!e) return intrinsicData ? '<span class="iv-none">—</span>' : '';
+      if (e.hold) return '<span class="iv-none">평가 보류</span>';
+      const lo = Math.min(e.low, live.price) * 0.85, hi = Math.max(e.high, live.price) * 1.08;
+      const x = (v) => ((v - lo) / (hi - lo) * 100).toFixed(1);
+      const tip = `내재가치 ${e.low.toLocaleString('ko-KR')}~${e.high.toLocaleString('ko-KR')}원 · 현재가 ${live.price.toLocaleString('ko-KR')}원`;
+      return `<div class="iv-rng" title="${tip}"><i style="left:${x(e.low)}%;width:${(x(e.high) - x(e.low)).toFixed(1)}%"></i><b style="left:${x(live.price)}%"></b></div>`;
+    }
+    function ivVerdict(stock, live) {
+      const e = ivEntry(stock, live);
+      if (!e) return null;
+      if (e.hold) return ['v-hold', '보류'];
+      return live.price < e.low ? ['v-under', '저평가'] : live.price > e.high ? ['v-over', '고평가'] : ['v-fair', '범위 안'];
+    }
+    function ivVerdictHtml(stock, live) {
+      const v = ivVerdict(stock, live);
+      return v ? `<span class="verdict ${v[0]}">${v[1]}</span>` : '';
+    }
+
+    // ── 표 옆 미니 카드: 기본적 매력도 상위 / 오늘 5% 이상 변동 ──
+    let sideMode = 'score';
+    function miniCardHtml(stock) {
+      const live = stockLive[stock.code];
+      const hasChange = live && typeof live.change === 'number';
+      const v = ivVerdict(stock, live);
+      const e = ivEntry(stock, live);
+      const sc = stock.vscore;
+      const scCls = sc >= 70 ? 'ms-hi' : sc >= 50 ? 'ms-mid' : 'ms-lo';
+      const rangeTxt = e && !e.hold ? `${e.low.toLocaleString('ko-KR')}~${e.high.toLocaleString('ko-KR')}` : '';
+      return `<a class="mini" href="${stock.page}">
+        <div><div class="mini-n">${stock.name}</div><div class="mini-m">${stock.code} · ${stock.industry}</div></div>
+        <div><div class="mini-p">${live ? live.price.toLocaleString('ko-KR') : '—'}</div><div class="mini-c ${hasChange ? (live.change >= 0 ? 'up' : 'dn') : ''}">${hasChange ? fmtChange(live.change) : ''}</div></div>
+        ${ivRangeHtml(stock, live)}
+        <div class="mini-g"><span>${v ? v[1] : ''}${rangeTxt ? ' · ' + rangeTxt : ''}</span>${sc != null ? `<span class="mini-score ${scCls}">매력도 ${sc}</span>` : ''}</div>
+      </a>`;
+    }
+    function renderSideCards() {
+      const box = document.getElementById('sideCards');
+      if (!box) return;
+      let list;
+      if (sideMode === 'score') {
+        list = stocksTop.filter((s) => s.vscore != null).sort((a, b) => b.vscore - a.vscore).slice(0, 5);
+      } else {
+        list = stocksTop
+          .filter((s) => stockLive[s.code] && typeof stockLive[s.code].change === 'number' && Math.abs(stockLive[s.code].change) >= 5)
+          .sort((a, b) => Math.abs(stockLive[b.code].change) - Math.abs(stockLive[a.code].change))
+          .slice(0, 6);
+      }
+      box.innerHTML = `<div class="side-head"><h3>${sideMode === 'score' ? '기본적 매력도 상위' : '오늘 5% 이상 변동'}</h3>
+        <div class="side-tabs"><button type="button" data-m="score" class="${sideMode === 'score' ? 'active' : ''}">매력도</button><button type="button" data-m="move" class="${sideMode === 'move' ? 'active' : ''}">5% 변동</button></div></div>`
+        + (list.length ? list.map(miniCardHtml).join('') : '<p class="side-empty">해당하는 종목이 없습니다.</p>');
+      box.querySelectorAll('.side-tabs button').forEach((b) => b.addEventListener('click', () => { sideMode = b.dataset.m; renderSideCards(); }));
+    }
+
     // ── 순위별 뷰 ──
     function createRankRow(stock) {
       const row = document.createElement('div');
@@ -4301,13 +4417,14 @@
       row.innerHTML = `
         <div class="rr-rank" role="cell">${rankOf(stock)}</div>
         <div class="rr-name-group">
-          <div class="rr-name" role="cell">${stock.name}<small>${stock.code}</small></div>
-          <div role="cell"><span class="industry-badge">${stock.industry}</span></div>
+          <div class="rr-name" role="cell">${stock.name}<small>${stock.code}</small><span class="rr-ind">${stock.industry}</span></div>
         </div>
         <div class="rr-price-group">
           <div class="rr-price" role="cell">${live ? fmtWon(live.price) : '—'}</div>
           <div class="rr-change ${hasChange ? (live.change >= 0 ? 'up' : 'dn') : ''}" role="cell">${hasChange ? fmtChange(live.change) : '—'}</div>
         </div>
+        <div class="rr-range" role="cell">${ivRangeHtml(stock, live)}</div>
+        <div class="rr-verdict" role="cell">${ivVerdictHtml(stock, live)}</div>
         <div class="rr-mcap" role="cell">${fmtMcap(mcap)}</div>
         <div class="rr-star" role="cell"><button type="button" class="star-btn ${isFav ? 'active' : ''}" aria-label="즐겨찾기">${isFav ? '★' : '☆'}</button></div>
       `;
@@ -4383,9 +4500,10 @@
       head.innerHTML = `
         <div role="columnheader">순위</div>
         <div role="columnheader">종목명</div>
-        <div role="columnheader">업종</div>
         <div role="columnheader" style="text-align:right;">현재가</div>
         <div role="columnheader" style="text-align:right;">등락률</div>
+        <div role="columnheader" title="초록 막대: 가중 내재가치 하단~상단, 동그라미: 현재가">내재가치 범위</div>
+        <div role="columnheader" style="text-align:center;">판단</div>
         <div role="columnheader" style="text-align:right;">시가총액</div>
         <div role="columnheader"></div>
       `;
@@ -4459,9 +4577,10 @@
       head.innerHTML = `
         <div role="columnheader">순위</div>
         <div role="columnheader">종목명</div>
-        <div role="columnheader">업종</div>
         <div role="columnheader" style="text-align:right;">현재가</div>
         <div role="columnheader" style="text-align:right;">등락률</div>
+        <div role="columnheader" title="초록 막대: 가중 내재가치 하단~상단, 동그라미: 현재가">내재가치 범위</div>
+        <div role="columnheader" style="text-align:center;">판단</div>
         <div role="columnheader" style="text-align:right;">시가총액</div>
         <div role="columnheader"></div>
       `;
@@ -5052,6 +5171,11 @@
     renderTheses();
     renderDailyMovers();
     renderRankView();
+    renderSideCards();
+    loadIntrinsicData().then(() => {
+      renderSideCards();
+      if (currentView === 'rank' || currentView === 'change') rerenderCurrentView();
+    });
 
     // ── 로그인 상태 표시 (카카오/네이버 로그인, auth.kospi10000.kr에서 세션 확인) ──
     // 세션 쿠키는 .kospi10000.kr로 공유되지만 httpOnly라 여기서 직접 못 읽고,

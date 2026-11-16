@@ -72,6 +72,23 @@ def map_decl(prop, val):
     return None
 
 
+def split_media(st):
+    """style 텍스트 → [(media 조건 or '', 규칙 텍스트)]. @media 안 규칙은 같은 @media로 감싸 출력해야
+    (평평하게 하면 모바일 전용 배경이 데스크톱에도 걸림)."""
+    out, i, top = [], 0, []
+    while True:
+        j = st.find('@media', i)
+        if j < 0:
+            top.append(st[i:]); break
+        top.append(st[i:j])
+        k = st.index('{', j); cond = ' '.join(st[j + 6:k].split())
+        depth, q = 1, k + 1
+        while depth:
+            depth += {'{': 1, '}': -1}.get(st[q], 0); q += 1
+        out.append((cond, st[k + 1:q - 1])); i = q
+    return [('', ''.join(top))] + out
+
+
 rules = {}
 cards = set()
 inline_vals = set()
@@ -79,10 +96,10 @@ for p in ['index.html', 'portfolio.html'] + sorted(glob.glob('stocks/*_*.html'))
     s = open(p, encoding='utf-8-sig').read()
     for st in re.findall(r'<style[^>]*>(.*?)</style>', s, re.S):
         st = re.sub(r'/\*.*?\*/', '', st, flags=re.S)
-        # @media 안 규칙도 같은 선택자로 평평하게(밝기만 바꾸므로 무방)
-        for m in re.finditer(r'([^{}@;]+)\{([^{}]*)\}', st):
-            sel = ' '.join(m.group(1).split())
-            if sel.startswith(':root') or not sel or sel[0].isdigit():
+        for media, chunk in split_media(st):
+          for m in re.finditer(r'([^{}@;]+)\{([^{}]*)\}', chunk):
+            sel = (media, ' '.join(m.group(1).split()))
+            if sel[1].startswith(':root') or not sel[1] or sel[1][0].isdigit():
                 continue
             for d in m.group(2).split(';'):
                 if ':' not in d: continue
@@ -96,8 +113,8 @@ for p in ['index.html', 'portfolio.html'] + sorted(glob.glob('stocks/*_*.html'))
             if re.search(r'background(-color)?:var\(--(color|dp)-accent\)', body) and re.search(r'(?<![-\w])color:(#fff(?![0-9a-f])|#ffffff|white)', body):
                 rules.setdefault(sel, {})['color'] = 'var(--t-bg)'
             # 카드 배경 요소는 바탕과 구분되게 그림자
-            if re.search(r'background(-color)?:var\(--(color-card-bg|dp-card)\)', body) and 'border-radius' in body:
-                cards.add(sel)
+            if re.search(r'background(-color)?:var\(--(color-card-bg|dp-card)\)', body) and 'border-radius' in body and not media:
+                cards.add(sel[1])
     for m in re.finditer(r'style="([^"]*)"', s):
         for d in m.group(1).split(';'):
             if ':' not in d: continue
@@ -107,8 +124,9 @@ for p in ['index.html', 'portfolio.html'] + sorted(glob.glob('stocks/*_*.html'))
                 inline_vals.add((k.strip(), v.strip(), r[0], r[1]))
 
 out = [open(os.path.join(SP, 'theme_manual.css'), encoding='utf-8').read(), '\n/* ---- 자동 생성: 기존 밝은 리터럴 색 덮어쓰기 ---- */']
-for sel, ds in sorted(rules.items()):
-    out.append(sel + '{' + ';'.join(f'{k}:{v} !important' for k, v in ds.items()) + '}')
+for (media, sel), ds in sorted(rules.items()):
+    r = sel + '{' + ';'.join(f'{k}:{v} !important' for k, v in ds.items()) + '}'
+    out.append(f'@media {media}{{{r}}}' if media else r)
 out.append(',\n'.join(sorted(cards)) + '{box-shadow:var(--t-shadow)}')
 for k, v, nk, nv in sorted(inline_vals):
     out.append(f'[style*="{k}:{v}"],[style*="{k}: {v}"]{{{nk}:{nv} !important}}')
