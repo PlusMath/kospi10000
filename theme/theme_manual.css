@@ -1,0 +1,71 @@
+/* 가치를말하다 다크 테마 (시안 E). 각 페이지 <head> 끝에서 불러온다 — 이 줄만 빼면 원래 테마로 돌아감.
+   토큰은 html:root(:root보다 우선)로 덮고, 기존 CSS의 밝은 리터럴 색은 아래 자동 생성 규칙이 덮는다.
+   theme/gen_theme.py로 다시 만든다. 손으로 고칠 땐 theme/theme_manual.css를 고치고 재생성(css/theme.css 직접 수정 금지). */
+@import url('https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700;800;900&display=swap');
+
+html:root{
+  --t-bg:oklch(0.15 0.018 285);
+  --t-card:oklch(0.245 0.026 285);
+  --t-card2:oklch(0.29 0.028 285);
+  --t-edge:oklch(0.36 0.03 285);
+  --t-line:oklch(0.33 0.022 285);
+  --t-fg:oklch(0.94 0.008 285);
+  --t-fg2:oklch(0.82 0.014 285);
+  --t-mute:oklch(0.68 0.02 285);
+  --t-accent:oklch(0.76 0.13 290);
+  --t-up:oklch(0.7 0.18 25);
+  --t-down:oklch(0.72 0.13 250);
+  --t-good:oklch(0.76 0.14 155);
+  --t-shadow:0 6px 18px oklch(0.05 0.02 285 / .45);
+  --t-font:'Gothic A1','Noto Sans KR',system-ui,sans-serif;
+  color-scheme:dark;
+
+  /* 메인(index·portfolio) 토큰 */
+  --color-accent:var(--t-accent);
+  --color-accent-soft:oklch(0.76 0.13 290 / .15);
+  --color-up:var(--t-up);
+  --color-down:var(--t-down);
+  --color-star-active:oklch(0.82 0.15 85);
+  --color-star-inactive:oklch(0.45 0.02 285);
+  --color-bg:var(--t-bg);
+  --color-card-bg:var(--t-card);
+  --color-border:var(--t-edge);
+  --color-text:var(--t-fg);
+  --color-text-secondary:var(--t-mute);
+  --shadow-active-tab:0 1px 3px oklch(0 0 0 / .4);
+
+  /* 종목 상세 토큰 */
+  --dp-accent:var(--t-accent);
+  --dp-accent-soft:oklch(0.76 0.13 290 / .1);
+  --dp-accent-soft2:oklch(0.76 0.13 290 / .2);
+  --dp-up:var(--t-up);
+  --dp-down:var(--t-down);
+  --dp-bg:var(--t-bg);
+  --dp-card:var(--t-card);
+  --dp-border:var(--t-edge);
+  --dp-border2:var(--t-line);
+  --dp-text:var(--t-fg);
+  --dp-text2:var(--t-fg2);
+  --dp-text3:var(--t-mute);
+  --dp-text4:var(--t-mute);
+}
+html body{background:var(--t-bg) !important;color:var(--t-fg);font-family:var(--t-font) !important}
+html body button,html body input,html body select,html body textarea{font-family:inherit}
+html body .box{background:var(--t-bg) !important}
+
+/* SVG 차트(JS가 속성으로 넣는 밝은 격자·글자색) */
+svg [stroke="oklch(0.85 0.005 90)"],svg [stroke="oklch(0.7 0.01 90)"],svg [stroke="oklch(0.9 0.005 90)"],svg [stroke="oklch(0.91 0.005 90)"],svg [stroke="oklch(0.93 0.004 90)"],svg [stroke="#e5e5e5"],svg [stroke="#eee"],svg [stroke="#ddd"]{stroke:var(--t-line)}
+svg text[fill="oklch(0.55 0.02 260)"],svg text[fill="oklch(0.5 0.02 260)"],svg text[fill="oklch(0.45 0.02 260)"],svg text[fill="#888"],svg text[fill="#666"],svg text[fill="#999"],svg text[fill="#9a9a95"]{fill:var(--t-mute)}
+svg text[fill="oklch(0.18 0.02 260)"],svg text[fill="oklch(0.2 0.02 260)"],svg text[fill="#333"],svg text[fill="#222"],svg text[fill="#111"],svg text[fill="#000"]{fill:var(--t-fg)}
+html body .kc-period-btn.active{background:var(--t-accent) !important;color:var(--t-bg) !important}
+svg text[fill="#B02E3C"]{fill:var(--t-up)}
+html body .mover-change.dn{color:var(--t-down) !important}
+html body .mover-change.up{color:var(--t-up) !important}
+/* 구형 레이아웃(삼양식품·농심): 상세 박스가 자체 범위에서 토큰을 다시 정의함 */
+html body .fundlg,html body #dpBuffettBox{
+  --dp-accent:var(--t-accent);--dp-accent-soft:oklch(0.76 0.13 290 / .1);--dp-up:var(--t-up);--dp-down:var(--t-down);
+  --dp-card:var(--t-card);--dp-bg:var(--t-bg);--dp-border:var(--t-edge);--dp-border2:var(--t-line);
+  --dp-text:var(--t-fg);--dp-text2:var(--t-fg2);--dp-text3:var(--t-mute);--dp-text4:var(--t-mute);
+}
+html body .b-fire,html body .b-red,html body .ev-dn{color:var(--t-up) !important}
+html body .b-blue{color:var(--t-down) !important}
