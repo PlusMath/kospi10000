@@ -1,0 +1,177 @@
+/* 메인 최상단 정리 (시안 E 마스트헤드 방식)
+   - 헤더: 왼쪽 워드마크 + 기준일, 오른쪽 알약 메뉴. 바탕색과 같은 띠로 카드 느낌 제거
+   - 요약 수치·지수: 카드 상자 대신 세로 구분선만 있는 띠 두 줄
+   - 큰 제목과 긴 집계 기준 문단은 접어 두는 "집계 기준"으로 */
+
+header.mast {
+  display: block;
+  min-height: 0;
+  padding: 0;
+  background: color-mix(in oklch, var(--t-bg) 88%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--t-line);
+}
+.mast-in {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 14px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  flex-wrap: wrap;
+}
+.mast-brand { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; min-width: 0; }
+.mast-brand h1 { margin: 0; font-size: 24px; font-weight: 900; letter-spacing: -0.03em; line-height: 1.1; }
+.mast-brand h1 a { color: var(--t-fg); text-decoration: none; }
+.mast-brand h1 span { color: var(--t-accent); }
+.mast-brand small { color: var(--t-mute); font-size: 12px; font-variant-numeric: tabular-nums; }
+
+.mast-nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.mast-nav > * {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  border-radius: 999px;
+  padding: 7px 13px;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--t-mute);
+  background: none;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.mast-nav > *:hover { color: var(--t-fg); background: var(--t-card); }
+.mast-nav > .on { background: var(--t-fg); color: var(--t-bg); cursor: default; }
+.mast-nav > [aria-expanded="true"] { background: var(--t-fg); color: var(--t-bg); }
+.mast-nav > *:focus-visible { outline: 2px solid var(--t-accent); outline-offset: 2px; }
+.mast-nav > [hidden] { display: none; }
+.mast-nav .n {
+  min-width: 20px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--t-card2);
+  color: var(--t-fg);
+  font-size: 11.5px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.mast-nav .movers-toggle-btn.has-alerts { background: none; color: var(--t-mute); }
+.mast-nav .movers-toggle-btn.has-alerts:hover { background: var(--t-card); color: var(--t-fg); }
+.mast-nav .movers-toggle-btn[aria-expanded="true"] { background: var(--t-fg); color: var(--t-bg); }
+.mast-nav .movers-toggle-btn.has-alerts .n { background: var(--t-up); color: var(--t-bg); }
+.mast-nav .fav-count { border: 0; padding: 7px 13px; color: var(--t-mute); cursor: default; }
+.mast-nav .fav-count:hover { background: none; color: var(--t-mute); }
+.mast-nav .fav-count .n { background: oklch(0.82 0.14 85 / .2); color: oklch(0.86 0.14 85); }
+.mast-nav .sep { width: 1px; height: 18px; padding: 0; margin: 0 6px; background: var(--t-line); cursor: default; }
+.mast-nav .sep:hover { background: var(--t-line); }
+.mast-nav .auth-btn { border: 1px solid var(--t-line); }
+
+/* 드롭다운 패널(투자논리·5% 변동)을 새 헤더 높이 아래로 */
+.theses-panel, .daily-movers { top: 70px; }
+
+/* 본문 시작 */
+.page-wrap { padding-top: 26px; }
+.sr-title {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* 요약 수치 띠 */
+.top-band {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 24px;
+  flex-wrap: wrap;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--t-line);
+  margin-bottom: 14px;
+}
+.top-band .stat-grid { display: flex; flex-wrap: wrap; gap: 10px 0; margin: 0; }
+.top-band .stat-card {
+  background: none;
+  border: 0;
+  border-left: 1px solid var(--t-line);
+  border-radius: 0;
+  box-shadow: none;
+  padding: 2px 26px;
+}
+.top-band .stat-card:first-child { border-left: 0; padding-left: 0; }
+.top-band .stat-card.clickable:hover { background: none; transform: none; }
+.top-band .stat-card.clickable:hover .stat-label { color: var(--t-fg); }
+.top-band .stat-label { font-size: 12px; margin-bottom: 4px; }
+.top-band .stat-value { font-size: 26px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.top-band .stat-unit { font-size: 13px; }
+
+.data-basis { font-size: 12px; color: var(--t-mute); max-width: 520px; }
+.data-basis summary { cursor: pointer; list-style: none; text-align: right; }
+.data-basis summary::-webkit-details-marker { display: none; }
+.data-basis summary::after { content: ' ▾'; }
+.data-basis[open] summary::after { content: ' ▴'; }
+.data-basis summary:hover { color: var(--t-fg); }
+.data-basis p { margin: 8px 0 0; line-height: 1.6; text-align: left; }
+
+/* 지수 띠 */
+.index-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px 0;
+  margin: 0 0 26px;
+}
+.index-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 8px;
+  row-gap: 2px;
+  min-width: 0;
+  background: none;
+  border: 0;
+  border-left: 1px solid var(--t-line);
+  border-radius: 0;
+  box-shadow: none;
+  padding: 2px 14px;
+  text-align: left;
+  white-space: nowrap;
+}
+.index-card:first-child { border-left: 0; padding-left: 0; }
+.index-card:hover { transform: none; }
+.index-card:hover .index-label { color: var(--t-accent); }
+.index-card .index-label { display: block; flex-basis: 100%; margin: 0; font-size: 12px; }
+.index-card .index-value { display: inline; font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.index-card .index-change { display: inline; font-size: 12px; font-variant-numeric: tabular-nums; }
+
+@media (max-width: 768px) {
+  .mast-in { padding: 10px 16px; }
+  .mast-brand h1 { font-size: 20px; }
+  .mast-nav {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    width: calc(100% + 32px);
+    margin: 0 -16px;
+    padding: 0 16px;
+  }
+  .mast-nav::-webkit-scrollbar { display: none; }
+  .mast-nav > * { flex: 0 0 auto; font-size: 13px; padding: 6px 11px; }
+  .theses-panel, .daily-movers { top: 96px; right: 16px; }
+
+  .page-wrap { padding-top: 16px; }
+  .top-band { align-items: stretch; }
+  .top-band .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); width: 100%; row-gap: 12px; }
+  .top-band .stat-card { padding: 2px 14px; }
+  .top-band .stat-card:nth-child(odd) { border-left: 0; padding-left: 0; }
+  .top-band .stat-value { font-size: 22px; }
+  .data-basis { max-width: none; width: 100%; }
+  .data-basis summary { text-align: left; }
+
+  .index-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 0; margin-bottom: 18px; }
+  .index-card { padding: 2px 12px; }
+  .index-card:nth-child(odd) { border-left: 0; padding-left: 0; }
+}

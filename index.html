@@ -1433,6 +1433,7 @@
     }
   </style>
 <link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/home.css">
 </head>
 
 <body>
@@ -1442,32 +1443,33 @@
       <img src="images/ad_kmong_807696.jpg" alt="나만의 주식 분석 사이트 맞춤 제작" style="display:block;width:160px;height:160px;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.18);">
     </a>
   </div>
-  <header>
-    <div class="header-brand">
-      <div class="logo-badge">주</div>
-      <div>
-        <h1>가치를말하다</h1>
-        <p>KOSPI 분석</p>
+  <header class="mast">
+    <div class="mast-in">
+      <div class="mast-brand">
+        <h1><a href="./">가치를<span>말하다</span></a></h1>
+        <small id="mastSub">KOSPI 시가총액 상위 200</small>
       </div>
+      <nav class="mast-nav" aria-label="메뉴">
+        <span class="on" aria-current="page">커버리지</span>
+        <button type="button" class="movers-toggle-btn theses-toggle-btn" id="thesesToggleBtn" aria-expanded="false" hidden>투자논리 <span class="n" id="thesesToggleCount">0</span></button>
+        <button type="button" class="movers-toggle-btn" id="moversToggleBtn" aria-expanded="false">5% 변동 <span class="n" id="moversToggleCount">0</span></button>
+        <span class="fav-count" title="즐겨찾기 종목 수">★ 즐겨찾기 <span class="n" id="favCount">0</span></span>
+        <span class="sep" aria-hidden="true"></span>
+        <a href="portfolio.html" class="auth-btn">내 보유종목</a>
+        <a href="#" class="auth-btn" id="authBtn">로그인</a>
+      </nav>
     </div>
-    <nav class="market-switch" aria-label="시장 선택">
-      <span class="market-switch-btn active">🇰🇷 KOSPI Top 200</span>
-      <span class="fav-count">★ <span id="favCount">0</span></span>
-      <button type="button" class="movers-toggle-btn theses-toggle-btn" id="thesesToggleBtn" aria-expanded="false" hidden>💡 투자논리 <span id="thesesToggleCount">0</span></button>
-      <button type="button" class="movers-toggle-btn" id="moversToggleBtn" aria-expanded="false">🔔 종목별 5%+ 변동 <span id="moversToggleCount">0</span></button>
-      <a href="portfolio.html" class="auth-btn">내 보유종목</a>
-      <a href="#" class="auth-btn" id="authBtn">로그인</a>
-    </nav>
   </header>
 
   <main class="page-wrap">
-    <h2 class="section-title" id="mainTitle">KOSPI Top 200</h2>
-    <p class="data-note" style="margin:0 0 0;text-align:left;max-width:none;">
-      기준: 매일경제 마켓 코스피 시가총액 순위 상위 200개 종목.
-      KODEX, TIGER, ACE, RISE 등 ETF/ETN은 기업 분석 목적에 맞지 않아 제외하고, 일반 주식과 우선주 중심으로 200개를 정리했습니다. 각 종목 상세 페이지의 등락률을 기준으로 자동 분류합니다. 투자 권고가 아닙니다.
-    </p>
-
-    <div class="stat-grid" id="statGrid"></div>
+    <h2 class="section-title sr-title" id="mainTitle">KOSPI Top 200</h2>
+    <div class="top-band">
+      <div class="stat-grid" id="statGrid"></div>
+      <details class="data-basis">
+        <summary>집계 기준</summary>
+        <p>기준: 매일경제 마켓 코스피 시가총액 순위 상위 200개 종목. KODEX, TIGER, ACE, RISE 등 ETF/ETN은 기업 분석 목적에 맞지 않아 제외하고, 일반 주식과 우선주 중심으로 200개를 정리했습니다. 각 종목 상세 페이지의 등락률을 기준으로 자동 분류합니다. 투자 권고가 아닙니다.</p>
+      </details>
+    </div>
 
     <div class="index-grid" id="indexGrid"></div>
 
@@ -5145,6 +5147,11 @@
       }).join('');
     }
 
+    (function () {
+      const d = document.querySelector('.daily-movers-date');
+      const t = d && d.textContent.trim().replace(/\s*기준$/, '');
+      if (t) document.getElementById('mastSub').textContent = `KOSPI 시가총액 상위 200 · ${t}`;
+    })();
     updateFavCount();
     updateMoversToggleBadge();
     renderStatCards();
