@@ -5,14 +5,45 @@
   if (!box || !pEl) return;
   const price = box.dataset.price ? +box.dataset.price : parseFloat(pEl.textContent.replace(/[^0-9.]/g, ''));
   const low = +box.dataset.ivLow, high = +box.dataset.ivHigh;
-  document.getElementById('dpbPrice').textContent = price.toLocaleString() + '원';
-  let verdict, color;
-  if (price < low) { verdict = '내재가치 하단 아래 — 저평가'; color = 'var(--dp-up)'; }
-  else if (price <= high) { verdict = '내재가치 범위 안 — 적정 가치 수준'; color = 'var(--dp-text2)'; }
-  else { verdict = '내재가치 상단 초과 — 고평가'; color = 'var(--dp-down)'; }
-  if (box.dataset.hold) { verdict = '평가 보류 — 적자·고성장 단계라 장부가치 기준 참고값만 제시'; color = 'var(--dp-text3)'; }
-  const vEl = document.getElementById('dpbVerdict');
-  vEl.textContent = verdict; vEl.style.color = color;
+  const won = (v) => Math.round(v).toLocaleString() + '원';
+  // 한 줄 판단 + 배지(리포트형). 구형 박스(dpbPrice 숫자 칸)도 계속 채움
+  let verdict, badge, cls;
+  if (box.dataset.hold) { badge = '평가 보류'; cls = 'hold'; verdict = '적자·고성장 단계라 장부가치 기준 참고값만 제시합니다.'; }
+  else if (price < low) { badge = '저평가'; cls = 'under'; verdict = `현재가 ${won(price)}은 내재가치 하단 ${won(low)}보다 ${Math.round((1 - price / low) * 100)}% 낮습니다. 보수적으로 잡은 가치보다도 싼 구간입니다.`; }
+  else if (price <= high) { badge = '범위 안'; cls = 'fair'; verdict = `현재가 ${won(price)}은 내재가치 범위 ${won(low)}~${won(high)} 안, 하단에서 ${Math.round((price - low) / (high - low) * 100)}% 지점에 있습니다.`; }
+  else { badge = '고평가'; cls = 'over'; verdict = `현재가 ${won(price)}은 내재가치 상단 ${won(high)}보다 ${Math.round((price / high - 1) * 100)}% 높습니다. 지금의 이익 수준이 오래 이어진다는 기대가 주가에 들어 있다는 뜻입니다.`; }
+  const bEl = document.getElementById('dpbBadge');
+  if (bEl) { bEl.textContent = badge; bEl.className = 'dpb-badge ' + cls; }
+  document.getElementById('dpbVerdict').textContent = bEl ? verdict : badge + ' — ' + verdict;
+  const pOld = document.getElementById('dpbPrice');
+  if (pOld) pOld.textContent = won(price);
+  // 범위 막대: 초록 = 가중 내재가치 하단~상단, 빨간 선 = 현재가
+  const bar = document.getElementById('dpbBar');
+  if (bar && low >= 0 && high > 0) {
+    const a = Math.min(low, price) * 0.85, b = Math.max(high, price) * 1.08, x = (v) => (v - a) / (b - a) * 100;
+    bar.innerHTML = `<div class="ax"></div><div class="band" style="left:${x(low)}%;width:${x(high) - x(low)}%"></div><div class="now" style="left:${x(price)}%"></div>`
+      + `<label class="lo"><small>하단</small>${Math.round(low).toLocaleString()}</label>`
+      + `<label class="hi"><small>상단</small>${Math.round(high).toLocaleString()}</label>`
+      + `<label class="cur"><small>현재가</small>${Math.round(price).toLocaleString()}</label>`;
+    // 라벨 배치(px): 각자 기준점 가운데 → 하단·상단이 겹치면 둘 사이 가운데를 기준으로 좌우로 벌림 → 막대 안으로 밀어 넣음
+    const place = () => {
+      const W = bar.clientWidth;
+      if (!W) return;
+      const [lo, hi, cur] = ['lo', 'hi', 'cur'].map((c) => bar.querySelector('label.' + c));
+      const fit = (l, w) => Math.min(Math.max(l, 0), W - w);
+      const wl = lo.offsetWidth, wh = hi.offsetWidth, wc = cur.offsetWidth;
+      const pl = x(low) / 100 * W, ph = x(high) / 100 * W;
+      let ll = pl - wl / 2, lh = ph - wh / 2;
+      if (ll + wl + 8 > lh) { const mid = (pl + ph) / 2; ll = mid - 4 - wl; lh = mid + 4; }
+      ll = fit(ll, wl); lh = fit(lh, wh);
+      if (ll + wl + 8 > lh) { if (lh + wh >= W) ll = lh - 8 - wl; else lh = ll + wl + 8; }
+      lo.style.left = ll + 'px'; hi.style.left = lh + 'px';
+      cur.style.left = fit(x(price) / 100 * W - wc / 2, wc) + 'px';
+      [lo, hi, cur].forEach((e) => { e.style.transform = 'none'; });
+    };
+    place();
+    window.addEventListener('resize', place);
+  } else if (bar) bar.hidden = true;
   const svg = document.getElementById('dpbChart');
   const readout = document.getElementById('dpbReadout');
   const all = JSON.parse(box.dataset.hist).map(h => ({ d: h[0], c: h[1] }));
@@ -25,7 +56,6 @@
   const mNum = d => (+d.slice(0, 4)) * 12 + (+d.slice(5, 7)) - 1;
   const NS = 'http://www.w3.org/2000/svg';
   const fmtK = v => v >= 10000 ? (+(v / 10000).toFixed(1)).toLocaleString() + '만' : Math.round(v).toLocaleString();
-  const won = v => Math.round(v).toLocaleString() + '원';
   const bandAt = d => { let b = null; bands.forEach(x => { if (x[0] <= d) b = x; }); return b; };  // 값이 null이면 그 분기는 평가 공백(최근 4분기 적자)
   let state = null;
 

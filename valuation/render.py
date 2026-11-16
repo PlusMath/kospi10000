@@ -62,10 +62,32 @@ STYLE = '''  <style>
     #dpBuffettBox .dpb-readout{font-size:12.5px;color:var(--dp-text2);min-height:18px;margin:-2px 0 4px;}
     #dpBuffettBox .dpb-cap{font-size:11.5px;color:var(--dp-text4);margin-bottom:8px;}
     #dpBuffettBox .dpb-verdict{font-size:13px;font-weight:800;margin-bottom:4px;}
+    /* 리포트형: 한 줄 판단 → 범위 막대 → 방식별 카드 → 분기별 그래프 */
+    #dpBuffettBox .dpb-say{display:flex;align-items:flex-start;gap:10px;margin:12px 0 4px;padding:12px 14px;border-radius:12px;background:var(--dp-accent-soft);}
+    #dpBuffettBox .dpb-say .dpb-verdict{margin:0;font-size:14.5px;font-weight:600;line-height:1.6;}
+    #dpBuffettBox .dpb-badge{flex-shrink:0;font-size:12px;font-weight:800;padding:3px 9px;border-radius:7px;margin-top:2px;}
+    #dpBuffettBox .dpb-badge.under{background:var(--dp-good,oklch(0.55 0.13 155));color:var(--dp-card);}
+    #dpBuffettBox .dpb-badge.fair{background:var(--dp-good-soft,oklch(0.55 0.13 155 / .14));color:var(--dp-good,oklch(0.55 0.13 155));}
+    #dpBuffettBox .dpb-badge.over,#dpBuffettBox .dpb-badge.hold{background:var(--dp-border);color:var(--dp-text2);}
+    #dpBuffettBox .dpb-bar{position:relative;height:76px;margin:8px 4px 6px;}
+    #dpBuffettBox .dpb-bar .ax{position:absolute;left:0;right:0;top:35px;height:2px;border-radius:1px;background:var(--dp-border);}
+    #dpBuffettBox .dpb-bar .band{position:absolute;top:25px;height:22px;border-radius:7px;background:var(--dp-good-soft,oklch(0.55 0.13 155 / .14));border:2px solid var(--dp-good,oklch(0.55 0.13 155));box-sizing:border-box;}
+    #dpBuffettBox .dpb-bar .now{position:absolute;top:14px;width:3px;height:44px;margin-left:-1.5px;border-radius:2px;background:var(--dp-up);}
+    #dpBuffettBox .dpb-bar label{position:absolute;font-size:12px;font-weight:700;white-space:nowrap;transform:translateX(-50%);font-variant-numeric:tabular-nums;}
+    #dpBuffettBox .dpb-bar label.lo,#dpBuffettBox .dpb-bar label.hi{top:54px;color:var(--dp-text2);}
+    #dpBuffettBox .dpb-bar label.cur{top:-4px;color:var(--dp-up);}
+    #dpBuffettBox .dpb-bar label small{font-size:11px;font-weight:500;color:var(--dp-text3);margin-right:4px;}
+    #dpBuffettBox .dpb-bar label.cur small{color:inherit;}
+    #dpBuffettBox .dpb-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin:4px 0 6px;}
+    #dpBuffettBox .dpb-card{padding:12px 14px;border-radius:12px;background:var(--dp-card);border:1px solid var(--dp-border);min-width:0;}
+    #dpBuffettBox .dpb-card-h{display:flex;justify-content:space-between;gap:6px;font-size:12px;font-weight:700;color:var(--dp-text3);}
+    #dpBuffettBox .dpb-card-v{font-size:16px;font-weight:800;margin:4px 0 6px;font-variant-numeric:tabular-nums;}
+    #dpBuffettBox .dpb-card-w{display:block;height:4px;border-radius:2px;background:var(--dp-border);margin-bottom:8px;}
+    #dpBuffettBox .dpb-card-w i{display:block;height:100%;border-radius:2px;background:var(--dp-accent);}
+    #dpBuffettBox .dpb-card .dpb-m-note{margin:0;font-size:12px;line-height:1.55;}
     @media (max-width:640px){
-      #dpBuffettBox .dpb-m-top{flex-wrap:wrap;font-size:13.5px;}
-      #dpBuffettBox .dpb-m-v{flex-basis:calc(100% - 180px);}
-      #dpBuffettBox .dpb-m-note{font-size:12.5px;}
+      #dpBuffettBox .dpb-say .dpb-verdict{font-size:14px;}
+      #dpBuffettBox .dpb-card .dpb-m-note{font-size:12.5px;}
     }
   </style>'''
 
@@ -121,11 +143,11 @@ def make_box(page_code, r, legacy=False, price_sel=None, price=None):
                  if lt.get('pref_factor') else ' 우선주는 보통주와 같은 주당 내재가치를 적용했다(의결권·배당 차이 미반영).')
     qy, qm = lt['q'].split('-')
     hold = r['type'] == '고성장·적자'
-    mrows = '\n'.join(
-        f'  <div class="dpb-m"><div class="dpb-m-top"><span class="dpb-m-n">{html.escape(x["name"])}</span>'
-        f'<span class="dpb-m-v">{fmt(x["low"])} ~ {fmt(x["high"])}원</span>'
-        f'<span class="dpb-m-w"><i style="width:{x["w"]}%"></i><b>{x["w"]}%</b></span></div>'
-        f'<div class="dpb-m-note">{html.escape(x["note"])}</div></div>' for x in lt['methods'])
+    mrows = '  <div class="dpb-cards">\n' + '\n'.join(
+        f'  <div class="dpb-card"><div class="dpb-card-h"><span>{html.escape(x["name"])}</span><span>가중 {x["w"]}%</span></div>'
+        f'<div class="dpb-card-v">{fmt(x["low"])} ~ {fmt(x["high"])}원</div>'
+        f'<span class="dpb-card-w"><i style="width:{x["w"]}%"></i></span>'
+        f'<div class="dpb-m-note">{html.escape(x["note"])}</div></div>' for x in lt['methods']) + '\n  </div>'
     bands = [[v['q'], None, None] if v.get('gap') else [v['q'], round(v['low']), round(v['high'])] for v in q]
     attrs = (f" data-hist='{json.dumps(hist(page_code, THIS_YEAR - 5), separators=(',', ':'))}'"
              f" data-bands='{json.dumps(bands, separators=(',', ':'))}'"
@@ -142,15 +164,11 @@ def make_box(page_code, r, legacy=False, price_sel=None, price=None):
 {LEGACY_STYLE if legacy else ''}
   <div class="dp-summary-l">내재가치 평가</div>
   <div class="dpb-sub">DART 연결 재무제표 {r["first_year"]}~{lt["fy"]}년 + {qy}년 {QNAME[qm]}보고서 기준 · 할인율 12% · 안전마진 미적용</div>
-  <div class="dpb-h"><span class="dpb-type">{r['type']}형</span>평가 방식별 내재가치 <span style="font-weight:400">({html.escape(r['type_why'])})</span></div>
+  <div class="dpb-say"><span class="dpb-badge" id="dpbBadge"></span><div class="dpb-verdict" id="dpbVerdict"></div></div>
+  <div class="dpb-bar" id="dpbBar" role="img" aria-label="{head2}: 하단 {fmt(lt['low'])}원, 상단 {fmt(lt['high'])}원"></div>
+  <div class="dpb-h"><span class="dpb-type">{r['type']}형</span>평가 방식별 내재가치 <span style="font-weight:400">({html.escape(r['type_why'])})</span> · 방식 간 일치도 <span style="color:{CONF_COLOR[cf]}">{cf}</span></div>
 {mrows}
-  <div class="dpb-h">{head2} · 방식 간 일치도 <span style="color:{CONF_COLOR[cf]}">{cf}</span></div>
-  <div class="dpb-verdict" id="dpbVerdict"></div>
-  <div class="dpb-nums">
-    <div class="dpb-num"><div class="l">내재가치 하단</div><div class="v">{fmt(lt['low'])}원</div></div>
-    <div class="dpb-num"><div class="l">내재가치 상단</div><div class="v">{fmt(lt['high'])}원</div></div>
-    <div class="dpb-num"><div class="l">현재가</div><div class="v" id="dpbPrice">-</div></div>
-  </div>
+  <div class="dpb-h">분기별 내재가치와 월말 주가</div>
 {CHART}  <div class="dp-logic-chart-note">{html.escape(note)} 가중 내재가치는 방식별 하단·상단을 종목 유형에 따른 가중치로 평균한 값이다. 주가 예측이 아니라 재무제표로 추정한 기업 가치이며, 투자 권고가 아니다.</div>
 </div>'''.replace('\n\n', '\n')
 

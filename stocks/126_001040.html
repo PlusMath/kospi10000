@@ -269,25 +269,45 @@ body{background:var(--dp-bg);}
     #dpBuffettBox .dpb-readout{font-size:12.5px;color:var(--dp-text2);min-height:18px;margin:-2px 0 4px;}
     #dpBuffettBox .dpb-cap{font-size:11.5px;color:var(--dp-text4);margin-bottom:8px;}
     #dpBuffettBox .dpb-verdict{font-size:13px;font-weight:800;margin-bottom:4px;}
+    /* 리포트형: 한 줄 판단 → 범위 막대 → 방식별 카드 → 분기별 그래프 */
+    #dpBuffettBox .dpb-say{display:flex;align-items:flex-start;gap:10px;margin:12px 0 4px;padding:12px 14px;border-radius:12px;background:var(--dp-accent-soft);}
+    #dpBuffettBox .dpb-say .dpb-verdict{margin:0;font-size:14.5px;font-weight:600;line-height:1.6;}
+    #dpBuffettBox .dpb-badge{flex-shrink:0;font-size:12px;font-weight:800;padding:3px 9px;border-radius:7px;margin-top:2px;}
+    #dpBuffettBox .dpb-badge.under{background:var(--dp-good,oklch(0.55 0.13 155));color:var(--dp-card);}
+    #dpBuffettBox .dpb-badge.fair{background:var(--dp-good-soft,oklch(0.55 0.13 155 / .14));color:var(--dp-good,oklch(0.55 0.13 155));}
+    #dpBuffettBox .dpb-badge.over,#dpBuffettBox .dpb-badge.hold{background:var(--dp-border);color:var(--dp-text2);}
+    #dpBuffettBox .dpb-bar{position:relative;height:76px;margin:8px 4px 6px;}
+    #dpBuffettBox .dpb-bar .ax{position:absolute;left:0;right:0;top:35px;height:2px;border-radius:1px;background:var(--dp-border);}
+    #dpBuffettBox .dpb-bar .band{position:absolute;top:25px;height:22px;border-radius:7px;background:var(--dp-good-soft,oklch(0.55 0.13 155 / .14));border:2px solid var(--dp-good,oklch(0.55 0.13 155));box-sizing:border-box;}
+    #dpBuffettBox .dpb-bar .now{position:absolute;top:14px;width:3px;height:44px;margin-left:-1.5px;border-radius:2px;background:var(--dp-up);}
+    #dpBuffettBox .dpb-bar label{position:absolute;font-size:12px;font-weight:700;white-space:nowrap;transform:translateX(-50%);font-variant-numeric:tabular-nums;}
+    #dpBuffettBox .dpb-bar label.lo,#dpBuffettBox .dpb-bar label.hi{top:54px;color:var(--dp-text2);}
+    #dpBuffettBox .dpb-bar label.cur{top:-4px;color:var(--dp-up);}
+    #dpBuffettBox .dpb-bar label small{font-size:11px;font-weight:500;color:var(--dp-text3);margin-right:4px;}
+    #dpBuffettBox .dpb-bar label.cur small{color:inherit;}
+    #dpBuffettBox .dpb-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin:4px 0 6px;}
+    #dpBuffettBox .dpb-card{padding:12px 14px;border-radius:12px;background:var(--dp-card);border:1px solid var(--dp-border);min-width:0;}
+    #dpBuffettBox .dpb-card-h{display:flex;justify-content:space-between;gap:6px;font-size:12px;font-weight:700;color:var(--dp-text3);}
+    #dpBuffettBox .dpb-card-v{font-size:16px;font-weight:800;margin:4px 0 6px;font-variant-numeric:tabular-nums;}
+    #dpBuffettBox .dpb-card-w{display:block;height:4px;border-radius:2px;background:var(--dp-border);margin-bottom:8px;}
+    #dpBuffettBox .dpb-card-w i{display:block;height:100%;border-radius:2px;background:var(--dp-accent);}
+    #dpBuffettBox .dpb-card .dpb-m-note{margin:0;font-size:12px;line-height:1.55;}
     @media (max-width:640px){
-      #dpBuffettBox .dpb-m-top{flex-wrap:wrap;font-size:13.5px;}
-      #dpBuffettBox .dpb-m-v{flex-basis:calc(100% - 180px);}
-      #dpBuffettBox .dpb-m-note{font-size:12.5px;}
+      #dpBuffettBox .dpb-say .dpb-verdict{font-size:14px;}
+      #dpBuffettBox .dpb-card .dpb-m-note{font-size:12.5px;}
     }
   </style>
   <div class="dp-summary-l">내재가치 평가</div>
   <div class="dpb-sub">DART 연결 재무제표 2015~2025년 + 2026년 반기보고서 기준 · 할인율 12% · 안전마진 미적용</div>
-  <div class="dpb-h"><span class="dpb-type">지주·투자형</span>평가 방식별 내재가치 <span style="font-weight:400">(지주·투자회사)</span></div>
-  <div class="dpb-m"><div class="dpb-m-top"><span class="dpb-m-n">NAV</span><span class="dpb-m-v">42,104 ~ 58,946원</span><span class="dpb-m-w"><i style="width:60%"></i><b>60%</b></span></div><div class="dpb-m-note">주당 NAV 84,209원(별도 자본 3.0조 + 상장 자회사 2곳 지분 시가 1.4조 반영) × 지주사 할인 50~30%</div></div>
-  <div class="dpb-m"><div class="dpb-m-top"><span class="dpb-m-n">RIM</span><span class="dpb-m-v">71,786 ~ 100,601원</span><span class="dpb-m-w"><i style="width:20%"></i><b>20%</b></span></div><div class="dpb-m-note">BPS 162,187원, ROE 2.7~6.2%(요구수익률 12% 미만이면 10년간 그 수준 유지)</div></div>
-  <div class="dpb-m"><div class="dpb-m-top"><span class="dpb-m-n">정상화 PER</span><span class="dpb-m-v">64,788 ~ 157,455원</span><span class="dpb-m-w"><i style="width:20%"></i><b>20%</b></span></div><div class="dpb-m-note">11년 가중평균(반감기 5년)+최근 4분기 EPS 5,249원 × 과거 PER 12.3~30.0배(연도별 30배 상한)</div></div>
-  <div class="dpb-h">가중 내재가치와 현재가 위치 · 방식 간 일치도 <span style="color:oklch(0.62 0.16 60)">낮음</span></div>
-  <div class="dpb-verdict" id="dpbVerdict"></div>
-  <div class="dpb-nums">
-    <div class="dpb-num"><div class="l">내재가치 하단</div><div class="v">52,577원</div></div>
-    <div class="dpb-num"><div class="l">내재가치 상단</div><div class="v">86,979원</div></div>
-    <div class="dpb-num"><div class="l">현재가</div><div class="v" id="dpbPrice">-</div></div>
+  <div class="dpb-say"><span class="dpb-badge" id="dpbBadge"></span><div class="dpb-verdict" id="dpbVerdict"></div></div>
+  <div class="dpb-bar" id="dpbBar" role="img" aria-label="가중 내재가치와 현재가 위치: 하단 52,577원, 상단 86,979원"></div>
+  <div class="dpb-h"><span class="dpb-type">지주·투자형</span>평가 방식별 내재가치 <span style="font-weight:400">(지주·투자회사)</span> · 방식 간 일치도 <span style="color:oklch(0.62 0.16 60)">낮음</span></div>
+  <div class="dpb-cards">
+  <div class="dpb-card"><div class="dpb-card-h"><span>NAV</span><span>가중 60%</span></div><div class="dpb-card-v">42,104 ~ 58,946원</div><span class="dpb-card-w"><i style="width:60%"></i></span><div class="dpb-m-note">주당 NAV 84,209원(별도 자본 3.0조 + 상장 자회사 2곳 지분 시가 1.4조 반영) × 지주사 할인 50~30%</div></div>
+  <div class="dpb-card"><div class="dpb-card-h"><span>RIM</span><span>가중 20%</span></div><div class="dpb-card-v">71,786 ~ 100,601원</div><span class="dpb-card-w"><i style="width:20%"></i></span><div class="dpb-m-note">BPS 162,187원, ROE 2.7~6.2%(요구수익률 12% 미만이면 10년간 그 수준 유지)</div></div>
+  <div class="dpb-card"><div class="dpb-card-h"><span>정상화 PER</span><span>가중 20%</span></div><div class="dpb-card-v">64,788 ~ 157,455원</div><span class="dpb-card-w"><i style="width:20%"></i></span><div class="dpb-m-note">11년 가중평균(반감기 5년)+최근 4분기 EPS 5,249원 × 과거 PER 12.3~30.0배(연도별 30배 상한)</div></div>
   </div>
+  <div class="dpb-h">분기별 내재가치와 월말 주가</div>
   <div class="dpb-ctl"><div class="dpb-legend"><span><i style="background:var(--dp-accent);height:3px"></i>월말 주가</span><span><i style="background:oklch(0.68 0.13 150 / 0.5)"></i>1분기</span><span><i style="background:oklch(0.68 0.13 195 / 0.5)"></i>반기</span><span><i style="background:oklch(0.68 0.13 300 / 0.5)"></i>3분기</span><span><i style="background:oklch(0.68 0.13 60 / 0.5)"></i>사업보고서</span></div><div class="dpb-rng"><button type="button" data-m="12">1년</button><button type="button" data-m="36">3년</button><button type="button" class="on" data-m="0">5년</button></div></div>
   <svg class="dpb-chart" id="dpbChart" viewBox="0 0 600 240" role="img" aria-label="주가와 분기별 내재가치 범위"></svg>
   <div class="dpb-readout" id="dpbReadout"></div>
@@ -943,14 +963,45 @@ let _dpTechDrawn = false, _dpAnnualDrawn = false, _dpQtrDrawn = false; let _dpNe
   if (!box || !pEl) return;
   const price = box.dataset.price ? +box.dataset.price : parseFloat(pEl.textContent.replace(/[^0-9.]/g, ''));
   const low = +box.dataset.ivLow, high = +box.dataset.ivHigh;
-  document.getElementById('dpbPrice').textContent = price.toLocaleString() + '원';
-  let verdict, color;
-  if (price < low) { verdict = '내재가치 하단 아래 — 저평가'; color = 'var(--dp-up)'; }
-  else if (price <= high) { verdict = '내재가치 범위 안 — 적정 가치 수준'; color = 'var(--dp-text2)'; }
-  else { verdict = '내재가치 상단 초과 — 고평가'; color = 'var(--dp-down)'; }
-  if (box.dataset.hold) { verdict = '평가 보류 — 적자·고성장 단계라 장부가치 기준 참고값만 제시'; color = 'var(--dp-text3)'; }
-  const vEl = document.getElementById('dpbVerdict');
-  vEl.textContent = verdict; vEl.style.color = color;
+  const won = (v) => Math.round(v).toLocaleString() + '원';
+  // 한 줄 판단 + 배지(리포트형). 구형 박스(dpbPrice 숫자 칸)도 계속 채움
+  let verdict, badge, cls;
+  if (box.dataset.hold) { badge = '평가 보류'; cls = 'hold'; verdict = '적자·고성장 단계라 장부가치 기준 참고값만 제시합니다.'; }
+  else if (price < low) { badge = '저평가'; cls = 'under'; verdict = `현재가 ${won(price)}은 내재가치 하단 ${won(low)}보다 ${Math.round((1 - price / low) * 100)}% 낮습니다. 보수적으로 잡은 가치보다도 싼 구간입니다.`; }
+  else if (price <= high) { badge = '범위 안'; cls = 'fair'; verdict = `현재가 ${won(price)}은 내재가치 범위 ${won(low)}~${won(high)} 안, 하단에서 ${Math.round((price - low) / (high - low) * 100)}% 지점에 있습니다.`; }
+  else { badge = '고평가'; cls = 'over'; verdict = `현재가 ${won(price)}은 내재가치 상단 ${won(high)}보다 ${Math.round((price / high - 1) * 100)}% 높습니다. 지금의 이익 수준이 오래 이어진다는 기대가 주가에 들어 있다는 뜻입니다.`; }
+  const bEl = document.getElementById('dpbBadge');
+  if (bEl) { bEl.textContent = badge; bEl.className = 'dpb-badge ' + cls; }
+  document.getElementById('dpbVerdict').textContent = bEl ? verdict : badge + ' — ' + verdict;
+  const pOld = document.getElementById('dpbPrice');
+  if (pOld) pOld.textContent = won(price);
+  // 범위 막대: 초록 = 가중 내재가치 하단~상단, 빨간 선 = 현재가
+  const bar = document.getElementById('dpbBar');
+  if (bar && low >= 0 && high > 0) {
+    const a = Math.min(low, price) * 0.85, b = Math.max(high, price) * 1.08, x = (v) => (v - a) / (b - a) * 100;
+    bar.innerHTML = `<div class="ax"></div><div class="band" style="left:${x(low)}%;width:${x(high) - x(low)}%"></div><div class="now" style="left:${x(price)}%"></div>`
+      + `<label class="lo"><small>하단</small>${Math.round(low).toLocaleString()}</label>`
+      + `<label class="hi"><small>상단</small>${Math.round(high).toLocaleString()}</label>`
+      + `<label class="cur"><small>현재가</small>${Math.round(price).toLocaleString()}</label>`;
+    // 라벨 배치(px): 각자 기준점 가운데 → 하단·상단이 겹치면 둘 사이 가운데를 기준으로 좌우로 벌림 → 막대 안으로 밀어 넣음
+    const place = () => {
+      const W = bar.clientWidth;
+      if (!W) return;
+      const [lo, hi, cur] = ['lo', 'hi', 'cur'].map((c) => bar.querySelector('label.' + c));
+      const fit = (l, w) => Math.min(Math.max(l, 0), W - w);
+      const wl = lo.offsetWidth, wh = hi.offsetWidth, wc = cur.offsetWidth;
+      const pl = x(low) / 100 * W, ph = x(high) / 100 * W;
+      let ll = pl - wl / 2, lh = ph - wh / 2;
+      if (ll + wl + 8 > lh) { const mid = (pl + ph) / 2; ll = mid - 4 - wl; lh = mid + 4; }
+      ll = fit(ll, wl); lh = fit(lh, wh);
+      if (ll + wl + 8 > lh) { if (lh + wh >= W) ll = lh - 8 - wl; else lh = ll + wl + 8; }
+      lo.style.left = ll + 'px'; hi.style.left = lh + 'px';
+      cur.style.left = fit(x(price) / 100 * W - wc / 2, wc) + 'px';
+      [lo, hi, cur].forEach((e) => { e.style.transform = 'none'; });
+    };
+    place();
+    window.addEventListener('resize', place);
+  } else if (bar) bar.hidden = true;
   const svg = document.getElementById('dpbChart');
   const readout = document.getElementById('dpbReadout');
   const all = JSON.parse(box.dataset.hist).map(h => ({ d: h[0], c: h[1] }));
@@ -963,7 +1014,6 @@ let _dpTechDrawn = false, _dpAnnualDrawn = false, _dpQtrDrawn = false; let _dpNe
   const mNum = d => (+d.slice(0, 4)) * 12 + (+d.slice(5, 7)) - 1;
   const NS = 'http://www.w3.org/2000/svg';
   const fmtK = v => v >= 10000 ? (+(v / 10000).toFixed(1)).toLocaleString() + '만' : Math.round(v).toLocaleString();
-  const won = v => Math.round(v).toLocaleString() + '원';
   const bandAt = d => { let b = null; bands.forEach(x => { if (x[0] <= d) b = x; }); return b; };  // 값이 null이면 그 분기는 평가 공백(최근 4분기 적자)
   let state = null;
 

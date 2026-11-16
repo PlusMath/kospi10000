@@ -130,5 +130,6 @@ for (media, sel), ds in sorted(rules.items()):
 out.append(',\n'.join(sorted(cards)) + '{box-shadow:var(--t-shadow)}')
 for k, v, nk, nv in sorted(inline_vals):
     out.append(f'[style*="{k}:{v}"],[style*="{k}: {v}"]{{{nk}:{nv} !important}}')
-open('css/theme.css', 'w', encoding='utf-8', newline='\n').write('\n'.join(out) + '\n')
+# 저장소 작업본은 CRLF(LF로 쓰면 git 경고 → 일일 스크립트가 충돌로 오인한 이력)
+open('css/theme.css', 'w', encoding='utf-8', newline='\r\n').write('\n'.join(out) + '\n')
 print('rules', len(rules), 'inline', len(inline_vals))
