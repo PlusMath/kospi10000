@@ -362,7 +362,7 @@ body{background:var(--dp-bg);}
   <div class="dp-acc-body">
     <div class="dp-tab-row">
       <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
-      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">반기보고서 · 1H26</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">3분기보고서 · 3Q26</button>
     </div>
 
     <div id="dpFundAnnual">
@@ -419,7 +419,7 @@ body{background:var(--dp-bg);}
 
     <div id="dpFundQuarter" style="display:none;">
 <!-- fundq:start -->
-      <div class="dp-secl">분기별 실적 (8개 분기, 3Q24~2Q26)</div>
+      <div class="dp-secl">분기별 실적 (8개 분기, 4Q24~3Q26)</div>
       <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
         <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
         <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
@@ -431,25 +431,80 @@ body{background:var(--dp-bg);}
       <svg id="fundQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
       <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 분기·반기·사업보고서의 3개월 단독 실적. 4분기는 사업보고서 연간 실적에서 3분기 누적을 뺀 값. 분기 이름 아래 ▲▼는 전년 동기 대비 증감.</div>
 <!-- fundq:end -->
+<!-- q3qa:start -->
+    <div class="dp-qa" id="dpQtrQA">
+      <div class="dp-qa-h">항목별 Q&amp;A <small>3Q26 기준 · 위 지표 버튼을 누르면 해당 항목으로 바뀝니다</small></div>
+      <div class="dp-qa-set" data-qm="rev">
+        <div class="dp-qa-t">매출액</div>
+        <dl>
+          <dt>Q. 3분기 매출은?</dt>
+          <dd>802억으로 1년 전보다 6.1% 줄었고 2Q26보다는 12.2% 늘었다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 매출 2,213억으로 1년 전과 비슷하다(▲1.2%). 지주회사라 매출보다 지분법이익이 실적을 좌우한다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="oi">
+        <div class="dp-qa-t">영업이익</div>
+        <dl>
+          <dt>Q. 3분기 영업이익은?</dt>
+          <dd>119억으로 1년 전(-366억) 적자에서 흑자로 돌아섰지만 2Q26(168억)보다는 29.3% 줄었다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 영업이익 416억으로 1년 전(-199억)과 달리 흑자다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="pretax">
+        <div class="dp-qa-t">세전이익</div>
+        <dl>
+          <dt>Q. 세전이익이 왜 커졌나?</dt>
+          <dd>3분기 영업외 이익이 2,805억이다. 대한항공이 3분기에 외화환산이익을 포함해 1조 원대 순이익을 낸 것이 지분법이익으로 들어온 결과로 보인다.</dd>
+          <dt>Q. 반기와 비교하면?</dt>
+          <dd>반기 때는 대한항공 손실이 반영돼 적자였는데, 3분기 한 분기로 이를 뒤집어 누적 세전이익 2,955억(▲159.5%)이 됐다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="ni">
+        <div class="dp-qa-t">순이익</div>
+        <dl>
+          <dt>Q. 3분기 순이익은?</dt>
+          <dd>2,762억이다. 지분법이익은 세금이 거의 붙지 않아 실효세율이 5.5%로 낮다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 순이익 2,759억으로 1년 전보다 151.7% 늘었다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="nip">
+        <div class="dp-qa-t">지배주주순이익</div>
+        <dl>
+          <dt>Q. 지배주주 순이익은?</dt>
+          <dd>3분기 2,751억, 누적 2,721억이다. 반기 누적 -31억 적자에서 흑자로 돌아섰다.</dd>
+          <dt>Q. EPS를 그대로 믿어도 되나?</dt>
+          <dd>누적 EPS 4,043원, 연환산 5,391원으로 2025년의 2.3배지만, 대한항공의 환율 이익에 기댄 수치라 반복되기 어렵다.</dd>
+        </dl>
+      </div>
+    </div>
+    <script>(function(){var b=document.getElementById('dpQtrQA'),n=document.getElementById('dpQtrMetricNav');if(!b)return;b.classList.add('js');function s(){var a=n&&n.querySelector('button.active'),k=a?a.dataset.qm:'rev';b.querySelectorAll('.dp-qa-set').forEach(function(e){e.classList.toggle('on',e.dataset.qm===k)});}if(n)n.addEventListener('click',function(){setTimeout(s,0)});s();})();</script>
+<!-- q3qa:end -->
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1H26 연결 매출액</span><span class="v up">1,411억 (▲5.8% YoY)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v up">298억 (▲79.0% YoY)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 매출액</span><span class="v up">2,213억 (전년동기比 ▲1.2%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 영업이익</span><span class="v up">416억 (전년동기比 흑자전환)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 지배주주 순이익</span><span class="v up">2,721억 (전년동기比 ▲157.1%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 단독 영업이익</span><span class="v dn">119억 (3Q25 대비 흑자전환, 2Q26 대비 ▼29.3%)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 지배주주 순이익</span><span class="v" style="color:var(--dp-down);">-31억 (흑자→적자)</span></div>
-          <div class="dp-row2"><span class="l">1H26 기본EPS(보통주)</span><span class="v" style="color:var(--dp-down);">-46원 (전년동기 2,728원)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 기본EPS</span><span class="v up">4,043원 (연환산 5,391원)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 부채비율</span><span class="v">18.4%</span></div>
+          <div class="dp-row2"><span class="l">9월 말 지배지분</span><span class="v">3조 5,797억 (작년 말 대비 ▲7.1%)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 현금성자산</span><span class="v">797억</span></div>
         </div>
       </div>
       <!-- fundq-insight:start -->
       <div class="dp-insight" style="margin-bottom:10px;">
         <div class="dp-insight-t">분기 실적 — 2개년 흐름</div>
-        <div class="dp-insight-b">최근 8개 분기(3Q24~2Q26) 영업이익은 139억→168억. 2Q26 영업이익은 전년 동기(2Q25) 99억 대비 ▲69.6%, 직전 분기(1Q26) 대비 ▲28.9%. 이 기간 분기 최고는 2Q26(168억).</div>
+        <div class="dp-insight-b">최근 8개 분기(4Q24~3Q26) 영업이익은 79억→119억. 3Q26 영업이익은 전년 동기(3Q25) -366억 대비 흑자전환, 직전 분기(2Q26) 대비 ▼29.3%. 이 기간 분기 최고는 2Q26(168억).</div>
       </div>
 <!-- fundq-insight:end -->
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심</div>
-        <div class="dp-insight-b">2분기 관계기업투자손익(주로 대한항공 지분법손익)이 -1,017억원으로 급격히 악화되며(1분기 228억 흑자 → 2분기 대규모 적자) 1H26 누적 관계기업투자손익은 -789억원으로 흑자에서 적자 전환. 대한항공이 2분기 영업손실(-2,071억)과 대규모 외화환산손실을 반영한 결과가 그대로 전이된 것. 한진칼 자체 사업(영업이익 +79.0%)은 견조했으나, 지분법손익 악화로 지배주주순이익도 1H26 누적 -31억원 적자전환.</div>
+        <div class="dp-insight-t">3분기보고서 핵심 — 전년동기(3Q25 누적) 대비</div>
+        <div class="dp-insight-b">3Q26 지배주주 순이익이 2,751억으로 흑자 전환했다. 자체 영업이익은 119억으로 2Q26(168억)보다 줄었지만, 영업외 이익이 2,805억이어서 세전이익이 2,924억이 됐다. 대한항공이 3분기에 외화환산이익을 포함해 1조 원대 순이익을 낸 것이 지분법이익으로 들어온 결과로 보인다. 그래서 반기 때 -31억 적자였던 누적 지배주주 순이익이 2,721억(▲157.1%)으로 뒤집혔다. 누적 영업이익도 416억으로, 3Q25 영업손실(-366억)이 있었던 1년 전(-199억)과 달리 흑자다. 누적 EPS 4,043원의 연환산(5,391원)은 2025년 EPS(2,313원)의 2.3배지만, 대한항공의 환율 이익에 기댄 수치라 반복된다고 보기 어렵다. 9월 말 지배지분은 작년 말보다 7.1% 늘었고 부채비율은 18.4%다.</div>
       </div>
     </div>
   </div>
@@ -478,7 +533,7 @@ body{background:var(--dp-bg);}
     <!-- dp-vscore:end -->
     <div class="dp-share4">
       <div class="dp-share"><div class="dp-share-l">2025 EPS</div><div class="dp-share-v">2,313원</div><div class="dp-share-s">-68.9%</div></div>
-      <div class="dp-share"><div class="dp-share-l">1H26 EPS</div><div class="dp-share-v" style="color:var(--dp-down);">-46원</div><div class="dp-share-s">흑자→적자 (대한항공 지분법손익 악화)</div></div>
+      <div class="dp-share"><div class="dp-share-l">3Q26 누적 EPS</div><div class="dp-share-v" style="color:var(--dp-down);">4,043원</div><div class="dp-share-s">연환산 5,391원</div></div>
       <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">약 50,067원</div><div class="dp-share-s">지배지분 3.34조÷6,676만주</div></div>
       <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">360원</div><div class="dp-share-s">전기와 동일</div></div>
     </div>
@@ -511,12 +566,12 @@ body{background:var(--dp-bg);}
               </div>
     </div>
         <div class="dp-gauge dp-metric-detail" data-metric="fpe">
-              <div class="dp-gauge-h"><span>Forward PER (1H26 연환산)</span><span>산출불가</span></div>
-              <div class="dp-gauge-track"><div class="dp-gauge-fill" style="width:0%;"></div></div>
-              <div class="dp-gauge-note">1H26 EPS -46원으로 적자전환 · 대한항공 2분기 실적 악화의 지분법손익 전이로 연환산 EPS 산출 불가.</div>
+              <div class="dp-gauge-h"><span>Forward PER (3Q26 연환산)</span><span>41.27x</span></div>
+              <div class="dp-gauge-track"><div class="dp-gauge-fill" style="width:100%;"></div></div>
+              <div class="dp-gauge-note">222,500÷5,391(3Q26 누적×4/3 연환산 EPS) · 대한항공 3분기 환율 이익이 지분법으로 들어온 수치라 반복성 낮음, 참고용.</div>
               <div class="dp-insight" style="margin-top:12px;">
                 <div class="dp-insight-t">해석</div>
-                <div class="dp-insight-b">선행 이익 기준으로는 밸류에이션 부담이 상당 부분 해소되는 모습으로, 이익 전망치가 유지된다면 저평가 매력이 부각될 수 있는 구간.</div>
+                <div class="dp-insight-b">3분기 지분법이익으로 연환산 EPS가 커졌지만 여전히 40배를 넘어, 이익 기준으로는 부담이 큰 구간. 지주사 특성상 보유 지분가치(NAV)와 함께 보는 것이 맞음.</div>
               </div>
             </div>
         <div class="dp-gauge dp-metric-detail" data-metric="pbr">
@@ -880,6 +935,12 @@ body{background:var(--dp-bg);}
         <div class="dp-tl-title">1H26 실적 공시 — 2분기 대한항공 지분법손익 급악화로 순이익 적자전환</div>
         <div class="dp-tl-body">2분기 관계기업투자손익이 -1,017억원으로 급락(1분기 228억 흑자→2분기 대규모 적자)하며 1H26 누적 지배주주순이익이 -31억원 적자전환. 대한항공의 2분기 영업손실·외화환산손실이 그대로 전이된 결과.</div>
       </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.11.13 (3분기보고서)</div>
+        <div class="dp-tl-title">3Q26 분기보고서 — 지분법이익으로 지배주주 순이익 2,751억</div>
+        <div class="dp-tl-body">대한항공 3분기 실적 개선이 지분법으로 반영되며 영업외 이익 2,805억, 지배주주 순이익 2,751억. 누적 순이익 2,721억으로 흑자 전환.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -891,7 +952,7 @@ body{background:var(--dp-bg);}
       <div>
         <div class="dp-thesis-t bull">긍정 요인</div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>밸류업 계획 발표(PBR 1.3배+·배당성향 50% 목표)</span></div>
-        <div class="dp-thesis-item bull"><span class="dot">●</span><span>한진칼 자체 사업 영업이익 1H26 +79.0%로 견조</span></div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>자체 영업이익 3Q26 누적 416억으로 전년동기 적자(-199억)에서 흑자</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>이익 감소에도 DPS 유지(360원), 배당 안정성 확인</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>대한항공 아시아나 완전통합(2026.12) 시너지 기대 연동</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>52주 저점 대비 +12.8%, 저점권 근접 매력</span></div>
@@ -902,7 +963,7 @@ body{background:var(--dp-bg);}
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>유가·지정학적 리스크에 취약한 항공업 특성 그대로 전이</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>호반그룹의 지분 확대 지속, 경영권 불확실성 상존</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>52주 고점 대비 -38.8%, 매우 높은 가격 변동성</span></div>
-        <div class="dp-thesis-item bear"><span class="dot">●</span><span>1H26 지배주주순이익 적자전환(-31억), 지분법손익 변동성 노출</span></div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>3분기 지분법이익으로 누적 순이익 흑자 전환했으나, 대한항공 환율 손익에 따른 변동성 큼</span></div>
       </div>
     </div>
   </div>
@@ -1239,7 +1300,7 @@ function svgEl(tag,attrs){
 }
 
 // -- fund-report:start (valuation/fund_render.py)
-const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[395278013105.0,200336082220.0,275726817725.0,292157342000.0,298362106000.0],"oi":[-195175723509.0,14487192387.0,42843084229.0,49192742000.0,-7523512000.0],"nip":[17233604197.0,683804487526.0,385139191390.0,496999178000.0,155013035000.0],"qLabels":["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26"],"q":{"rev":[81577444000.0,70599027000.0,62668004000.0,70664384000.0,85401720000.0,79627998000.0,69594760000.0,71461541000.0],"oi":[13890748000.0,7918034000.0,6753069000.0,9891118000.0,-36555430000.0,12387732000.0,13011940000.0,16776673000.0],"pretax":[189518942000.0,87172600000.0,78935265000.0,113615083000.0,-78664626000.0,44040724000.0,90007263000.0,-86866567000.0],"ni":[193752522000.0,70031393000.0,73094820000.0,112722364000.0,-76209626000.0,49574144000.0,85433170000.0,-85697615000.0],"nip":[180816323000.0,71186866000.0,71524844000.0,110864362000.0,-76581996000.0,49205825000.0,83952608000.0,-87047966000.0]}};
+const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[395278013105.0,200336082220.0,275726817725.0,292157342000.0,298362106000.0],"oi":[-195175723509.0,14487192387.0,42843084229.0,49192742000.0,-7523512000.0],"nip":[17233604197.0,683804487526.0,385139191390.0,496999178000.0,155013035000.0],"qLabels":["4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26","3Q26"],"q":{"rev":[70599027000.0,62668004000.0,70664384000.0,85401720000.0,79627998000.0,69594760000.0,71461541000.0,80194255000.0],"oi":[7918034000.0,6753069000.0,9891118000.0,-36555430000.0,12387732000.0,13011940000.0,16776673000.0,11854308000.0],"pretax":[87172600000.0,78935265000.0,113615083000.0,-78664626000.0,44040724000.0,90007263000.0,-86866567000.0,292394978000.0],"ni":[70031393000.0,73094820000.0,112722364000.0,-76209626000.0,49574144000.0,85433170000.0,-85697615000.0,276184402000.0],"nip":[71186866000.0,71524844000.0,110864362000.0,-76581996000.0,49205825000.0,83952608000.0,-87047966000.0,275149716000.0]}};
 const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
 const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
 let _qtrCurrentMetric=(document.querySelector('#dpQtrMetricNav button')||{dataset:{qm:'oi'}}).dataset.qm;
