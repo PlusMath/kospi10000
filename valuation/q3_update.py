@@ -15,7 +15,7 @@ notes.json = {코드: {"core": 보고서 핵심 해설, "tl_title": 시계열 �
 import os, re, sys, json, html
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from engine import IS, num, get, eps_by_name
+from engine import IS, num, get, eps_by_name, FIN
 from fund_report import _fs, _row, annual, quarters, src_code
 from fund_render import krw, pct, transform, STOCKS, LEGACY_ACCENT
 
@@ -94,7 +94,7 @@ def g2_html(f):
         row(left, '3Q26 단독 영업이익', krw(q3['oi']) + (f' ({", ".join(parts)})' if parts else ''), _cls(q2.get('oi'), q3['oi']))
     if f['eps9'] is not None:
         row(right, '3Q26 누적 기본EPS' + ('(보통주)' if src_code(f['code']) != f['code'] else ''), f'{won(f["eps9"])} (연환산 {won(f["eps9"] * 4 / 3)})', ' up' if f['eps9'] > 0 else ' dn')
-    if f['liab'] is not None and f['eq_total']:
+    if f['liab'] is not None and f['eq_total'] and src_code(f['code']) not in FIN:   # 금융사 부채비율은 의미가 다름
         row(right, '9월 말 부채비율', f'{f["liab"] / f["eq_total"] * 100:.1f}%')
     if f['eq_parent'] is not None:
         g = pct(f['eq_parent_ye'], f['eq_parent'])
