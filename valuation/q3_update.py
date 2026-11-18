@@ -144,10 +144,18 @@ def apply(code, note, dry=False):
         return 'skip: dp-g2 없음'
     Q = Q2
     core = html.escape(note['core'])
-    pat = r'(<div class="dp-insight">\s*<div class="dp-insight-t">)[^<]*(?:반기|분기|1분기)보고서 핵심[^<]*(</div>\s*<div class="dp-insight-b">)[^<]*(</div>)'
+    pat = r'(<div class="dp-insight"[^>]*>\s*<div class="dp-insight-t">)[^<]*(?:반기|분기|1분기)보고서 핵심[^<]*(</div>\s*<div class="dp-insight-b">)[^<]*(</div>)'
     Q, n = re.subn(pat, lambda m: f'{m.group(1)}3분기보고서 핵심 — 전년동기(3Q25 누적) 대비{m.group(2)}{core}{m.group(3)}', Q, count=1)
     if not n:
         return 'skip: 보고서 핵심 해설 못 찾음'
+    # 분기 탭에 따로 있던 반기 기준 해설 상자(예: '1H26 연환산 EPS…')는 3Q26 핵심 해설과 겹치므로 제거
+    def _drop(m):
+        title = m.group(1)
+        if title.startswith('3분기보고서 핵심') or title.startswith('분기 실적 — 2개년 흐름'):
+            return m.group(0)
+        log.append('drop insight: ' + title[:30])
+        return ''
+    Q = re.sub(r'      <div class="dp-insight"[^>]*>\s*<div class="dp-insight-t">([^<]*)</div>\s*<div class="dp-insight-b">[^<]*</div>\s*</div>\n', _drop, Q)
     t = t[:q0] + Q + t[e0:]
     # 3) 투자지표 EPS 카드
     if f['eps9'] is not None:

@@ -365,7 +365,7 @@ body{background:var(--dp-bg);}
   <div class="dp-acc-body">
     <div class="dp-tab-row">
       <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
-      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">반기보고서 · 1H26</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">3분기보고서 · 3Q26</button>
     </div>
 
     <div id="dpFundAnnual">
@@ -424,7 +424,7 @@ body{background:var(--dp-bg);}
 
     <div id="dpFundQuarter" style="display:none;">
 <!-- fundq:start -->
-      <div class="dp-secl">분기별 실적 (8개 분기, 3Q24~2Q26)</div>
+      <div class="dp-secl">분기별 실적 (8개 분기, 4Q24~3Q26)</div>
       <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
         <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
         <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
@@ -436,31 +436,80 @@ body{background:var(--dp-bg);}
       <svg id="fundQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
       <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 분기·반기·사업보고서의 3개월 단독 실적. 4분기는 사업보고서 연간 실적에서 3분기 누적을 뺀 값. 분기 이름 아래 ▲▼는 전년 동기 대비 증감.</div>
 <!-- fundq:end -->
+<!-- q3qa:start -->
+    <div class="dp-qa" id="dpQtrQA">
+      <div class="dp-qa-h">항목별 Q&amp;A <small>3Q26 기준 · 위 지표 버튼을 누르면 해당 항목으로 바뀝니다</small></div>
+      <div class="dp-qa-set" data-qm="rev">
+        <div class="dp-qa-t">매출액</div>
+        <dl>
+          <dt>Q. 3분기 매출은?</dt>
+          <dd>3Q26 단독 매출은 8,348억으로 2Q26보다 22.9% 늘었지만 1년 전보다 4.6% 적다.</dd>
+          <dt>Q. 누적 매출은?</dt>
+          <dd>누적 매출 2조 2,717억으로 1년 전보다 4.6% 줄었다. 2차전지 소재 판매 회복이 아직 매출 성장으로 이어지지는 않았다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="oi">
+        <div class="dp-qa-t">영업이익</div>
+        <dl>
+          <dt>Q. 영업이익률은?</dt>
+          <dd>3분기 영업이익률은 9.8%로 최근 2년 중 가장 높고, 누적도 5.6%로 1년 전(3.6%)보다 높다.</dd>
+          <dt>Q. 3분기 영업이익은?</dt>
+          <dd>3Q26 단독 영업이익은 821억으로 2Q26(267억)의 3배다. 누적 1,265억은 2025년 연간(328억)의 3.9배다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="pretax">
+        <div class="dp-qa-t">세전이익</div>
+        <dl>
+          <dt>Q. 영업 밖에서는?</dt>
+          <dd>3분기 영업외 손실은 214억, 누적 304억으로 금융비용 부담이 이어진다.</dd>
+          <dt>Q. 3분기 세전이익은?</dt>
+          <dd>608억으로 2Q26보다 139.5% 늘었다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="ni">
+        <div class="dp-qa-t">순이익</div>
+        <dl>
+          <dt>Q. 세금 부담은?</dt>
+          <dd>누적 실효세율은 19.5%로 1년 전과 같다.</dd>
+          <dt>Q. 3분기 순이익은?</dt>
+          <dd>3Q26 연결 순이익은 464억으로 2Q26보다 88.3% 늘었다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="nip">
+        <div class="dp-qa-t">지배주주순이익</div>
+        <dl>
+          <dt>Q. 연결 순이익 중 주주 몫은?</dt>
+          <dd>누적 연결 순이익의 11.8%(91억)가 비지배지분 몫이다. 해외 합작법인 등 외부 지분이 있는 자회사 몫으로 보인다.</dd>
+          <dt>Q. 주당순이익(EPS)은 어떻게 봐야 하나?</dt>
+          <dd>누적 EPS는 477원(연환산 636원)이지만, 우선주·전환사채 등 희석 요소 때문에 순이익 기준 계산과 차이가 있다. 2025년 EPS(51원)가 매우 낮아 EPS 증가율보다 순이익 규모로 보는 편이 낫다.</dd>
+        </dl>
+      </div>
+    </div>
+    <script>(function(){var b=document.getElementById('dpQtrQA'),n=document.getElementById('dpQtrMetricNav');if(!b)return;b.classList.add('js');function s(){var a=n&&n.querySelector('button.active'),k=a?a.dataset.qm:'rev';b.querySelectorAll('.dp-qa-set').forEach(function(e){e.classList.toggle('on',e.dataset.qm===k)});}if(n)n.addEventListener('click',function(){setTimeout(s,0)});s();})();</script>
+<!-- q3qa:end -->
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1H26 연결 매출액</span><span class="v">1조 4,370억 (전년동기比 ▼4.6%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v up">444억 (전년동기比 ▲147.7%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 법인세차감전이익</span><span class="v up">354억 (전년동기比 ▲108.4%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 반기순이익(전체)</span><span class="v">309억 (전년동기比 ▲131.2%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 지배주주 순이익</span><span class="v up">258억 (전년동기比 ▲91.1%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 매출액</span><span class="v dn">2조 2,717억 (전년동기比 ▼4.6%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 영업이익</span><span class="v up">1,265억 (전년동기比 ▲49.6%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 지배주주 순이익</span><span class="v up">682억 (전년동기比 ▲22.3%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 단독 영업이익</span><span class="v up">821억 (3Q25 대비 ▲23.2%, 2Q26 대비 ▲207.8%)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 공시 기본EPS</span><span class="v">97원 (본문 유의사항 참고)</span></div>
-          <div class="dp-row2"><span class="l">1H26 비지배지분 순이익</span><span class="v">51억 (전체의 16.5%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 자산총계</span><span class="v up">9조 6,046억 (▲5.0%)</span></div>
-          <div class="dp-row2"><span class="l">연결 자본총계</span><span class="v up">4조 7,136억 (▲4.5%)</span></div>
-          <div class="dp-row2"><span class="l">지배기업소유주지분</span><span class="v up">4조 1,993억 (▲3.2%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 기본EPS</span><span class="v up">477원 (연환산 636원)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 부채비율</span><span class="v">104.5%</span></div>
+          <div class="dp-row2"><span class="l">9월 말 지배지분</span><span class="v">3조 9,828억 (작년 말 대비 ▼2.1%)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 현금성자산</span><span class="v">5,398억</span></div>
         </div>
       </div>
       <!-- fundq-insight:start -->
       <div class="dp-insight" style="margin-bottom:10px;">
         <div class="dp-insight-t">분기 실적 — 2개년 흐름</div>
-        <div class="dp-insight-b">최근 8개 분기(3Q24~2Q26) 영업이익은 14억→267억. 2Q26 영업이익은 전년 동기(2Q25) 8억 대비 ▲3351.2%, 직전 분기(1Q26) 대비 ▲50.8%. 이 기간 분기 최고는 3Q25(667억).</div>
+        <div class="dp-insight-b">최근 8개 분기(4Q24~3Q26) 영업이익은 -413억→821억. 3Q26 영업이익은 전년 동기(3Q25) 667억 대비 ▲23.2%, 직전 분기(2Q26) 대비 ▲207.8%. 이 기간 분기 최고는 3Q26(821억).</div>
       </div>
 <!-- fundq-insight:end -->
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심</div>
-        <div class="dp-insight-b">2분기 지배주주순이익이 231억으로 1분기(27억)의 8배 이상으로 급증하며 상반기 누적 258억(+91.1%)을 기록, 2025년 연간(323억)의 약 80%에 이미 도달했다. 연결 전체 반기순이익(309억) 중 비지배지분 몫은 51억(16.5%)으로 1분기(57.7%)보다 크게 축소돼 지배주주 몫의 비중이 뚜렷하게 커졌다. 공시 기본EPS(97원)는 우선주·전환사채 등 희석 요소로 인해 지배주주순이익 기준 환산 EPS(약 290원, 연환산 ~580원)와 괴리가 있어 해석에 유의. 2차전지 소재 업황 저점 통과 여부는 하반기 실적으로 추가 확인이 필요.</div>
+        <div class="dp-insight-t">3분기보고서 핵심 — 전년동기(3Q25 누적) 대비</div>
+        <div class="dp-insight-b">3Q26 단독 영업이익은 821억으로 2Q26(267억)의 3배, 1년 전보다 23.2% 많고, 3분기 영업이익률은 9.8%로 최근 2년 중 가장 높다. 단독 매출도 8,348억으로 2Q26보다 22.9% 늘었다. 누적으로는 매출 2조 2,717억(▼4.6%)으로 줄었지만 영업이익은 1,265억(▲49.6%)으로 2025년 연간(328억)의 3.9배다. 누적 지배주주 순이익은 682억(▲22.3%)으로 2025년 연간(323억)의 2.1배. 다만 공시 기본EPS(누적 477원)는 우선주·전환사채 등 희석 요소 때문에 순이익 기준 계산과 차이가 있고, 2025년 EPS(51원)가 워낙 낮아 EPS 증가율로 실적을 판단하기는 어렵다. 2차전지 소재 업황 저점 통과 여부는 3분기 이익률 개선으로 한 단계 확인된 모습이다.</div>
       </div>
     </div>
   </div>
@@ -489,7 +538,7 @@ body{background:var(--dp-bg);}
     <!-- dp-vscore:end -->
     <div class="dp-share4">
       <div class="dp-share"><div class="dp-share-l">환산 EPS · 2025 연결</div><div class="dp-share-v">약 363원</div><div class="dp-share-s">지배주주순이익 323억 ÷ 8,895만주</div></div>
-      <div class="dp-share"><div class="dp-share-l">1H26 환산 반기EPS</div><div class="dp-share-v">약 290원</div><div class="dp-share-s">연환산 ~580원</div></div>
+      <div class="dp-share"><div class="dp-share-l">3Q26 환산 누적EPS</div><div class="dp-share-v">약 767원</div><div class="dp-share-s">연환산 ~1,022원</div></div>
       <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">약 45,730원</div><div class="dp-share-s">지배지분 4.07조 ÷ 8,895만주</div></div>
       <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">250원</div><div class="dp-share-s">배당성향 60.9% · 배당 재개</div></div>
     </div>
@@ -837,6 +886,12 @@ body{background:var(--dp-bg);}
         <div class="dp-tl-date">2026.08.14 (반기보고서)</div>
         <div class="dp-tl-title">1H26 실적 공시 — 2분기 지배주주순이익 231억, 1분기 대비 8배 급증</div>
         <div class="dp-tl-body">1분기 27억에 그쳤던 지배주주순이익이 2분기 231억으로 급증하며 상반기 누적 258억(+91.1%), 2025년 연간(323억)의 80%에 이미 도달. 비지배지분 몫도 57.7%→16.5%로 축소되며 지배주주 몫 비중이 뚜렷하게 커짐.</div>
+      </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.11.13 (3분기보고서)</div>
+        <div class="dp-tl-title">3Q26 분기보고서 — 영업이익 821억, 영업이익률 9.8%</div>
+        <div class="dp-tl-body">3분기 영업이익 821억으로 2Q26의 3배, 매출 8,348억으로 22.9% 증가. 누적 영업이익 1,265억으로 2025년 연간의 3.9배.</div>
       </div>
     </div>
   </div>
@@ -1227,7 +1282,7 @@ function svgEl(tag,attrs){
 }
 
 // -- fund-report:start (valuation/fund_render.py)
-const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[1989542181862.0,3301915805063.0,4759871486264.0,3699944235821.0,2938698184392.0],"oi":[121675892582.0,165871669943.0,35882185999.0,721245866.0,32827283494.0],"nip":[134160118356.0,118266658602.0,28722208549.0,-212323486396.0,32262297485.0],"qLabels":["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26"],"q":{"rev":[922788171172.0,723246956546.0,845393850220.0,660936939289.0,874798315308.0,557569079575.0,757515005832.0,679457103191.0],"oi":[1367594309.0,-41280974029.0,17150145795.0,773324990.0,66669950510.0,-51766137801.0,17699640745.0,26688763004.0],"pretax":[-26023558875.0,-430215182049.0,60836884089.0,-43863586772.0,57267048774.0,-84112417627.0,10006916607.0,25372976925.0],"ni":[-1208309177.0,-275941920922.0,48929585333.0,-35547312063.0,46449106360.0,-23309488486.0,6283039998.0,24654775346.0],"nip":[2479365879.0,-266235865652.0,49061437821.0,-35560541017.0,42265765906.0,-23504365225.0,2658711601.0,23136596254.0]}};
+const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[1989542181862.0,3301915805063.0,4759871486264.0,3699944235821.0,2938698184392.0],"oi":[121675892582.0,165871669943.0,35882185999.0,721245866.0,32827283494.0],"nip":[134160118356.0,118266658602.0,28722208549.0,-212323486396.0,32262297485.0],"qLabels":["4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26","3Q26"],"q":{"rev":[723246956546.0,845393850220.0,660936939289.0,874798315308.0,557569079575.0,757515005832.0,679457103191.0,834770910764.0],"oi":[-41280974029.0,17150145795.0,773324990.0,66669950510.0,-51766137801.0,17699640745.0,26688763004.0,82143544932.0],"pretax":[-430215182049.0,60836884089.0,-43863586772.0,57267048774.0,-84112417627.0,10006916607.0,25372976925.0,60763006683.0],"ni":[-275941920922.0,48929585333.0,-35547312063.0,46449106360.0,-23309488486.0,6283039998.0,24654775346.0,46427714458.0],"nip":[-266235865652.0,49061437821.0,-35560541017.0,42265765906.0,-23504365225.0,2658711601.0,23136596254.0,42421143820.0]}};
 const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
 const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
 let _qtrCurrentMetric=(document.querySelector('#dpQtrMetricNav button')||{dataset:{qm:'oi'}}).dataset.qm;
