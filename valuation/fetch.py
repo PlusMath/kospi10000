@@ -15,6 +15,9 @@ import os, io, re, json, time, zipfile, datetime, urllib.request
 ROOT = os.path.dirname(os.path.abspath(__file__))
 CACHE = os.path.join(ROOT, '.cache')
 RC = {1: '11013', 2: '11012', 3: '11014', 4: '11011'}
+# 12월 결산이 아닌 회사의 결산월(2026-11-18). 3월 결산은 DART 보고서 코드의 실제 기간이 1분기=6월, 반기=9월,
+# 3분기=12월이고, 사업보고서는 bsns_year Y가 'Y년 3월 결산'(같은 회계연도 분기보고서보다 연도가 1 큼)
+FY_END = {'001720': 3}   # 신영증권
 UA = {'User-Agent': 'Mozilla/5.0'}
 
 
@@ -81,24 +84,29 @@ def dart(api, **params):
         return {'status': 'ERR', 'message': str(e)}
 
 
-def report_jobs(today=None):
+def period_end(y, rc, code=None):
+    """(bsns_year, reprt_code) 보고서가 다루는 기간의 마지막 달 근처 날짜. 12월 결산이 아니면 FY_END로 이동."""
+    q = {v: k for k, v in RC.items()}[rc]
+    fe = FY_END.get(code, 12)
+    m = fe if q == 4 else (fe + q * 3 - 1) % 12 + 1
+    return datetime.date(y, m, 28)
+
+
+def report_jobs(today=None, code=None):
     """(year, reprt_code) pairs that may exist by now. 2015~ annual, 2020~ quarterly."""
     today = today or datetime.date.today()
     jobs = [(y, '11011') for y in range(2015, 2020)]
     for y in range(2020, today.year + 1):
         for q in (1, 2, 3, 4):
             # 공시 기한: 분기·반기 +45일, 사업보고서 +90일. 기한 전이라도 일찍 내는 회사가 있어 마감 다음날부터 조회
-            end = datetime.date(y, q * 3, 28)
-            if today >= end + datetime.timedelta(days=1):
+            if today >= period_end(y, RC[q], code) + datetime.timedelta(days=1):
                 jobs.append((y, RC[q]))
     return jobs
 
 
-def _recent(y, rc, today):
+def _recent(y, rc, today, code=None):
     """013(미제출)을 다시 조회할 가치가 있는 최근 공시인지 — 기한 + 20일까지만 재시도."""
-    q = {v: k for k, v in RC.items()}[rc]
-    end = datetime.date(y, q * 3, 28)
-    deadline = end + datetime.timedelta(days=110 if q == 4 else 65)
+    deadline = period_end(y, rc, code) + datetime.timedelta(days=110 if rc == '11011' else 65)
     return today <= deadline
 
 
@@ -112,12 +120,12 @@ def refresh_fs(code, corp, fs_div_dir='fs', fs_div='CFS', today=None, log=print)
     path = _p(fs_div_dir, f'{code}.json')
     out = _load(path, {})
     changed = 0
-    for y, rc in report_jobs(today):
+    for y, rc in report_jobs(today, code):
         k = f'{y}_{rc}'
         old = out.get(k)
         if old and old.get('status') == '000':
             continue
-        if old and old.get('status') == '013' and not _recent(y, rc, today) and not _stale(old, y, today):
+        if old and old.get('status') == '013' and not _recent(y, rc, today, code) and not _stale(old, y, today):
             continue
         if old and old.get('checked') == str(today):
             continue
@@ -161,12 +169,12 @@ def refresh_inv(code, corp, today=None):
     today = today or datetime.date.today()
     path = _p('inv', f'{code}.json')
     out = _load(path, {})
-    for y, rc in report_jobs(today):
+    for y, rc in report_jobs(today, code):
         if y < 2020 or rc not in ('11011', '11012'):
             continue
         k = f'{y}_{rc}'
         old = out.get(k)
-        if old and (old.get('status') == '000' or (old.get('status') == '013' and not _recent(y, rc, today) and not _stale(old, y, today))
+        if old and (old.get('status') == '000' or (old.get('status') == '013' and not _recent(y, rc, today, code) and not _stale(old, y, today))
                     or old.get('checked') == str(today)):
             continue
         d = dart('otrCprInvstmntSttus', corp_code=corp, bsns_year=y, reprt_code=rc)
@@ -182,12 +190,12 @@ def refresh_shr(code, corp, today=None, since=2025):
     today = today or datetime.date.today()
     path = _p('shr', f'{code}.json')
     out = _load(path, {})
-    for y, rc in report_jobs(today):
+    for y, rc in report_jobs(today, code):
         if y < since:
             continue
         k = f'{y}_{rc}'
         old = out.get(k)
-        if old and (old.get('status') == '000' or (old.get('status') == '013' and not _recent(y, rc, today) and not _stale(old, y, today))
+        if old and (old.get('status') == '000' or (old.get('status') == '013' and not _recent(y, rc, today, code) and not _stale(old, y, today))
                     or old.get('checked') == str(today)):
             continue
         d = dart('stockTotqySttus', corp_code=corp, bsns_year=y, reprt_code=rc)

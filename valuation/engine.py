@@ -5,7 +5,7 @@
 """
 import os, re, json, math, datetime, statistics as st
 
-from fetch import CACHE, RC
+from fetch import CACHE, RC, FY_END
 
 R = 0.12
 DEBUG = bool(os.environ.get('IV_DEBUG'))
@@ -63,6 +63,25 @@ def _load(path, default=None):
 
 
 NAVER = _load(_p('naver.json'), {})
+
+
+# 3월 결산(FY_END) 회사: 캐시의 사업보고서 키만 연도를 1 당기면(Y년 3월 결산 → Y-1) 엔진이 가정하는 '연도 y의 1~4분기'
+# 누적 구조(1분기 → 반기 → 3분기 → 연간)가 그대로 맞는다. 대신 (y, q)의 실제 기간 끝은 3개월 뒤(4분기는 y+1년 3월)
+def fy_shift(code):
+    return (FY_END.get(code, 12) % 12) if code else 0
+
+
+def fy_keys(code, d):
+    """'{bsns_year}_{reprt_code}' 키 dict를 12월 결산 기준 가상 연도로 옮김."""
+    if not fy_shift(code) or not d:
+        return d
+    return {(f'{int(k[:4]) - 1}_11011' if k.endswith('_11011') else k): v for k, v in d.items()}
+
+
+def period_ym(code, y, q):
+    """가상 (연도, 분기)의 실제 기간 끝 (연도, 월)."""
+    m = q * 3 + fy_shift(code)
+    return (y + 1, m - 12) if m > 12 else (y, m)
 
 
 def num(s):
@@ -178,6 +197,7 @@ def alot_rows(code):
     """전체 재무제표가 없는 해(금융사 2015~2020 등): 배당 공시의 순이익·EPS·배당 (재무상태표 없음)."""
     out = {}
     for y, d in (_load(_p('alot', f'{code}.json'), {}) or {}).items():
+        y = int(y) - (1 if fy_shift(code) else 0)   # 사업보고서 기준 연도 → 가상 연도
         v = {}
         for x in d.get('list') or []:
             se, val = x.get('se', ''), num(x.get('thstrm'))
@@ -206,7 +226,7 @@ def _shares(r):
 def dart_shares(code):
     """{(연도, 분기): 유통주식 수(발행 − 자기주식, 보통·우선 합계)} — 공시에 숫자가 있는 보고서만."""
     out = {}
-    for k, v in (_load(_p('shr', f'{code}.json'), {}) or {}).items():
+    for k, v in fy_keys(code, _load(_p('shr', f'{code}.json'), {}) or {}).items():
         y, rc = k.split('_')
         rows = {x.get('se'): num(x.get('distb_stock_co')) for x in v.get('list') or []}
         n = rows.get('합계') or rows.get('보통주')
@@ -216,7 +236,7 @@ def dart_shares(code):
 
 
 def load(code):
-    d = _load(_p('fs', f'{code}.json'), {})
+    d = fy_keys(code, _load(_p('fs', f'{code}.json'), {}))
     L = lambda y, q: (d.get(f'{y}_{RC[q]}') or {}).get('list') or []
     rows = {}
     for y in range(2015, THIS_YEAR):
@@ -511,7 +531,7 @@ def value_at(typ, rows, ys, px, qb, ttm, shares, nav=None, merged=False, code=No
         pers, pws = [], []
         wy = dict(zip(ys, eps_weights(ys)))
         for y in ys:
-            p = px_at(px, y, 12)
+            p = px_at(px, *period_ym(code, y, 4))
             if p and rows[y]['nip'] > 0:
                 # 이익이 바닥이던 해의 PER(CJ대한통운 2015~2021년 최대 80배)이 평균 EPS에 곱해져 상단이 주가의 6배까지
                 # 나왔음 → 연도별 PER을 30배로 자름(2026-10-26)
@@ -594,7 +614,7 @@ def run(code, factor=None, force=None):
         return {'code': code, 'error': f'연간 재무 이력 부족({len(rows)}년)'}
     typ, why = force or classify(code, rows)
     px = code if px_series(code) else None
-    ofs = _load(_p('ofs', f'{code}.json'), {}) or {}
+    ofs = fy_keys(code, _load(_p('ofs', f'{code}.json'), {}) or {})
     ofs_L = lambda y, q: (ofs.get(f'{y}_{RC[q]}') or {}).get('list') or []
     out = []
     full = {y for y in rows if not rows[y].get('lite')}
@@ -666,11 +686,11 @@ def run(code, factor=None, force=None):
         nav = nav_at(code, y, q, shares, ofs_L, latest=last) if typ == '지주·투자' else None
         v = value_at(typ, rows, ys, px, qb, ttm, shares, nav, merged=code in MERGED, code=code, q=q)
         if v:
-            v['q'] = f'{y}-{q*3:02d}'
+            v['q'] = '%d-%02d' % period_ym(code, y, q)
             v['fy'] = fy
             out.append(v)
         elif typ == '저수익·회복' and out:
-            out.append({'q': f'{y}-{q*3:02d}', 'fy': fy, 'gap': True})   # 최근 4분기 적자: 이익 기반 가치 없음(그래프 공백)
+            out.append({'q': '%d-%02d' % period_ym(code, y, q), 'fy': fy, 'gap': True})   # 최근 4분기 적자: 이익 기반 가치 없음(그래프 공백)
     if typ == '저수익·회복' and (not out or out[-1].get('gap')):
         return run(code, factor, force=('고성장·적자', '최근 4분기 적자'))
     if not out:
@@ -687,7 +707,7 @@ def cache_complete(code):
     """수집해야 할 공시가 캐시에 빠짐없이 있는지(제출·미제출 응답 모두 기록됨) — 일시적 수집 실패와 진짜 이력 부족을 구분."""
     from fetch import report_jobs
     d = _load(_p('fs', f'{code}.json'), {}) or {}
-    return bool(d) and all(f'{y}_{rc}' in d for y, rc in report_jobs())
+    return bool(d) and all(f'{y}_{rc}' in d for y, rc in report_jobs(code=code))
 
 
 def run_all(stocks, log=print):

@@ -1,7 +1,7 @@
 """engine 결과를 종목 페이지의 '내재가치 평가' 박스(#dpBuffettBox)와 그래프 스크립트로 반영."""
 import os, re, json, html
 
-from fetch import CACHE
+from fetch import CACHE, FY_END
 from engine import px_series, THIS_YEAR, MERGED
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -142,6 +142,11 @@ def make_box(page_code, r, legacy=False, price_sel=None, price=None):
                  '(의결권·유동성 차이로 생기는 상시 할인 반영, 방식별 범위도 같은 비율로 환산, 근거 수치는 보통주 기준).'
                  if lt.get('pref_factor') else ' 우선주는 보통주와 같은 주당 내재가치를 적용했다(의결권·배당 차이 미반영).')
     qy, qm = lt['q'].split('-')
+    fe = FY_END.get(r['code'])
+    if fe:   # 3월 결산 등: 엔진의 연도는 회계연도 시작 연도 → 결산 연도로 표기, 분기 이름 대신 실적 기준월
+        src_txt = f'DART 연결 재무제표 {r["first_year"] + 1}~{lt["fy"] + 1}년 {fe}월 결산 + {qy}년 {int(qm)}월말 누적 실적 기준'
+    else:
+        src_txt = f'DART 연결 재무제표 {r["first_year"]}~{lt["fy"]}년 + {qy}년 {QNAME[qm]}보고서 기준'
     hold = r['type'] == '고성장·적자'
     mrows = '  <div class="dpb-cards">\n' + '\n'.join(
         f'  <div class="dpb-card"><div class="dpb-card-h"><span>{html.escape(x["name"])}</span><span>가중 {x["w"]}%</span></div>'
@@ -163,7 +168,7 @@ def make_box(page_code, r, legacy=False, price_sel=None, price=None):
 {STYLE}
 {LEGACY_STYLE if legacy else ''}
   <div class="dp-summary-l">내재가치 평가</div>
-  <div class="dpb-sub">DART 연결 재무제표 {r["first_year"]}~{lt["fy"]}년 + {qy}년 {QNAME[qm]}보고서 기준 · 할인율 12% · 안전마진 미적용</div>
+  <div class="dpb-sub">{src_txt} · 할인율 12% · 안전마진 미적용</div>
   <div class="dpb-say"><span class="dpb-badge" id="dpbBadge"></span><div class="dpb-verdict" id="dpbVerdict"></div></div>
   <div class="dpb-bar" id="dpbBar" role="img" aria-label="{head2}: 하단 {fmt(lt['low'])}원, 상단 {fmt(lt['high'])}원"></div>
   <div class="dpb-h"><span class="dpb-type">{r['type']}형</span>평가 방식별 내재가치 <span style="font-weight:400">({html.escape(r['type_why'])})</span> · 방식 간 일치도 <span style="color:{CONF_COLOR[cf]}">{cf}</span></div>
