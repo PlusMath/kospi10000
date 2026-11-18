@@ -25,9 +25,39 @@ def stock_pages():
     return out
 
 
-def export_iv():
+def iv_detail(r, today):
+    """엔진 결과 → QRI(integrated_score/) 입력용 구조화 정보. 페이지 박스와 같은 마지막 분기 기준.
+    method_coverage는 엔진이 누락 방식을 빼고 100으로 재환산한 methods[].w가 아니라, 유형별 원래 가중치(WEIGHTS)로 계산."""
+    import engine
+    if not r or 'error' in r:
+        return {'error': (r or {}).get('error', '데이터 없음'), 'excluded': bool((r or {}).get('excluded')), 'calc_date': today}
+    lt = r['quarters'][-1]
+    w = engine.WEIGHTS[r['type']]
+    ok = [m['name'] for m in lt['methods']]
+    d = {
+        'model_type': r['type'], 'required_return': engine.R, 'financial_period': lt['q'], 'fy': lt.get('fy'),
+        'low_raw': lt['low'], 'high_raw': lt['high'], 'spread': lt['spread'],
+        'method_weights': w, 'methods_ok': ok, 'missing_methods': list(lt.get('missing') or []),
+        'method_coverage': sum(w[k] for k in ok if k in w) / sum(w.values()),
+        'single_method_design': len(w) == 1, 'calc_date': today,
+    }
+    if lt.get('pref_factor'):
+        d['pref_factor'] = lt['pref_factor']
+    return d
+
+
+def export_iv(detail=None):
     """메인 페이지 '내재가치 매력순'용: 종목 페이지 박스(#dpBuffettBox)의 최신 분기 내재가치 하단·상단을
-    data/intrinsic_value.json으로 모은다. 점수(주가÷내재가치)는 메인 페이지가 실시간 가격으로 계산."""
+    data/intrinsic_value.json으로 모은다. 점수(주가÷내재가치)는 메인 페이지가 실시간 가격으로 계산.
+    detail(엔진 결과 요약, 2026-11-17 QRI용)이 주어지면 종목별로 덧붙이고, 이번 실행에 없는 종목(--code 부분 실행,
+    일시 오류로 기존 박스 유지 등)은 직전 파일의 detail을 그대로 유지(detail_carried=True)."""
+    path = os.path.join(REPO, 'data', 'intrinsic_value.json')
+    prev = {}
+    try:
+        prev = json.load(open(path, encoding='utf-8')).get('stocks', {})
+    except (OSError, ValueError):
+        pass
+    detail = detail or {}
     out = {}
     for s in stock_pages():
         t = open(s['file'], encoding='utf-8').read()
@@ -40,9 +70,22 @@ def export_iv():
         q = json.loads(bands.group(1))[-1][0] if bands else None
         out[s['code']] = {'low': int(float(g('data-iv-low'))), 'high': int(float(g('data-iv-high'))),
                           'hold': 'data-hold=' in a, 'q': q}
-    path = os.path.join(REPO, 'data', 'intrinsic_value.json')
-    json.dump({'generated_at': time.strftime('%Y-%m-%d %H:%M:%S'), 'stocks': out},
-              open(path, 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
+        d = detail.get(s['code'])
+        if d is None or 'error' in d:
+            # 이번 실행에서 평가 못 했지만 페이지는 기존 박스를 유지한 경우 → 직전 detail 유지(박스와 같은 분기일 때만)
+            pd = (prev.get(s['code']) or {}).get('detail')
+            if pd and pd.get('financial_period') == q:
+                d = dict(pd, detail_carried=True)
+        if d and 'error' not in d:
+            if d.get('financial_period') != q:
+                d = dict(d, period_mismatch=True)   # 박스 분기와 엔진 분기가 다르면 QRI가 평가 보류
+            out[s['code']]['detail'] = d
+    # 박스가 없는 종목(평가 제외·오류)의 사유 — QRI '평가 보류' 사유 표시용. stocks와 분리(기존 소비처는 stocks만 읽음)
+    errors = {code: d for code, d in detail.items() if code not in out and d and 'error' in d}
+    tmp = path + '.tmp'
+    json.dump({'generated_at': time.strftime('%Y-%m-%d %H:%M:%S'), 'stocks': out, 'errors': errors},
+              open(tmp, 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
+    os.replace(tmp, path)
     return len(out)
 
 
@@ -112,7 +155,8 @@ def main():
                            if 'quarters' in (r := res.get(s['code']) or {}) else {'error': r.get('error')})
                for s in stocks}
     json.dump(summary, open(os.path.join(fetch.CACHE, 'last_result.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=0)
-    log.info('intrinsic_value.json %d종목', export_iv())
+    today = time.strftime('%Y-%m-%d')
+    log.info('intrinsic_value.json %d종목', export_iv({s['code']: iv_detail(res.get(s['code']), today) for s in stocks}))
     log.info('완료: %d종목 %s, %.0f초 소요', len(stocks), ' '.join(f'{k}={v}' for k, v in sorted(counts.items())), time.time() - t0)
 
 

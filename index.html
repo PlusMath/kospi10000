@@ -711,7 +711,7 @@
     .up { color: var(--color-up); }
     .dn { color: var(--color-down); }
 
-    /* ── 매력도별 뷰: 순위별 뷰와 동일 그리드, 시가총액 칸을 기본·기술·총점 3분할로 교체 ── */
+    /* ── 매력도별 뷰: 순위별 뷰와 동일 그리드, 시가총액 칸을 통합·Q·R·I 점수로 교체 ── */
     .score-table-head,
     .score-row {
       display: grid;
@@ -1433,7 +1433,7 @@
     }
   </style>
 <link rel="stylesheet" href="css/theme.css">
-<link rel="stylesheet" href="css/home.css?v=20261117c">
+<link rel="stylesheet" href="css/home.css?v=20261118a">
 </head>
 
 <body>
@@ -4098,7 +4098,7 @@
     let scorePage = 1;
     let changePage = 1;
     let changeSortMode = 'desc'; // 'desc' (상승률 큰 순) | 'asc' (하락률 큰 순)
-    let scoreSortMode = 'total'; // 'fundamental' | 'technical' | 'total' | 'intrinsic'
+    let scoreSortMode = 'qri'; // 'qri'(통합) | 'q' | 'r' | 'i' | 'technical'(별도)
     let searchQuery = '';
     const RANK_PAGE_SIZE = 10;
 
@@ -4128,20 +4128,6 @@
         .then((data) => { intrinsicData = data.stocks || {}; return intrinsicData; })
         .catch(() => { intrinsicData = {}; return intrinsicData; });
       return intrinsicLoadPromise;
-    }
-    // 내재가치 매력 점수(절대평가): 주가 ÷ 내재가치(하단·상단 기하평균) 비율 하나로만 계산.
-    // 0.5배 이하 100 · 0.71배 75 · 1배 50 · 2배 25 · 4배 이상 0 (로그 눈금, 고평가 쪽은 2배마다 -25).
-    function intrinsicScore(price, entry) {
-      if (!entry || entry.hold || !(price > 0) || !(entry.low > 0) || !(entry.high > 0)) return null;
-      const value = Math.sqrt(entry.low * entry.high);
-      const x = Math.log(value / price);
-      const s = x >= 0 ? 50 + 50 * x / Math.log(2) : 50 + 50 * x / Math.log(4);
-      return { score: Math.round(Math.max(0, Math.min(100, s))), ratio: price / value, value };
-    }
-    function intrinsicTier(score) {
-      if (score >= 50) return 'tier-cheap';
-      if (score >= 25) return 'tier-mid';
-      return 'tier-expensive';
     }
     // 종목 상세 페이지의 scoring.classify_grade와 동일한 등급 문자열 → 색상 티어.
     function tscoreGradeTier(grade) {
@@ -4219,16 +4205,6 @@
     function fmtMcap(joWon) {
       if (joWon == null) return '—';
       return joWon.toFixed(1) + '조원';
-    }
-    // 종목 상세 페이지의 Get-DpVscoreGrade와 동일한 등급 경계.
-    // 2026-08-27(vscore P0): 산식은 업종 내 상대순위(percentile)일 뿐 절대적 저평가 판정이
-    // 아니므로, PowerShell의 Get-DpVscoreGrade와 동일하게 "저평가" 표현을 상대매력 표현으로 교체.
-    function vscoreGrade(score) {
-      if (score >= 80) return { label: '업종 내 상대매력 최상위', tier: 'tier-cheap' };
-      if (score >= 70) return { label: '업종 내 상대매력 상위', tier: 'tier-cheap' };
-      if (score >= 60) return { label: '업종 내 상대매력 중상위', tier: 'tier-cheap' };
-      if (score >= 40) return { label: '업종 내 중립', tier: 'tier-mid' };
-      return { label: '업종 내 상대매력 하위 또는 재무위험', tier: 'tier-expensive' };
     }
     function marketCapOf(stock) {
       const live = stockLive[stock.code];
@@ -4355,21 +4331,22 @@
       return v ? `<span class="verdict ${v[0]}">${v[1]}</span>` : '';
     }
 
-    // ── 표 옆 미니 카드: 기본적 매력도 상위 / 오늘 5% 이상 변동 ──
+    // ── 표 옆 미니 카드: 통합 매력도(QRI) 상위 / 오늘 5% 이상 변동 ──
     let sideMode = 'score';
     function miniCardHtml(stock) {
       const live = stockLive[stock.code];
       const hasChange = live && typeof live.change === 'number';
       const v = ivVerdict(stock, live);
       const e = ivEntry(stock, live);
-      const sc = stock.vscore;
-      const scCls = sc >= 70 ? 'ms-hi' : sc >= 50 ? 'ms-mid' : 'ms-lo';
+      const qe = qriEntry(stock.code);
+      const sc = qe && qe.published ? qe.score : null;
+      const scCls = sc >= 65 ? 'ms-hi' : sc >= 45 ? 'ms-mid' : 'ms-lo';
       const rangeTxt = e && !e.hold ? `${e.low.toLocaleString('ko-KR')}~${e.high.toLocaleString('ko-KR')}` : '';
       return `<a class="mini" href="${stock.page}">
         <div><div class="mini-n">${stock.name}</div><div class="mini-m">${stock.code} · ${stock.industry}</div></div>
         <div><div class="mini-p">${live ? live.price.toLocaleString('ko-KR') : '—'}</div><div class="mini-c ${hasChange ? (live.change >= 0 ? 'up' : 'dn') : ''}">${hasChange ? fmtChange(live.change) : ''}</div></div>
         ${ivRangeHtml(stock, live)}
-        <div class="mini-g"><span>${v ? v[1] : ''}${rangeTxt ? ' · ' + rangeTxt : ''}</span>${sc != null ? `<span class="mini-score ${scCls}">매력도 ${sc}</span>` : ''}</div>
+        <div class="mini-g"><span>${v ? v[1] : ''}${rangeTxt ? ' · ' + rangeTxt : ''}</span>${sc != null ? `<span class="mini-score ${scCls}" title="${qe.grade}">통합 ${sc.toFixed(1)}</span>` : ''}</div>
       </a>`;
     }
     function renderSideCards() {
@@ -4377,15 +4354,21 @@
       if (!box) return;
       let list;
       if (sideMode === 'score') {
-        list = stocksTop.filter((s) => s.vscore != null).sort((a, b) => b.vscore - a.vscore).slice(0, 5);
+        if (!qriData) {
+          box.innerHTML = `<div class="side-head"><h3>통합 매력도 상위</h3></div><p class="side-empty">${qriLoadFailed ? '통합 매력도 데이터를 불러오지 못했습니다.' : '불러오는 중...'}</p>`;
+          if (!qriLoadFailed) loadQriData().then(renderSideCards);
+          return;
+        }
+        list = stocksTop.filter((s) => { const e = qriEntry(s.code); return e && e.published; })
+          .sort((a, b) => qriEntry(a.code).rank - qriEntry(b.code).rank).slice(0, 5);
       } else {
         list = stocksTop
           .filter((s) => stockLive[s.code] && typeof stockLive[s.code].change === 'number' && Math.abs(stockLive[s.code].change) >= 5)
           .sort((a, b) => Math.abs(stockLive[b.code].change) - Math.abs(stockLive[a.code].change))
           .slice(0, 6);
       }
-      box.innerHTML = `<div class="side-head"><h3>${sideMode === 'score' ? '기본적 매력도 상위' : '오늘 5% 이상 변동'}</h3>
-        <div class="side-tabs"><button type="button" data-m="score" class="${sideMode === 'score' ? 'active' : ''}">매력도</button><button type="button" data-m="move" class="${sideMode === 'move' ? 'active' : ''}">5% 변동</button></div></div>`
+      box.innerHTML = `<div class="side-head"><h3>${sideMode === 'score' ? '통합 매력도 상위' : '오늘 5% 이상 변동'}</h3>
+        <div class="side-tabs"><button type="button" data-m="score" class="${sideMode === 'score' ? 'active' : ''}">통합 매력</button><button type="button" data-m="move" class="${sideMode === 'move' ? 'active' : ''}">5% 변동</button></div></div>`
         + (list.length ? list.map(miniCardHtml).join('') : '<p class="side-empty">해당하는 종목이 없습니다.</p>');
       box.querySelectorAll('.side-tabs button').forEach((b) => b.addEventListener('click', () => { sideMode = b.dataset.m; renderSideCards(); }));
     }
@@ -4656,63 +4639,86 @@
       });
     }
 
-    // ── 매력도별 뷰(기본적 매력=vscore + 기술적 매력=technical_score 통합) ──
+    // ── 매력도별 뷰: QRI 통합 매력도(data/integrated_score.json, integrated_score/run_daily.py가 매일 생성) ──
+    // 백엔드가 최종 score·grade·rank를 계산하고 여기서는 표시만 한다. 기술적 매력순은 QRI와 섞지 않는 별도 정렬.
+    let qriData = null;
+    let qriLoadPromise = null;
+    let qriLoadFailed = false;
+    let qriShowHeld = false;
+    function loadQriData() {
+      if (qriData) return Promise.resolve(qriData);
+      if (qriLoadPromise) return qriLoadPromise;
+      qriLoadFailed = false;
+      qriLoadPromise = fetch(`data/integrated_score.json?v=${Date.now()}`, { cache: 'no-store' })
+        .then((res) => { if (!res.ok) throw new Error('no data'); return res.json(); })
+        .then((data) => { if (!data || !data.stocks) throw new Error('bad data'); qriData = data; return data; })
+        .catch(() => { qriLoadFailed = true; qriLoadPromise = null; return null; });
+      return qriLoadPromise;
+    }
+    function qriEntry(code) { return qriData && qriData.stocks ? qriData.stocks[code] || null : null; }
+    function qriTier(score) { return score >= 65 ? 'tier-cheap' : score >= 45 ? 'tier-mid' : 'tier-expensive'; }
+    const QRI_AXIS = { q: '기업체력', r: '상대가치', i: '내재가치' };
+    // 메인 시세 기준일(일일 스크립트가 고치는 '…종가 기준' 문구)보다 QRI 기준일이 이르면 이전 기준일 자료
+    function qriIsStale() {
+      const el = document.querySelector('.daily-movers-date');
+      const m = el && el.textContent.match(/(\d{4})년 (\d{1,2})월 (\d{1,2})일/);
+      if (!m || !qriData) return false;
+      const d = `${m[1]}-${m[2].padStart(2, '0')}-${m[3].padStart(2, '0')}`;
+      return qriData.as_of_date < d;
+    }
     function scoreSortLabel(mode) {
       if (mode === 'technical') return '기술적 매력순';
-      if (mode === 'fundamental') return '기본적 매력순';
-      if (mode === 'intrinsic') return '내재가치 매력순';
-      return '총점순';
+      if (mode === 'q') return '기업체력순';
+      if (mode === 'r') return '상대가치순';
+      if (mode === 'i') return '내재가치순';
+      return '통합 매력순';
     }
+    function fmtPct(v) { return v == null ? '—' : `${v >= 0 ? '' : '−'}${Math.abs(v * 100).toFixed(1)}%`; }
 
-    function createScoreRow(displayRank, stock, vscoreVal, tscoreEntry, totalVal, ivVal) {
+    function scoreRowShell(displayRank, stock, nameSub, badgeHtml, extraCls) {
       const row = document.createElement('div');
-      row.className = 'score-row';
+      row.className = 'score-row' + (extraCls ? ' ' + extraCls : '');
       row.setAttribute('role', 'row');
-
       const live = stockLive[stock.code];
       const isFav = favorites.has(stock.code);
       const hasChange = live && typeof live.change === 'number';
-      const vTier = vscoreVal != null ? vscoreGrade(vscoreVal).tier : '';
-      const tTier = tscoreEntry ? tscoreGradeTier(tscoreEntry.grade) : '';
-
       row.innerHTML = `
         <div class="sr2-rank" role="cell">${displayRank}</div>
-        <div class="sr2-name" role="cell">${stock.name}<small>${stock.code}</small></div>
+        <div class="sr2-name" role="cell">${stock.name}<small>${stock.code}</small>${nameSub ? `<span class="sr2-sub">${nameSub}</span>` : ''}</div>
         <div class="sr2-price" role="cell">${live ? fmtWon(live.price) : '—'}</div>
         <div class="sr2-change ${hasChange ? (live.change >= 0 ? 'up' : 'dn') : ''}" role="cell">${hasChange ? fmtChange(live.change) : '—'}</div>
-        ${ivVal ? `<div class="score-badge-group dual" role="cell">
-          <div class="score-mini ${intrinsicTier(ivVal.score)}" title="내재가치 매력(절대평가, 100점 만점)">
-            <span class="score-mini-l">내재</span>
-            <span class="score-mini-v">${ivVal.score}</span>
-          </div>
-          <div class="score-mini" title="주가 ÷ 내재가치(${fmtWon(Math.round(ivVal.value))})">
-            <span class="score-mini-l">주가/가치</span>
-            <span class="score-mini-v">${ivVal.ratio.toFixed(2)}배</span>
-          </div>
-        </div>` : `<div class="score-badge-group dual" role="cell">
-          <div class="score-mini ${vTier}" title="기본적 매력(밸류에이션)">
-            <span class="score-mini-l">기본</span>
-            <span class="score-mini-v">${vscoreVal != null ? vscoreVal : '—'}</span>
-          </div>
-          <div class="score-mini ${tTier}" title="기술적 매력(눌림목매매 기준)">
-            <span class="score-mini-l">기술</span>
-            <span class="score-mini-v">${tscoreEntry ? tscoreEntry.technical_score : '—'}</span>
-          </div>
-          <div class="score-mini total" title="총점(기본+기술)">
-            <span class="score-mini-l">총점</span>
-            <span class="score-mini-v">${totalVal != null ? totalVal : '—'}</span>
-          </div>
-        </div>`}
+        <div class="score-badge-group dual" role="cell">${badgeHtml}</div>
         <div class="sr2-star" role="cell"><button type="button" class="star-btn ${isFav ? 'active' : ''}" aria-label="즐겨찾기">${isFav ? '★' : '☆'}</button></div>
       `;
-
       row.addEventListener('click', () => { window.location.href = stock.page; });
-      row.querySelector('.star-btn').addEventListener('click', (e) => {
-        e.stopPropagation();
-        toggleFavorite(stock.code);
-      });
-
+      row.querySelector('.star-btn').addEventListener('click', (e) => { e.stopPropagation(); toggleFavorite(stock.code); });
       return row;
+    }
+    function miniBox(label, value, cls, title) {
+      return `<div class="score-mini ${cls || ''}"${title ? ` title="${title}"` : ''}><span class="score-mini-l">${label}</span><span class="score-mini-v">${value}</span></div>`;
+    }
+    function createQriRow(displayRank, stock, e, mode) {
+      if (!e) return scoreRowShell(displayRank, stock, '통합 매력도 데이터에 없는 종목', miniBox('통합', '보류', 'total'), 'held');
+      const iv = e.i || {};
+      const sub = e.published || (iv.price_to_value != null)
+        ? (iv.price_to_value != null ? `주가/가치 ${iv.price_to_value.toFixed(2)}배 · 하단 안전마진 ${fmtPct(iv.margin_of_safety_low)}` : '')
+        : '';
+      const holdSub = e.published ? '' : `평가 보류 · ${(e.reasons && e.reasons[0]) || '사유 미상'}`;
+      const total = miniBox('통합', e.score != null ? e.score.toFixed(1) : '보류', 'total' + (e.score != null ? ' ' + qriTier(e.score) : ''),
+        e.score != null ? `${e.grade} · 기여도 ${e.q.contribution.toFixed(1)} + ${e.r.contribution.toFixed(1)} + ${e.i.contribution.toFixed(1)}` : (e.reasons || []).join(' / '));
+      let minis;
+      if (mode === 'qri') {
+        minis = ['q', 'r', 'i'].map((a) => miniBox(a.toUpperCase(), e[a].normalized != null ? Math.round(e[a].normalized) : '—', '', `${QRI_AXIS[a]} — 비교 종목 내 백분위`)).join('');
+      } else {
+        const a = e[mode];
+        minis = miniBox(`${mode.toUpperCase()} 원점수`, a.raw != null ? a.raw.toFixed(1) : '—', 'raw', `${QRI_AXIS[mode]} 원점수(0~100, 정규화 전)`)
+          + miniBox('백분위', a.normalized != null ? Math.round(a.normalized) : '—', '', '통합 비교 모집단 안의 백분위(통합 보류 종목은 —)');
+      }
+      return scoreRowShell(displayRank, stock, holdSub || sub, total + minis, e.published ? '' : 'held');
+    }
+    function createTechRow(displayRank, stock, tEntry) {
+      return scoreRowShell(displayRank, stock, tEntry.grade || '',
+        miniBox('기술', tEntry.technical_score, tscoreGradeTier(tEntry.grade), '기술적 매력(눌림목매매 기준) — 통합 매력도와 별개'));
     }
 
     function renderScoreView() {
@@ -4721,10 +4727,10 @@
 
       const sortBar = document.createElement('div');
       sortBar.className = 'score-sort-bar';
-      ['technical', 'fundamental', 'intrinsic', 'total'].forEach((mode) => {
+      ['qri', 'q', 'r', 'i', 'technical'].forEach((mode) => {
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'score-sort-btn' + (scoreSortMode === mode ? ' active' : '');
+        btn.className = 'score-sort-btn' + (scoreSortMode === mode ? ' active' : '') + (mode === 'technical' ? ' sep-left' : '');
         btn.textContent = scoreSortLabel(mode);
         btn.addEventListener('click', () => {
           if (scoreSortMode === mode) return;
@@ -4736,59 +4742,53 @@
       });
       stockArea.appendChild(sortBar);
 
-      // 내재가치 매력순은 intrinsic_value.json만 필요하다.
-      if (scoreSortMode === 'intrinsic' && !intrinsicData) {
-        const loading = document.createElement('p');
-        loading.className = 'score-view-note';
-        loading.textContent = '내재가치 데이터를 불러오는 중...';
-        stockArea.appendChild(loading);
-        loadIntrinsicData().then(() => {
-          if (currentView === 'score') renderScoreView();
-        });
-        return;
-      }
-      // 기본적 매력순만 볼 때는 technical_score.json이 필요 없어 fetch를 미룬다.
-      if (scoreSortMode !== 'fundamental' && scoreSortMode !== 'intrinsic' && !technicalScoreData) {
-        const loading = document.createElement('p');
-        loading.className = 'score-view-note';
-        loading.textContent = '기술적 매력도 데이터를 불러오는 중...';
-        stockArea.appendChild(loading);
-        loadTechnicalScoreData().then(() => {
-          if (currentView === 'score') renderScoreView();
-        });
-        return;
-      }
-
+      const note = (text) => { const p = document.createElement('p'); p.className = 'score-view-note'; p.textContent = text; return p; };
       const base = stocks.filter((s) => !favOnlyActive || favorites.has(s.code)).filter(matchesSearch);
-      const combined = base.map((s) => {
-        const tEntry = technicalScoreData ? technicalScoreData[s.code] : undefined;
-        const hasT = !!(tEntry && tEntry.data_status === 'ok' && tEntry.technical_score != null);
-        const vscoreVal = s.vscore != null ? s.vscore : null;
-        const tscoreEntry = hasT ? tEntry : null;
-        const totalVal = (vscoreVal != null && tscoreEntry != null) ? (vscoreVal + tscoreEntry.technical_score) : null;
-        const live = stockLive[s.code];
-        const ivVal = scoreSortMode === 'intrinsic' && intrinsicData ? intrinsicScore(live && live.price, intrinsicData[s.code]) : null;
-        return { stock: s, vscoreVal, tscoreEntry, totalVal, ivVal };
-      });
+      let scored, held = [], makeRow;
 
-      let scored;
-      if (scoreSortMode === 'fundamental') {
-        scored = combined.filter((c) => c.vscoreVal != null).sort((a, b) => b.vscoreVal - a.vscoreVal);
-      } else if (scoreSortMode === 'intrinsic') {
-        // 같은 점수(0점·100점 구간 포함)는 주가/가치 비율이 낮은 쪽이 위
-        scored = combined.filter((c) => c.ivVal != null).sort((a, b) => b.ivVal.score - a.ivVal.score || a.ivVal.ratio - b.ivVal.ratio);
-      } else if (scoreSortMode === 'technical') {
-        scored = combined.filter((c) => c.tscoreEntry != null).sort((a, b) => b.tscoreEntry.technical_score - a.tscoreEntry.technical_score);
+      if (scoreSortMode === 'technical') {
+        if (!technicalScoreData) {
+          stockArea.appendChild(note('기술적 매력도 데이터를 불러오는 중...'));
+          loadTechnicalScoreData().then(() => { if (currentView === 'score') renderScoreView(); });
+          return;
+        }
+        scored = base.map((s) => ({ stock: s, t: technicalScoreData[s.code] }))
+          .filter((c) => c.t && c.t.data_status === 'ok' && c.t.technical_score != null)
+          .sort((a, b) => b.t.technical_score - a.t.technical_score || a.stock.code.localeCompare(b.stock.code));
+        makeRow = (c, k) => createTechRow(k, c.stock, c.t);
       } else {
-        scored = combined.filter((c) => c.totalVal != null).sort((a, b) => b.totalVal - a.totalVal);
+        if (!qriData) {
+          if (qriLoadFailed) {
+            // 로딩 실패를 '평가 낮음'으로 보이지 않게 — 목록 대신 실패 안내
+            stockArea.appendChild(note('통합 매력도 데이터를 불러오지 못했습니다. 점수가 낮다는 뜻이 아니며, 잠시 후 다시 시도해 주세요.'));
+            const retry = document.createElement('button');
+            retry.type = 'button'; retry.className = 'score-sort-btn qri-retry'; retry.textContent = '다시 불러오기';
+            retry.addEventListener('click', () => { loadQriData().then(() => { if (currentView === 'score') renderScoreView(); }); });
+            stockArea.appendChild(retry);
+            return;
+          }
+          stockArea.appendChild(note('통합 매력도 데이터를 불러오는 중...'));
+          loadQriData().then(() => { if (currentView === 'score') renderScoreView(); });
+          return;
+        }
+        const entries = base.map((s) => ({ stock: s, e: qriEntry(s.code) }));
+        if (scoreSortMode === 'qri') {
+          scored = entries.filter((c) => c.e && c.e.published).sort((a, b) => a.e.rank - b.e.rank);
+          held = entries.filter((c) => !c.e || !c.e.published);
+          makeRow = (c) => createQriRow(c.e.rank, c.stock, c.e, 'qri');
+        } else {
+          const ax = scoreSortMode;
+          scored = entries.filter((c) => c.e && c.e[ax].raw != null)
+            .sort((a, b) => b.e[ax].raw - a.e[ax].raw || a.stock.code.localeCompare(b.stock.code));
+          held = entries.filter((c) => !c.e || c.e[ax].raw == null);
+          makeRow = (c, k) => createQriRow(k, c.stock, c.e, ax);
+        }
       }
-      const excludedCount = combined.length - scored.length;
 
-      if (scored.length === 0) {
+      if (scored.length === 0 && held.length === 0) {
         stockArea.appendChild(createEmptyState());
         return;
       }
-
       const totalPages = Math.max(1, Math.ceil(scored.length / RANK_PAGE_SIZE));
       if (scorePage > totalPages) scorePage = totalPages;
       const start = (scorePage - 1) * RANK_PAGE_SIZE;
@@ -4797,46 +4797,58 @@
       const table = document.createElement('div');
       table.className = 'rank-table';
       table.setAttribute('role', 'table');
-
       const head = document.createElement('div');
       head.className = 'score-table-head';
       head.setAttribute('role', 'row');
+      const scoreHead = scoreSortMode === 'technical' ? '기술적 매력' : scoreSortMode === 'qri' ? '통합 · Q · R · I(백분위)' : `통합 · ${QRI_AXIS[scoreSortMode]}`;
       head.innerHTML = `
         <div role="columnheader">순위</div>
         <div role="columnheader">종목명</div>
         <div role="columnheader" style="text-align:right;">현재가</div>
         <div role="columnheader" style="text-align:right;">등락률</div>
-        <div role="columnheader" style="text-align:right;white-space:nowrap;">${scoreSortMode === 'intrinsic' ? '내재 · 주가/가치' : '기본 · 기술 · 총점'}</div>
+        <div role="columnheader" style="text-align:right;white-space:nowrap;">${scoreHead}</div>
         <div role="columnheader"></div>
       `;
       table.appendChild(head);
-
-      pageItems.forEach((c, i) => table.appendChild(createScoreRow(start + i + 1, c.stock, c.vscoreVal, c.tscoreEntry, c.totalVal, c.ivVal)));
-
+      pageItems.forEach((c, i) => table.appendChild(makeRow(c, start + i + 1)));
       stockArea.appendChild(table);
 
       if (scored.length > 0) {
-        stockArea.appendChild(
-          createPagination(scored.length, RANK_PAGE_SIZE, scorePage, (p) => {
-            scorePage = p;
-            renderScoreView();
-            stockArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          })
-        );
+        stockArea.appendChild(createPagination(scored.length, RANK_PAGE_SIZE, scorePage, (p) => {
+          scorePage = p;
+          renderScoreView();
+          stockArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }));
       }
 
-      const note = document.createElement('p');
-      note.className = 'score-view-note';
-      note.textContent = scoreSortMode === 'intrinsic' ? (
-        '내재가치 매력은 다른 종목과 비교하지 않는 절대평가입니다. 종목 페이지의 최신 분기 내재가치(하단·상단의 기하평균)와 현재가의 비율로만 계산하며, ' +
-        '주가가 내재가치의 0.5배 이하면 100점, 0.71배 75점, 1배 50점, 2배 25점, 4배 이상 0점입니다. ' +
-        `적자·고성장 단계라 평가 보류인 종목과 내재가치가 없는 종목은 제외됩니다` + (excludedCount > 0 ? `(제외 ${excludedCount}개).` : '.') +
-        ' 재무제표로 추정한 값이며 주가 상승을 의미하지 않고, 투자 권고가 아닙니다.') :
-        '기본적 매력(밸류에이션, 업종 내 상대순위 1차 버전)과 기술적 매력(눌림목매매 기준) 점수를 함께 표시합니다. ' +
-        `총점은 두 점수의 합(200점 만점)입니다. 현재 "${scoreSortLabel(scoreSortMode)}" 기준으로, 그 정렬에 필요한 점수가 없는 종목은 목록에서 제외됩니다` +
-        (excludedCount > 0 ? `(제외 ${excludedCount}개).` : '.') +
-        ' 저평가·기술적 매력이 곧 주가 상승을 의미하지는 않으며, 투자 권고가 아닙니다.';
-      stockArea.appendChild(note);
+      // 평가 보류 종목이 목록에서 조용히 사라지지 않도록 개수 표시 + 펼쳐 보기
+      if (held.length > 0) {
+        const tog = document.createElement('button');
+        tog.type = 'button';
+        tog.className = 'qri-held-toggle';
+        tog.setAttribute('aria-expanded', String(qriShowHeld));
+        tog.textContent = `${scoreSortMode === 'qri' ? '평가 보류' : `${QRI_AXIS[scoreSortMode]} 원점수 없음`} ${held.length}개 ${qriShowHeld ? '접기' : '보기'}`;
+        tog.addEventListener('click', () => { qriShowHeld = !qriShowHeld; renderScoreView(); });
+        stockArea.appendChild(tog);
+        if (qriShowHeld) {
+          const ht = document.createElement('div');
+          ht.className = 'rank-table qri-held-table';
+          held.sort((a, b) => a.stock.code.localeCompare(b.stock.code))
+            .forEach((c) => ht.appendChild(createQriRow('—', c.stock, c.e, scoreSortMode === 'qri' ? 'qri' : scoreSortMode)));
+          stockArea.appendChild(ht);
+        }
+      }
+
+      if (scoreSortMode === 'technical') {
+        stockArea.appendChild(note('기술적 매력(눌림목매매 기준)은 통합 매력도와 별개의 점수입니다. 통합 매력도 산식·순위에는 쓰이지 않습니다. 투자 권고가 아닙니다.'));
+        return;
+      }
+      const stale = qriIsStale();
+      stockArea.appendChild(note(
+        (qriData.help || '') + ' Q·R·I 숫자는 비교 가능한 종목 안의 백분위이고, 통합점수 = 0.45×Q + 0.15×R + 0.40×I입니다. ' +
+        '80점은 상위 20%나 상승확률 80%를 뜻하지 않으며, 비교 대상이 바뀌면 같은 종목의 점수도 달라질 수 있습니다. ' +
+        `평가 기준일 ${qriData.as_of_date}` + (stale ? ' (이전 기준일 자료 — 오늘 갱신이 아직 반영되지 않았습니다)' : '') +
+        ` · 비교 모집단 ${qriData.normalization.universe_count}개 종목.`));
     }
 
     // ── 탭 전환 / 즐겨찾기만 보기 ──

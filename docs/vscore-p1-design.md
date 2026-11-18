@@ -1,5 +1,7 @@
 # KOSPI10000 vscore P1 설계안 (미구현 — 설계 문서만)
 
+> **2026-11-17 갱신:** 메인 화면의 대표 점수는 QRI 통합 매력도(`docs/qri-integrated-score.md`)로 바뀌었다. 아래의 `total`(기본 vscore + 기술 technical_score, 200점 만점) 정렬과 '기본적 매력순'·클라이언트 '내재가치 매력순'은 화면에서 제거됐다. vscore(`data/fundamental_score.json`)는 QRI 입력과 호환용으로만 남아 있고, 기술적 매력순은 QRI와 섞지 않는 별도 정렬로 유지된다.
+
 > 이 문서는 `claude-code-vscore-improvement-prompt.md`(2026-08-27 P0 작업 지시서)의 "P1 설계안"
 > 절에서 요청된 내용을 정리한 것이다. **P0 작업에서는 여기 적힌 어떤 것도 구현하지 않았다** —
 > 코드 변경은 전부 [attractiveness-scoring-spec.md](./attractiveness-scoring-spec.md)의

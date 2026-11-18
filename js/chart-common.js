@@ -765,3 +765,89 @@ function initIndexDetailPage(cfg) {
   renderIndexEventsTimeline(cfg.code);
   initDpNews(cfg.code);
 }
+
+// ── QRI 통합 매력도 카드(2026-11-17) — data/integrated_score.json(integrated_score/run_daily.py가 매일 생성)을 읽어
+// 종목 상단 수치(.dp-stats) 바로 아래에 대표 점수로 표시. 점수·등급·순위는 백엔드 값 그대로(여기서 재계산하지 않음).
+// 카드가 그려지면 <html>에 qri-on 클래스 → 예전 '기본적 매력도' 카드(.dp-vscore)는 대표 점수로 겹치지 않게 숨김(report.css).
+// 기술적 매력도와 무관하며 기술 카드는 '1. 기술적 분석' 섹션에 그대로 둔다.
+(function () {
+  const m = location.pathname.match(/\/\d{3}_([0-9A-Z]{6})\.html$/);
+  if (!m) return;
+  const code = m[1];
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const f1 = (v) => (v == null ? '—' : Number(v).toFixed(1));
+  const pct = (v) => (v == null ? '—' : `${v < 0 ? '−' : ''}${Math.abs(v * 100).toFixed(1)}%`);
+  const AX = { q: ['Q', '기업체력'], r: ['R', '상대가치'], i: ['I', '내재가치'] };
+  const ST = { valid: '관측', zero_dividend: '무배당', loss: '적자 확인', turnaround: '흑자전환', missing: '데이터 없음', parse_error: '읽기 실패',
+    insufficient_peers: '비교 표본 부족', stale: '기한 경과', designed_not_applicable: '설계상 미적용', invalid: '평가 불가' };
+  const OBS = ['valid', 'zero_dividend', 'loss', 'turnaround'];
+
+  function itemsTable(items) {
+    return `<div class="qri-tbl"><table class="qri-items"><thead><tr><th>항목</th><th>상태</th><th>점수</th><th>적용 가중치</th><th>근거</th></tr></thead><tbody>${items.map(it => `
+      <tr class="${OBS.includes(it.status) ? '' : 'off'}"><td>${esc(it.label)}<small>기본 ${it.weight}</small></td><td>${esc(ST[it.status] || it.status)}</td>
+      <td>${it.score == null ? '—' : f1(it.score)}</td><td>${it.effective_weight ? (it.effective_weight * 100).toFixed(0) + '%' : '—'}</td><td>${esc(it.reason || '')}</td></tr>`).join('')}</tbody></table></div>`;
+  }
+
+  function render(data, holder) {
+    const e = data.stocks && data.stocks[code];
+    if (!e) { holder.innerHTML = '<p class="qri-empty">이 종목은 통합 매력도 산출 대상에 없습니다.</p>'; return; }
+    const pageDate = (document.querySelector('.dp-date') || {}).textContent || '';
+    const pd = pageDate.match(/(\d{4})\.(\d{2})\.(\d{2})/);
+    const stale = pd && data.as_of_date < `${pd[1]}-${pd[2]}-${pd[3]}`;
+    const n = data.normalization || {};
+    const W = data.weights || {};
+    const head = e.published
+      ? `<div class="qri-top"><div class="qri-num">${f1(e.score)}<span>/100</span></div><div class="qri-grade">${esc(e.grade)}</div>
+         <div class="qri-rank">비교 가능 ${n.universe_count}개 종목 중 ${e.rank}위</div></div>`
+      : `<div class="qri-top"><div class="qri-num hold">평가 보류</div></div><ul class="qri-reasons">${(e.reasons || []).map(r => `<li>${esc(r)}</li>`).join('')}</ul>`;
+    const axes = ['q', 'r', 'i'].map(a => {
+      const x = e[a] || {};
+      return `<div class="qri-ax"><div class="qri-ax-h"><b>${AX[a][0]}</b> ${AX[a][1]} <small>× ${Math.round((W[a] || 0) * 100)}%</small></div>
+        <div class="qri-ax-v">${x.normalized != null ? `${Math.round(x.normalized)}<small>백분위</small>` : '<small>통합 비교 제외</small>'}</div>
+        <div class="qri-ax-bar"><i style="width:${x.normalized != null ? x.normalized : 0}%"></i></div>
+        <div class="qri-ax-s">원점수 ${f1(x.raw)}${x.contribution != null ? ` · 기여 ${f1(x.contribution)}` : ''}${x.coverage != null && a !== 'i' ? ` · 자료 ${Math.round(x.coverage * 100)}%` : ''}</div></div>`;
+    }).join('');
+    const iv = e.i || {};
+    const sd = e.source_dates || {};
+    const facts = [
+      iv.price_to_value != null ? `주가/가치 ${iv.price_to_value.toFixed(2)}배` : null,
+      iv.margin_of_safety_low != null ? `하단 안전마진 ${pct(iv.margin_of_safety_low)}` : null,
+      iv.upside_to_mid != null ? `중간값까지 ${pct(iv.upside_to_mid)}` : null,
+      `가격 기준일 ${esc(sd.price || data.as_of_date)}`,
+      sd.intrinsic_period ? `재무 기준 ${esc(sd.intrinsic_period)}` : null,
+    ].filter(Boolean).join(' · ');
+    const warns = (e.warnings || []).filter(w => !/구 형식|메인 페이지 시세/.test(w)).map(w => `<span class="qri-badge">${esc(w)}</span>`).join('');
+    const contrib = e.published ? `<p class="qri-calc">기여도 ${f1(e.q.contribution)} + ${f1(e.r.contribution)} + ${f1(e.i.contribution)} = ${f1(e.score_unrounded)} → 표시 ${f1(e.score)}</p>` : '';
+    const ivInfo = iv.model_type ? `<p class="qri-calc">내재가치: ${esc(iv.model_type)}형 · 요구수익률 ${Math.round((iv.required_return || 0) * 100)}% · 평가방법 ${esc((iv.methods || []).join(', '))}${(iv.missing_methods || []).length ? ` (누락: ${esc(iv.missing_methods.join(', '))})` : ''} · 방법 커버리지 ${iv.method_coverage != null ? Math.round(iv.method_coverage * 100) + '%' : '—'}${iv.spread != null ? ` · 방법 간 차이 ${iv.spread.toFixed(2)}배` : ''}</p>` : '';
+    holder.innerHTML = `${head}<div class="qri-axes">${axes}</div>
+      ${facts ? `<p class="qri-facts">${facts}</p>` : ''}${warns ? `<div class="qri-badges">${warns}</div>` : ''}
+      ${stale ? '<p class="qri-stale">이전 기준일 자료 — 오늘 통합 매력도 갱신이 아직 반영되지 않았습니다.</p>' : ''}
+      <details class="qri-more"><summary>계산 근거 펼치기 (원점수 → 백분위 → 기여도)</summary>
+        ${contrib}
+        <p class="qri-calc">각 축은 항목 점수(0~100)를 관측된 항목 가중치로 평균한 원점수이고, 이를 통합 비교 가능한 ${n.universe_count}개 종목 안에서 평균 동순위 백분위로 바꾼 값이 Q·R·I입니다.</p>
+        <h4>Q 기업체력 · 원점수 ${f1(e.q.raw)}</h4>${itemsTable(e.q.metrics || [])}
+        <h4>R 상대가치 · 원점수 ${f1(e.r.raw)}${e.r.pref_adjustment ? ` · 우선주 평소 할인 대비 보정 ×${e.r.pref_adjustment.toFixed(2)}` : ''}</h4>${itemsTable(e.r.metrics || [])}
+        <h4>I 내재가치 · 원점수 ${f1(iv.raw)}</h4>${ivInfo}
+        <p class="qri-calc">I 원점수는 주가가 가치 중간값(하단·상단의 기하평균)의 0.5배면 100, 1배면 50, 2배면 25, 4배면 0입니다. 50점이 '주가 = 가치'를 뜻하는 건 I 원점수에만 해당합니다.</p>
+      </details>
+      <p class="qri-help">${esc(data.help || '')}</p>`;
+    document.documentElement.classList.add('qri-on');
+  }
+
+  function init() {
+    const anchor = document.querySelector('.dp-head + .dp-stats') || document.querySelector('.dp-stats');
+    if (!anchor || document.getElementById('dpQri')) return;
+    const box = document.createElement('section');
+    box.className = 'dp-qri';
+    box.id = 'dpQri';
+    box.setAttribute('aria-label', '통합 매력도');
+    box.innerHTML = '<div class="dp-qri-h">통합 매력도 <small>기업체력·상대가치·내재가치 · 기술적 분석 제외</small></div><div class="dp-qri-body"><p class="qri-empty">불러오는 중...</p></div>';
+    anchor.insertAdjacentElement('afterend', box);
+    const holder = box.querySelector('.dp-qri-body');
+    fetch(`../data/integrated_score.json?v=${Date.now()}`, { cache: 'no-store' })
+      .then(res => { if (!res.ok) throw new Error('no data'); return res.json(); })
+      .then(data => render(data, holder))
+      .catch(() => { holder.innerHTML = '<p class="qri-empty">통합 매력도 데이터를 불러오지 못했습니다(점수가 낮다는 뜻이 아닙니다).</p>'; });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
