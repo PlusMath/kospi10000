@@ -359,7 +359,7 @@ body{background:var(--dp-bg);}
   <div class="dp-acc-body">
     <div class="dp-tab-row">
       <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
-      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">반기보고서 · 1H26</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">3분기보고서 · 3Q26</button>
     </div>
 
     <div class="dp-insight" style="margin-bottom:16px;">
@@ -419,7 +419,7 @@ body{background:var(--dp-bg);}
 
     <div id="dpFundQuarter" style="display:none;">
 <!-- fundq:start -->
-      <div class="dp-secl">분기별 실적 (8개 분기, 3Q24~2Q26)</div>
+      <div class="dp-secl">분기별 실적 (8개 분기, 4Q24~3Q26)</div>
       <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
         <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
         <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
@@ -431,26 +431,80 @@ body{background:var(--dp-bg);}
       <svg id="fundQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
       <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 분기·반기·사업보고서의 3개월 단독 실적. 4분기는 사업보고서 연간 실적에서 3분기 누적을 뺀 값. 분기 이름 아래 ▲▼는 전년 동기 대비 증감.</div>
 <!-- fundq:end -->
+<!-- q3qa:start -->
+    <div class="dp-qa" id="dpQtrQA">
+      <div class="dp-qa-h">항목별 Q&amp;A <small>3Q26 기준 · 위 지표 버튼을 누르면 해당 항목으로 바뀝니다</small></div>
+      <div class="dp-qa-set" data-qm="rev">
+        <div class="dp-qa-t">매출액</div>
+        <dl>
+          <dt>Q. 3분기 매출은?</dt>
+          <dd>현대차2우B는 보통주와 같은 실적을 공유한다. 3Q26 단독 매출은 45조 1,102억으로 2Q26보다 8.3%, 1년 전보다 3.4% 줄었다.</dd>
+          <dt>Q. 누적 매출은?</dt>
+          <dd>누적 매출은 140조 2,645억으로 1년 전과 거의 같다(▲0.6%).</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="oi">
+        <div class="dp-qa-t">영업이익</div>
+        <dl>
+          <dt>Q. 영업이익률은?</dt>
+          <dd>누적 영업이익률은 5.7%로 1년 전(7.0%)보다 1.3%p 낮다. 미국 관세 부담 이후 5%대에 머물러 있다.</dd>
+          <dt>Q. 3분기 영업이익은?</dt>
+          <dd>3Q26 단독 영업이익은 2조 6,772억으로 1년 전보다 5.5% 많지만 2Q26보다 6.1% 적다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="pretax">
+        <div class="dp-qa-t">세전이익</div>
+        <dl>
+          <dt>Q. 영업 밖에서 번 돈은?</dt>
+          <dd>누적 영업외 이익은 2조 311억으로 1년 전(2조 4,034억)보다 줄었다.</dd>
+          <dt>Q. 3분기 세전이익은?</dt>
+          <dd>2조 9,066억으로 1년 전보다 12.6% 줄었다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="ni">
+        <div class="dp-qa-t">순이익</div>
+        <dl>
+          <dt>Q. 세금 부담은?</dt>
+          <dd>3분기 실효세율이 33.5%로 높아 순이익이 세전이익보다 더 크게 줄었다.</dd>
+          <dt>Q. 3분기 순이익은?</dt>
+          <dd>3Q26 연결 순이익은 1조 9,317억으로 1년 전보다 24.2% 줄었다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="nip">
+        <div class="dp-qa-t">지배주주순이익</div>
+        <dl>
+          <dt>Q. 우선주 주당순이익은?</dt>
+          <dd>3Q26 누적 우선주 기본주당이익은 25,073원으로 보통주(25,022원)보다 조금 많다. 연환산하면 약 33,431원으로 2025년 연간 우선주 EPS(37,851원)보다 약 12% 낮다.</dd>
+          <dt>Q. 우선주의 이익 대비 가격은?</dt>
+          <dd>같은 이익을 보통주보다 낮은 가격에 나눠 갖기 때문에 PER은 보통주보다 낮게 나온다. 의결권이 없는 대신 그만큼 할인돼 거래된다.</dd>
+        </dl>
+      </div>
+    </div>
+    <script>(function(){var b=document.getElementById('dpQtrQA'),n=document.getElementById('dpQtrMetricNav');if(!b)return;b.classList.add('js');function s(){var a=n&&n.querySelector('button.active'),k=a?a.dataset.qm:'rev';b.querySelectorAll('.dp-qa-set').forEach(function(e){e.classList.toggle('on',e.dataset.qm===k)});}if(n)n.addEventListener('click',function(){setTimeout(s,0)});s();})();</script>
+<!-- q3qa:end -->
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1H26 연결 매출액</span><span class="v">95조 1,542억 (전년동기比 ▲2.7%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v" style="color:var(--dp-down);">5조 3,656억 (OPM 5.64%) (전년동기比 ▼25.8%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 지배주주 순이익</span><span class="v" style="color:var(--dp-down);">4조 8,562억 (전년동기比 ▼21.1%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 매출액</span><span class="v up">140조 2,645억 (전년동기比 ▲0.6%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 영업이익</span><span class="v dn">8조 428억 (전년동기比 ▼17.7%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 지배주주 순이익</span><span class="v dn">6조 5,606억 (전년동기比 ▼22.1%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 단독 영업이익</span><span class="v dn">2조 6,772억 (3Q25 대비 ▲5.5%, 2Q26 대비 ▼6.1%)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 우선주 기본EPS</span><span class="v" style="color:var(--dp-down);">18,555원 (전년 동기 23,631원)</span></div>
-          <div class="dp-row2"><span class="l">1H26 보통주 기본EPS</span><span class="v">18,514원 (참고)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 기본EPS(보통주)</span><span class="v up">25,022원 (연환산 33,363원)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 부채비율</span><span class="v">183.7%</span></div>
+          <div class="dp-row2"><span class="l">9월 말 지배지분</span><span class="v">116조 2,220억 (작년 말 대비 ▲0.7%)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 현금성자산</span><span class="v">14조 7,060억</span></div>
         </div>
       </div>
       <!-- fundq-insight:start -->
       <div class="dp-insight" style="margin-bottom:10px;">
         <div class="dp-insight-t">분기 실적 — 2개년 흐름</div>
-        <div class="dp-insight-b">최근 8개 분기(3Q24~2Q26) 영업이익은 3조 5,809억→2조 8,509억. 2Q26 영업이익은 전년 동기(2Q25) 3조 6,016억 대비 ▼20.8%, 직전 분기(1Q26) 대비 ▲13.4%. 이 기간 분기 최고는 1Q25(3조 6,336억).</div>
+        <div class="dp-insight-b">최근 8개 분기(4Q24~3Q26) 영업이익은 2조 8,222억→2조 6,772억. 3Q26 영업이익은 전년 동기(3Q25) 2조 5,373억 대비 ▲5.5%, 직전 분기(2Q26) 대비 ▼6.1%. 이 기간 분기 최고는 1Q25(3조 6,336억).</div>
       </div>
 <!-- fundq-insight:end -->
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심</div>
-        <div class="dp-insight-b">1H26 영업이익률 5.64%로 2024년(8.13%)·2025년(6.16%)에 이어 낮은 수준이 지속돼 우선주 역시 동일한 펀더멘털 리스크에 노출. 08/14 종가 기준 우선주 PER은 5.63배로 보통주(12.55배)의 절반 이하이며, 배당수익률도 보통주 대비 2배 이상 높아 실적 둔화 리스크를 가격 메리트가 상당 부분 상쇄하는 구도.</div>
+        <div class="dp-insight-t">3분기보고서 핵심 — 전년동기(3Q25 누적) 대비</div>
+        <div class="dp-insight-b">현대차2우B는 보통주(현대차)와 같은 실적을 공유한다. 3Q26 누적 매출은 140조 2,645억으로 1년 전과 거의 같지만(▲0.6%), 누적 영업이익은 8조 428억으로 17.7% 줄었고 누적 영업이익률은 5.7%로 1년 전(7.0%)보다 낮다. 3Q26 단독 영업이익은 2조 6,772억으로 관세가 처음 반영된 3Q25보다 5.5% 많지만 2Q26보다는 6.1% 적다. 3분기 실효세율이 33.5%로 높아 지배주주 순이익은 1조 7,044억으로 1년 전보다 24.6% 줄었다. 3Q26 누적 우선주 기본주당이익은 25,073원(연환산 약 33,431원)으로, 2025년 연간 우선주 EPS(37,851원)보다 약 12% 낮다. 이익 체력은 아직 관세 이전 수준을 회복하지 못했지만, 우선주는 보통주보다 낮은 가격에 같은 이익을 나눠 갖고 배당수익률이 높아 실적 둔화 위험을 가격이 일부 흡수하는 구도는 그대로다.</div>
       </div>
 
       <div class="dp-secl" style="margin-top:16px;">우선주 vs 보통주 비교 (07/20 종가 기준)</div>
@@ -491,7 +545,7 @@ body{background:var(--dp-bg);}
     <!-- dp-vscore:end -->
     <div class="dp-share4">
       <div class="dp-share"><div class="dp-share-l">EPS · 2025 (우선주)</div><div class="dp-share-v">37,851원</div><div class="dp-share-s">▼20.10%</div></div>
-      <div class="dp-share"><div class="dp-share-l">1H26 EPS (우선주)</div><div class="dp-share-v">18,555원</div><div class="dp-share-s">연환산 ~37,110원</div></div>
+      <div class="dp-share"><div class="dp-share-l">3Q26 누적 EPS (우선주)</div><div class="dp-share-v">25,073원</div><div class="dp-share-s">연환산 ~33,431원</div></div>
       <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">~563,820원</div><div class="dp-share-s">보통주와 동일 기준</div></div>
       <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">10,100원</div><div class="dp-share-s">보통주 대비 +100원 우선배당</div></div>
     </div>
@@ -806,6 +860,12 @@ body{background:var(--dp-bg);}
         <div class="dp-tl-date">2026.08.14 (반기보고서)</div>
         <div class="dp-tl-title">1H26 실적 공시 — 우선주 EPS -21.5%, 영업이익률 5.64%로 부진 지속</div>
         <div class="dp-tl-body">현대차(005380) 연결 실적과 동일하게 영업이익률 하락 흐름이 2분기까지 이어졌으나, 낮은 가격(우선주/보통주 비율 약 44%)에 힘입어 우선주 PER·배당수익률 메리트는 여전히 유효.</div>
+      </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.11.16 (3분기보고서)</div>
+        <div class="dp-tl-title">3Q26 분기보고서 — 누적 영업이익 17.7% 감소, 영업이익률 5%대</div>
+        <div class="dp-tl-body">보통주와 같은 실적. 3분기 영업이익 2.68조로 전년동기 대비 5.5% 증가, 누적 영업이익률 5.7%(전년 7.0%).</div>
       </div>
     </div>
   </div>
@@ -1167,7 +1227,7 @@ function svgEl(tag,attrs){
 }
 
 // -- fund-report:start (valuation/fund_render.py)
-const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[117610626000000.0,142527535000000.0,162663579000000.0,175231153000000.0,186254472000000.0],"oi":[6678949000000.0,9819769000000.0,15126901000000.0,14239592000000.0,11467851000000.0],"nip":[4942356000000.0,7364364000000.0,11961717000000.0,12526691000000.0,9445987000000.0],"qLabels":["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26"],"q":{"rev":[42928332000000.0,46623701000000.0,44407761000000.0,48286677000000.0,46721448000000.0,46838586000000.0,45938886000000.0,49215328000000.0],"oi":[3580900000000.0,2822194000000.0,3633609000000.0,3601597000000.0,2537266000000.0,1695379000000.0,2514686000000.0,2850888000000.0],"pretax":[4369673000000.0,3118910000000.0,4464598000000.0,4385343000000.0,3325963000000.0,1665999000000.0,3521511000000.0,3645740000000.0],"ni":[3205850000000.0,2474157000000.0,3382174000000.0,3250390000000.0,2548183000000.0,1184028000000.0,2584926000000.0,2887962000000.0],"nip":[3045569000000.0,2280340000000.0,3157298000000.0,2998299000000.0,2261353000000.0,1029037000000.0,2335346000000.0,2520851000000.0]}};
+const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[117610626000000.0,142527535000000.0,162663579000000.0,175231153000000.0,186254472000000.0],"oi":[6678949000000.0,9819769000000.0,15126901000000.0,14239592000000.0,11467851000000.0],"nip":[4942356000000.0,7364364000000.0,11961717000000.0,12526691000000.0,9445987000000.0],"qLabels":["4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26","3Q26"],"q":{"rev":[46623701000000.0,44407761000000.0,48286677000000.0,46721448000000.0,46838586000000.0,45938886000000.0,49215328000000.0,45110247000000.0],"oi":[2822194000000.0,3633609000000.0,3601597000000.0,2537266000000.0,1695379000000.0,2514686000000.0,2850888000000.0,2677232000000.0],"pretax":[3118910000000.0,4464598000000.0,4385343000000.0,3325963000000.0,1665999000000.0,3521511000000.0,3645740000000.0,2906622000000.0],"ni":[2474157000000.0,3382174000000.0,3250390000000.0,2548183000000.0,1184028000000.0,2584926000000.0,2887962000000.0,1931746000000.0],"nip":[2280340000000.0,3157298000000.0,2998299000000.0,2261353000000.0,1029037000000.0,2335346000000.0,2520851000000.0,1704370000000.0]}};
 const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
 const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
 let _qtrCurrentMetric=(document.querySelector('#dpQtrMetricNav button')||{dataset:{qm:'oi'}}).dataset.qm;
