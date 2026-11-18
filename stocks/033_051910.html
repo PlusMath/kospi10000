@@ -362,7 +362,7 @@ body{background:var(--dp-bg);}
   <div class="dp-acc-body">
     <div class="dp-tab-row">
       <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
-      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">반기보고서 · 1H26</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">3분기보고서 · 3Q26</button>
     </div>
 
     <div id="dpFundAnnual">
@@ -421,7 +421,7 @@ body{background:var(--dp-bg);}
 
     <div id="dpFundQuarter" style="display:none;">
 <!-- fundq:start -->
-      <div class="dp-secl">분기별 실적 (8개 분기, 3Q24~2Q26)</div>
+      <div class="dp-secl">분기별 실적 (8개 분기, 4Q24~3Q26)</div>
       <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
         <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
         <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
@@ -433,31 +433,80 @@ body{background:var(--dp-bg);}
       <svg id="fundQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
       <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 분기·반기·사업보고서의 3개월 단독 실적. 4분기는 사업보고서 연간 실적에서 3분기 누적을 뺀 값. 분기 이름 아래 ▲▼는 전년 동기 대비 증감.</div>
 <!-- fundq:end -->
+<!-- q3qa:start -->
+    <div class="dp-qa" id="dpQtrQA">
+      <div class="dp-qa-h">항목별 Q&amp;A <small>3Q26 기준 · 위 지표 버튼을 누르면 해당 항목으로 바뀝니다</small></div>
+      <div class="dp-qa-set" data-qm="rev">
+        <div class="dp-qa-t">매출액</div>
+        <dl>
+          <dt>Q. 3분기 매출은?</dt>
+          <dd>3Q26 단독 매출은 15조 4,960억으로 2Q26보다 9.3%, 1년 전보다 38.4% 늘었다.</dd>
+          <dt>Q. 매출 증가는 어디서 왔나?</dt>
+          <dd>연결 자회사 LG에너지솔루션의 3분기 매출(9조 6,434억)이 크게 늘어난 영향이 크다. 석유화학 본업만의 흐름은 따로 봐야 한다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="oi">
+        <div class="dp-qa-t">영업이익</div>
+        <dl>
+          <dt>Q. 3분기 영업이익은?</dt>
+          <dd>3Q26 단독 영업이익은 5,612억으로 2Q26보다 6.4%, 1년 전보다 17.4% 줄었다. 3분기 영업이익률은 3.6%.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 영업이익은 1조 1,111억으로 1년 전보다 30.3% 적고, 누적 영업이익률은 2.7%(전년 4.4%)다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="pretax">
+        <div class="dp-qa-t">세전이익</div>
+        <dl>
+          <dt>Q. 영업이익이 났는데 왜 세전은 적자인가?</dt>
+          <dd>3분기 영업외 손실이 1조 2,066억으로 세전손익이 -6,455억이 됐다. 같은 분기 LG에너지솔루션의 영업외 손실 9,872억이 대부분을 차지한다.</dd>
+          <dt>Q. 누적 세전손익은?</dt>
+          <dd>누적 세전손익은 -7,826억으로 1년 전 흑자(7,091억)에서 적자로 돌아섰다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="ni">
+        <div class="dp-qa-t">순이익</div>
+        <dl>
+          <dt>Q. 누적 순손실이 세전손실보다 큰 이유는?</dt>
+          <dd>누적 세전손실(-7,826억)보다 연결 순손실(-1조 3,151억)이 크다. 손실을 냈는데도 법인세 비용이 발생했다.</dd>
+          <dt>Q. 3분기 순손익은?</dt>
+          <dd>3Q26 연결 순손익은 -6,000억으로 적자다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="nip">
+        <div class="dp-qa-t">지배주주순이익</div>
+        <dl>
+          <dt>Q. 지배주주 순손실이 연결 순손실보다 작은 이유는?</dt>
+          <dd>누적 연결 순손실 -1조 3,151억 중 -4,322억은 LG에너지솔루션 등 자회사 외부 주주가 나눠 진 몫이라, LG화학 주주 몫 손실은 -8,829억이다.</dd>
+          <dt>Q. 주당순이익(EPS)으로 보면?</dt>
+          <dd>누적 EPS는 -11,280원으로 1년 전(-5,398원)보다 적자가 2배 넘게 커졌다. 2025년 연간은 -23,244원이었다.</dd>
+        </dl>
+      </div>
+    </div>
+    <script>(function(){var b=document.getElementById('dpQtrQA'),n=document.getElementById('dpQtrMetricNav');if(!b)return;b.classList.add('js');function s(){var a=n&&n.querySelector('button.active'),k=a?a.dataset.qm:'rev';b.querySelectorAll('.dp-qa-set').forEach(function(e){e.classList.toggle('on',e.dataset.qm===k)});}if(n)n.addEventListener('click',function(){setTimeout(s,0)});s();})();</script>
+<!-- q3qa:end -->
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1H26 연결 매출</span><span class="v">26조 4,227억 (전년동기比 ▲7.9%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v">5,499억 (전년동기比 ▼39.9%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 법인세차감전손익</span><span class="v" style="color:var(--dp-down);">-1,372억 (전년동기比 적자전환)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 반기순손익</span><span class="v" style="color:var(--dp-down);">-7,151억 (전년동기比 적자전환)</span></div>
-          <div class="dp-row2"><span class="l">1H26 지배주주 순손익</span><span class="v" style="color:var(--dp-down);">-2,348억 (전년동기比 적자폭 56.7% 축소)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 매출액</span><span class="v up">41조 9,186억 (전년동기比 ▲16.3%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 영업이익</span><span class="v dn">1조 1,111억 (전년동기比 ▼30.3%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 지배주주 순이익</span><span class="v dn">-8,829억 (전년동기比 적자지속)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 단독 영업이익</span><span class="v dn">5,612억 (3Q25 대비 ▼17.4%, 2Q26 대비 ▼6.4%)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 보통주 EPS</span><span class="v" style="color:var(--dp-down);">-2,999원 (적자 축소, 2Q 흑자전환)</span></div>
-          <div class="dp-row2"><span class="l">1H26 비지배지분 순손익</span><span class="v" style="color:var(--dp-down);">-4,803억 (자회사도 적자 지속)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 자산총계</span><span class="v">112조 2,098억 (▲11.0%)</span></div>
-          <div class="dp-row2"><span class="l">지배기업소유주지분</span><span class="v">35조 4,302억 (▲7.9%)</span></div>
-          <div class="dp-row2"><span class="l">연결 자본총계</span><span class="v">48조 8,709억 (▲3.7%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 기본EPS</span><span class="v dn">-11,280원 (연환산 -15,040원)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 부채비율</span><span class="v">134.4%</span></div>
+          <div class="dp-row2"><span class="l">9월 말 지배지분</span><span class="v">31조 8,131억 (작년 말 대비 ▼3.1%)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 현금성자산</span><span class="v">8조 6,871억</span></div>
         </div>
       </div>
       <!-- fundq-insight:start -->
       <div class="dp-insight" style="margin-bottom:10px;">
         <div class="dp-insight-t">분기 실적 — 2개년 흐름</div>
-        <div class="dp-insight-b">최근 8개 분기(3Q24~2Q26) 영업이익은 4,984억→5,996억. 2Q26 영업이익은 전년 동기(2Q25) 4,768억 대비 ▲25.8%, 직전 분기(1Q26) 대비 흑자전환. 이 기간 분기 최고는 3Q25(6,797억).</div>
+        <div class="dp-insight-b">최근 8개 분기(4Q24~3Q26) 영업이익은 -2,520억→5,612억. 3Q26 영업이익은 전년 동기(3Q25) 6,797억 대비 ▼17.4%, 직전 분기(2Q26) 대비 ▼6.4%. 이 기간 분기 최고는 3Q25(6,797억).</div>
       </div>
 <!-- fundq-insight:end -->
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심</div>
-        <div class="dp-insight-b">2분기 영업이익이 5,996억으로 1분기 영업손실(-497억)에서 흑자전환했으나, 상반기 합산으로는 5,499억(-39.9%)에 그쳐 아직 완전한 회복으로 보기 어렵다. 법인세전손익(-1,372억)은 영업이익 대비 -6,871억 갭으로 순금융비용 부담이 여전히 큼을 시사. 지배주주 순손실은 -2,348억으로 전년동기(-5,419억) 대비 적자폭을 56.7% 줄였고, 2분기 단독으로는 지배주주 순이익 1,135억으로 흑자전환에 성공. 지배기업소유주지분은 상반기 동안 +7.9%(32.85조→35.43조) 늘며 자본 완충력은 유지되고 있다.</div>
+        <div class="dp-insight-t">3분기보고서 핵심 — 전년동기(3Q25 누적) 대비</div>
+        <div class="dp-insight-b">3Q26 단독 매출은 15조 4,960억으로 1년 전보다 38.4% 늘었지만, 연결 자회사인 LG에너지솔루션 매출 증가 영향이 크다. 영업이익은 5,612억으로 2Q26보다 6.4%, 1년 전보다 17.4% 줄었고, 3분기 영업이익률은 3.6%다. 더 큰 문제는 영업 밖이다. 3분기 영업외 손실이 1조 2,066억에 달해 세전손익이 -6,455억, 지배주주 순손익이 -6,482억으로 적자 전환했다. 같은 분기 LG에너지솔루션의 영업외 손실(9,872억)이 대부분을 차지한다. 누적으로는 영업이익 1조 1,111억(▼30.3%), 세전손익 -7,826억, 지배주주 순손실 -8,829억으로 적자가 1년 전(-4,225억)의 2배 넘게 커졌다. 누적 EPS는 -11,280원이고, 9월 말 지배지분은 작년 말보다 3.1% 줄었다. 반기에 보였던 2분기 흑자 전환은 3분기에 다시 꺾였다.</div>
       </div>
     </div>
   </div>
@@ -486,7 +535,7 @@ body{background:var(--dp-bg);}
     <!-- dp-vscore:end -->
     <div class="dp-share4">
       <div class="dp-share"><div class="dp-share-l">2025 EPS</div><div class="dp-share-v">-23,244원</div><div class="dp-share-s">2년 연속 적자</div></div>
-      <div class="dp-share"><div class="dp-share-l">1H26 EPS</div><div class="dp-share-v">-2,999원</div><div class="dp-share-s">적자 축소, 2Q 흑자전환</div></div>
+      <div class="dp-share"><div class="dp-share-l">3Q26 누적 EPS</div><div class="dp-share-v">-11,280원</div><div class="dp-share-s">연환산 -15,040원</div></div>
       <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">493,838원</div><div class="dp-share-s">지배지분 기준</div></div>
       <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">2,000원</div><div class="dp-share-s">전기比 2배</div></div>
     </div>
@@ -515,7 +564,7 @@ body{background:var(--dp-bg);}
         <div class="dp-gauge dp-metric-detail" data-metric="fpe">
               <div class="dp-gauge-h"><span>Forward PER</span><span>N/A</span></div>
               <div class="dp-gauge-track"><div class="dp-gauge-fill" style="width:0%;"></div></div>
-              <div class="dp-gauge-note">1H26 EPS도 적자 지속으로 산출 불가.</div>
+              <div class="dp-gauge-note">3Q26 누적 EPS도 적자(-11,280원)로 산출 불가.</div>
               <div class="dp-insight" style="margin-top:12px;">
                 <div class="dp-insight-t">해석</div>
                 <div class="dp-insight-b">선행 이익 추정치도 적자 구간에 머물러 있어 Forward PER 역시 의미 있는 산출이 어려운 상태. 흑자전환이 가시화되면 재평가가 가능함.</div>
@@ -783,6 +832,12 @@ body{background:var(--dp-bg);}
         <div class="dp-tl-title">1H26 실적 공시 — 2Q 영업이익 흑자전환, 지배주주 순손실 -2,348억</div>
         <div class="dp-tl-body">2분기 영업이익 5,996억으로 1분기 적자에서 흑자전환했으나 상반기 합산은 5,499억(-39.9%)에 그침. 지배주주 순손실은 -2,348억으로 전년동기 대비 적자폭 56.7% 축소, 2분기 단독으로는 지배주주 순이익 1,135억 흑자전환.</div>
       </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.11.16 (3분기보고서)</div>
+        <div class="dp-tl-title">3Q26 분기보고서 — 영업외 손실 1.21조, 지배순손실 -6,482억</div>
+        <div class="dp-tl-body">3분기 영업이익 5,612억에도 영업외 손실 1조 2,066억(LG에너지솔루션 영업외 손실 9,872억 포함)으로 지배주주 순손익 -6,482억.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -803,7 +858,7 @@ body{background:var(--dp-bg);}
       <div>
         <div class="dp-thesis-t bear">리스크 요인</div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>지배주주순이익 2년 연속 적자, 폭 확대</span></div>
-        <div class="dp-thesis-item bear"><span class="dot">●</span><span>1H26 누적 영업이익 -39.9% 감소 — 완전 회복 미확인</span></div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>3Q26 누적 영업이익 -30.3%, 3분기 지배순손실 -6,482억 — 회복 미확인</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>52주 신저가 · 완전 역배열</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>PER 산정 불가 — 밸류에이션 기준 자체가 모호</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>비지배지분도 적자(-4,803억) — 자회사 손실 지속</span></div>
@@ -1172,7 +1227,7 @@ function svgEl(tag,attrs){
 }
 
 // -- fund-report:start (valuation/fund_render.py)
-const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[42654722000000.0,51864888000000.0,55249785000000.0,48916104000000.0,45932167000000.0],"oi":[5025466000000.0,2995698000000.0,2529196000000.0,916798000000.0,1180900000000.0],"nip":[3669787000000.0,1845363000000.0,1337812000000.0,-690854000000.0,-1819449000000.0],"qLabels":["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26"],"q":{"rev":[12670398000000.0,12336602000000.0,12171015000000.0,11417711000000.0,11196170000000.0,11197134000000.0,12246789000000.0,14175901000000.0],"oi":[498356000000.0,-252049000000.0,446971000000.0,476783000000.0,679715000000.0,-413264000000.0,-49691000000.0,599588000000.0],"pretax":[378301000000.0,-1156926000000.0,443896000000.0,-184775000000.0,457134000000.0,-2489477000000.0,-566462000000.0,429303000000.0],"ni":[1012734000000.0,-899215000000.0,260370000000.0,-111885000000.0,447284000000.0,-1572831000000.0,-781892000000.0,66788000000.0],"nip":[544704000000.0,-1055422000000.0,-107568000000.0,-434336000000.0,119394000000.0,-1396938000000.0,-348219000000.0,113453000000.0]}};
+const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[42654722000000.0,51864888000000.0,55249785000000.0,48916104000000.0,45932167000000.0],"oi":[5025466000000.0,2995698000000.0,2529196000000.0,916798000000.0,1180900000000.0],"nip":[3669787000000.0,1845363000000.0,1337812000000.0,-690854000000.0,-1819449000000.0],"qLabels":["4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26","3Q26"],"q":{"rev":[12336602000000.0,12171015000000.0,11417711000000.0,11196170000000.0,11197134000000.0,12246789000000.0,14175901000000.0,15495953000000.0],"oi":[-252049000000.0,446971000000.0,476783000000.0,679715000000.0,-413264000000.0,-49691000000.0,599588000000.0,561186000000.0],"pretax":[-1156926000000.0,443896000000.0,-184775000000.0,457134000000.0,-2489477000000.0,-566462000000.0,429303000000.0,-645455000000.0],"ni":[-899215000000.0,260370000000.0,-111885000000.0,447284000000.0,-1572831000000.0,-781892000000.0,66788000000.0,-600014000000.0],"nip":[-1055422000000.0,-107568000000.0,-434336000000.0,119394000000.0,-1396938000000.0,-348219000000.0,113453000000.0,-648181000000.0]}};
 const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
 const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
 let _qtrCurrentMetric=(document.querySelector('#dpQtrMetricNav button')||{dataset:{qm:'oi'}}).dataset.qm;
