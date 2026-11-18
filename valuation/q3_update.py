@@ -202,8 +202,54 @@ def show(code):
         print(f'  부채비율 {f["liab"] / f["eq_total"] * 100:.1f}%, 지배지분 {krw(f["eq_parent"])} (작년말 {krw(f["eq_parent_ye"])}), 현금 {krw(f["cash"])}')
 
 
+QA_METRICS = [('rev', '매출액'), ('oi', '영업이익'), ('pretax', '세전이익'), ('ni', '순이익'), ('nip', '지배주주순이익')]
+QA_JS = ("<script>(function(){var b=document.getElementById('dpQtrQA'),n=document.getElementById('dpQtrMetricNav');if(!b)return;"
+         "b.classList.add('js');function s(){var a=n&&n.querySelector('button.active'),k=a?a.dataset.qm:'rev';"
+         "b.querySelectorAll('.dp-qa-set').forEach(function(e){e.classList.toggle('on',e.dataset.qm===k)});}"
+         "if(n)n.addEventListener('click',function(){setTimeout(s,0)});s();})();</script>")
+
+
+def qa_html(qa):
+    """항목별 Q&A — 분기 차트의 지표 버튼(#dpQtrMetricNav)과 연동해 선택한 항목만 표시(JS 없으면 전부 표시)."""
+    sets = []
+    for k, nm in QA_METRICS:
+        items = qa.get(k) or []
+        if not items:
+            continue
+        dl = '\n'.join(f'          <dt>Q. {html.escape(q)}</dt>\n          <dd>{html.escape(a)}</dd>' for q, a in items)
+        sets.append(f'      <div class="dp-qa-set" data-qm="{k}">\n        <div class="dp-qa-t">{nm}</div>\n        <dl>\n{dl}\n        </dl>\n      </div>')
+    return ('<!-- q3qa:start -->\n    <div class="dp-qa" id="dpQtrQA">\n'
+            '      <div class="dp-qa-h">항목별 Q&amp;A <small>3Q26 기준 · 위 지표 버튼을 누르면 해당 항목으로 바뀝니다</small></div>\n'
+            + '\n'.join(sets) + f'\n    </div>\n    {QA_JS}\n<!-- q3qa:end -->')
+
+
+def apply_qa(code, qa, dry=False):
+    path = next((os.path.join(STOCKS, f) for f in os.listdir(STOCKS) if re.match(rf'\d{{3}}_{code}\.html$', f)), None)
+    if not path:
+        return 'skip: 페이지 없음'
+    raw = open(path, 'rb').read().decode('utf-8')
+    crlf = '\r\n' in raw
+    t = raw.replace('\r\n', '\n')
+    block = qa_html(qa)
+    if '<!-- q3qa:start -->' in t:
+        t = re.sub(r'<!-- q3qa:start -->.*?<!-- q3qa:end -->', lambda m: block, t, flags=re.S)
+        how = 'replaced'
+    elif '<!-- fundq:end -->' in t:
+        t = t.replace('<!-- fundq:end -->', '<!-- fundq:end -->\n' + block, 1)
+        how = 'added'
+    else:
+        return 'skip: 분기 차트 마커 없음'
+    if not dry:
+        open(path, 'wb').write((t.replace('\n', '\r\n') if crlf else t).encode('utf-8'))
+    return f'qa {how} ({sum(len(qa.get(k) or []) for k, _ in QA_METRICS)}문항)'
+
+
 if __name__ == '__main__':
-    if sys.argv[1] == 'facts':
+    if sys.argv[1] == 'qa':
+        qas = json.load(open(sys.argv[2], encoding='utf-8'))
+        for c, q in qas.items():
+            print(c, apply_qa(c, q, dry='--dry' in sys.argv))
+    elif sys.argv[1] == 'facts':
         for c in sys.argv[2:]:
             show(c)
     elif sys.argv[1] == 'apply':
