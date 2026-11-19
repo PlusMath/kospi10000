@@ -363,7 +363,7 @@ body{background:var(--dp-bg);}
   <div class="dp-acc-body">
     <div class="dp-tab-row">
       <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
-      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">반기보고서 · 1H26</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">3분기보고서 · 3Q26</button>
     </div>
 
     <div id="dpFundAnnual">
@@ -420,7 +420,7 @@ body{background:var(--dp-bg);}
 
     <div id="dpFundQuarter" style="display:none;">
 <!-- fundq:start -->
-      <div class="dp-secl">분기별 실적 (8개 분기, 3Q24~2Q26)</div>
+      <div class="dp-secl">분기별 실적 (8개 분기, 4Q24~3Q26)</div>
       <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
         <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
         <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
@@ -432,27 +432,80 @@ body{background:var(--dp-bg);}
       <svg id="fundQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
       <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 분기·반기·사업보고서의 3개월 단독 실적. 4분기는 사업보고서 연간 실적에서 3분기 누적을 뺀 값. 분기 이름 아래 ▲▼는 전년 동기 대비 증감.</div>
 <!-- fundq:end -->
+<!-- q3qa:start -->
+    <div class="dp-qa" id="dpQtrQA">
+      <div class="dp-qa-h">항목별 Q&amp;A <small>3Q26 기준 · 위 지표 버튼을 누르면 해당 항목으로 바뀝니다</small></div>
+      <div class="dp-qa-set" data-qm="rev">
+        <div class="dp-qa-t">매출액</div>
+        <dl>
+          <dt>Q. 3분기 매출은?</dt>
+          <dd>9,385억으로 1년 전보다 11.0% 늘었다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 매출 2조 9,076억으로 1년 전보다 18.5% 많다. 오리온의 중국·러시아 법인이 성장을 이끌었다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="oi">
+        <div class="dp-qa-t">영업이익</div>
+        <dl>
+          <dt>Q. 3분기 영업이익은?</dt>
+          <dd>1,428억으로 1년 전보다 16.2%, 2Q26보다 11.8% 늘었다. 영업이익률은 15.2%다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 영업이익 4,434억(▲31.0%)이다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="pretax">
+        <div class="dp-qa-t">세전이익</div>
+        <dl>
+          <dt>Q. 영업 밖에서는?</dt>
+          <dd>3분기 영업외 손실 -549억으로 세전이익이 879억(▼30.4%)으로 줄었다. 자회사 오리온도 같은 분기에 비슷한 규모의 영업외 손실을 냈다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 영업외 손실 -551억으로 1년 전(-22억)보다 크다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="ni">
+        <div class="dp-qa-t">순이익</div>
+        <dl>
+          <dt>Q. 3분기 순이익은?</dt>
+          <dd>연결 순이익 584억으로 1년 전보다 34.9% 줄었다. 3분기 실효세율이 33.5%로 높았다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 순이익 2,664억(▲9.1%)이다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="nip">
+        <div class="dp-qa-t">지배주주순이익</div>
+        <dl>
+          <dt>Q. 지배주주 몫이 왜 작은가?</dt>
+          <dd>지주회사라 연결 순이익의 절반 이상이 오리온의 다른 주주 몫이다. 3분기 지배주주 순이익은 270억(▼15.0%)이다.</dd>
+          <dt>Q. EPS는?</dt>
+          <dd>누적 지배주주 순이익 1,066억(▲15.9%), 누적 EPS 1,772원, 연환산 2,363원으로 2025년(2,011원)보다 17% 높다.</dd>
+        </dl>
+      </div>
+    </div>
+    <script>(function(){var b=document.getElementById('dpQtrQA'),n=document.getElementById('dpQtrMetricNav');if(!b)return;b.classList.add('js');function s(){var a=n&&n.querySelector('button.active'),k=a?a.dataset.qm:'rev';b.querySelectorAll('.dp-qa-set').forEach(function(e){e.classList.toggle('on',e.dataset.qm===k)});}if(n)n.addEventListener('click',function(){setTimeout(s,0)});s();})();</script>
+<!-- q3qa:end -->
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1H26 연결 매출액</span><span class="v up">1조 9,691억 (▲22.4%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v up">3,005.8억 (▲39.4%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 지배주주 순이익</span><span class="v up">796.1억 (▲32.2%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 매출액</span><span class="v up">2조 9,076억 (전년동기比 ▲18.5%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 영업이익</span><span class="v up">4,434억 (전년동기比 ▲31.0%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 지배주주 순이익</span><span class="v up">1,066억 (전년동기比 ▲15.9%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 단독 영업이익</span><span class="v up">1,428억 (3Q25 대비 ▲16.2%, 2Q26 대비 ▲11.8%)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 EPS</span><span class="v up">1,323원 (전년 동기 1,001원)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 부채비율</span><span class="v">21.4% (2025년 말 19.9%)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 현금성자산</span><span class="v up">6,918억 (2025년 말 3,534억)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 기본EPS</span><span class="v up">1,772원 (연환산 2,363원)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 부채비율</span><span class="v">20.2%</span></div>
+          <div class="dp-row2"><span class="l">9월 말 지배지분</span><span class="v">2조 4,391억 (작년 말 대비 ▼1.0%)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 현금성자산</span><span class="v">3,788억</span></div>
         </div>
       </div>
       <!-- fundq-insight:start -->
       <div class="dp-insight" style="margin-bottom:10px;">
         <div class="dp-insight-t">분기 실적 — 2개년 흐름</div>
-        <div class="dp-insight-b">최근 8개 분기(3Q24~2Q26) 영업이익은 1,221억→1,277억. 2Q26 영업이익은 전년 동기(2Q25) 993억 대비 ▲28.6%, 직전 분기(1Q26) 대비 ▼26.1%. 이 기간 분기 최고는 1Q26(1,729억).</div>
+        <div class="dp-insight-b">최근 8개 분기(4Q24~3Q26) 영업이익은 1,423억→1,428억. 3Q26 영업이익은 전년 동기(3Q25) 1,229억 대비 ▲16.2%, 직전 분기(2Q26) 대비 ▲11.8%. 이 기간 분기 최고는 1Q26(1,729억).</div>
       </div>
 <!-- fundq-insight:end -->
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심</div>
-        <div class="dp-insight-b">1분기 연결 매출은 1조 86억(+24.1%), 영업이익은 1,729억(+48.5%)이었다. 사업 자회사 오리온의 1분기 영업이익이 1,655억(+26%)으로 늘었고, 중국(+42.7%)·러시아(+66.2%) 법인이 성장을 이끌었다(보도). 2분기는 매출 9,605억(+20.7%), 영업이익 1,277억(+28.6%), 지배주주순이익 279억(+25.8%)이다. 6월 말 현금성자산은 6,918억으로 연말의 약 2배다.</div>
+        <div class="dp-insight-t">3분기보고서 핵심 — 전년동기(3Q25 누적) 대비</div>
+        <div class="dp-insight-b">3Q26 매출 9,385억, 영업이익 1,428억으로 1년 전보다 11.0%, 16.2% 늘었다. 영업이익률은 15.2%다. 사업 자회사 오리온의 중국·러시아 법인 성장이 이어진 것으로 보인다. 그러나 영업외 손실이 -549억으로 커지고 세율도 33.5%로 높아, 연결 순이익은 584억으로 1년 전보다 34.9% 줄었다. 자회사 오리온도 3분기에 같은 규모의 영업외 손실을 냈다. 지배주주 순이익은 270억(▼15.0%)인데, 지주회사라 연결 순이익의 절반 이상(53.8%)이 오리온의 다른 주주 몫이다. 누적으로는 매출 2조 9,076억(▲18.5%), 영업이익 4,434억(▲31.0%), 지배주주 순이익 1,066억(▲15.9%)이다. 누적 EPS 1,772원의 연환산(2,363원)은 2025년 EPS(2,011원)보다 17% 높다. 9월 말 부채비율은 20.2%로 낮다.</div>
       </div>
     </div>
   </div>
@@ -481,7 +534,7 @@ body{background:var(--dp-bg);}
     <!-- dp-vscore:end -->
     <div class="dp-share4">
       <div class="dp-share"><div class="dp-share-l">2025 EPS</div><div class="dp-share-v">2,011원</div><div class="dp-share-s">▼24.7%</div></div>
-      <div class="dp-share"><div class="dp-share-l">1H26 EPS</div><div class="dp-share-v">1,323원</div><div class="dp-share-s">▲32.2%</div></div>
+      <div class="dp-share"><div class="dp-share-l">3Q26 누적 EPS</div><div class="dp-share-v">1,772원</div><div class="dp-share-s">연환산 2,363원</div></div>
       <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">42,358원</div><div class="dp-share-s">지배지분 ÷ 발행주식(6월 말)</div></div>
       <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">1,100원</div><div class="dp-share-s">+37.5%</div></div>
     </div>
@@ -797,6 +850,12 @@ body{background:var(--dp-bg);}
         <div class="dp-tl-title">2만3천원대로 하락</div>
         <div class="dp-tl-body">9월 말 23,200원으로 내렸고, 10/20 23,350원(+2.0%)으로 마감했다. 하락 원인을 직접 설명한 기사는 찾지 못했다.</div>
       </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.11.16 (3분기보고서)</div>
+        <div class="dp-tl-title">3Q26 분기보고서 — 영업이익 1,428억, 지배주주 순이익 270억</div>
+        <div class="dp-tl-body">3분기 영업이익 1,428억(▲16.2%)이나 영업외 손실 -549억으로 지배주주 순이익 270억(▼15.0%). 누적 순이익 1,066억(▲15.9%).</div>
+      </div>
     </div>
   </div>
 </div>
@@ -807,7 +866,7 @@ body{background:var(--dp-bg);}
     <div class="dp-thesis">
       <div>
         <div class="dp-thesis-t bull">긍정 요인</div>
-        <div class="dp-thesis-item bull"><span class="dot">●</span><span>1H26 연결 영업이익 3,006억(+39.4%), 지배주주순이익 796억(+32.2%)</span></div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>3Q26 누적 연결 영업이익 4,434억(+31.0%), 지배주주순이익 1,066억(+15.9%)</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>사업 자회사 오리온의 중국·러시아 법인 성장(1Q26 영업이익 중국 +42.7%, 러시아 +66.2%, 보도)</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>PBR 0.55배로 장부상 지배지분 순자산의 절반 수준</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>배당 2021년 650원 → 2025년 1,100원, 첫 중간배당 550원, 3년간 주당 800원 이상 배당 약속</span></div>
@@ -1181,7 +1240,7 @@ function svgEl(tag,attrs){
 }
 
 // -- fund-report:start (valuation/fund_render.py)
-const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[2415059149467.0,2934623360638.0,2953806265859.0,3195245858433.0,3393126199452.0],"oi":[315697398867.0,399824809538.0,405463095002.0,506240029274.0,487728621983.0],"nip":[85985012798.0,102966522187.0,85624031645.0,160636402912.0,120991845518.0],"qLabels":["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26"],"q":{"rev":[779052698837.0,869330441214.0,812997839153.0,795509604155.0,845588881155.0,939029874989.0,1008604818670.0,960503126780.0],"oi":[122071988441.0,142290976786.0,116387279224.0,99279933172.0,122861578204.0,149199831383.0,172859822498.0,127719389280.0],"pretax":[123916037403.0,288486748620.0,128265711216.0,81799791806.0,126292542198.0,141639823795.0,179842627788.0,120509439711.0],"ni":[83176516298.0,223832729860.0,96730734683.0,57735453610.0,89772456545.0,93539215432.0,130609560467.0,77345510755.0],"nip":[25546132812.0,71118448106.0,38048489567.0,22190326105.0,31732311317.0,29020718529.0,51694811904.0,27918525346.0]}};
+const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[2415059149467.0,2934623360638.0,2953806265859.0,3195245858433.0,3393126199452.0],"oi":[315697398867.0,399824809538.0,405463095002.0,506240029274.0,487728621983.0],"nip":[85985012798.0,102966522187.0,85624031645.0,160636402912.0,120991845518.0],"qLabels":["4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26","3Q26"],"q":{"rev":[869330441214.0,812997839153.0,795509604155.0,845588881155.0,939029874989.0,1008604818670.0,960503126780.0,938457377493.0],"oi":[142290976786.0,116387279224.0,99279933172.0,122861578204.0,149199831383.0,172859822498.0,127719389280.0,142810914448.0],"pretax":[288486748620.0,128265711216.0,81799791806.0,126292542198.0,141639823795.0,179842627788.0,120509439711.0,87907231877.0],"ni":[223832729860.0,96730734683.0,57735453610.0,89772456545.0,93539215432.0,130609560467.0,77345510755.0,58446951868.0],"nip":[71118448106.0,38048489567.0,22190326105.0,31732311317.0,29020718529.0,51694811904.0,27918525346.0,26975999054.0]}};
 const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
 const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
 let _qtrCurrentMetric=(document.querySelector('#dpQtrMetricNav button')||{dataset:{qm:'oi'}}).dataset.qm;
