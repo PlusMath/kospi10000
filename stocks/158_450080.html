@@ -359,7 +359,7 @@ body{background:var(--dp-bg);}
   <div class="dp-acc-body">
     <div class="dp-tab-row">
       <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
-      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">반기보고서 · 1H26</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">3분기보고서 · 3Q26</button>
     </div>
 
     <div id="dpFundAnnual">
@@ -416,7 +416,7 @@ body{background:var(--dp-bg);}
 
     <div id="dpFundQuarter" style="display:none;">
 <!-- fundq:start -->
-      <div class="dp-secl">분기별 실적 (8개 분기, 3Q24~2Q26)</div>
+      <div class="dp-secl">분기별 실적 (8개 분기, 4Q24~3Q26)</div>
       <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
         <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
         <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
@@ -428,27 +428,80 @@ body{background:var(--dp-bg);}
       <svg id="fundQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
       <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 분기·반기·사업보고서의 3개월 단독 실적. 4분기는 사업보고서 연간 실적에서 3분기 누적을 뺀 값. 분기 이름 아래 ▲▼는 전년 동기 대비 증감.</div>
 <!-- fundq:end -->
+<!-- q3qa:start -->
+    <div class="dp-qa" id="dpQtrQA">
+      <div class="dp-qa-h">항목별 Q&amp;A <small>3Q26 기준 · 위 지표 버튼을 누르면 해당 항목으로 바뀝니다</small></div>
+      <div class="dp-qa-set" data-qm="rev">
+        <div class="dp-qa-t">매출액</div>
+        <dl>
+          <dt>Q. 3분기 매출은?</dt>
+          <dd>1,811억으로 1년 전의 2.9배다. 1월 연결 편입한 인도네시아 제련소 GEN 효과다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 매출 5,265억(▲89.9%)으로 2025년 연간(3,925억)을 넘었다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="oi">
+        <div class="dp-qa-t">영업이익</div>
+        <dl>
+          <dt>Q. 3분기 영업손실은?</dt>
+          <dd>-290억으로 2Q26(-106억)보다 커졌다. 영업이익률은 -16.0%다.</dd>
+          <dt>Q. 추세는?</dt>
+          <dd>1Q26 157억 흑자 뒤 2Q26 -106억, 3Q26 -290억으로 두 분기 연속 나빠졌다. 누적 영업손실은 -239억이다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="pretax">
+        <div class="dp-qa-t">세전이익</div>
+        <dl>
+          <dt>Q. 영업 밖에서는?</dt>
+          <dd>3분기 영업외 손실이 -737억으로 커졌다. GEN 편입으로 늘어난 차입 이자 등이 부담이다.</dd>
+          <dt>Q. 1년 전과 비교하면?</dt>
+          <dd>1년 전에는 누적 영업외 이익이 1,660억으로 순이익을 냈지만, 올해는 누적 -624억이다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="ni">
+        <div class="dp-qa-t">순이익</div>
+        <dl>
+          <dt>Q. 3분기 순이익은?</dt>
+          <dd>-909억 순손실이다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 순손실 -787억으로 1년 전(1,208억 흑자)과 반대다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="nip">
+        <div class="dp-qa-t">지배주주순이익</div>
+        <dl>
+          <dt>Q. 지배주주 순이익은?</dt>
+          <dd>3분기 -680억, 누적 -614억이다. 비지배지분이 손실 일부(3분기 -229억)를 나눠 졌다.</dd>
+          <dt>Q. 재무 부담은?</dt>
+          <dd>9월 말 부채가 작년 말보다 122.2% 늘어 부채비율이 96.4%다. GEN 가동 정상화가 관건이다.</dd>
+        </dl>
+      </div>
+    </div>
+    <script>(function(){var b=document.getElementById('dpQtrQA'),n=document.getElementById('dpQtrMetricNav');if(!b)return;b.classList.add('js');function s(){var a=n&&n.querySelector('button.active'),k=a?a.dataset.qm:'rev';b.querySelectorAll('.dp-qa-set').forEach(function(e){e.classList.toggle('on',e.dataset.qm===k)});}if(n)n.addEventListener('click',function(){setTimeout(s,0)});s();})();</script>
+<!-- q3qa:end -->
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1Q26 / 2Q26 매출액</span><span class="v up">1,665.3억 / 약 1,788억</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v up">50.9억 (전년 동기 -435.7억)</span></div>
-          <div class="dp-row2"><span class="l">1H26 지배주주 순이익</span><span class="v up">66.7억 (전년 동기 -408.3억)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 매출액</span><span class="v up">5,265억 (전년동기比 ▲89.9%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 영업이익</span><span class="v dn">-239억 (전년동기比 적자축소)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 지배주주 순이익</span><span class="v dn">-614억 (전년동기比 적자전환)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 단독 영업이익</span><span class="v dn">-290억 (3Q25 대비 적자지속, 2Q26 대비 적자지속)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 기본EPS</span><span class="v up">94원 (전년 동기 -585원)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 부채비율</span><span class="v">95.9% (2025년 말 51.1%)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 차입금·사채</span><span class="v">1조 326억 (연초 5,162억)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 기본EPS</span><span class="v dn">-868원 (연환산 -1,157원)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 부채비율</span><span class="v">96.4%</span></div>
+          <div class="dp-row2"><span class="l">9월 말 지배지분</span><span class="v">1조 789억 (작년 말 대비 ▼5.8%)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 현금성자산</span><span class="v">696억</span></div>
         </div>
       </div>
       <!-- fundq-insight:start -->
       <div class="dp-insight" style="margin-bottom:10px;">
         <div class="dp-insight-t">분기 실적 — 2개년 흐름</div>
-        <div class="dp-insight-b">최근 8개 분기(3Q24~2Q26) 영업이익은 -385억→-106억. 2Q26 영업이익은 전년 동기(2Q25) -288억 대비 적자축소, 직전 분기(1Q26) 대비 적자전환. 이 기간 분기 최고는 1Q26(157억).</div>
+        <div class="dp-insight-b">최근 8개 분기(4Q24~3Q26) 영업이익은 -95억→-290억. 3Q26 영업이익은 전년 동기(3Q25) -251억 대비 적자지속, 직전 분기(2Q26) 대비 적자지속. 이 기간 분기 최고는 1Q26(157억).</div>
       </div>
 <!-- fundq-insight:end -->
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심</div>
-        <div class="dp-insight-b">1분기에 매출 1,665억, 영업이익 157억으로 흑자 전환했다. 개선 폭의 절반 이상이 1월 연결 편입한 인도네시아 제련소 GEN에서 나왔다는 분석이 있다. 2분기에는 매출이 약 1,788억으로 늘었지만 GEN 가동 차질로 영업손실 106억, 지배주주 순손실 73억을 냈다. GEN 편입으로 6월 말 자산이 2조 9,120억으로 연초(1조 7,291억)보다 68% 늘었고, 차입금·사채도 1조 326억으로 두 배가 됐다. 2분기 매출은 DART 반기보고서에 분기 매출 항목이 없어 보도 수치를 썼다.</div>
+        <div class="dp-insight-t">3분기보고서 핵심 — 전년동기(3Q25 누적) 대비</div>
+        <div class="dp-insight-b">3Q26 매출은 1,811억으로 1년 전의 2.9배(+186.8%)지만, 영업손실은 -290억으로 2Q26(-106억)보다 커졌다. 1월 연결 편입한 인도네시아 제련소 GEN이 매출을 키웠지만, 가동 차질 등으로 수익성은 나빠졌다. 영업외 손실도 -737억으로 커져 순손실 -909억, 지배주주 순손실 -680억이다(비지배지분이 -229억을 나눠 졌다). 누적으로는 매출 5,265억(▲89.9%)으로 2025년 연간(3,925억)을 넘었지만, 영업손실 -239억, 지배주주 순손실 -614억이다. 1년 전에는 영업외 이익(1,660억)으로 순이익이 1,208억 흑자였다. 누적 EPS는 -868원이다. GEN 편입으로 9월 말 부채가 작년 말보다 122.2% 늘어 부채비율이 96.4%가 됐고, 차입 이자가 영업외 손실을 키우고 있다. GEN 가동 정상화가 관건이다.</div>
       </div>
     </div>
   </div>
@@ -477,7 +530,7 @@ body{background:var(--dp-bg);}
     <!-- dp-vscore:end -->
     <div class="dp-share4">
       <div class="dp-share"><div class="dp-share-l">2025 EPS</div><div class="dp-share-v">345원</div><div class="dp-share-s">흑자 전환(전년 -618원)</div></div>
-      <div class="dp-share"><div class="dp-share-l">1H26 EPS</div><div class="dp-share-v">94원</div><div class="dp-share-s">흑자 전환(전년 동기 -585원)</div></div>
+      <div class="dp-share"><div class="dp-share-l">3Q26 누적 EPS</div><div class="dp-share-v">-868원</div><div class="dp-share-s">연환산 -1,157원</div></div>
       <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">15,284원</div><div class="dp-share-s">지배지분 기준(6월 말)</div></div>
       <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">0원</div><div class="dp-share-s">보통주 무배당</div></div>
     </div>
@@ -742,6 +795,12 @@ body{background:var(--dp-bg);}
         <div class="dp-tl-title">-8%대 두 차례 뒤 +14.8%</div>
         <div class="dp-tl-body">10/12 -8.2%, 10/15 -8.4%로 32,350원까지 밀렸다가 10/19 36,950원으로 14.8% 올랐다. 10/19 급등의 직접적인 원인은 확인되지 않았다.</div>
       </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.11.16 (3분기보고서)</div>
+        <div class="dp-tl-title">3Q26 분기보고서 — 영업손실 -290억, 지배주주 순손실 -680억</div>
+        <div class="dp-tl-body">3분기 매출 1,811억(▲186.8%)이나 영업손실 -290억·영업외 손실 -737억으로 지배주주 순손실 -680억. 누적 순손실 -614억.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -753,7 +812,7 @@ body{background:var(--dp-bg);}
       <div>
         <div class="dp-thesis-t bull">긍정 요인</div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>인도네시아 니켈 제련소 GEN 연결 편입으로 전구체 원료(니켈) 내재화 · 원가 경쟁력 강화</span></div>
-        <div class="dp-thesis-item bull"><span class="dot">●</span><span>1Q26 영업이익 157억으로 흑자 전환, 1H26 영업이익 51억(전년 동기 -436억)</span></div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>GEN 편입으로 3Q26 누적 매출 5,265억(+89.9%), 단 영업이익은 1Q26 157억 뒤 3Q26 -290억으로 악화</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>전구체 외부 판매 비중 13%→36%(2Q26)로 그룹 계열사 의존도 완화</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>1Q 1,665억·2Q 약 1,788억으로 분기 매출이 지난해 같은 기간보다 크게 늘어</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>52주 고점 대비 -57.2%, PBR 약 2.4배로 업종 비교 대상 중간 아래</span></div>
@@ -1126,7 +1185,7 @@ function svgEl(tag,attrs){
 }
 
 // -- fund-report:start (valuation/fund_render.py)
-const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[342888306397.0,665248278975.0,952523315840.0,299846484651.0,392506172705.0],"oi":[16252651418.0,38988203638.0,8772772409.0,-64719926202.0,-65369476119.0],"nip":[-22979543277.0,15582712507.0,5045159766.0,-42686351369.0,24103738371.0],"qLabels":["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26"],"q":{"rev":[65874877605.0,88094516821.0,136080858579.0,78068573064.0,63153785110.0,115202955952.0,166529087801.0,178788095607.0],"oi":[-38536588169.0,-9544869665.0,-14783746635.0,-28789921739.0,-25140832974.0,3345025229.0,15678037433.0,-10583518567.0],"pretax":[-38717340519.0,-8859003808.0,-12683975981.0,-44588511379.0,154519771967.0,-82219477121.0,26536424670.0,-10102517301.0],"ni":[-27739014984.0,-5636565527.0,-7325548455.0,-33501838342.0,161587947814.0,-96656822646.0,24618146241.0,-12449410448.0],"nip":[-27739014984.0,-5636565527.0,-7325548455.0,-33501838342.0,161587947814.0,-96656822646.0,13951484072.0,-7286221286.0]}};
+const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[342888306397.0,665248278975.0,952523315840.0,299846484651.0,392506172705.0],"oi":[16252651418.0,38988203638.0,8772772409.0,-64719926202.0,-65369476119.0],"nip":[-22979543277.0,15582712507.0,5045159766.0,-42686351369.0,24103738371.0],"qLabels":["4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26","3Q26"],"q":{"rev":[88094516821.0,136080858579.0,78068573064.0,63153785110.0,115202955952.0,166529087801.0,178788095607.0,181148398681.0],"oi":[-9544869665.0,-14783746635.0,-28789921739.0,-25140832974.0,3345025229.0,15678037433.0,-10583518567.0,-28970293802.0],"pretax":[-8859003808.0,-12683975981.0,-44588511379.0,154519771967.0,-82219477121.0,26536424670.0,-10102517301.0,-102717069543.0],"ni":[-5636565527.0,-7325548455.0,-33501838342.0,161587947814.0,-96656822646.0,24618146241.0,-12449410448.0,-90895214655.0],"nip":[-5636565527.0,-7325548455.0,-33501838342.0,161587947814.0,-96656822646.0,13951484072.0,-7286221286.0,-68030593999.0]}};
 const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
 const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
 let _qtrCurrentMetric=(document.querySelector('#dpQtrMetricNav button')||{dataset:{qm:'oi'}}).dataset.qm;

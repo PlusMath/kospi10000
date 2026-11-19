@@ -360,7 +360,7 @@ body{background:var(--dp-bg);}
   <div class="dp-acc-body">
     <div class="dp-tab-row">
       <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
-      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">반기보고서 · 1H26</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">3분기보고서 · 3Q26</button>
     </div>
 
     <div id="dpFundAnnual">
@@ -417,7 +417,7 @@ body{background:var(--dp-bg);}
 
     <div id="dpFundQuarter" style="display:none;">
 <!-- fundq:start -->
-      <div class="dp-secl">분기별 실적 (8개 분기, 3Q24~2Q26)</div>
+      <div class="dp-secl">분기별 실적 (8개 분기, 4Q24~3Q26)</div>
       <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
         <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
         <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
@@ -429,27 +429,80 @@ body{background:var(--dp-bg);}
       <svg id="fundQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
       <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 분기·반기·사업보고서의 3개월 단독 실적. 4분기는 사업보고서 연간 실적에서 3분기 누적을 뺀 값. 분기 이름 아래 ▲▼는 전년 동기 대비 증감.</div>
 <!-- fundq:end -->
+<!-- q3qa:start -->
+    <div class="dp-qa" id="dpQtrQA">
+      <div class="dp-qa-h">항목별 Q&amp;A <small>3Q26 기준 · 위 지표 버튼을 누르면 해당 항목으로 바뀝니다</small></div>
+      <div class="dp-qa-set" data-qm="rev">
+        <div class="dp-qa-t">매출액</div>
+        <dl>
+          <dt>Q. 3분기 매출은?</dt>
+          <dd>1조 9,653억으로 1년 전보다 2.1% 늘었고 2Q26보다 4.4% 줄었다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 매출 6조 1,047억으로 1년 전보다 1.8% 많다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="oi">
+        <div class="dp-qa-t">영업이익</div>
+        <dl>
+          <dt>Q. 3분기 영업이익은?</dt>
+          <dd>653억으로 1년 전보다 12.6%, 2Q26보다 23.5% 줄었다. 영업이익률은 3.3%다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 영업이익 2,682억(▲9.6%)으로 한섬·현대그린푸드 등 자회사 실적이 나아졌다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="pretax">
+        <div class="dp-qa-t">세전이익</div>
+        <dl>
+          <dt>Q. 영업 밖에서는?</dt>
+          <dd>3분기 영업외 이익은 210억이다. 누적 1,622억으로 1년 전(3,076억)의 절반인데, 1년 전 일회성 이익의 기저효과다.</dd>
+          <dt>Q. 3분기 세전이익은?</dt>
+          <dd>863억으로 1년 전보다 53.1% 줄었다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="ni">
+        <div class="dp-qa-t">순이익</div>
+        <dl>
+          <dt>Q. 3분기 순이익은?</dt>
+          <dd>연결 순이익 658억으로 1년 전보다 59.8% 줄었다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 순이익 3,452억으로 1년 전보다 26.7% 적다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="nip">
+        <div class="dp-qa-t">지배주주순이익</div>
+        <dl>
+          <dt>Q. 지배주주 순이익은?</dt>
+          <dd>3분기 453억(▼64.8%), 누적 2,306억(▼38.4%)이다. 연결 순이익의 33.2%는 비지배지분 몫이다.</dd>
+          <dt>Q. EPS가 크게 줄어든 이유는?</dt>
+          <dd>누적 EPS 1,418원, 연환산 1,891원이다. 순이익 감소에 더해 6월 현대홈쇼핑 주식교환으로 주식 수가 늘어난 영향도 있다.</dd>
+        </dl>
+      </div>
+    </div>
+    <script>(function(){var b=document.getElementById('dpQtrQA'),n=document.getElementById('dpQtrMetricNav');if(!b)return;b.classList.add('js');function s(){var a=n&&n.querySelector('button.active'),k=a?a.dataset.qm:'rev';b.querySelectorAll('.dp-qa-set').forEach(function(e){e.classList.toggle('on',e.dataset.qm===k)});}if(n)n.addEventListener('click',function(){setTimeout(s,0)});s();})();</script>
+<!-- q3qa:end -->
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1H26 연결 매출액</span><span class="v up">41,394.2억 (▲1.7%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v up">2,029.3억 (▲20.3%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 지배주주 순이익</span><span class="v" style="color:var(--dp-down);">1,853.3억 (▼24.4%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 매출액</span><span class="v up">6조 1,047억 (전년동기比 ▲1.8%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 영업이익</span><span class="v up">2,682억 (전년동기比 ▲9.6%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 지배주주 순이익</span><span class="v dn">2,306억 (전년동기比 ▼38.4%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 단독 영업이익</span><span class="v dn">653억 (3Q25 대비 ▼12.6%, 2Q26 대비 ▼23.5%)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 기본EPS</span><span class="v" style="color:var(--dp-down);">1,204원 (전년 동기 1,573원)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 지배지분</span><span class="v up">52,250.3억 (2025년 말 40,001.5억)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 현금성자산</span><span class="v">3,766.6억 (차입금 8,525.8억)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 기본EPS</span><span class="v up">1,418원 (연환산 1,891원)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 부채비율</span><span class="v">45.6%</span></div>
+          <div class="dp-row2"><span class="l">9월 말 지배지분</span><span class="v">5조 1,537억 (작년 말 대비 ▲28.8%)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 현금성자산</span><span class="v">3,559억</span></div>
         </div>
       </div>
       <!-- fundq-insight:start -->
       <div class="dp-insight" style="margin-bottom:10px;">
         <div class="dp-insight-t">분기 실적 — 2개년 흐름</div>
-        <div class="dp-insight-b">최근 8개 분기(3Q24~2Q26) 영업이익은 666억→853억. 2Q26 영업이익은 전년 동기(2Q25) 745억 대비 ▲14.6%, 직전 분기(1Q26) 대비 ▼27.4%. 이 기간 분기 최고는 1Q26(1,176억).</div>
+        <div class="dp-insight-b">최근 8개 분기(4Q24~3Q26) 영업이익은 203억→653억. 3Q26 영업이익은 전년 동기(3Q25) 748억 대비 ▼12.6%, 직전 분기(2Q26) 대비 ▼23.5%. 이 기간 분기 최고는 1Q26(1,176억).</div>
       </div>
 <!-- fundq-insight:end -->
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심</div>
-        <div class="dp-insight-b">1분기 영업이익은 1,176억(+24%)으로 한섬·현대그린푸드 실적 반등이 이끌었고, 2분기는 매출 2조 557억(+2.8%), 영업이익 853억(+14.6%)으로 증권사 추정치(IBK 1,181억)에는 못 미쳤다. 상반기 지배주주순이익이 24% 줄어든 것은 전년 동기에 있던 일회성 이익의 기저효과다. 6월 현대홈쇼핑 주식교환으로 신주 약 2,749만 주를 발행하면서 비지배지분이 지배지분으로 넘어와 지배지분이 1년 반 만에 1.2조 늘었다.</div>
+        <div class="dp-insight-t">3분기보고서 핵심 — 전년동기(3Q25 누적) 대비</div>
+        <div class="dp-insight-b">3Q26 매출 1조 9,653억, 영업이익 653억으로 매출은 1년 전보다 2.1% 늘었지만 영업이익은 12.6% 줄었다. 2Q26(853억)보다도 23.5% 적고 영업이익률은 3.3%다. 영업외 이익 210억이 더해졌지만 지배주주 순이익은 453억으로 1년 전보다 64.8% 줄었다. 1년 전 3분기에는 영업외 이익이 컸기 때문이다. 누적으로는 영업이익 2,682억(▲9.6%)으로 한섬·현대그린푸드 등 자회사 실적이 나아졌지만, 누적 영업외 이익이 1,622억으로 1년 전(3,076억)의 절반이어서 지배주주 순이익은 2,306억(▼38.4%)이다. 연결 순이익의 33.2%가 비지배지분 몫이다. 누적 EPS 1,418원의 연환산(1,891원)은 2025년 EPS(2,643원)보다 낮은데, 6월 현대홈쇼핑 주식교환으로 주식 수가 늘어난 영향도 있다. 같은 이유로 9월 말 지배지분은 작년 말보다 28.8% 늘었다. 부채비율은 45.6%다.</div>
       </div>
     </div>
   </div>
@@ -478,7 +531,7 @@ body{background:var(--dp-bg);}
     <!-- dp-vscore:end -->
     <div class="dp-share4">
       <div class="dp-share"><div class="dp-share-l">2025 EPS</div><div class="dp-share-v">2,643원</div><div class="dp-share-s">▼41.0%</div></div>
-      <div class="dp-share"><div class="dp-share-l">1H26 EPS</div><div class="dp-share-v">1,204원</div><div class="dp-share-s">▼23.5%</div></div>
+      <div class="dp-share"><div class="dp-share-l">3Q26 누적 EPS</div><div class="dp-share-v">1,418원</div><div class="dp-share-s">연환산 1,891원</div></div>
       <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">29,033원</div><div class="dp-share-s">지배지분 기준(6월 말)</div></div>
       <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">300원</div><div class="dp-share-s">+42.9%</div></div>
     </div>
@@ -831,6 +884,12 @@ body{background:var(--dp-bg);}
         <div class="dp-tl-title">2단계 개편 추진 · 12만원대 횡보</div>
         <div class="dp-tl-body">현대홈쇼핑 투자부문을 인적분할해 현대지에프홀딩스와 합병하는 방안을 추진 중이다(11/12 주총, 12/15 분할기일 예정). 500억 규모 자사주 매입(약 2.3%)과 연내 소각, 10월 중간배당 65원도 예정돼 있다. SK증권은 10/8 목표주가 2만원을 제시했고, 주가는 10/19 12,670원(+2.0%)으로 마감했다.</div>
       </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.11.16 (3분기보고서)</div>
+        <div class="dp-tl-title">3Q26 분기보고서 — 영업이익 653억, 지배주주 순이익 64.8% 감소</div>
+        <div class="dp-tl-body">3분기 영업이익 653억(▼12.6%)·지배주주 순이익 453억(▼64.8%). 누적 영업이익 ▲9.6%이나 영업외 이익 감소로 누적 순이익 ▼38.4%.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -844,14 +903,14 @@ body{background:var(--dp-bg);}
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>PER 4.8배·Forward PER 6.3배·PBR 0.44배로 지주사 업종 하단</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>현대홈쇼핑 100% 자회사 편입으로 지배구조 단순화, 투자부문 합병으로 한섬 등 손자회사가 직접 자회사로</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>자사주 500억 추가 매입 후 연내 소각, 2026년 주당 441원 이상 배당 계획</span></div>
-        <div class="dp-thesis-item bull"><span class="dot">●</span><span>연결 영업이익 2025년 +38%, 1H26 +20%로 자회사 실적 개선</span></div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>연결 영업이익 2025년 +38%, 3Q26 누적 +9.6%로 자회사 실적 개선</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>최근 6개월 목표주가를 낸 2개 증권사 모두 매수(SK 2만원·IBK 1.9만원)</span></div>
       </div>
       <div>
         <div class="dp-thesis-t bear">리스크 요인</div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>52주 고점 대비 -32.4%, 1년간 하루 ±5% 이상 변동 33회로 변동성이 큼</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>주식교환 신주로 주식 수가 약 18% 늘어 주당 지표가 희석됨</span></div>
-        <div class="dp-thesis-item bear"><span class="dot">●</span><span>지배주주순이익 2025년 -41%, 1H26 -24% (전년 일회성 이익 기저)</span></div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>지배주주순이익 2025년 -41%, 3Q26 누적 -38.4% (전년 일회성 이익 기저)</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>2Q26 영업이익이 증권사 추정치를 밑돎</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>2단계 분할·합병은 주총·정부 심사에 따라 일정이 바뀔 수 있음</span></div>
       </div>
@@ -1216,7 +1275,7 @@ function svgEl(tag,attrs){
 }
 
 // -- fund-report:start (valuation/fund_render.py)
-const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[3486080421000.0,3923177808000.0,2629493454000.0,7409277127000.0,8091605017000.0],"oi":[58615990000.0,60030394000.0,-11033826000.0,198099994000.0,274073694000.0],"nip":[43456270000.0,55856005000.0,1127285223000.0,698862577000.0,411983219000.0],"qLabels":["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26"],"q":{"rev":[2011373805000.0,2148006854000.0,2072112335000.0,1998795057000.0,1925169178000.0,2095528447000.0,2083694771000.0,2055729243000.0],"oi":[66613834000.0,20338078000.0,95568978000.0,74480766000.0,74759094000.0,29264856000.0,117588962000.0,85336942000.0],"pretax":[77721778000.0,162706545000.0,247622172000.0,120739438000.0,184001321000.0,88364619000.0,186213987000.0,157825727000.0],"ni":[66170509000.0,161768038000.0,203831872000.0,103266238000.0,163833847000.0,47729931000.0,147231697000.0,132150045000.0],"nip":[23659348000.0,159662882000.0,172980536000.0,72710124000.0,128499784000.0,37792775000.0,90935028000.0,94395566000.0]}};
+const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[3486080421000.0,3923177808000.0,2629493454000.0,7409277127000.0,8091605017000.0],"oi":[58615990000.0,60030394000.0,-11033826000.0,198099994000.0,274073694000.0],"nip":[43456270000.0,55856005000.0,1127285223000.0,698862577000.0,411983219000.0],"qLabels":["4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26","3Q26"],"q":{"rev":[2148006854000.0,2072112335000.0,1998795057000.0,1925169178000.0,2095528447000.0,2083694771000.0,2055729243000.0,1965290057000.0],"oi":[20338078000.0,95568978000.0,74480766000.0,74759094000.0,29264856000.0,117588962000.0,85336942000.0,65304680000.0],"pretax":[162706545000.0,247622172000.0,120739438000.0,184001321000.0,88364619000.0,186213987000.0,157825727000.0,86341188000.0],"ni":[161768038000.0,203831872000.0,103266238000.0,163833847000.0,47729931000.0,147231697000.0,132150045000.0,65828522000.0],"nip":[159662882000.0,172980536000.0,72710124000.0,128499784000.0,37792775000.0,90935028000.0,94395566000.0,45283544000.0]}};
 const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
 const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
 let _qtrCurrentMetric=(document.querySelector('#dpQtrMetricNav button')||{dataset:{qm:'oi'}}).dataset.qm;

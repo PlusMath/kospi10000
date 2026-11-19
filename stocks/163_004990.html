@@ -363,7 +363,7 @@ body{background:var(--dp-bg);}
   <div class="dp-acc-body">
     <div class="dp-tab-row">
       <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
-      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">반기보고서 · 1H26</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">3분기보고서 · 3Q26</button>
     </div>
 
     <div id="dpFundAnnual">
@@ -420,7 +420,7 @@ body{background:var(--dp-bg);}
 
     <div id="dpFundQuarter" style="display:none;">
 <!-- fundq:start -->
-      <div class="dp-secl">분기별 실적 (8개 분기, 3Q24~2Q26)</div>
+      <div class="dp-secl">분기별 실적 (8개 분기, 4Q24~3Q26)</div>
       <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
         <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
         <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
@@ -432,27 +432,80 @@ body{background:var(--dp-bg);}
       <svg id="fundQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
       <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 분기·반기·사업보고서의 3개월 단독 실적. 4분기는 사업보고서 연간 실적에서 3분기 누적을 뺀 값. 분기 이름 아래 ▲▼는 전년 동기 대비 증감.</div>
 <!-- fundq:end -->
+<!-- q3qa:start -->
+    <div class="dp-qa" id="dpQtrQA">
+      <div class="dp-qa-h">항목별 Q&amp;A <small>3Q26 기준 · 위 지표 버튼을 누르면 해당 항목으로 바뀝니다</small></div>
+      <div class="dp-qa-set" data-qm="rev">
+        <div class="dp-qa-t">매출액</div>
+        <dl>
+          <dt>Q. 3분기 매출은?</dt>
+          <dd>4조 1,240억으로 1년 전과 비슷하다(▼0.7%).</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 매출 11조 8,392억으로 1년 전과 비슷하다(▲0.5%).</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="oi">
+        <div class="dp-qa-t">영업이익</div>
+        <dl>
+          <dt>Q. 3분기 영업이익은?</dt>
+          <dd>1,576억으로 2Q26보다 22.2% 늘었지만 1년 전보다 14.8% 적다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 영업이익 3,327억으로 1년 전보다 3.6% 적다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="pretax">
+        <div class="dp-qa-t">세전이익</div>
+        <dl>
+          <dt>Q. 영업 밖에서는?</dt>
+          <dd>3분기 영업외 손익이 -1,347억으로 세전이익이 230억에 그쳤다. 롯데케미칼의 3분기 대규모 적자가 지분법손실로 반영된 것으로 보인다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 영업외 손실 -1,989억으로 1년 전(-4,577억)의 절반 이하다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="ni">
+        <div class="dp-qa-t">순이익</div>
+        <dl>
+          <dt>Q. 3분기 순이익은?</dt>
+          <dd>-82억 순손실이다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 순이익 707억으로 1년 전(-1,761억) 적자에서 흑자로 돌아섰다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="nip">
+        <div class="dp-qa-t">지배주주순이익</div>
+        <dl>
+          <dt>Q. 지배주주 순이익은?</dt>
+          <dd>3분기 -421억, 누적 0억이다. 상반기 421억 흑자가 3분기 손실로 상쇄됐다. 연결 순이익이 모두 비지배지분 몫이다.</dd>
+          <dt>Q. EPS는?</dt>
+          <dd>누적 EPS -326원이다. 롯데케미칼 실적 회복이 지주 순이익의 관건이다.</dd>
+        </dl>
+      </div>
+    </div>
+    <script>(function(){var b=document.getElementById('dpQtrQA'),n=document.getElementById('dpQtrMetricNav');if(!b)return;b.classList.add('js');function s(){var a=n&&n.querySelector('button.active'),k=a?a.dataset.qm:'rev';b.querySelectorAll('.dp-qa-set').forEach(function(e){e.classList.toggle('on',e.dataset.qm===k)});}if(n)n.addEventListener('click',function(){setTimeout(s,0)});s();})();</script>
+<!-- q3qa:end -->
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1H26 연결 매출액</span><span class="v up">77,152억 (▲1.1%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v up">1,751억 (▲9.3%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 지배주주 순이익</span><span class="v up">421억 (흑자전환, 전년 동기 -2,049억)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 매출액</span><span class="v up">11조 8,392억 (전년동기比 ▲0.5%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 영업이익</span><span class="v dn">3,327억 (전년동기比 ▼3.6%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 지배주주 순이익</span><span class="v up">0억 (전년동기比 흑자전환)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 단독 영업이익</span><span class="v up">1,576억 (3Q25 대비 ▼14.8%, 2Q26 대비 ▲22.2%)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 EPS</span><span class="v up">330원 (전년 동기 -2,992원)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 부채비율</span><span class="v">139.0% (2025년 말 144.9%)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 차입금·사채</span><span class="v">8조 6,462억 (현금성자산 1조 2,362억)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 기본EPS</span><span class="v dn">-326원 (연환산 -435원)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 부채비율</span><span class="v">146.7%</span></div>
+          <div class="dp-row2"><span class="l">9월 말 지배지분</span><span class="v">5조 9,776억 (작년 말 대비 ▼1.6%)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 현금성자산</span><span class="v">1조 5,486억</span></div>
         </div>
       </div>
       <!-- fundq-insight:start -->
       <div class="dp-insight" style="margin-bottom:10px;">
         <div class="dp-insight-t">분기 실적 — 2개년 흐름</div>
-        <div class="dp-insight-b">최근 8개 분기(3Q24~2Q26) 영업이익은 1,790억→1,290억. 2Q26 영업이익은 전년 동기(2Q25) 1,422억 대비 ▼9.3%, 직전 분기(1Q26) 대비 ▲179.9%. 이 기간 분기 최고는 3Q25(1,851억).</div>
+        <div class="dp-insight-b">최근 8개 분기(4Q24~3Q26) 영업이익은 -730억→1,576억. 3Q26 영업이익은 전년 동기(3Q25) 1,851억 대비 ▼14.8%, 직전 분기(2Q26) 대비 ▲22.2%. 이 기간 분기 최고는 3Q25(1,851억).</div>
       </div>
 <!-- fundq-insight:end -->
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심</div>
-        <div class="dp-insight-b">1분기 영업이익은 461억으로 전년 동기(180억)의 2.6배가 됐고, 2분기는 1,290억으로 9.3% 줄었다. 상반기 합계로는 영업이익 1,751억(+9.3%), 지배주주순이익 421억으로 흑자로 돌아섰다. IBK투자증권은 1분기 지분법이익이 660억 흑자로 돌아선 것을 롯데쇼핑 호조와 롯데케미칼 적자 축소 덕으로 봤다. 6월 말 부채비율은 139.0%로 2025년 말보다 낮아졌지만 차입금·사채가 8.6조에 이른다.</div>
+        <div class="dp-insight-t">3분기보고서 핵심 — 전년동기(3Q25 누적) 대비</div>
+        <div class="dp-insight-b">3Q26 영업이익은 1,576억으로 2Q26보다 22.2% 늘었지만 1년 전보다는 14.8% 적다. 매출은 4조 1,240억으로 1년 전과 비슷하다. 그러나 3분기 영업외 손익이 -1,347억으로 커져 세전이익이 230억에 그쳤고, 지배주주 순손실은 -421억이다. 롯데케미칼이 3분기에 영업손실 -2,814억을 낸 만큼 지분법손실이 영업외 손익에 반영된 것으로 보인다. 상반기 지배주주 순이익 421억이 3분기 손실로 상쇄돼 누적 지배주주 순이익은 0억이다. 그래도 1년 전(-2,839억)보다는 크게 나아졌다. 누적 영업이익은 3,327억(▼3.6%)이다. 연결 순이익보다 비지배지분 몫이 커서 지배주주 몫은 거의 남지 않는 구조다. 누적 EPS는 -326원이다. 9월 말 부채비율은 146.7%이고 차입금 부담이 크다. 롯데케미칼 실적 회복이 지주 순이익의 관건이다.</div>
       </div>
     </div>
   </div>
@@ -481,7 +534,7 @@ body{background:var(--dp-bg);}
     <!-- dp-vscore:end -->
     <div class="dp-share4">
       <div class="dp-share"><div class="dp-share-l">2025 EPS</div><div class="dp-share-v">-9,028원</div><div class="dp-share-s">적자 지속</div></div>
-      <div class="dp-share"><div class="dp-share-l">1H26 EPS</div><div class="dp-share-v">330원</div><div class="dp-share-s">흑자전환</div></div>
+      <div class="dp-share"><div class="dp-share-l">3Q26 누적 EPS</div><div class="dp-share-v">-326원</div><div class="dp-share-s">연환산 -435원</div></div>
       <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">83,300원</div><div class="dp-share-s">지배지분 기준(6월 말)</div></div>
       <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">1,250원</div><div class="dp-share-s">+4.2%</div></div>
     </div>
@@ -875,6 +928,12 @@ body{background:var(--dp-bg);}
         <div class="dp-tl-title">22,000원대 횡보</div>
         <div class="dp-tl-body">9월 말 24,050원에서 다시 내려 10/20 22,400원(-1.8%)으로 마감했다. 52주 고점보다 42% 낮다.</div>
       </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.11.13 (3분기보고서)</div>
+        <div class="dp-tl-title">3Q26 분기보고서 — 지배주주 순손실 -421억, 누적 0억</div>
+        <div class="dp-tl-body">3분기 영업이익 1,576억(▼14.8%)이나 영업외 손익 -1,347억(롯데케미칼 지분법 추정)으로 지배주주 순손실 -421억. 누적 지배주주 순이익 0억.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -1260,7 +1319,7 @@ function svgEl(tag,attrs){
 }
 
 // -- fund-report:start (valuation/fund_render.py)
-const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[9924864014193.0,14111852309175.0,15159775895639.0,15756975627179.0,15539626589471.0],"oi":[216401073913.0,489830602915.0,493689284141.0,340468760521.0,239439333968.0],"nip":[308604548632.0,170760973538.0,-15357995337.0,-1018805985752.0,-647552868590.0],"qLabels":["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26"],"q":{"rev":[4143043040649.0,3768328934501.0,3585252425700.0,4043186553890.0,4154307233412.0,3756880376469.0,3622150064464.0,4093073648313.0],"oi":[179002894398.0,-72988577083.0,17954717273.0,142199157410.0,185067817225.0,-105782357940.0,46075945676.0,128978572270.0],"pretax":[-31409221084.0,-765495437169.0,-75448172882.0,-52350289261.0,15363561938.0,-361748714033.0,42227932318.0,68583497389.0],"ni":[-21564628807.0,-758973114250.0,-91865265093.0,-68541091392.0,-15659268404.0,-418937662694.0,14480909526.0,64351963336.0],"nip":[-72313419959.0,-722618606817.0,-109736143365.0,-95157484465.0,-78991636341.0,-363667604419.0,6548342890.0,35572455625.0]}};
+const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[9924864014193.0,14111852309175.0,15159775895639.0,15756975627179.0,15539626589471.0],"oi":[216401073913.0,489830602915.0,493689284141.0,340468760521.0,239439333968.0],"nip":[308604548632.0,170760973538.0,-15357995337.0,-1018805985752.0,-647552868590.0],"qLabels":["4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26","3Q26"],"q":{"rev":[3768328934501.0,3585252425700.0,4043186553890.0,4154307233412.0,3756880376469.0,3622150064464.0,4093073648313.0,4124010560978.0],"oi":[-72988577083.0,17954717273.0,142199157410.0,185067817225.0,-105782357940.0,46075945676.0,128978572270.0,157634655702.0],"pretax":[-765495437169.0,-75448172882.0,-52350289261.0,15363561938.0,-361748714033.0,42227932318.0,68583497389.0,22976199026.0],"ni":[-758973114250.0,-91865265093.0,-68541091392.0,-15659268404.0,-418937662694.0,14480909526.0,64351963336.0,-8180692080.0],"nip":[-722618606817.0,-109736143365.0,-95157484465.0,-78991636341.0,-363667604419.0,6548342890.0,35572455625.0,-42118959789.0]}};
 const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
 const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
 let _qtrCurrentMetric=(document.querySelector('#dpQtrMetricNav button')||{dataset:{qm:'oi'}}).dataset.qm;

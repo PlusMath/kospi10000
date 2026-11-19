@@ -359,7 +359,7 @@ body{background:var(--dp-bg);}
   <div class="dp-acc-body">
     <div class="dp-tab-row">
       <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
-      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">반기보고서 · 1H26</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">3분기보고서 · 3Q26</button>
     </div>
 
     <div id="dpFundAnnual">
@@ -416,7 +416,7 @@ body{background:var(--dp-bg);}
 
     <div id="dpFundQuarter" style="display:none;">
 <!-- fundq:start -->
-      <div class="dp-secl">분기별 실적 (8개 분기, 3Q24~2Q26)</div>
+      <div class="dp-secl">분기별 실적 (8개 분기, 4Q24~3Q26)</div>
       <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
         <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
         <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
@@ -428,27 +428,80 @@ body{background:var(--dp-bg);}
       <svg id="fundQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
       <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 분기·반기·사업보고서의 3개월 단독 실적. 4분기는 사업보고서 연간 실적에서 3분기 누적을 뺀 값. 분기 이름 아래 ▲▼는 전년 동기 대비 증감.</div>
 <!-- fundq:end -->
+<!-- q3qa:start -->
+    <div class="dp-qa" id="dpQtrQA">
+      <div class="dp-qa-h">항목별 Q&amp;A <small>3Q26 기준 · 위 지표 버튼을 누르면 해당 항목으로 바뀝니다</small></div>
+      <div class="dp-qa-set" data-qm="rev">
+        <div class="dp-qa-t">매출액</div>
+        <dl>
+          <dt>Q. 3분기 매출은?</dt>
+          <dd>399억으로 1년 전보다 2.2% 줄었다. 기술료가 한꺼번에 반영된 2Q26(443억)보다 적다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 매출 1,242억으로 1년 전보다 5.6% 많다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="oi">
+        <div class="dp-qa-t">영업이익</div>
+        <dl>
+          <dt>Q. 3분기 영업이익은?</dt>
+          <dd>13억으로 작다. 2Q26(56억)은 바토클리맙 기술료 일시 반영 효과였다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 영업이익 77억으로 1년 전(11억)보다 늘었다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="pretax">
+        <div class="dp-qa-t">세전이익</div>
+        <dl>
+          <dt>Q. 영업 밖에서는?</dt>
+          <dd>3분기 영업외 이익 17억으로 세전이익이 30억이다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 영업외 손실 -256억으로 2분기 개발 관련 손상차손 등 일회성 비용이 컸다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="ni">
+        <div class="dp-qa-t">순이익</div>
+        <dl>
+          <dt>Q. 3분기 순이익은?</dt>
+          <dd>31억으로 흑자다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 순손실 -159억이다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="nip">
+        <div class="dp-qa-t">지배주주순이익</div>
+        <dl>
+          <dt>Q. 지배주주 순이익과 EPS는?</dt>
+          <dd>비지배지분이 없어 순이익과 같다. 누적 EPS -313원이다.</dd>
+          <dt>Q. 무엇으로 봐야 하나?</dt>
+          <dd>이익이 작고 기술료 시점에 따라 흔들려 이익 기준 밸류에이션은 의미가 작다. 바토클리맙 등 임상·허가 일정이 주가를 좌우한다.</dd>
+        </dl>
+      </div>
+    </div>
+    <script>(function(){var b=document.getElementById('dpQtrQA'),n=document.getElementById('dpQtrMetricNav');if(!b)return;b.classList.add('js');function s(){var a=n&&n.querySelector('button.active'),k=a?a.dataset.qm:'rev';b.querySelectorAll('.dp-qa-set').forEach(function(e){e.classList.toggle('on',e.dataset.qm===k)});}if(n)n.addEventListener('click',function(){setTimeout(s,0)});s();})();</script>
+<!-- q3qa:end -->
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1H26 연결 매출액</span><span class="v up">843.1억 (▲9.7%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v up">64.4억 (전년 동기 7.5억)</span></div>
-          <div class="dp-row2"><span class="l">1H26 지배주주 순이익</span><span class="v" style="color:var(--dp-down);">-189.5억 (적자전환, 전년 동기 +3.9억)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 매출액</span><span class="v up">1,242억 (전년동기比 ▲5.6%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 영업이익</span><span class="v up">77억 (전년동기比 ▲600.8%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 지배주주 순이익</span><span class="v dn">-159억 (전년동기比 적자전환)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 단독 영업이익</span><span class="v dn">13억 (3Q25 대비 ▲265.1%, 2Q26 대비 ▼77.2%)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 기본EPS</span><span class="v" style="color:var(--dp-down);">-373원 (전년 동기 8원)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 부채비율</span><span class="v">48.8% (2025년 말 39.3%)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 차입금</span><span class="v">441억 (단기 291억·장기 150억, 현금성자산 302억)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 기본EPS</span><span class="v dn">-313원 (연환산 -417원)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 부채비율</span><span class="v">41.0%</span></div>
+          <div class="dp-row2"><span class="l">9월 말 지배지분</span><span class="v">1,540억 (작년 말 대비 ▼4.7%)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 현금성자산</span><span class="v">233억</span></div>
         </div>
       </div>
       <!-- fundq-insight:start -->
       <div class="dp-insight" style="margin-bottom:10px;">
         <div class="dp-insight-t">분기 실적 — 2개년 흐름</div>
-        <div class="dp-insight-b">최근 8개 분기(3Q24~2Q26) 영업이익은 4억→56억. 2Q26 영업이익은 전년 동기(2Q25) 11억 대비 ▲388.5%, 직전 분기(1Q26) 대비 ▲567.4%. 이 기간 분기 최고는 2Q26(56억).</div>
+        <div class="dp-insight-b">최근 8개 분기(4Q24~3Q26) 영업이익은 27억→13억. 3Q26 영업이익은 전년 동기(3Q25) 3억 대비 ▲265.1%, 직전 분기(2Q26) 대비 ▼77.2%. 이 기간 분기 최고는 2Q26(56억).</div>
       </div>
 <!-- fundq-insight:end -->
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심</div>
-        <div class="dp-insight-b">2분기 매출은 443억(+8.8%), 영업이익은 56억(+388.5%)이었다. 바토클리맙 갑상선안병증(TED) 3상이 끝나면서 그동안 이연됐던 기술료 수익이 한꺼번에 반영된 영향이다. 반면 세전손실 215억, 순손실 192억으로 적자전환했는데, 회사는 개발 관련 손상차손 등 일회성 비용이 반영됐다고 설명했다(손상 대상과 금액은 공개 기사에서 확인되지 않음). 1H26 매출은 843억(DART 반기보고서·회사 공시 기준)이다.</div>
+        <div class="dp-insight-t">3분기보고서 핵심 — 전년동기(3Q25 누적) 대비</div>
+        <div class="dp-insight-b">3Q26 매출 399억, 영업이익 13억으로 1년 전과 비슷한 수준이다(매출 ▼2.2%). 바토클리맙 기술료가 한꺼번에 반영됐던 2Q26(매출 443억, 영업이익 56억)보다는 줄었다. 영업외 이익 17억이 더해져 순이익은 31억으로 흑자를 냈다. 누적으로는 매출 1,242억(▲5.6%), 영업이익 77억으로 1년 전(11억)보다 늘었지만, 2분기 개발 관련 손상차손 등 일회성 비용(누적 영업외 손실 -256억) 때문에 순손실은 -159억이다. 누적 EPS는 -313원이다. 영업이익이 매우 작고 기술료 반영 시점에 따라 분기 손익이 흔들리는 구조라, 이익 기준 밸류에이션은 의미가 작다. 주가는 바토클리맙 등 파이프라인 임상·허가 일정에 더 크게 반응한다. 9월 말 부채비율은 41.0%다.</div>
       </div>
     </div>
   </div>
@@ -477,7 +530,7 @@ body{background:var(--dp-bg);}
     <!-- dp-vscore:end -->
     <div class="dp-share4">
       <div class="dp-share"><div class="dp-share-l">2025 EPS</div><div class="dp-share-v">-109원</div><div class="dp-share-s">적자 확대(전년 -36원)</div></div>
-      <div class="dp-share"><div class="dp-share-l">1H26 EPS</div><div class="dp-share-v">-373원</div><div class="dp-share-s">적자전환(전년 동기 8원)</div></div>
+      <div class="dp-share"><div class="dp-share-l">3Q26 누적 EPS</div><div class="dp-share-v">-313원</div><div class="dp-share-s">연환산 -417원</div></div>
       <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">3,178원</div><div class="dp-share-s">6월 말 자본 ÷ 유통주식</div></div>
       <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">0원</div><div class="dp-share-s">무배당</div></div>
     </div>
@@ -504,7 +557,7 @@ body{background:var(--dp-bg);}
       </div>
       <div class="dp-insight" style="margin-top:12px;">
                 <div class="dp-insight-t">해석</div>
-                <div class="dp-insight-b">2025년 지배주주 순손실이 56억이라 이익 기준 밸류에이션이 성립하지 않는다. 2024년에도 순손실(EPS -36원)이었고, 1H26은 일회성 비용으로 순손실이 190억으로 커졌다. 주가는 실적보다 파트너사 이뮤노반트의 FcRn 억제제 임상 결과에 따라 움직인다.</div>
+                <div class="dp-insight-b">2025년 지배주주 순손실이 56억이라 이익 기준 밸류에이션이 성립하지 않는다. 2024년에도 순손실(EPS -36원)이었고, 3Q26 누적으로도 2분기 일회성 비용 탓에 순손실 159억이다. 주가는 실적보다 파트너사 이뮤노반트의 FcRn 억제제 임상 결과에 따라 움직인다.</div>
               </div>
     </div>
         <div class="dp-gauge dp-metric-detail" data-metric="fpe">
@@ -754,6 +807,12 @@ body{background:var(--dp-bg);}
         <div class="dp-tl-title">피부홍반루푸스 개발 중단</div>
         <div class="dp-tl-body">9/23 이뮤노반트가 아이메로프루바트의 피부홍반루푸스(CLE) 2상에서 1차 평가지표를 충족하지 못해 해당 적응증 개발을 중단했다. 9월 말 44,100원으로 내려왔고, 10/1 +10.0% 반등 뒤 10/20 41,550원으로 마감했다. 증권사들은 기전 실패가 아니라 경쟁 환경을 고려한 결정이라며 핵심 적응증 가치에 미치는 영향은 제한적이라고 봤다(IBK·키움, 9/28).</div>
       </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.11.13 (3분기보고서)</div>
+        <div class="dp-tl-title">3Q26 분기보고서 — 영업이익 13억, 순이익 31억 흑자</div>
+        <div class="dp-tl-body">3분기 매출 399억·영업이익 13억, 순이익 31억으로 흑자. 누적 순손실 -159억은 2분기 손상차손 등 일회성 비용 영향.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -775,7 +834,7 @@ body{background:var(--dp-bg);}
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>52주 고점 대비 -41.2%, 1년간 하루 ±5% 이상 변동 73회로 변동성이 매우 큼</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>주가가 파트너사 이뮤노반트의 임상 결과에 좌우되고, 바토클리맙 TED 3상과 아이메로프루바트 CLE 2상은 실패</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>이뮤노반트가 바토클리맙 대신 후속 물질에 집중하며 권리 반환 가능성이 거론되고, 중증근무력증 허가 신청을 두고 양사 입장이 엇갈림</span></div>
-        <div class="dp-thesis-item bear"><span class="dot">●</span><span>2025년 순손실 56억, 1H26 순손실 190억(일회성 손상차손 포함)으로 이익 기반 밸류에이션 불가</span></div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>2025년 순손실 56억, 3Q26 누적 순손실 159억(2분기 손상차손 포함)으로 이익 기반 밸류에이션 불가</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>PBR 13.1배로 업종 최고 수준, 기대가 꺾이면 하락 폭이 클 수 있음</span></div>
       </div>
     </div>
@@ -1142,7 +1201,7 @@ function svgEl(tag,attrs){
 }
 
 // -- fund-report:start (valuation/fund_render.py)
-const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[101594443691.0,109995418981.0,134909837622.0,138943698757.0,155184524107.0],"oi":[10099118837.0,1505787596.0,2211359603.0,230474890.0,-915814382.0],"nip":[8896137176.0,251473643.0,3508607559.0,-1804843479.0,-5559162634.0],"qLabels":["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26"],"q":{"rev":[36839656251.0,36417332954.0,36150425038.0,40681535264.0,40803569354.0,37548994451.0,40030619639.0,44275731477.0],"oi":[430155408.0,2738742891.0,-394461621.0,1145818081.0,348875709.0,-2016046551.0,838726386.0,5597740049.0],"pretax":[536036611.0,2405613109.0,-407434142.0,1046418042.0,342708021.0,-7161574870.0,570245181.0,-21500018847.0],"ni":[221925805.0,1620109098.0,-207514535.0,598772436.0,298958019.0,-6249378554.0,275003828.0,-19228508521.0],"nip":[221925805.0,1620109098.0,-207514535.0,598772436.0,298958019.0,-6249378554.0,275003828.0,-19228508521.0]}};
+const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[101594443691.0,109995418981.0,134909837622.0,138943698757.0,155184524107.0],"oi":[10099118837.0,1505787596.0,2211359603.0,230474890.0,-915814382.0],"nip":[8896137176.0,251473643.0,3508607559.0,-1804843479.0,-5559162634.0],"qLabels":["4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26","3Q26"],"q":{"rev":[36417332954.0,36150425038.0,40681535264.0,40803569354.0,37548994451.0,40030619639.0,44275731477.0,39906501093.0],"oi":[2738742891.0,-394461621.0,1145818081.0,348875709.0,-2016046551.0,838726386.0,5597740049.0,1273774568.0],"pretax":[2405613109.0,-407434142.0,1046418042.0,342708021.0,-7161574870.0,570245181.0,-21500018847.0,3021874731.0],"ni":[1620109098.0,-207514535.0,598772436.0,298958019.0,-6249378554.0,275003828.0,-19228508521.0,3061941373.0],"nip":[1620109098.0,-207514535.0,598772436.0,298958019.0,-6249378554.0,275003828.0,-19228508521.0,3061941373.0]}};
 const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
 const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
 let _qtrCurrentMetric=(document.querySelector('#dpQtrMetricNav button')||{dataset:{qm:'oi'}}).dataset.qm;
