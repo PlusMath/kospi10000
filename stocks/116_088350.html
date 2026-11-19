@@ -362,7 +362,7 @@ body{background:var(--dp-bg);}
   <div class="dp-acc-body">
     <div class="dp-tab-row">
       <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
-      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">반기보고서 · 1H26</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">3분기보고서 · 3Q26</button>
     </div>
 
     <div id="dpFundAnnual">
@@ -419,7 +419,7 @@ body{background:var(--dp-bg);}
 
     <div id="dpFundQuarter" style="display:none;">
 <!-- fundq:start -->
-      <div class="dp-secl">분기별 실적 (8개 분기, 3Q24~2Q26)</div>
+      <div class="dp-secl">분기별 실적 (8개 분기, 4Q24~3Q26)</div>
       <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
         <button type="button" data-qm="oi" class="active" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
         <button type="button" data-qm="pretax" onclick="dpShowQtrMetric('pretax',this)">세전이익</button>
@@ -430,27 +430,78 @@ body{background:var(--dp-bg);}
       <svg id="fundQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
       <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 분기·반기·사업보고서의 3개월 단독 실적. 4분기는 사업보고서 연간 실적에서 3분기 누적을 뺀 값. 분기 이름 아래 ▲▼는 전년 동기 대비 증감.</div>
 <!-- fundq:end -->
+<!-- q3qa:start -->
+    <div class="dp-qa" id="dpQtrQA">
+      <div class="dp-qa-h">항목별 Q&amp;A <small>3Q26 기준 · 위 지표 버튼을 누르면 해당 항목으로 바뀝니다</small></div>
+      <div class="dp-qa-set" data-qm="rev">
+        <div class="dp-qa-t">매출액</div>
+        <dl>
+          <dt>Q. 매출액 차트가 비어 있는 이유는?</dt>
+          <dd>생명보험사는 보험손익·투자손익 체계로 공시해 DART 요약 재무제표에 매출액 항목이 없다. 영업이익부터 보는 것이 맞다.</dd>
+          <dt>Q. 그럼 외형은 무엇으로 보나?</dt>
+          <dd>신계약 보험계약마진(CSM)과 보험수익으로 보는데, 이 페이지의 DART 손익 수치에는 포함돼 있지 않다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="oi">
+        <div class="dp-qa-t">영업이익</div>
+        <dl>
+          <dt>Q. 3분기 영업손익은?</dt>
+          <dd>-1,565억으로 적자 전환했다. 1Q26 4,808억, 2Q26 6,268억으로 분기 최대 이익을 낸 직후다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 영업이익 9,511억으로 1년 전보다 1.6% 적다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="pretax">
+        <div class="dp-qa-t">세전이익</div>
+        <dl>
+          <dt>Q. 영업 밖에서는?</dt>
+          <dd>3분기 영업외 이익 485억으로 세전이익은 -1,080억이다.</dd>
+          <dt>Q. 손실 원인은?</dt>
+          <dd>DART 요약 손익에는 세부 항목이 없다. 생보사는 금리·증시에 따라 변액보증과 보험부채 평가가 크게 흔들리므로 공시 주석 확인이 필요하다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="ni">
+        <div class="dp-qa-t">순이익</div>
+        <dl>
+          <dt>Q. 3분기 순이익은?</dt>
+          <dd>연결 순손실 -390억이다. 법인세 효과로 세전 손실보다 작다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 순이익 8,656억으로 1년 전보다 12.6% 많다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="nip">
+        <div class="dp-qa-t">지배주주순이익</div>
+        <dl>
+          <dt>Q. 지배주주 손실이 연결보다 큰 이유는?</dt>
+          <dd>3분기 비지배지분 몫이 645억 이익이다. 지분 일부만 가진 자회사는 이익을 냈고 손실은 본체에 집중된 것으로 보인다.</dd>
+          <dt>Q. EPS는?</dt>
+          <dd>누적 지배주주 순이익 6,685억(▲8.1%)은 여전히 2025년 연간(6,413억)보다 많다. 누적 EPS 732원, 연환산 976원이다.</dd>
+        </dl>
+      </div>
+    </div>
+    <script>(function(){var b=document.getElementById('dpQtrQA'),n=document.getElementById('dpQtrMetricNav');if(!b)return;b.classList.add('js');function s(){var a=n&&n.querySelector('button.active'),k=a?a.dataset.qm:'rev';b.querySelectorAll('.dp-qa-set').forEach(function(e){e.classList.toggle('on',e.dataset.qm===k)});}if(n)n.addEventListener('click',function(){setTimeout(s,0)});s();})();</script>
+<!-- q3qa:end -->
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1H26 연결 보험영업수익</span><span class="v up">6조 4,194억 (▲10.1%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v up">1조 1,076억 (▲81.0%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 지배주주 순이익</span><span class="v up">7,719억 (▲119.8%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 영업이익</span><span class="v dn">9,511억 (전년동기比 ▼1.6%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 지배주주 순이익</span><span class="v up">6,685억 (전년동기比 ▲8.1%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 단독 영업이익</span><span class="v dn">-1,565억 (3Q25 대비 적자전환, 2Q26 대비 적자전환)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 기본EPS</span><span class="v up">893원 (전년 동기 426원)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 지배주주지분</span><span class="v up">16조 2,537억 (2025년 말 13조 8,752억)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 CSM</span><span class="v">약 8.9조 (증권사 리포트 기준)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 기본EPS</span><span class="v up">732원 (연환산 976원)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 지배지분</span><span class="v">15조 2,848억 (작년 말 대비 ▲10.2%)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 현금성자산</span><span class="v">2조 8,977억</span></div>
         </div>
       </div>
       <!-- fundq-insight:start -->
       <div class="dp-insight" style="margin-bottom:10px;">
         <div class="dp-insight-t">분기 실적 — 2개년 흐름</div>
-        <div class="dp-insight-b">최근 8개 분기(3Q24~2Q26) 영업이익은 1,282억→6,268억. 2Q26 영업이익은 전년 동기(2Q25) 2,407억 대비 ▲160.4%, 직전 분기(1Q26) 대비 ▲30.4%. 이 기간 분기 최고는 2Q26(6,268억).</div>
+        <div class="dp-insight-b">최근 8개 분기(4Q24~3Q26) 영업이익은 1,883억→-1,565억. 3Q26 영업이익은 전년 동기(3Q25) 3,549억 대비 적자전환, 직전 분기(2Q26) 대비 적자전환. 이 기간 분기 최고는 2Q26(6,268억).</div>
       </div>
 <!-- fundq-insight:end -->
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심</div>
-        <div class="dp-insight-b">2분기 연결 영업이익 6,268억, 지배주주순이익 4,476억으로 분기 최대 실적을 냈다. 상반기 지배주주순이익(7,719억)이 이미 2025년 연간(6,413억)을 넘었다. 증시 호조로 변액보험 관련 손실부담계약비용이 환입되고 대체투자 평가익이 났으며, 종신보험 중심 상품 전환으로 2분기 신계약 CSM이 6,892억(+57.6%)으로 늘었다. 다만 계리가정 변경으로 CSM이 약 2,700억 줄었고, 반기 배당은 하지 않았다.</div>
+        <div class="dp-insight-t">3분기보고서 핵심 — 전년동기(3Q25 누적) 대비</div>
+        <div class="dp-insight-b">3Q26 영업손익이 -1,565억으로 적자 전환했다. 1Q26(4,808억)과 2Q26(6,268억)에 분기 최대 이익을 낸 뒤 급반전했다. 세전이익은 -1,080억, 연결 순손실은 -390억이다. 지배주주 순손실은 -1,035억으로 더 크다. 비지배지분 몫이 645억 이익이어서, 지분 일부만 가진 자회사(한화손해보험 등)는 이익을 냈고 손실은 본체에 집중된 것으로 보인다. 누적으로는 영업이익 9,511억(▼1.6%), 지배주주 순이익 6,685억(▲8.1%)으로 여전히 2025년 연간(6,413억)보다 많다. 반기 때 7,719억이던 누적 지배주주 순이익은 3분기 손실로 줄었다. 누적 EPS 732원의 연환산(976원)은 2025년 EPS(693원)보다 높다. 생명보험은 금리·증시에 따라 변액보증·보험부채 평가가 크게 흔들리므로, 3분기 손실의 원인(계리가정 변경, 손실부담계약 등)은 공시 주석 확인이 필요하다.</div>
       </div>
     </div>
   </div>
@@ -479,7 +530,7 @@ body{background:var(--dp-bg);}
     <!-- dp-vscore:end -->
     <div class="dp-share4">
       <div class="dp-share"><div class="dp-share-l">2025 EPS</div><div class="dp-share-v">693원</div><div class="dp-share-s">▼26.0%</div></div>
-      <div class="dp-share"><div class="dp-share-l">1H26 EPS</div><div class="dp-share-v">893원</div><div class="dp-share-s">▲109.6%</div></div>
+      <div class="dp-share"><div class="dp-share-l">3Q26 누적 EPS</div><div class="dp-share-v">732원</div><div class="dp-share-s">연환산 976원</div></div>
       <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">21,632원</div><div class="dp-share-s">지배지분 기준(6월 말)</div></div>
       <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">0원</div><div class="dp-share-s">2024·2025 무배당</div></div>
     </div>
@@ -820,6 +871,12 @@ body{background:var(--dp-bg);}
         <div class="dp-tl-title">보험주 약세 속 4천원대로</div>
         <div class="dp-tl-body">회사 고유의 악재는 없었지만 보험 업종 매도세가 이어지며 10/15 4,675원까지 내렸다. 10/16에는 4,745원으로 마감했다.</div>
       </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.11.12 (3분기보고서)</div>
+        <div class="dp-tl-title">3Q26 분기보고서 — 영업손익 -1,565억, 적자 전환</div>
+        <div class="dp-tl-body">상반기 분기 최대 이익 뒤 3분기 영업손익 -1,565억, 지배주주 순손실 -1,035억으로 적자 전환. 누적 순이익 6,685억(▲8.1%).</div>
+      </div>
     </div>
   </div>
 </div>
@@ -830,7 +887,7 @@ body{background:var(--dp-bg);}
     <div class="dp-thesis">
       <div>
         <div class="dp-thesis-t bull">긍정 요인</div>
-        <div class="dp-thesis-item bull"><span class="dot">●</span><span>1H26 지배주주순이익 7,719억(+120%)으로 반기 최대, 상반기에 이미 2025년 연간 이익(6,413억)을 넘어섬</span></div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>3Q26 누적 지배주주순이익 6,685억(+8.1%)으로 2025년 연간(6,413억) 초과, 단 3분기는 -1,035억 적자</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>중장기납 종신보험 중심으로 상품을 바꾸며 2Q26 신계약 CSM 6,892억(+57.6%)</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>PBR 0.22배 — 지배주주지분 16.3조에 비해 시가총액이 약 4.1조에 그침</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>손해보험·증권·해외 자회사의 이익 기여 확대, 애큐온캐피탈 인수로 종합금융그룹 체제 강화</span></div>
@@ -1209,7 +1266,7 @@ function svgEl(tag,attrs){
 }
 
 // -- fund-report:start (valuation/fund_render.py)
-const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[27173625032824.0,0.0,0.0,null,null],"oi":[1351975220378.0,1256974885222.0,1057044424910.0,1096965243506.0,1147250000000.0],"nip":[1191311383175.0,1030328630872.0,758479879648.0,737253509036.0,641310000000.0],"qLabels":["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26"],"q":{"rev":[null,null,null,null,null,null,null,null],"oi":[128177373932.0,188280090460.0,371359000000.0,240704000000.0,354889000000.0,180298000000.0,480782000000.0,626782000000.0],"pretax":[130725633875.0,182944502353.0,377255000000.0,248790000000.0,352386000000.0,154049000000.0,484603000000.0,627314000000.0],"ni":[59681021117.0,138992224048.0,295728000000.0,165765000000.0,307420000000.0,67407000000.0,381582000000.0,522943000000.0],"nip":[23153069275.0,158687716564.0,226061000000.0,125095000000.0,266994000000.0,23161000000.0,324395000000.0,447554000000.0]}};
+const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[27173625032824.0,0.0,0.0,null,null],"oi":[1351975220378.0,1256974885222.0,1057044424910.0,1096965243506.0,1147250000000.0],"nip":[1191311383175.0,1030328630872.0,758479879648.0,737253509036.0,641310000000.0],"qLabels":["4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26","3Q26"],"q":{"rev":[null,null,null,null,null,null,null,null],"oi":[188280090460.0,371359000000.0,240704000000.0,354889000000.0,180298000000.0,480782000000.0,626782000000.0,-156471000000.0],"pretax":[182944502353.0,377255000000.0,248790000000.0,352386000000.0,154049000000.0,484603000000.0,627314000000.0,-107982000000.0],"ni":[138992224048.0,295728000000.0,165765000000.0,307420000000.0,67407000000.0,381582000000.0,522943000000.0,-38953000000.0],"nip":[158687716564.0,226061000000.0,125095000000.0,266994000000.0,23161000000.0,324395000000.0,447554000000.0,-103462000000.0]}};
 const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
 const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
 let _qtrCurrentMetric=(document.querySelector('#dpQtrMetricNav button')||{dataset:{qm:'oi'}}).dataset.qm;

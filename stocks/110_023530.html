@@ -358,7 +358,7 @@ body{background:var(--dp-bg);}
   <div class="dp-acc-body">
     <div class="dp-tab-row">
       <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
-      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">반기보고서 · 1H26</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">3분기보고서 · 3Q26</button>
     </div>
 
     <div id="dpFundAnnual">
@@ -415,7 +415,7 @@ body{background:var(--dp-bg);}
 
     <div id="dpFundQuarter" style="display:none;">
 <!-- fundq:start -->
-      <div class="dp-secl">분기별 실적 (8개 분기, 3Q24~2Q26)</div>
+      <div class="dp-secl">분기별 실적 (8개 분기, 4Q24~3Q26)</div>
       <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
         <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
         <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
@@ -427,27 +427,80 @@ body{background:var(--dp-bg);}
       <svg id="fundQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
       <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 분기·반기·사업보고서의 3개월 단독 실적. 4분기는 사업보고서 연간 실적에서 3분기 누적을 뺀 값. 분기 이름 아래 ▲▼는 전년 동기 대비 증감.</div>
 <!-- fundq:end -->
+<!-- q3qa:start -->
+    <div class="dp-qa" id="dpQtrQA">
+      <div class="dp-qa-h">항목별 Q&amp;A <small>3Q26 기준 · 위 지표 버튼을 누르면 해당 항목으로 바뀝니다</small></div>
+      <div class="dp-qa-set" data-qm="rev">
+        <div class="dp-qa-t">매출액</div>
+        <dl>
+          <dt>Q. 3분기 매출은?</dt>
+          <dd>3조 6,532억으로 1년 전보다 7.1%, 2Q26보다 4.8% 늘었다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 매출 10조 7,198억으로 1년 전보다 4.9% 많다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="oi">
+        <div class="dp-qa-t">영업이익</div>
+        <dl>
+          <dt>Q. 3분기 영업이익은?</dt>
+          <dd>1,756억으로 1년 전보다 34.5% 늘었고, 희망퇴직·손상 비용이 있었던 2Q26(899억)의 약 2배다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 영업이익 5,184억(▲62.3%)으로 2025년 연간(5,470억)에 거의 닿았다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="pretax">
+        <div class="dp-qa-t">세전이익</div>
+        <dl>
+          <dt>Q. 영업 밖에서는?</dt>
+          <dd>3분기 영업외 손익은 -122억으로 작다. 누적 -1,555억으로 1년 전(-3,137억)의 절반이다.</dd>
+          <dt>Q. 3분기 세전이익은?</dt>
+          <dd>1,633억으로 1년 전 적자에서 흑자로 돌아섰다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="ni">
+        <div class="dp-qa-t">순이익</div>
+        <dl>
+          <dt>Q. 3분기 순이익은?</dt>
+          <dd>연결 순이익 1,424억으로 1년 전 적자에서 흑자로 돌아섰다. 3분기 실효세율은 12.8%다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 순이익 3,009억으로 1년 전(-409억)과 반대다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="nip">
+        <div class="dp-qa-t">지배주주순이익</div>
+        <dl>
+          <dt>Q. 지배주주 순이익은?</dt>
+          <dd>3분기 1,315억, 누적 2,568억으로 2025년 연간(516억)의 5배다. 누적 연결 순이익의 14.6%는 비지배지분 몫이다.</dd>
+          <dt>Q. EPS를 그대로 봐도 되나?</dt>
+          <dd>누적 EPS 9,085원, 연환산 12,113원이다. 다만 4분기에 손상 같은 일회성 손실이 반복돼 온 회사라 연간은 이보다 낮을 수 있다.</dd>
+        </dl>
+      </div>
+    </div>
+    <script>(function(){var b=document.getElementById('dpQtrQA'),n=document.getElementById('dpQtrMetricNav');if(!b)return;b.classList.add('js');function s(){var a=n&&n.querySelector('button.active'),k=a?a.dataset.qm:'rev';b.querySelectorAll('.dp-qa-set').forEach(function(e){e.classList.toggle('on',e.dataset.qm===k)});}if(n)n.addEventListener('click',function(){setTimeout(s,0)});s();})();</script>
+<!-- q3qa:end -->
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1H26 연결 매출액</span><span class="v up">7조 666억 (▲3.8%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v up">3,427.9억 (▲81.5%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 영업이익률</span><span class="v">4.85% (2025년 3.98%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 매출액</span><span class="v up">10조 7,198억 (전년동기比 ▲4.9%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 영업이익</span><span class="v up">5,184억 (전년동기比 ▲62.3%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 지배주주 순이익</span><span class="v up">2,568억 (전년동기比 흑자전환)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 단독 영업이익</span><span class="v up">1,756억 (3Q25 대비 ▲34.5%, 2Q26 대비 ▲95.3%)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 지배주주 순이익</span><span class="v up">1,253.6억 (흑자전환)</span></div>
-          <div class="dp-row2"><span class="l">1H26 기본EPS</span><span class="v up">4,434원 (전년 동기 -148원)</span></div>
-          <div class="dp-row2"><span class="l">연환산 EPS vs 2025 EPS</span><span class="v up">8,868원 vs 1,824원</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 기본EPS</span><span class="v up">9,085원 (연환산 12,113원)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 부채비율</span><span class="v">123.6%</span></div>
+          <div class="dp-row2"><span class="l">9월 말 지배지분</span><span class="v">15조 1,968억 (작년 말 대비 ▲0.1%)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 현금성자산</span><span class="v">1조 4,201억</span></div>
         </div>
       </div>
       <!-- fundq-insight:start -->
       <div class="dp-insight" style="margin-bottom:10px;">
         <div class="dp-insight-t">분기 실적 — 2개년 흐름</div>
-        <div class="dp-insight-b">최근 8개 분기(3Q24~2Q26) 영업이익은 1,550억→899억. 2Q26 영업이익은 전년 동기(2Q25) 406억 대비 ▲121.2%, 직전 분기(1Q26) 대비 ▼64.4%. 이 기간 분기 최고는 1Q26(2,529억).</div>
+        <div class="dp-insight-b">최근 8개 분기(4Q24~3Q26) 영업이익은 1,472억→1,756억. 3Q26 영업이익은 전년 동기(3Q25) 1,305억 대비 ▲34.5%, 직전 분기(2Q26) 대비 ▲95.3%. 이 기간 분기 최고는 1Q26(2,529억).</div>
       </div>
 <!-- fundq-insight:end -->
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심</div>
-        <div class="dp-insight-b">1분기 영업이익 2,529억(+70.6%)은 시장 기대치(약 2,075억)를 크게 웃돌았다. 국내 백화점 기존점이 성장하고 외국인 매출이 늘면서 백화점 영업이익이 1분기 기준 사상 최대(1,912억)를 기록했다. 2분기 영업이익 899억(+121.2%)은 컨센서스 1,133억을 밑돌았다. 마트·슈퍼 희망퇴직 비용 82억과 컬처웍스 드라마 재고작 손상 146억 등 일회성 비용 228억이 반영된 탓이다. 2분기 지배주주순이익은 -29억으로 소폭 적자였지만, 상반기 누적으로는 1,254억 흑자다.</div>
+        <div class="dp-insight-t">3분기보고서 핵심 — 전년동기(3Q25 누적) 대비</div>
+        <div class="dp-insight-b">3Q26 매출 3조 6,532억, 영업이익 1,756억으로 1년 전보다 7.1%, 34.5% 늘었고, 일회성 비용이 있었던 2Q26(899억)의 약 2배다. 영업이익률은 4.8%다. 영업외 손실이 -122억으로 작아 지배주주 순이익은 1,315억으로 1년 전 적자에서 흑자로 돌아섰다. 누적으로는 매출 10조 7,198억(▲4.9%), 영업이익 5,184억(▲62.3%), 지배주주 순이익 2,568억으로, 1년 전(-608억)과 2025년 연간(516억)을 모두 크게 넘었다. 누적 영업외 손실이 -1,555억으로 1년 전(-3,137억)의 절반으로 줄어든 것이 순이익 회복의 핵심이다. 누적 EPS 9,085원의 연환산(12,113원)은 2025년 EPS(1,824원)의 6.6배다. 다만 롯데쇼핑은 4분기에 손상 같은 일회성 손실이 반복돼 온 만큼 연간 이익은 연환산보다 낮을 수 있다. 9월 말 부채비율은 123.6%다.</div>
       </div>
     </div>
   </div>
@@ -476,7 +529,7 @@ body{background:var(--dp-bg);}
     <!-- dp-vscore:end -->
     <div class="dp-share4">
       <div class="dp-share"><div class="dp-share-l">2025 EPS</div><div class="dp-share-v">1,824원</div><div class="dp-share-s">흑자전환</div></div>
-      <div class="dp-share"><div class="dp-share-l">1H26 EPS</div><div class="dp-share-v">4,434원</div><div class="dp-share-s">흑자전환</div></div>
+      <div class="dp-share"><div class="dp-share-l">3Q26 누적 EPS</div><div class="dp-share-v">9,085원</div><div class="dp-share-s">연환산 12,113원</div></div>
       <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">541,270원</div><div class="dp-share-s">지배지분 기준</div></div>
       <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">4,000원</div><div class="dp-share-s">+5.3%</div></div>
     </div>
@@ -505,7 +558,7 @@ body{background:var(--dp-bg);}
       </div>
       <div class="dp-insight" style="margin-top:12px;">
                 <div class="dp-insight-t">해석</div>
-                <div class="dp-insight-b">2025년 이익이 일회성 손익 영향으로 작아 PER만 보면 고평가로 보이지만, 1H26 EPS(4,434원)를 연환산하면 PER은 약 9배 수준이다. 이익 정상화 여부를 함께 봐야 하는 지표.</div>
+                <div class="dp-insight-b">2025년 이익이 일회성 손익 영향으로 작아 PER만 보면 고평가로 보이지만, 3Q26 누적 EPS(9,085원)를 연환산(12,113원)하면 PER은 약 7배 수준이다. 이익 정상화 여부를 함께 봐야 하는 지표.</div>
               </div>
     </div>
         <div class="dp-gauge dp-metric-detail" data-metric="fpe">
@@ -921,6 +974,12 @@ body{background:var(--dp-bg);}
         <div class="dp-tl-title">하루 -8.2% 급락, 82,400원</div>
         <div class="dp-tl-body">뚜렷한 악재 공시 없이 급락해 고점 대비 -59.5%까지 밀렸다. 10/29에는 감사위원 독립이사 선임을 위한 임시주주총회가 예정돼 있다.</div>
       </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.11.13 (3분기보고서)</div>
+        <div class="dp-tl-title">3Q26 분기보고서 — 영업이익 1,756억, 지배주주 순이익 흑자 전환</div>
+        <div class="dp-tl-body">3분기 영업이익 1,756억(전년동기 대비 ▲34.5%), 지배주주 순이익 1,315억으로 흑자 전환. 누적 순이익 2,568억으로 2025년 연간의 5배.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -932,7 +991,7 @@ body{background:var(--dp-bg);}
       <div>
         <div class="dp-thesis-t bull">긍정 요인</div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>백화점 실적 레버리지: 1Q26 백화점 영업이익 1,912억(1분기 기준 사상 최대), 2Q26 국내 기존점 +15%·외국인 매출 +108%</span></div>
-        <div class="dp-thesis-item bull"><span class="dot">●</span><span>1H26 영업이익 3,428억(+81.5%), 지배주주순이익 1,254억으로 흑자 전환</span></div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>3Q26 누적 영업이익 5,184억(+62.3%), 지배주주순이익 2,568억으로 흑자 전환</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>PBR 0.15배(BPS 54만원) — 순자산 대비 주가가 극단적으로 낮음</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>DPS 4,000원·배당수익률 4.9%, 중간배당 도입과 주주우대 제도 시행</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>증권사 3Q26 영업이익 전망 1,705억~1,950억(+31~49%), 홈플러스 폐점 반사수혜</span></div>
@@ -1310,7 +1369,7 @@ function svgEl(tag,attrs){
 }
 
 // -- fund-report:start (valuation/fund_render.py)
-const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[15573550042665.0,15476035656554.0,14555863880290.0,13986578270060.0,13738354725833.0],"oi":[207602693266.0,386225594610.0,508404731640.0,473113964780.0,547037221095.0],"nip":[-292279479719.0,-324570885303.0,174403554447.0,-968016249419.0,51555579106.0],"qLabels":["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26"],"q":{"rev":[3568352544649.0,3477109685761.0,3456770795359.0,3349696312762.0,3410062599971.0,3521825017741.0,3581595079314.0,3485027676575.0],"oi":[154987063225.0,147201095929.0,148235715781.0,40639191033.0,130510430154.0,227651884127.0,252882436712.0,89908892335.0],"pretax":[28647457069.0,-1081979749812.0,44581917665.0,-24144670909.0,-14780280490.0,77789997376.0,180119691580.0,19440889219.0],"ni":[6505965708.0,-1016119742097.0,18117983343.0,-10321824905.0,-48745166108.0,114504565195.0,143872271700.0,14617059196.0],"nip":[-110289522.0,-977358521093.0,16192014356.0,-20362332785.0,-56638004687.0,112363902222.0,128214884684.0,-2852698001.0]}};
+const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[15573550042665.0,15476035656554.0,14555863880290.0,13986578270060.0,13738354725833.0],"oi":[207602693266.0,386225594610.0,508404731640.0,473113964780.0,547037221095.0],"nip":[-292279479719.0,-324570885303.0,174403554447.0,-968016249419.0,51555579106.0],"qLabels":["4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26","3Q26"],"q":{"rev":[3477109685761.0,3456770795359.0,3349696312762.0,3410062599971.0,3521825017741.0,3581595079314.0,3485027676575.0,3653202217844.0],"oi":[147201095929.0,148235715781.0,40639191033.0,130510430154.0,227651884127.0,252882436712.0,89908892335.0,175560262670.0],"pretax":[-1081979749812.0,44581917665.0,-24144670909.0,-14780280490.0,77789997376.0,180119691580.0,19440889219.0,163320158868.0],"ni":[-1016119742097.0,18117983343.0,-10321824905.0,-48745166108.0,114504565195.0,143872271700.0,14617059196.0,142367423173.0],"nip":[-977358521093.0,16192014356.0,-20362332785.0,-56638004687.0,112363902222.0,128214884684.0,-2852698001.0,131463867470.0]}};
 const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
 const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
 let _qtrCurrentMetric=(document.querySelector('#dpQtrMetricNav button')||{dataset:{qm:'oi'}}).dataset.qm;
