@@ -363,7 +363,7 @@ body{background:var(--dp-bg);}
   <div class="dp-acc-body">
     <div class="dp-tab-row">
       <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
-      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">반기보고서 · 1H26</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">3분기보고서 · 3Q26</button>
     </div>
 
     <div id="dpFundAnnual">
@@ -420,7 +420,7 @@ body{background:var(--dp-bg);}
 
     <div id="dpFundQuarter" style="display:none;">
 <!-- fundq:start -->
-      <div class="dp-secl">분기별 실적 (8개 분기, 3Q24~2Q26)</div>
+      <div class="dp-secl">분기별 실적 (8개 분기, 4Q24~3Q26)</div>
       <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
         <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
         <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
@@ -432,27 +432,80 @@ body{background:var(--dp-bg);}
       <svg id="fundQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
       <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 분기·반기·사업보고서의 3개월 단독 실적. 4분기는 사업보고서 연간 실적에서 3분기 누적을 뺀 값. 분기 이름 아래 ▲▼는 전년 동기 대비 증감.</div>
 <!-- fundq:end -->
+<!-- q3qa:start -->
+    <div class="dp-qa" id="dpQtrQA">
+      <div class="dp-qa-h">항목별 Q&amp;A <small>3Q26 기준 · 위 지표 버튼을 누르면 해당 항목으로 바뀝니다</small></div>
+      <div class="dp-qa-set" data-qm="rev">
+        <div class="dp-qa-t">매출액</div>
+        <dl>
+          <dt>Q. 3분기 매출은?</dt>
+          <dd>7,583억으로 분기 최대다. 1년 전보다 21.2% 늘었다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 매출 2조 1,876억(▲19.5%)이다. NHN클라우드 GPU 공급과 결제·게임이 함께 늘었다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="oi">
+        <div class="dp-qa-t">영업이익</div>
+        <dl>
+          <dt>Q. 3분기 영업이익은?</dt>
+          <dd>588억으로 분기 최대다. 1년 전의 2.1배이고 영업이익률은 7.8%다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 영업이익 1,429억(▲85.1%)으로 2025년 연간(1,324억)을 넘었다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="pretax">
+        <div class="dp-qa-t">세전이익</div>
+        <dl>
+          <dt>Q. 영업 밖에서는?</dt>
+          <dd>3분기 영업외 손실 -37억이다. 누적으로는 141억 이익이다.</dd>
+          <dt>Q. 3분기 세전이익은?</dt>
+          <dd>551억으로 1년 전보다 41.0% 늘었다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="ni">
+        <div class="dp-qa-t">순이익</div>
+        <dl>
+          <dt>Q. 3분기 순이익은?</dt>
+          <dd>연결 순이익 389억으로 1년 전의 2.2배다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 순이익 990억(▲241.5%)이다. 1년 전에는 실효세율이 66.6%로 비정상적으로 높았다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="nip">
+        <div class="dp-qa-t">지배주주순이익</div>
+        <dl>
+          <dt>Q. 지배주주 순이익은?</dt>
+          <dd>3분기 292억(▲141.2%), 누적 727억(▲318.2%)으로 2025년 연간(321억)의 2.3배다. 연결 순이익의 약 4분의 1은 비지배지분 몫이다.</dd>
+          <dt>Q. EPS는?</dt>
+          <dd>누적 EPS 2,375원, 연환산 3,167원으로 2025년(1,023원)의 3.1배다. GPU 감가상각비 증가를 클라우드 매출이 계속 웃도는지가 관건이다.</dd>
+        </dl>
+      </div>
+    </div>
+    <script>(function(){var b=document.getElementById('dpQtrQA'),n=document.getElementById('dpQtrMetricNav');if(!b)return;b.classList.add('js');function s(){var a=n&&n.querySelector('button.active'),k=a?a.dataset.qm:'rev';b.querySelectorAll('.dp-qa-set').forEach(function(e){e.classList.toggle('on',e.dataset.qm===k)});}if(n)n.addEventListener('click',function(){setTimeout(s,0)});s();})();</script>
+<!-- q3qa:end -->
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업수익</span><span class="v up">1조 4,293억 (▲18.6%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v up">842억 (▲69.8%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 지배주주 순이익</span><span class="v up">436억 (전년 동기 53억)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 매출액</span><span class="v up">2조 1,876억 (전년동기比 ▲19.5%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 영업이익</span><span class="v up">1,429억 (전년동기比 ▲85.1%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 지배주주 순이익</span><span class="v up">727억 (전년동기比 ▲318.2%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 단독 영업이익</span><span class="v up">588억 (3Q25 대비 ▲112.6%, 2Q26 대비 ▲1.5%)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 기본EPS</span><span class="v up">1,418원 (전년 동기 168원)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 지배지분</span><span class="v">1조 4,884억</span></div>
-          <div class="dp-row2"><span class="l">6월 말 현금성자산</span><span class="v">8,223억</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 기본EPS</span><span class="v up">2,375원 (연환산 3,167원)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 부채비율</span><span class="v">98.4%</span></div>
+          <div class="dp-row2"><span class="l">9월 말 지배지분</span><span class="v">1조 4,776억 (작년 말 대비 ▲1.0%)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 현금성자산</span><span class="v">9,958억</span></div>
         </div>
       </div>
       <!-- fundq-insight:start -->
       <div class="dp-insight" style="margin-bottom:10px;">
         <div class="dp-insight-t">분기 실적 — 2개년 흐름</div>
-        <div class="dp-insight-b">최근 8개 분기(3Q24~2Q26) 영업이익은 -1,134억→579억. 2Q26 영업이익은 전년 동기(2Q25) 219억 대비 ▲164.1%, 직전 분기(1Q26) 대비 ▲120.6%. 이 기간 분기 최고는 2Q26(579억).</div>
+        <div class="dp-insight-b">최근 8개 분기(4Q24~3Q26) 영업이익은 250억→588억. 3Q26 영업이익은 전년 동기(3Q25) 276억 대비 ▲112.6%, 직전 분기(2Q26) 대비 ▲1.5%. 이 기간 분기 최고는 3Q26(588억).</div>
       </div>
 <!-- fundq-insight:end -->
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심</div>
-        <div class="dp-insight-b">1분기는 매출 6,714억(+11.9%)으로 컨센서스를 웃돌았지만, 영업이익 263억(-5.0%)은 NHN클라우드 상각비 73억 등 GPU 사업 선투자로 컨센서스(321억)를 밑돌았다. 2분기는 매출 7,579억(+25.3%), 영업이익 579억(+164%)으로 매출·영업이익 모두 분기 최대였다. 양평 리전 B200 GPU 공급이 반영된 NHN클라우드 매출이 85% 늘어 기술 매출이 1,598억(+52.9%)이 됐고, 결제 3,940억(+27.3%)과 게임 1,396억(+21.5%)도 함께 늘었다. 한화투자증권은 3분기를 매출 7,785억, 영업이익 549억으로 컨센서스(543억) 수준으로 본다.</div>
+        <div class="dp-insight-t">3분기보고서 핵심 — 전년동기(3Q25 누적) 대비</div>
+        <div class="dp-insight-b">3Q26 매출 7,583억, 영업이익 588억으로 둘 다 분기 최대다. 1년 전보다 매출 21.2%, 영업이익 112.6% 늘었고 2Q26과 비슷한 수준을 지켰다. 영업이익률은 7.8%다. 2분기부터 반영된 NHN클라우드의 GPU(B200) 공급 매출이 이어지고 결제·게임도 함께 늘어난 것으로 보인다. 지배주주 순이익은 292억으로 1년 전의 2.4배다. 누적으로는 매출 2조 1,876억(▲19.5%), 영업이익 1,429억(▲85.1%), 지배주주 순이익 727억(▲318.2%)으로 영업이익과 순이익 모두 이미 2025년 연간을 넘었다. 누적 EPS 2,375원의 연환산(3,167원)은 2025년 EPS(1,023원)의 3.1배다. 연결 순이익의 25%가 비지배지분 몫이다. GPU 투자에 따른 감가상각비가 늘어나는 만큼, 클라우드 매출이 이를 계속 웃도는지가 관건이다. 9월 말 부채가 작년 말보다 14.7% 줄어 부채비율은 98.4%다.</div>
       </div>
     </div>
   </div>
@@ -481,7 +534,7 @@ body{background:var(--dp-bg);}
     <!-- dp-vscore:end -->
     <div class="dp-share4">
       <div class="dp-share"><div class="dp-share-l">2025 EPS</div><div class="dp-share-v">1,023원</div><div class="dp-share-s">흑자전환</div></div>
-      <div class="dp-share"><div class="dp-share-l">1H26 EPS</div><div class="dp-share-v">1,418원</div><div class="dp-share-s">▲744%</div></div>
+      <div class="dp-share"><div class="dp-share-l">3Q26 누적 EPS</div><div class="dp-share-v">2,375원</div><div class="dp-share-s">연환산 3,167원</div></div>
       <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">48,960원</div><div class="dp-share-s">지배지분 기준(6월 말)</div></div>
       <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">500원</div><div class="dp-share-s">배당성향 48%</div></div>
     </div>
@@ -510,7 +563,7 @@ body{background:var(--dp-bg);}
       </div>
       <div class="dp-insight" style="margin-top:12px;">
                 <div class="dp-insight-t">해석</div>
-                <div class="dp-insight-b">2025년 지배주주순이익(321억)이 작아 PER이 50배로 높다. 1H26 EPS(1,418원)를 연환산하면 약 18배, 네이버 기준 최근 4분기 EPS(2,124원)로는 약 24배다. 같은 업종(15~59배)과 비교하면 중간 수준이다.</div>
+                <div class="dp-insight-b">2025년 지배주주순이익(321억)이 작아 PER이 50배로 높다. 3Q26 누적 EPS(2,375원)를 연환산(3,167원)하면 약 23배, 네이버 기준 최근 4분기 EPS(2,124원)로는 약 24배다. 같은 업종(15~59배)과 비교하면 중간 수준이다.</div>
               </div>
     </div>
         <div class="dp-gauge dp-metric-detail" data-metric="fpe">
@@ -870,6 +923,12 @@ body{background:var(--dp-bg);}
         <div class="dp-tl-title">3Q26 프리뷰 · 5만원선</div>
         <div class="dp-tl-body">한화투자증권(10/8)은 3분기 매출 7,785억, 영업이익 549억으로 컨센서스 부합을 예상하고 목표가 87,000원을 제시했다. 10/15 하루 8.1% 내렸고 10/20 종가는 51,100원이다.</div>
       </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.11.13 (3분기보고서)</div>
+        <div class="dp-tl-title">3Q26 분기보고서 — 매출 7,583억·영업이익 588억, 분기 최대</div>
+        <div class="dp-tl-body">3분기 매출 7,583억(▲21.2%)·영업이익 588억(▲112.6%)으로 분기 최대, 지배주주 순이익 292억(▲141.2%). 누적 순이익 2025년 연간의 2.3배.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -889,7 +948,7 @@ body{background:var(--dp-bg);}
       <div>
         <div class="dp-thesis-t bear">리스크 요인</div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>1년간 하루 ±5% 이상 변동 51회 — AI 인프라 기대에 따라 크게 움직임</span></div>
-        <div class="dp-thesis-item bear"><span class="dot">●</span><span>GPU 사업 선투자에 따른 감가상각비 증가(1Q26 영업이익 컨센서스 하회)</span></div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>GPU 사업 선투자에 따른 감가상각비 증가(1Q26 영업이익 컨센서스 하회 사례)</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>2025년 지배주주순이익 321억으로 이익 규모가 아직 작아 PER 50배</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>결제 사업은 매출 비중이 크지만 이익률이 낮음</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>2024년 티몬·위메프 미정산 사태 같은 결제 자회사 손실 위험</span></div>
@@ -1259,7 +1318,7 @@ function svgEl(tag,attrs){
 }
 
 // -- fund-report:start (valuation/fund_render.py)
-const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[1923677420336.0,2114869816089.0,2269614866943.0,2456107865377.0,2516233825224.0],"oi":[97869201232.0,39053530657.0,55598405513.0,-32619646834.0,132434145572.0],"nip":[116850751812.0,-32107181386.0,-8537569133.0,-132530342697.0,32091574976.0],"qLabels":["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26"],"q":{"rev":[608367211208.0,643941812470.0,600129016163.0,604887356986.0,625602175655.0,685615276420.0,671397393908.0,757918045230.0],"oi":[-113388627469.0,25005413926.0,27645536068.0,21921852320.0,27637443705.0,55229313479.0,26251000334.0,57905020197.0],"pretax":[-97355702395.0,-71749351168.0,24073227216.0,23818416444.0,39051433621.0,44397118485.0,50608539592.0,51410230628.0],"ni":[-110270344855.0,-82115736542.0,-237687417.0,11233363653.0,18003048248.0,22910556038.0,31118537549.0,29074839379.0],"nip":[-82829360007.0,-53963805660.0,-3751502417.0,9050182079.0,12087721843.0,14705173471.0,23551006711.0,20007055329.0]}};
+const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[1923677420336.0,2114869816089.0,2269614866943.0,2456107865377.0,2516233825224.0],"oi":[97869201232.0,39053530657.0,55598405513.0,-32619646834.0,132434145572.0],"nip":[116850751812.0,-32107181386.0,-8537569133.0,-132530342697.0,32091574976.0],"qLabels":["4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26","3Q26"],"q":{"rev":[643941812470.0,600129016163.0,604887356986.0,625602175655.0,685615276420.0,671397393908.0,757918045230.0,758306109896.0],"oi":[25005413926.0,27645536068.0,21921852320.0,27637443705.0,55229313479.0,26251000334.0,57905020197.0,58770906144.0],"pretax":[-71749351168.0,24073227216.0,23818416444.0,39051433621.0,44397118485.0,50608539592.0,51410230628.0,55057730590.0],"ni":[-82115736542.0,-237687417.0,11233363653.0,18003048248.0,22910556038.0,31118537549.0,29074839379.0,38850905021.0],"nip":[-53963805660.0,-3751502417.0,9050182079.0,12087721843.0,14705173471.0,23551006711.0,20007055329.0,29156237295.0]}};
 const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
 const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
 let _qtrCurrentMetric=(document.querySelector('#dpQtrMetricNav button')||{dataset:{qm:'oi'}}).dataset.qm;
