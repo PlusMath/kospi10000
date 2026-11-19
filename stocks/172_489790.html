@@ -294,7 +294,7 @@ body{background:var(--dp-bg);}
   <div class="dp-acc-body">
     <div class="dp-tab-row">
       <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
-      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">반기보고서 · 1H26</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">3분기보고서 · 3Q26</button>
     </div>
 
     <div id="dpFundAnnual">
@@ -345,7 +345,7 @@ body{background:var(--dp-bg);}
 
     <div id="dpFundQuarter" style="display:none;">
 <!-- fundq:start -->
-      <div class="dp-secl">분기별 실적 (8개 분기, 3Q24~2Q26)</div>
+      <div class="dp-secl">분기별 실적 (8개 분기, 4Q24~3Q26)</div>
       <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
         <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
         <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
@@ -357,27 +357,80 @@ body{background:var(--dp-bg);}
       <svg id="fundQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
       <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 분기·반기·사업보고서의 3개월 단독 실적. 4분기는 사업보고서 연간 실적에서 3분기 누적을 뺀 값. 분기 이름 아래 ▲▼는 전년 동기 대비 증감.</div>
 <!-- fundq:end -->
+<!-- q3qa:start -->
+    <div class="dp-qa" id="dpQtrQA">
+      <div class="dp-qa-h">항목별 Q&amp;A <small>3Q26 기준 · 위 지표 버튼을 누르면 해당 항목으로 바뀝니다</small></div>
+      <div class="dp-qa-set" data-qm="rev">
+        <div class="dp-qa-t">매출액</div>
+        <dl>
+          <dt>Q. 3분기 매출은?</dt>
+          <dd>5,734억으로 분기 최대다. 1년 전보다 35.6%, 2Q26보다 5.7% 늘었다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 매출 1조 5,571억으로 1년 전보다 16.9% 많다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="oi">
+        <div class="dp-qa-t">영업이익</div>
+        <dl>
+          <dt>Q. 3분기 영업이익은?</dt>
+          <dd>1,026억으로 분기 최대다. 1년 전의 3.3배이고 영업이익률은 17.9%다.</dd>
+          <dt>Q. 무엇이 이끌었나?</dt>
+          <dd>시큐리티의 AI 카메라 수요와 한화세미텍의 TC본더·SMT 장비 매출이 함께 늘어난 것으로 보인다. 누적 영업이익 1,902억은 2025년 연간(1,623억)을 넘었다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="pretax">
+        <div class="dp-qa-t">세전이익</div>
+        <dl>
+          <dt>Q. 영업 밖에서는?</dt>
+          <dd>3분기 영업외 손실이 -408억으로 커져 세전이익은 617억으로 2분기보다 39.2% 줄었다.</dd>
+          <dt>Q. 원인은?</dt>
+          <dd>9월 말 부채가 작년 말보다 43.7% 늘었다. 차입 이자 등 금융비용 부담으로 보인다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="ni">
+        <div class="dp-qa-t">순이익</div>
+        <dl>
+          <dt>Q. 3분기 순이익은?</dt>
+          <dd>536억으로 1년 전 적자에서 흑자로 돌아섰다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 순이익 1,148억으로 1년 전(-202억)과 반대다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="nip">
+        <div class="dp-qa-t">지배주주순이익</div>
+        <dl>
+          <dt>Q. 지배주주 순이익과 EPS는?</dt>
+          <dd>3분기 536억, 누적 1,149억으로 2025년 연간(456억)의 2.5배다.</dd>
+          <dt>Q. EPS는?</dt>
+          <dd>누적 EPS 2,275원, 연환산 3,033원으로 2025년(902원)의 3.4배다.</dd>
+        </dl>
+      </div>
+    </div>
+    <script>(function(){var b=document.getElementById('dpQtrQA'),n=document.getElementById('dpQtrMetricNav');if(!b)return;b.classList.add('js');function s(){var a=n&&n.querySelector('button.active'),k=a?a.dataset.qm:'rev';b.querySelectorAll('.dp-qa-set').forEach(function(e){e.classList.toggle('on',e.dataset.qm===k)});}if(n)n.addEventListener('click',function(){setTimeout(s,0)});s();})();</script>
+<!-- q3qa:end -->
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1H26 연결 매출액</span><span class="v up">9,836.7억 (▲8.2%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v" style="color:var(--dp-down);">876.7억 (▼12.8%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 지배주주 순이익</span><span class="v up">613.5억 (흑자전환)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 매출액</span><span class="v up">1조 5,571억 (전년동기比 ▲16.9%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 영업이익</span><span class="v up">1,902억 (전년동기比 ▲31.7%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 지배주주 순이익</span><span class="v up">1,149억 (전년동기比 흑자전환)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 단독 영업이익</span><span class="v up">1,026억 (3Q25 대비 ▲229.2%, 2Q26 대비 ▲56.4%)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 EPS(계산값)</span><span class="v up">1,218원 (전년 동기 -240원)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 부채비율</span><span class="v">136.8% (2025년 말 108.9%)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 현금성자산</span><span class="v">983.7억</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 기본EPS</span><span class="v up">2,275원 (연환산 3,033원)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 부채비율</span><span class="v">140.2%</span></div>
+          <div class="dp-row2"><span class="l">9월 말 지배지분</span><span class="v">9,665억 (작년 말 대비 ▲11.6%)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 현금성자산</span><span class="v">1,517억</span></div>
         </div>
       </div>
       <!-- fundq-insight:start -->
       <div class="dp-insight" style="margin-bottom:10px;">
         <div class="dp-insight-t">분기 실적 — 2개년 흐름</div>
-        <div class="dp-insight-b">최근 8개 분기(3Q24~2Q26) 영업이익은 54억→656억. 2Q26 영업이익은 전년 동기(2Q25) 563억 대비 ▲16.5%, 직전 분기(1Q26) 대비 ▲196.8%. 이 기간 분기 최고는 2Q26(656억).</div>
+        <div class="dp-insight-b">최근 8개 분기(4Q24~3Q26) 영업이익은 -55억→1,026억. 3Q26 영업이익은 전년 동기(3Q25) 312억 대비 ▲229.2%, 직전 분기(2Q26) 대비 ▲56.4%. 이 기간 분기 최고는 3Q26(1,026억).</div>
       </div>
 <!-- fundq-insight:end -->
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심</div>
-        <div class="dp-insight-b">1분기는 영업이익 221억에 지배주주 순손실 139억으로 부진했지만, 2분기에 매출 5,423억(+23% QoQ), 영업이익 656억(+197% QoQ)으로 컨센서스를 크게 웃돌았다. 시큐리티는 AI 카메라 수요 확산과 판가 인상으로, 한화세미텍은 TC본더·SMT 장비 매출 인식으로 이익이 늘었다. 2분기 지배주주순이익은 753억으로 상반기 전체로는 흑자로 돌아섰다. 6월 말 장기차입금 2,209억이 새로 생기며 차입금이 4,578억으로 늘었다. EPS는 DART에 반기 수치가 없어 지배주주순이익을 유통주식 수로 나눈 계산값이다.</div>
+        <div class="dp-insight-t">3분기보고서 핵심 — 전년동기(3Q25 누적) 대비</div>
+        <div class="dp-insight-b">3Q26 매출 5,734억, 영업이익 1,026억으로 둘 다 분기 최대다. 1년 전보다 매출 35.6%, 영업이익 229.2% 늘었고 2Q26보다도 5.7%, 56.4% 많다. 영업이익률은 17.9%로 높아졌다. 시큐리티 부문의 AI 카메라 수요와 한화세미텍의 TC본더·SMT 장비 매출이 함께 늘어난 것으로 보인다. 다만 영업외 손실이 -408억으로 커져 지배주주 순이익은 536억으로 2분기보다 28.8% 줄었다. 늘어난 차입금의 이자 등 금융비용 부담으로 보인다. 누적으로는 매출 1조 5,571억(▲16.9%), 영업이익 1,902억(▲31.7%)으로 영업이익은 이미 2025년 연간(1,623억)을 넘었고, 지배주주 순이익 1,149억은 1년 전(-181억) 적자에서 흑자로 돌아섰다. 누적 EPS 2,275원의 연환산(3,033원)은 2025년 EPS(902원)의 3.4배다. 9월 말 부채가 작년 말보다 43.7% 늘어 부채비율이 140.2%다.</div>
       </div>
     </div>
   </div>
@@ -406,7 +459,7 @@ body{background:var(--dp-bg);}
     <!-- dp-vscore:end -->
     <div class="dp-share4">
       <div class="dp-share"><div class="dp-share-l">2025 EPS</div><div class="dp-share-v">902원</div><div class="dp-share-s">2024년은 4개월분</div></div>
-      <div class="dp-share"><div class="dp-share-l">1H26 EPS</div><div class="dp-share-v">1,218원</div><div class="dp-share-s">계산값 · 전년 동기 적자</div></div>
+      <div class="dp-share"><div class="dp-share-l">3Q26 누적 EPS</div><div class="dp-share-v">2,275원</div><div class="dp-share-s">연환산 3,033원</div></div>
       <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">18,819원</div><div class="dp-share-s">지배지분 기준(6월 말)</div></div>
       <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">0원</div><div class="dp-share-s">무배당</div></div>
     </div>
@@ -787,6 +840,12 @@ body{background:var(--dp-bg);}
         <div class="dp-tl-title">다시 3만원대</div>
         <div class="dp-tl-body">10/15 하루 10.3% 내려 37,900원에 마감했다. 원인은 확인되지 않았다. 10/19 41,150원으로 반등했다가 10/20 38,950원(-5.3%)으로 마감했다.</div>
       </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.11.12 (3분기보고서)</div>
+        <div class="dp-tl-title">3Q26 분기보고서 — 매출 5,734억·영업이익 1,026억, 분기 최대</div>
+        <div class="dp-tl-body">3분기 매출 5,734억(▲35.6%)·영업이익 1,026억(▲229.2%)으로 분기 최대, 지배주주 순이익 536억. 누적 순이익 1,149억으로 흑자 전환.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -1025,7 +1084,7 @@ function svgEl(tag,attrs){
 }
 
 // -- fund-report:start (valuation/fund_render.py)
-const FUND={"cats":["2024년","2025년"],"rev":[493322362934.0,1790921869125.0],"oi":[-120362075.0,162267204336.0],"nip":[10595898861.0,45589822699.0],"qLabels":["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26"],"q":{"rev":[139525266140.0,353797096794.0,451805860293.0,457161852438.0,422742391618.0,459211764776.0,441377807050.0,542288924730.0],"oi":[5424240528.0,-5544602603.0,44297137678.0,56267894060.0,31157096955.0,30545075643.0,22093126501.0,65578457512.0],"pretax":[-9888198651.0,29767725373.0,-13115712470.0,-17382810706.0,-10541882823.0,62029845999.0,-32579460494.0,101493211389.0],"ni":[-13090956256.0,16301748887.0,-3304428450.0,-10187994593.0,-6749631880.0,62861808758.0,-14047858275.0,75294760133.0],"nip":[-11777314329.0,22373213190.0,-2391827687.0,-9722935443.0,-5976021164.0,63680606993.0,-13935483185.0,75282407066.0]}};
+const FUND={"cats":["2024년","2025년"],"rev":[493322362934.0,1790921869125.0],"oi":[-120362075.0,162267204336.0],"nip":[10595898861.0,45589822699.0],"qLabels":["4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26","3Q26"],"q":{"rev":[353797096794.0,451805860293.0,457161852438.0,422742391618.0,459211764776.0,441377807050.0,542288924730.0,573424854691.0],"oi":[-5544602603.0,44297137678.0,56267894060.0,31157096955.0,30545075643.0,22093126501.0,65578457512.0,102572279049.0],"pretax":[29767725373.0,-13115712470.0,-17382810706.0,-10541882823.0,62029845999.0,-32579460494.0,101493211389.0,61735439010.0],"ni":[16301748887.0,-3304428450.0,-10187994593.0,-6749631880.0,62861808758.0,-14047858275.0,75294760133.0,53572807398.0],"nip":[22373213190.0,-2391827687.0,-9722935443.0,-5976021164.0,63680606993.0,-13935483185.0,75282407066.0,53572209960.0]}};
 const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
 const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
 let _qtrCurrentMetric=(document.querySelector('#dpQtrMetricNav button')||{dataset:{qm:'oi'}}).dataset.qm;

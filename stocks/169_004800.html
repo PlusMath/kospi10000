@@ -360,7 +360,7 @@ body{background:var(--dp-bg);}
   <div class="dp-acc-body">
     <div class="dp-tab-row">
       <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
-      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">반기보고서 · 1H26</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">3분기보고서 · 3Q26</button>
     </div>
 
     <div id="dpFundAnnual">
@@ -417,7 +417,7 @@ body{background:var(--dp-bg);}
 
     <div id="dpFundQuarter" style="display:none;">
 <!-- fundq:start -->
-      <div class="dp-secl">분기별 실적 (8개 분기, 3Q24~2Q26)</div>
+      <div class="dp-secl">분기별 실적 (8개 분기, 4Q24~3Q26)</div>
       <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
         <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
         <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
@@ -429,27 +429,80 @@ body{background:var(--dp-bg);}
       <svg id="fundQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
       <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 분기·반기·사업보고서의 3개월 단독 실적. 4분기는 사업보고서 연간 실적에서 3분기 누적을 뺀 값. 분기 이름 아래 ▲▼는 전년 동기 대비 증감.</div>
 <!-- fundq:end -->
+<!-- q3qa:start -->
+    <div class="dp-qa" id="dpQtrQA">
+      <div class="dp-qa-h">항목별 Q&amp;A <small>3Q26 기준 · 위 지표 버튼을 누르면 해당 항목으로 바뀝니다</small></div>
+      <div class="dp-qa-set" data-qm="rev">
+        <div class="dp-qa-t">매출액</div>
+        <dl>
+          <dt>Q. 3분기 매출은?</dt>
+          <dd>6,993억으로 1년 전보다 14.2% 늘었다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 매출 1조 9,631억으로 1년 전보다 11.0% 많다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="oi">
+        <div class="dp-qa-t">영업이익</div>
+        <dl>
+          <dt>Q. 3분기 영업이익은?</dt>
+          <dd>1,753억으로 1년 전보다 43.9% 늘었고 분기 최대였던 2Q26(2,316억)보다 24.3% 줄었다.</dd>
+          <dt>Q. 왜 이익률이 높나?</dt>
+          <dd>지주회사라 효성중공업 등 자회사 지분법이익이 영업이익에 들어간다. 효성중공업의 전력기기 호황이 반영돼 영업이익률이 25%대다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="pretax">
+        <div class="dp-qa-t">세전이익</div>
+        <dl>
+          <dt>Q. 영업 밖에서는?</dt>
+          <dd>3분기 영업외 손실 -102억이다. 누적으로는 306억 이익이다.</dd>
+          <dt>Q. 3분기 세전이익은?</dt>
+          <dd>1,652억으로 1년 전보다 61.7% 늘었다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="ni">
+        <div class="dp-qa-t">순이익</div>
+        <dl>
+          <dt>Q. 3분기 순이익은?</dt>
+          <dd>연결 순이익 1,392억으로 1년 전보다 63.8% 늘었다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 순이익 4,521억(▲83.1%)이다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="nip">
+        <div class="dp-qa-t">지배주주순이익</div>
+        <dl>
+          <dt>Q. 지배주주 순이익은?</dt>
+          <dd>3분기 1,023억(▲61.8%), 누적 3,709억(▲85.6%)으로 2025년 연간(3,299억)을 넘었다. 연결 순이익의 18%는 비지배지분 몫이다.</dd>
+          <dt>Q. EPS는?</dt>
+          <dd>누적 EPS 22,185원, 연환산 29,580원으로 2025년(19,734원)보다 50% 높다.</dd>
+        </dl>
+      </div>
+    </div>
+    <script>(function(){var b=document.getElementById('dpQtrQA'),n=document.getElementById('dpQtrMetricNav');if(!b)return;b.classList.add('js');function s(){var a=n&&n.querySelector('button.active'),k=a?a.dataset.qm:'rev';b.querySelectorAll('.dp-qa-set').forEach(function(e){e.classList.toggle('on',e.dataset.qm===k)});}if(n)n.addEventListener('click',function(){setTimeout(s,0)});s();})();</script>
+<!-- q3qa:end -->
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1H26 연결 매출액(지분법 포함)</span><span class="v up">12,638.2억 (▲9.3%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v up">3,262.4억 (▲80.3%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 지배주주 순이익</span><span class="v up">2,686.3억 (▲96.6%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 매출액</span><span class="v up">1조 9,631억 (전년동기比 ▲11.0%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 영업이익</span><span class="v up">5,016억 (전년동기比 ▲65.6%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 지배주주 순이익</span><span class="v up">3,709억 (전년동기比 ▲85.6%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 단독 영업이익</span><span class="v dn">1,753억 (3Q25 대비 ▲43.9%, 2Q26 대비 ▼24.3%)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 기본EPS</span><span class="v up">16,069원 (전년 동기 8,175원)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 지배지분</span><span class="v up">26,907.3억 (2025년 말 24,435.8억)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 현금성자산</span><span class="v">2,668.0억 (차입금 16,241.8억)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 기본EPS</span><span class="v up">22,185원 (연환산 29,580원)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 부채비율</span><span class="v">76.8%</span></div>
+          <div class="dp-row2"><span class="l">9월 말 지배지분</span><span class="v">2조 6,765억 (작년 말 대비 ▲9.5%)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 현금성자산</span><span class="v">1,516억</span></div>
         </div>
       </div>
       <!-- fundq-insight:start -->
       <div class="dp-insight" style="margin-bottom:10px;">
         <div class="dp-insight-t">분기 실적 — 2개년 흐름</div>
-        <div class="dp-insight-b">최근 8개 분기(3Q24~2Q26) 영업이익은 474억→2,316억. 2Q26 영업이익은 전년 동기(2Q25) 991억 대비 ▲133.7%, 직전 분기(1Q26) 대비 ▲144.9%. 이 기간 분기 최고는 2Q26(2,316억).</div>
+        <div class="dp-insight-b">최근 8개 분기(4Q24~3Q26) 영업이익은 1,295억→1,753억. 3Q26 영업이익은 전년 동기(3Q25) 1,219억 대비 ▲43.9%, 직전 분기(2Q26) 대비 ▼24.3%. 이 기간 분기 최고는 2Q26(2,316억).</div>
       </div>
 <!-- fundq-insight:end -->
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심</div>
-        <div class="dp-insight-b">1분기 영업이익은 946억(+15.5%)이었고, 2분기는 매출 7,336억, 영업이익 2,316억으로 전년 동기(991억)보다 133.7% 늘었다. 효성중공업(2분기 영업이익 2,643억, 분기 최대)·효성티앤씨·효성화학의 수익성이 함께 좋아지며 지분법이익이 커졌다(언론 보도는 2분기 지분법이익 약 1,470억). 2분기 지배주주순이익은 1,953억으로 전년 동기(716억)의 2.7배다. 6월 말 차입금은 1.62조로 연말(1.36조)보다 늘었다.</div>
+        <div class="dp-insight-t">3분기보고서 핵심 — 전년동기(3Q25 누적) 대비</div>
+        <div class="dp-insight-b">3Q26 매출 6,993억, 영업이익 1,753억으로 1년 전보다 14.2%, 43.9% 늘었다. 분기 최대였던 2Q26(2,316억)보다는 24.3% 적고, 영업이익률은 25.1%다. 지주회사 효성의 영업이익에는 효성중공업 등 자회사 지분법이익이 들어 있어, 효성중공업의 전력기기 호황이 그대로 반영되고 있다. 지배주주 순이익은 1,023억으로 1년 전보다 61.8% 많다. 누적으로는 매출 1조 9,631억(▲11.0%), 영업이익 5,016억(▲65.6%), 지배주주 순이익 3,709억(▲85.6%)으로 영업이익과 순이익 모두 이미 2025년 연간을 넘었다. 누적 EPS 22,185원의 연환산(29,580원)은 2025년 EPS(19,734원)보다 50% 높다. 연결 순이익의 18.0%가 비지배지분 몫이다. 9월 말 지배지분은 작년 말보다 9.5% 늘었고 부채비율은 76.8%다.</div>
       </div>
     </div>
   </div>
@@ -478,7 +531,7 @@ body{background:var(--dp-bg);}
     <!-- dp-vscore:end -->
     <div class="dp-share4">
       <div class="dp-share"><div class="dp-share-l">2025 EPS</div><div class="dp-share-v">19,734원</div><div class="dp-share-s">▼20.1%</div></div>
-      <div class="dp-share"><div class="dp-share-l">1H26 EPS</div><div class="dp-share-v">16,069원</div><div class="dp-share-s">▲96.6%</div></div>
+      <div class="dp-share"><div class="dp-share-l">3Q26 누적 EPS</div><div class="dp-share-v">22,185원</div><div class="dp-share-s">연환산 29,580원</div></div>
       <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">160,952원</div><div class="dp-share-s">지배지분 기준(6월 말)</div></div>
       <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">5,000원</div><div class="dp-share-s">+66.7%</div></div>
     </div>
@@ -831,6 +884,12 @@ body{background:var(--dp-bg);}
         <div class="dp-tl-title">-9.3% · 목표가 하향</div>
         <div class="dp-tl-body">10/15 9.3% 내려 118,500원이 됐다. 대신증권은 10/16 자회사 주가 하락에 따른 지분가치 감소를 반영해 목표주가를 15만원으로 25% 낮추면서도 배당 전망은 올렸다. 10/20 120,200원(-3.0%)으로 마감했다.</div>
       </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.11.13 (3분기보고서)</div>
+        <div class="dp-tl-title">3Q26 분기보고서 — 영업이익 1,753억, 전년동기 대비 43.9% 증가</div>
+        <div class="dp-tl-body">3분기 영업이익 1,753억(▲43.9%)·지배주주 순이익 1,023억(▲61.8%). 누적 영업이익·순이익 2025년 연간 초과.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -842,7 +901,7 @@ body{background:var(--dp-bg);}
       <div>
         <div class="dp-thesis-t bull">긍정 요인</div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>PER 6.1배·Forward PER 5.0배로 지주사 업종 하단, 배당수익률 4%대</span></div>
-        <div class="dp-thesis-item bull"><span class="dot">●</span><span>효성중공업 등 자회사 실적 호조로 1H26 영업이익 +80%, 지배주주순이익 +97%</span></div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>효성중공업 등 자회사 실적 호조로 3Q26 누적 영업이익 +65.6%, 지배주주순이익 +85.6%</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>효성화학 흑자 전환으로 그룹 재무 리스크 완화(대신증권)</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>배당소득 분리과세 요건 충족을 위한 배당 확대 기대(iM증권)</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>최근 6개월 목표주가를 낸 2개 증권사 모두 매수(대신 15만원·iM 18.5만원)</span></div>
@@ -1216,7 +1275,7 @@ function svgEl(tag,attrs){
 }
 
 // -- fund-report:start (valuation/fund_render.py)
-const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[3538942985039.0,3719325523137.0,3436688023238.0,2272756398560.0,2431708714737.0],"oi":[640562745995.0,64887143335.0,94366525424.0,221133379310.0,393021437826.0],"nip":[490799728258.0,24807189262.0,68232761.0,453157569978.0,329905103957.0],"qLabels":["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26"],"q":{"rev":[577696598026.0,710134371657.0,553897669909.0,601914227660.0,612171789960.0,663725027208.0,530184894922.0,733636709693.0],"oi":[47436249059.0,129454160714.0,81820624098.0,99137937022.0,121853460369.0,90209416337.0,94601468347.0,231638674798.0],"pretax":[38636205921.0,128179634544.0,80852216810.0,105239189088.0,102147891136.0,242532238550.0,99498780734.0,267527004393.0],"ni":[339585707570.0,126131103483.0,72166150913.0,89737939050.0,84998151768.0,175218619916.0,86505412952.0,226319284638.0],"nip":[332121917910.0,117592876174.0,65035381546.0,71624622013.0,63193407894.0,130051692504.0,73288381193.0,195339561383.0]}};
+const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[3538942985039.0,3719325523137.0,3436688023238.0,2272756398560.0,2431708714737.0],"oi":[640562745995.0,64887143335.0,94366525424.0,221133379310.0,393021437826.0],"nip":[490799728258.0,24807189262.0,68232761.0,453157569978.0,329905103957.0],"qLabels":["4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26","3Q26"],"q":{"rev":[710134371657.0,553897669909.0,601914227660.0,612171789960.0,663725027208.0,530184894922.0,733636709693.0,699292944060.0],"oi":[129454160714.0,81820624098.0,99137937022.0,121853460369.0,90209416337.0,94601468347.0,231638674798.0,175347234063.0],"pretax":[128179634544.0,80852216810.0,105239189088.0,102147891136.0,242532238550.0,99498780734.0,267527004393.0,165191364656.0],"ni":[126131103483.0,72166150913.0,89737939050.0,84998151768.0,175218619916.0,86505412952.0,226319284638.0,139248613372.0],"nip":[117592876174.0,65035381546.0,71624622013.0,63193407894.0,130051692504.0,73288381193.0,195339561383.0,102259946552.0]}};
 const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
 const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
 let _qtrCurrentMetric=(document.querySelector('#dpQtrMetricNav button')||{dataset:{qm:'oi'}}).dataset.qm;

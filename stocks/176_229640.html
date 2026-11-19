@@ -362,7 +362,7 @@ body{background:var(--dp-bg);}
   <div class="dp-acc-body">
     <div class="dp-tab-row">
       <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
-      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">반기보고서 · 1H26</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">3분기보고서 · 3Q26</button>
     </div>
 
     <div id="dpFundAnnual">
@@ -419,7 +419,7 @@ body{background:var(--dp-bg);}
 
     <div id="dpFundQuarter" style="display:none;">
 <!-- fundq:start -->
-      <div class="dp-secl">분기별 실적 (8개 분기, 3Q24~2Q26)</div>
+      <div class="dp-secl">분기별 실적 (8개 분기, 4Q24~3Q26)</div>
       <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
         <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
         <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
@@ -431,27 +431,80 @@ body{background:var(--dp-bg);}
       <svg id="fundQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
       <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 분기·반기·사업보고서의 3개월 단독 실적. 4분기는 사업보고서 연간 실적에서 3분기 누적을 뺀 값. 분기 이름 아래 ▲▼는 전년 동기 대비 증감.</div>
 <!-- fundq:end -->
+<!-- q3qa:start -->
+    <div class="dp-qa" id="dpQtrQA">
+      <div class="dp-qa-h">항목별 Q&amp;A <small>3Q26 기준 · 위 지표 버튼을 누르면 해당 항목으로 바뀝니다</small></div>
+      <div class="dp-qa-set" data-qm="rev">
+        <div class="dp-qa-t">매출액</div>
+        <dl>
+          <dt>Q. 3분기 매출은?</dt>
+          <dd>3,515억으로 분기 최대다. 1년 전보다 51.0% 늘었다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 매출 9,873억(▲38.8%)으로 2025년 연간(9,601억)을 넘었다. 구리값 상승에 따른 소재 판가 상승과 배전 케이블 증가 효과다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="oi">
+        <div class="dp-qa-t">영업이익</div>
+        <dl>
+          <dt>Q. 3분기 영업이익은?</dt>
+          <dd>222억으로 1년 전보다 50.2% 늘었고 2Q26(253억)보다 12.2% 줄었다. 영업이익률은 6.3%다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 영업이익 675억(▲25.8%)으로 2025년 연간(668억)을 넘었다. 누적 영업이익률은 6.8%(1년 전 7.5%)로 낮아졌다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="pretax">
+        <div class="dp-qa-t">세전이익</div>
+        <dl>
+          <dt>Q. 영업 밖에서는?</dt>
+          <dd>3분기 영업외 손실 -41억, 누적 -59억이다. 늘어난 차입의 이자 부담이다.</dd>
+          <dt>Q. 3분기 세전이익은?</dt>
+          <dd>181억으로 1년 전보다 25.6% 늘었다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="ni">
+        <div class="dp-qa-t">순이익</div>
+        <dl>
+          <dt>Q. 3분기 순이익은?</dt>
+          <dd>연결 순이익 140억으로 1년 전보다 24.8% 늘었다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 순이익 474억(▲12.4%)이다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="nip">
+        <div class="dp-qa-t">지배주주순이익</div>
+        <dl>
+          <dt>Q. 지배주주 순이익은?</dt>
+          <dd>3분기 124억(▲25.5%), 누적 418억(▲12.8%)이다. 연결 순이익의 약 12%는 비지배지분 몫이다.</dd>
+          <dt>Q. EPS는?</dt>
+          <dd>누적 EPS 1,366원, 연환산 1,821원으로 2025년(1,387원)보다 31% 높다.</dd>
+        </dl>
+      </div>
+    </div>
+    <script>(function(){var b=document.getElementById('dpQtrQA'),n=document.getElementById('dpQtrMetricNav');if(!b)return;b.classList.add('js');function s(){var a=n&&n.querySelector('button.active'),k=a?a.dataset.qm:'rev';b.querySelectorAll('.dp-qa-set').forEach(function(e){e.classList.toggle('on',e.dataset.qm===k)});}if(n)n.addEventListener('click',function(){setTimeout(s,0)});s();})();</script>
+<!-- q3qa:end -->
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1H26 연결 매출액</span><span class="v up">6,358억 (▲32.8%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v up">454억 (▲16.5%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 지배주주 순이익</span><span class="v up">294억 (▲8.2%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 매출액</span><span class="v up">9,873억 (전년동기比 ▲38.8%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 영업이익</span><span class="v up">675억 (전년동기比 ▲25.8%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 지배주주 순이익</span><span class="v up">418억 (전년동기比 ▲12.8%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 단독 영업이익</span><span class="v dn">222억 (3Q25 대비 ▲50.2%, 2Q26 대비 ▼12.2%)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 기본EPS</span><span class="v up">962원 (전년 동기 897원)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 부채비율</span><span class="v">114.8% (2025년 말 117.6%)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 현금성자산 · 단기차입금</span><span class="v">309억 · 1,686억</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 기본EPS</span><span class="v up">1,366원 (연환산 1,821원)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 부채비율</span><span class="v">138.5%</span></div>
+          <div class="dp-row2"><span class="l">9월 말 지배지분</span><span class="v">2,463억 (작년 말 대비 ▲17.7%)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 현금성자산</span><span class="v">387억</span></div>
         </div>
       </div>
       <!-- fundq-insight:start -->
       <div class="dp-insight" style="margin-bottom:10px;">
         <div class="dp-insight-t">분기 실적 — 2개년 흐름</div>
-        <div class="dp-insight-b">최근 8개 분기(3Q24~2Q26) 영업이익은 125억→253억. 2Q26 영업이익은 전년 동기(2Q25) 236억 대비 ▲7.0%, 직전 분기(1Q26) 대비 ▲25.6%. 이 기간 분기 최고는 2Q26(253억).</div>
+        <div class="dp-insight-b">최근 8개 분기(4Q24~3Q26) 영업이익은 78억→222억. 3Q26 영업이익은 전년 동기(3Q25) 148억 대비 ▲50.2%, 직전 분기(2Q26) 대비 ▼12.2%. 이 기간 분기 최고는 2Q26(253억).</div>
       </div>
 <!-- fundq-insight:end -->
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심</div>
-        <div class="dp-insight-b">1분기 매출 2,855억(+25.0%), 영업이익 201억(+31.1%)에 이어 2분기 매출 3,503억(+40.0%), 영업이익 253억(+7.0%)으로 분기 최대 매출을 냈다. 증권사들은 매출이 컨센서스를 10% 이상 웃돈 이유로 구리값 상승에 따른 소재 판가 상승과 직판 물량 확대, 베트남 내수·미국향 배전 케이블 증가를 꼽았다. 영업이익 증가폭이 작은 것은 전년 2분기 고마진 북미향 지중배전 케이블 수출이 몰렸던 기저 효과와 소재 비중 상승 때문이라고 설명했다.</div>
+        <div class="dp-insight-t">3분기보고서 핵심 — 전년동기(3Q25 누적) 대비</div>
+        <div class="dp-insight-b">3Q26 매출은 3,515억으로 1년 전보다 51.0% 늘어 분기 최대다. 영업이익은 222억으로 1년 전보다 50.2% 늘었지만 2Q26(253억)보다 12.2% 줄었고, 영업이익률은 6.3%다. 구리값 상승에 따른 소재 판가 상승과 베트남 내수·미국향 배전 케이블 증가로 매출이 커졌지만, 마진이 낮은 소재 비중이 늘어 이익률은 낮아지는 흐름이다. 지배주주 순이익은 124억(▲25.5%)이다. 누적으로는 매출 9,873억(▲38.8%)과 영업이익 675억(▲25.8%)이 이미 2025년 연간(9,601억, 668억)을 넘었고, 지배주주 순이익은 418억(▲12.8%)이다. 누적 영업이익률 6.8%는 1년 전(7.5%)보다 낮다. 누적 EPS 1,366원의 연환산(1,821원)은 2025년 EPS(1,387원)보다 31% 높다. 매출 증가로 9월 말 부채가 작년 말보다 37.2% 늘어 부채비율은 138.5%다.</div>
       </div>
     </div>
   </div>
@@ -480,7 +533,7 @@ body{background:var(--dp-bg);}
     <!-- dp-vscore:end -->
     <div class="dp-share4">
       <div class="dp-share"><div class="dp-share-l">2025 EPS</div><div class="dp-share-v">1,387원</div><div class="dp-share-s">▲34.7%</div></div>
-      <div class="dp-share"><div class="dp-share-l">1H26 EPS</div><div class="dp-share-v">962원</div><div class="dp-share-s">▲7.2%</div></div>
+      <div class="dp-share"><div class="dp-share-l">3Q26 누적 EPS</div><div class="dp-share-v">1,366원</div><div class="dp-share-s">연환산 1,821원</div></div>
       <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">8,202원</div><div class="dp-share-s">지배지분 기준(6월 말)</div></div>
       <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">250원</div><div class="dp-share-s">전년 200원</div></div>
     </div>
@@ -875,6 +928,12 @@ body{background:var(--dp-bg);}
         <div class="dp-tl-title">하루 -13.6%, -14.6%</div>
         <div class="dp-tl-body">10/12 -13.6% 뒤 10/14 +8.8%로 69,500원까지 반등했다가, 10/19 57,900원에서 10/20 -14.6%로 49,450원에 마감했다. 두 차례 급락의 뚜렷한 원인은 확인하지 못했다.</div>
       </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.11.16 (3분기보고서)</div>
+        <div class="dp-tl-title">3Q26 분기보고서 — 매출 3,515억 분기 최대, 영업이익 222억</div>
+        <div class="dp-tl-body">3분기 매출 3,515억(▲51.0%)으로 분기 최대, 영업이익 222억(▲50.2%)·지배주주 순이익 124억(▲25.5%). 누적 매출·영업이익 2025년 연간 초과.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -885,7 +944,7 @@ body{background:var(--dp-bg);}
     <div class="dp-thesis">
       <div>
         <div class="dp-thesis-t bull">긍정 요인</div>
-        <div class="dp-thesis-item bull"><span class="dot">●</span><span>2Q26 분기 최대 매출 3,503억(+40%) · 1H26 영업이익 454억(+16.5%)</span></div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>3Q26 분기 최대 매출 3,515억(+51%) · 누적 영업이익 675억(+25.8%)</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>희토류 금속 신사업: 베트남 사마륨 금속 시설 연말 시양산 목표, LS전선 영구자석 사업과 연계(보도)</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>유럽향 초고압·미국향 배전 케이블 수출, 동남아 데이터센터용 부스덕트 수요</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>베트남 해저케이블 사업 추진 등 2030년 매출 1.8조 목표(보도)</span></div>
@@ -1264,7 +1323,7 @@ function svgEl(tag,attrs){
 }
 
 // -- fund-report:start (valuation/fund_render.py)
-const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[750616895541.0,818494728195.0,731067866979.0,868966083143.0,960056115154.0],"oi":[28199819675.0,27451816095.0,29489190951.0,44768330622.0,66778106845.0],"nip":[14683203906.0,-1916058708.0,4129886413.0,31238497162.0,42064947281.0],"qLabels":["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26"],"q":{"rev":[223390490246.0,233107024722.0,228341552408.0,250235674686.0,232779532453.0,248699355607.0,285479341348.0,350271469180.0],"oi":[12549940397.0,7788982978.0,15336531251.0,23593793137.0,14766721444.0,13081061013.0,20103036992.0,25256211365.0],"pretax":[10288626462.0,10088042217.0,13802453442.0,23646883858.0,14419007826.0,9268349442.0,19524570177.0,24015451645.0],"ni":[8377751438.0,6012747621.0,12742526862.0,18175485674.0,11231420850.0,6326356328.0,14234372814.0,19138089260.0],"nip":[7399231817.0,4779504304.0,11252132776.0,15959118285.0,9843064733.0,5010631487.0,12477084292.0,16969110289.0]}};
+const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[750616895541.0,818494728195.0,731067866979.0,868966083143.0,960056115154.0],"oi":[28199819675.0,27451816095.0,29489190951.0,44768330622.0,66778106845.0],"nip":[14683203906.0,-1916058708.0,4129886413.0,31238497162.0,42064947281.0],"qLabels":["4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26","3Q26"],"q":{"rev":[233107024722.0,228341552408.0,250235674686.0,232779532453.0,248699355607.0,285479341348.0,350271469180.0,351521092067.0],"oi":[7788982978.0,15336531251.0,23593793137.0,14766721444.0,13081061013.0,20103036992.0,25256211365.0,22173775654.0],"pretax":[10088042217.0,13802453442.0,23646883858.0,14419007826.0,9268349442.0,19524570177.0,24015451645.0,18109782071.0],"ni":[6012747621.0,12742526862.0,18175485674.0,11231420850.0,6326356328.0,14234372814.0,19138089260.0,14022067600.0],"nip":[4779504304.0,11252132776.0,15959118285.0,9843064733.0,5010631487.0,12477084292.0,16969110289.0,12352440576.0]}};
 const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
 const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
 let _qtrCurrentMetric=(document.querySelector('#dpQtrMetricNav button')||{dataset:{qm:'oi'}}).dataset.qm;
