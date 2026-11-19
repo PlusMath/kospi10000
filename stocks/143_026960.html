@@ -363,7 +363,7 @@ body{background:var(--dp-bg);}
   <div class="dp-acc-body">
     <div class="dp-tab-row">
       <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
-      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">반기보고서 · 1H26</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">3분기보고서 · 3Q26</button>
     </div>
 
     <div id="dpFundAnnual">
@@ -420,7 +420,7 @@ body{background:var(--dp-bg);}
 
     <div id="dpFundQuarter" style="display:none;">
 <!-- fundq:start -->
-      <div class="dp-secl">분기별 실적 (8개 분기, 3Q24~2Q26)</div>
+      <div class="dp-secl">분기별 실적 (8개 분기, 4Q24~3Q26)</div>
       <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
         <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
         <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
@@ -432,27 +432,80 @@ body{background:var(--dp-bg);}
       <svg id="fundQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
       <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 분기·반기·사업보고서의 3개월 단독 실적. 4분기는 사업보고서 연간 실적에서 3분기 누적을 뺀 값. 분기 이름 아래 ▲▼는 전년 동기 대비 증감.</div>
 <!-- fundq:end -->
+<!-- q3qa:start -->
+    <div class="dp-qa" id="dpQtrQA">
+      <div class="dp-qa-h">항목별 Q&amp;A <small>3Q26 기준 · 위 지표 버튼을 누르면 해당 항목으로 바뀝니다</small></div>
+      <div class="dp-qa-set" data-qm="rev">
+        <div class="dp-qa-t">매출액</div>
+        <dl>
+          <dt>Q. 3분기 매출은?</dt>
+          <dd>1,203억으로 1년 전보다 12.4%, 2Q26보다 11.4% 줄었다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 매출 3,913억으로 1년 전보다 2.9% 적다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="oi">
+        <div class="dp-qa-t">영업이익</div>
+        <dl>
+          <dt>Q. 3분기 영업이익은?</dt>
+          <dd>86억으로 1년 전보다 36.3% 줄었다. 자체 영업이익은 104억 → 98억 → 86억으로 세 분기 연속 줄었다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 영업이익 288억(▼22.1%), 누적 영업이익률 7.4%(1년 전 9.2%)다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="pretax">
+        <div class="dp-qa-t">세전이익</div>
+        <dl>
+          <dt>Q. 동서 이익의 핵심은?</dt>
+          <dd>맥심·카누의 동서식품(지분 50%) 지분법이익이 영업외 이익으로 들어온다. 3분기 영업외 이익은 189억으로 상반기 분기 평균(약 360억)의 절반 수준이다.</dd>
+          <dt>Q. 3분기 세전이익은?</dt>
+          <dd>275억으로 1년 전보다 28.7% 줄었다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="ni">
+        <div class="dp-qa-t">순이익</div>
+        <dl>
+          <dt>Q. 3분기 순이익은?</dt>
+          <dd>246억으로 1년 전보다 27.6% 줄었다. 지분법이익은 세금이 거의 붙지 않아 실효세율이 낮다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 순이익 1,095억으로 1년 전보다 8.2% 적다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="nip">
+        <div class="dp-qa-t">지배주주순이익</div>
+        <dl>
+          <dt>Q. 지배주주 순이익과 EPS는?</dt>
+          <dd>3분기 244억(▼27.7%), 누적 1,083억(▼8.3%)이다. 누적 EPS 1,098원, 연환산 1,464원은 2025년(1,468원)과 같다.</dd>
+          <dt>Q. 재무는?</dt>
+          <dd>9월 말 부채비율 3.2%로 사실상 부채가 없다.</dd>
+        </dl>
+      </div>
+    </div>
+    <script>(function(){var b=document.getElementById('dpQtrQA'),n=document.getElementById('dpQtrMetricNav');if(!b)return;b.classList.add('js');function s(){var a=n&&n.querySelector('button.active'),k=a?a.dataset.qm:'rev';b.querySelectorAll('.dp-qa-set').forEach(function(e){e.classList.toggle('on',e.dataset.qm===k)});}if(n)n.addEventListener('click',function(){setTimeout(s,0)});s();})();</script>
+<!-- q3qa:end -->
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1H26 연결 매출액</span><span class="v up">2,710억 (▲2.0%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v" style="color:var(--dp-down);">202억 (▼14.0%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 지분법이익</span><span class="v up">589억 (▲0.8%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 매출액</span><span class="v dn">3,913억 (전년동기比 ▼2.9%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 영업이익</span><span class="v dn">288억 (전년동기比 ▼22.1%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 지배주주 순이익</span><span class="v dn">1,083억 (전년동기比 ▼8.3%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 단독 영업이익</span><span class="v dn">86억 (3Q25 대비 ▼36.3%, 2Q26 대비 ▼12.8%)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 기본EPS</span><span class="v">850원 (전년 동기 855원)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 부채비율</span><span class="v">4.0% (2025년 말 3.5%)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 현금성자산</span><span class="v">325억</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 기본EPS</span><span class="v up">1,098원 (연환산 1,464원)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 부채비율</span><span class="v">3.2%</span></div>
+          <div class="dp-row2"><span class="l">9월 말 지배지분</span><span class="v">1조 7,108억 (작년 말 대비 ▼0.7%)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 현금성자산</span><span class="v">297억</span></div>
         </div>
       </div>
       <!-- fundq-insight:start -->
       <div class="dp-insight" style="margin-bottom:10px;">
         <div class="dp-insight-t">분기 실적 — 2개년 흐름</div>
-        <div class="dp-insight-b">최근 8개 분기(3Q24~2Q26) 영업이익은 101억→98억. 2Q26 영업이익은 전년 동기(2Q25) 117억 대비 ▼16.2%, 직전 분기(1Q26) 대비 ▼5.3%. 이 기간 분기 최고는 3Q25(135억).</div>
+        <div class="dp-insight-b">최근 8개 분기(4Q24~3Q26) 영업이익은 114억→86억. 3Q26 영업이익은 전년 동기(3Q25) 135억 대비 ▼36.3%, 직전 분기(2Q26) 대비 ▼12.8%. 이 기간 분기 최고는 3Q25(135억).</div>
       </div>
 <!-- fundq-insight:end -->
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심</div>
-        <div class="dp-insight-b">1분기는 매출 1,353억(+5.0%), 영업이익 104억(-11.7%)이었고, 2분기는 매출 1,357억(-0.8%), 영업이익 98억(-16.2%)이었다. 자체 영업이익은 두 분기 연속 줄었지만, 동서식품 지분법이익이 상반기 589억(+0.8%)으로 버텼다. 그래서 반기 지배주주 순이익은 839억, EPS는 850원(전년 855원)으로 거의 같았다.</div>
+        <div class="dp-insight-t">3분기보고서 핵심 — 전년동기(3Q25 누적) 대비</div>
+        <div class="dp-insight-b">3Q26 매출 1,203억, 영업이익 86억으로 1년 전보다 12.4%, 36.3% 줄었다. 자체 영업이익은 1Q26 104억 → 2Q26 98억 → 3Q26 86억으로 세 분기 연속 줄었다. 동서의 이익 대부분은 동서식품(맥심·카누) 지분법이익으로 들어오는데, 3분기 영업외 이익은 189억으로 상반기 분기 평균(약 360억)의 절반 수준이다. 그래서 지배주주 순이익은 244억으로 1년 전보다 27.7% 줄었다. 동서식품 이익 감소의 원인(원가·판매 등)은 공시 주석에서 확인할 수 있다. 누적으로는 매출 3,913억(▼2.9%), 영업이익 288억(▼22.1%), 지배주주 순이익 1,083억(▼8.3%)이다. 누적 EPS 1,098원의 연환산(1,464원)은 2025년 EPS(1,468원)와 같다. 9월 말 부채비율은 3.2%로 사실상 부채가 없다.</div>
       </div>
     </div>
   </div>
@@ -481,7 +534,7 @@ body{background:var(--dp-bg);}
     <!-- dp-vscore:end -->
     <div class="dp-share4">
       <div class="dp-share"><div class="dp-share-l">2025 EPS</div><div class="dp-share-v">1,468원</div><div class="dp-share-s">▼7.9%</div></div>
-      <div class="dp-share"><div class="dp-share-l">1H26 EPS</div><div class="dp-share-v">850원</div><div class="dp-share-s">▼0.6%</div></div>
+      <div class="dp-share"><div class="dp-share-l">3Q26 누적 EPS</div><div class="dp-share-v">1,098원</div><div class="dp-share-s">연환산 1,464원</div></div>
       <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">17,410원</div><div class="dp-share-s">지배지분 기준(6월 말)</div></div>
       <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">1,140원</div><div class="dp-share-s">+28.1%</div></div>
     </div>
@@ -712,6 +765,12 @@ body{background:var(--dp-bg);}
         <div class="dp-tl-title">하루 +6.9% 뒤 등락</div>
         <div class="dp-tl-body">10/2 27,700원(+6.9%), 10/6 -4.5%를 거쳐 10/19 27,800원에 마감했다. 원인이 된 공시·보도는 확인되지 않았다.</div>
       </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.11.16 (3분기보고서)</div>
+        <div class="dp-tl-title">3Q26 분기보고서 — 지배주주 순이익 244억, 전년동기 대비 27.7% 감소</div>
+        <div class="dp-tl-body">3분기 자체 영업이익 86억(▼36.3%)·지분법 포함 영업외 이익 189억으로 지배주주 순이익 244억(▼27.7%). 누적 순이익 1,083억(▼8.3%).</div>
+      </div>
     </div>
   </div>
 </div>
@@ -731,7 +790,7 @@ body{background:var(--dp-bg);}
       <div>
         <div class="dp-thesis-t bear">리스크 요인</div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>1년간 하루 ±5% 이상 변동 5회 — 대부분 원인이 확인되지 않은 급등락</span></div>
-        <div class="dp-thesis-item bear"><span class="dot">●</span><span>1H26 자체 영업이익 202억(-14.0%)으로 두 분기 연속 감소</span></div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>자체 영업이익 104억 → 98억 → 86억으로 세 분기 연속 감소(3Q26 누적 -22.1%)</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>동서식품은 커피 원두·야자유 등 원재료를 전량 수입해 국제 원두 가격과 환율에 민감(2024.11·2025.5 연속 가격 인상)</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>최근 6개월 증권사 리포트가 없어 이익 추정·목표주가 정보가 적음</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>하루 거래대금이 10억원대로 적어 유동성이 낮음</span></div>
@@ -1096,7 +1155,7 @@ function svgEl(tag,attrs){
 }
 
 // -- fund-report:start (valuation/fund_render.py)
-const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[535327319245.0,556486608719.0,489695541569.0,488860392545.0,532878500925.0],"oi":[38374679515.0,39175078067.0,43752486840.0,44476967156.0,45337393517.0],"nip":[113354764375.0,167855851714.0,144859290393.0,157251142776.0,144876386111.0],"qLabels":["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26"],"q":{"rev":[116044830130.0,124442640020.0,128789889398.0,136891078661.0,137322183792.0,129875349074.0,135283553465.0,135733871058.0],"oi":[10073266668.0,11361455472.0,11767385914.0,11739033213.0,13458776085.0,8372198305.0,10388496303.0,9836682557.0],"pretax":[36724545435.0,31172482194.0,48423091597.0,44394386690.0,38586260769.0,30603840485.0,47644593233.0,44809842271.0],"ni":[32789972138.0,26038748959.0,44253331345.0,41003607078.0,34035597867.0,27171159100.0,43627599313.0,41216142630.0],"nip":[32567231107.0,25552298455.0,43874876347.0,40468691469.0,33773705404.0,26759112891.0,43127571723.0,40793748881.0]}};
+const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[535327319245.0,556486608719.0,489695541569.0,488860392545.0,532878500925.0],"oi":[38374679515.0,39175078067.0,43752486840.0,44476967156.0,45337393517.0],"nip":[113354764375.0,167855851714.0,144859290393.0,157251142776.0,144876386111.0],"qLabels":["4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26","3Q26"],"q":{"rev":[124442640020.0,128789889398.0,136891078661.0,137322183792.0,129875349074.0,135283553465.0,135733871058.0,120314307253.0],"oi":[11361455472.0,11767385914.0,11739033213.0,13458776085.0,8372198305.0,10388496303.0,9836682557.0,8578382579.0],"pretax":[31172482194.0,48423091597.0,44394386690.0,38586260769.0,30603840485.0,47644593233.0,44809842271.0,27503718060.0],"ni":[26038748959.0,44253331345.0,41003607078.0,34035597867.0,27171159100.0,43627599313.0,41216142630.0,24647450470.0],"nip":[25552298455.0,43874876347.0,40468691469.0,33773705404.0,26759112891.0,43127571723.0,40793748881.0,24420774094.0]}};
 const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
 const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
 let _qtrCurrentMetric=(document.querySelector('#dpQtrMetricNav button')||{dataset:{qm:'oi'}}).dataset.qm;

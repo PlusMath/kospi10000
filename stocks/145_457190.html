@@ -362,7 +362,7 @@ body{background:var(--dp-bg);}
   <div class="dp-acc-body">
     <div class="dp-tab-row">
       <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
-      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">반기보고서 · 1H26</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">3분기보고서 · 3Q26</button>
     </div>
 
     <div id="dpFundAnnual">
@@ -415,7 +415,7 @@ body{background:var(--dp-bg);}
 
     <div id="dpFundQuarter" style="display:none;">
 <!-- fundq:start -->
-      <div class="dp-secl">분기별 실적 (8개 분기, 3Q24~2Q26)</div>
+      <div class="dp-secl">분기별 실적 (8개 분기, 4Q24~3Q26)</div>
       <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
         <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
         <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
@@ -427,27 +427,80 @@ body{background:var(--dp-bg);}
       <svg id="fundQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
       <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 분기·반기·사업보고서의 3개월 단독 실적. 4분기는 사업보고서 연간 실적에서 3분기 누적을 뺀 값. 분기 이름 아래 ▲▼는 전년 동기 대비 증감.</div>
 <!-- fundq:end -->
+<!-- q3qa:start -->
+    <div class="dp-qa" id="dpQtrQA">
+      <div class="dp-qa-h">항목별 Q&amp;A <small>3Q26 기준 · 위 지표 버튼을 누르면 해당 항목으로 바뀝니다</small></div>
+      <div class="dp-qa-set" data-qm="rev">
+        <div class="dp-qa-t">매출액</div>
+        <dl>
+          <dt>Q. 3분기 매출은?</dt>
+          <dd>921억으로 1년 전보다 11.5%, 2Q26보다 14.8% 줄었다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 매출 3,087억으로 1년 전보다 2.0% 많다. 대부분 정밀화학 매출이다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="oi">
+        <div class="dp-qa-t">영업이익</div>
+        <dl>
+          <dt>Q. 3분기 영업손익은?</dt>
+          <dd>-45억으로 다시 적자다. 1Q26 35억, 2Q26 77억으로 늘던 흐름이 꺾였다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 영업이익 67억으로 1년 전(0억)보다는 낫다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="pretax">
+        <div class="dp-qa-t">세전이익</div>
+        <dl>
+          <dt>Q. 영업 밖에서는?</dt>
+          <dd>3분기 영업외 손실 -5억, 누적 -37억이다. 플랜트 투자 차입의 이자 부담이다.</dd>
+          <dt>Q. 세전이익은?</dt>
+          <dd>3분기 -49억, 누적 31억이다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="ni">
+        <div class="dp-qa-t">순이익</div>
+        <dl>
+          <dt>Q. 3분기 순이익은?</dt>
+          <dd>-39억 순손실이다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 순이익 16억으로 1년 전(-21억)보다 낫다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="nip">
+        <div class="dp-qa-t">지배주주순이익</div>
+        <dl>
+          <dt>Q. 지배주주 순이익과 EPS는?</dt>
+          <dd>비지배지분이 없어 순이익과 같다. 누적 EPS 54원이다.</dd>
+          <dt>Q. 황화리튬은?</dt>
+          <dd>전고체 배터리 소재인 황화리튬 매출은 아직 샘플 수준이다. 양산 매출 시점이 실적과 주가를 가를 변수다.</dd>
+        </dl>
+      </div>
+    </div>
+    <script>(function(){var b=document.getElementById('dpQtrQA'),n=document.getElementById('dpQtrMetricNav');if(!b)return;b.classList.add('js');function s(){var a=n&&n.querySelector('button.active'),k=a?a.dataset.qm:'rev';b.querySelectorAll('.dp-qa-set').forEach(function(e){e.classList.toggle('on',e.dataset.qm===k)});}if(n)n.addEventListener('click',function(){setTimeout(s,0)});s();})();</script>
+<!-- q3qa:end -->
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1H26 연결 매출액</span><span class="v up">2,166.0억 (▲9.1%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v up">112.2억 (전년 동기 14.4억)</span></div>
-          <div class="dp-row2"><span class="l">1H26 지배주주 순이익</span><span class="v up">55.1억 (흑자 전환)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 매출액</span><span class="v up">3,087억 (전년동기比 ▲2.0%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 영업이익</span><span class="v up">67억 (전년동기比 흑자전환)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 지배주주 순이익</span><span class="v up">16억 (전년동기比 흑자전환)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 단독 영업이익</span><span class="v dn">-45억 (3Q25 대비 적자지속, 2Q26 대비 적자전환)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 기본EPS</span><span class="v up">182원 (전년 동기 -11원)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 부채비율</span><span class="v">201.1% (2025년 말 175.8%)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 현금성자산</span><span class="v">345.2억</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 기본EPS</span><span class="v up">54원 (연환산 72원)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 부채비율</span><span class="v">194.2%</span></div>
+          <div class="dp-row2"><span class="l">9월 말 지배지분</span><span class="v">1,344억 (작년 말 대비 ▲1.2%)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 현금성자산</span><span class="v">111억</span></div>
         </div>
       </div>
       <!-- fundq-insight:start -->
       <div class="dp-insight" style="margin-bottom:10px;">
         <div class="dp-insight-t">분기 실적 — 2개년 흐름</div>
-        <div class="dp-insight-b">최근 8개 분기(3Q24~2Q26) 영업이익은 39억→77억. 2Q26 영업이익은 전년 동기(2Q25) -47억 대비 흑자전환, 직전 분기(1Q26) 대비 ▲122.3%. 이 기간 분기 최고는 2Q26(77억).</div>
+        <div class="dp-insight-b">최근 8개 분기(4Q24~3Q26) 영업이익은 9억→-45억. 3Q26 영업이익은 전년 동기(3Q25) -15억 대비 적자지속, 직전 분기(2Q26) 대비 적자전환. 이 기간 분기 최고는 2Q26(77억).</div>
       </div>
 <!-- fundq-insight:end -->
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심</div>
-        <div class="dp-insight-b">영업이익이 1분기 35억, 2분기 77억으로 늘며 지난해 2분기(46억 적자)보다 크게 좋아졌다. 다만 매출은 여전히 정밀화학이 대부분이고, 황화리튬 매출은 아직 샘플 수준이다. 상업화 플랜트 투자로 6월 말 부채총계가 2,785억으로 연초보다 450억 늘어 부채비율이 201%가 됐다.</div>
+        <div class="dp-insight-t">3분기보고서 핵심 — 전년동기(3Q25 누적) 대비</div>
+        <div class="dp-insight-b">3Q26 영업손익이 -45억으로 다시 적자가 됐다. 영업이익이 1Q26 35억, 2Q26 77억으로 늘었는데 3분기에 꺾였다. 매출도 921억으로 1년 전보다 11.5%, 2Q26보다 14.8% 줄었다. 순손실은 -39억이다. 누적으로는 매출 3,087억(▲2.0%), 영업이익 67억, 순이익 16억으로 1년 전(각각 0억, -21억)보다는 낫다. 누적 EPS는 54원이다. 매출 대부분은 여전히 정밀화학이고, 전고체 배터리 소재인 황화리튬 매출은 아직 샘플 수준이라 실적은 정밀화학 업황에 좌우된다. 상업화 플랜트 투자로 9월 말 부채가 작년 말보다 11.8% 늘어 부채비율이 194.2%다. 황화리튬 양산 매출이 언제 시작되는지가 주가와 실적을 가를 변수다.</div>
       </div>
     </div>
   </div>
@@ -476,7 +529,7 @@ body{background:var(--dp-bg);}
     <!-- dp-vscore:end -->
     <div class="dp-share4">
       <div class="dp-share"><div class="dp-share-l">2025 EPS</div><div class="dp-share-v">26원</div><div class="dp-share-s">▼92.7%</div></div>
-      <div class="dp-share"><div class="dp-share-l">1H26 EPS</div><div class="dp-share-v">182원</div><div class="dp-share-s">흑자 전환</div></div>
+      <div class="dp-share"><div class="dp-share-l">3Q26 누적 EPS</div><div class="dp-share-v">54원</div><div class="dp-share-s">연환산 72원</div></div>
       <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">4,583원</div><div class="dp-share-s">지배지분 기준(6월 말)</div></div>
       <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">0원</div><div class="dp-share-s">무배당</div></div>
     </div>
@@ -789,6 +842,12 @@ body{background:var(--dp-bg);}
         <div class="dp-tl-title">반등 · 9만원대 회복</div>
         <div class="dp-tl-body">9/30 +17.2%로 79,700원, 10/14 +10.1%로 91,300원까지 올랐다. 10/16 87,300원(-3.8%)으로 밀렸다가 10/19 91,700원(+5.0%)으로 마감했다. 9/30 급등의 계기는 확인되지 않았다.</div>
       </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.11.16 (3분기보고서)</div>
+        <div class="dp-tl-title">3Q26 분기보고서 — 영업손익 -45억, 적자 전환</div>
+        <div class="dp-tl-body">3분기 매출 921억(▼11.5%)·영업손익 -45억으로 적자 전환, 순손실 -39억. 누적 영업이익 67억·순이익 16억은 흑자.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -802,7 +861,7 @@ body{background:var(--dp-bg);}
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>전고체 배터리 황화물계 고체전해질 원료인 황화리튬을 생산하는 국내 대표 기업</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>연 150톤 상업화 플랜트를 예정보다 일찍 준공, 최대 500톤까지 확장 가능한 부지 확보</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>세계 유일의 연속식 공법 — 증설할수록 단위당 투자비가 줄어 배치식 경쟁사보다 원가 우위(신한투자증권)</span></div>
-        <div class="dp-thesis-item bull"><span class="dot">●</span><span>1H26 영업이익 112억으로 지난해(14억)보다 크게 늘며 본업 실적이 회복</span></div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>3Q26 누적 영업이익 67억으로 흑자 유지, 단 3분기는 -45억 적자 전환</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>정밀화학(TDM 등) 본업이 매출 기반을 받쳐 황화리튬 투자 기간에도 현금흐름 확보</span></div>
       </div>
       <div>
@@ -1173,7 +1232,7 @@ function svgEl(tag,attrs){
 }
 
 // -- fund-report:start (valuation/fund_render.py)
-const FUND={"cats":["2023년","2024년","2025년"],"rev":[117528614931.0,332069862904.0,411470361000.0],"oi":[-6119544615.0,14206083843.0,1615256000.0],"nip":[-6205555775.0,10511891726.0,769523000.0],"qLabels":["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26"],"q":{"rev":[86908923871.0,90582007682.0,98897996085.0,99707789560.0,103986105087.0,108878470268.0,108571660000.0,108029149000.0],"oi":[3949063509.0,920728347.0,6097115509.0,-4652559392.0,-1460814951.0,1631514834.0,3480707000.0,7737005000.0],"pretax":[1680681001.0,-557431627.0,4837416950.0,-5024749816.0,-2291775302.0,-1628981832.0,3030292000.0,4965056000.0],"ni":[1388334121.0,4290559462.0,3767019390.0,-4097637517.0,-1815121590.0,2915262717.0,1884047000.0,3627145000.0],"nip":[1388334121.0,4290559462.0,3767019390.0,-4097637517.0,-1815121590.0,2915262717.0,1884047000.0,3627145000.0]}};
+const FUND={"cats":["2023년","2024년","2025년"],"rev":[117528614931.0,332069862904.0,411470361000.0],"oi":[-6119544615.0,14206083843.0,1615256000.0],"nip":[-6205555775.0,10511891726.0,769523000.0],"qLabels":["4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26","3Q26"],"q":{"rev":[90582007682.0,98897996085.0,99707789560.0,103986105087.0,108878470268.0,108571660000.0,108029149000.0,92052876000.0],"oi":[920728347.0,6097115509.0,-4652559392.0,-1460814951.0,1631514834.0,3480707000.0,7737005000.0,-4489663000.0],"pretax":[-557431627.0,4837416950.0,-5024749816.0,-2291775302.0,-1628981832.0,3030292000.0,4965056000.0,-4944625000.0],"ni":[4290559462.0,3767019390.0,-4097637517.0,-1815121590.0,2915262717.0,1884047000.0,3627145000.0,-3885739000.0],"nip":[4290559462.0,3767019390.0,-4097637517.0,-1815121590.0,2915262717.0,1884047000.0,3627145000.0,-3885739000.0]}};
 const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
 const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
 let _qtrCurrentMetric=(document.querySelector('#dpQtrMetricNav button')||{dataset:{qm:'oi'}}).dataset.qm;

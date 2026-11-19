@@ -362,7 +362,7 @@ body{background:var(--dp-bg);}
   <div class="dp-acc-body">
     <div class="dp-tab-row">
       <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
-      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">반기보고서 · 1H26</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">3분기보고서 · 3Q26</button>
     </div>
 
     <div id="dpFundAnnual">
@@ -419,7 +419,7 @@ body{background:var(--dp-bg);}
 
     <div id="dpFundQuarter" style="display:none;">
 <!-- fundq:start -->
-      <div class="dp-secl">분기별 실적 (8개 분기, 3Q24~2Q26)</div>
+      <div class="dp-secl">분기별 실적 (8개 분기, 4Q24~3Q26)</div>
       <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
         <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
         <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
@@ -431,27 +431,80 @@ body{background:var(--dp-bg);}
       <svg id="fundQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
       <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 분기·반기·사업보고서의 3개월 단독 실적. 4분기는 사업보고서 연간 실적에서 3분기 누적을 뺀 값. 분기 이름 아래 ▲▼는 전년 동기 대비 증감.</div>
 <!-- fundq:end -->
+<!-- q3qa:start -->
+    <div class="dp-qa" id="dpQtrQA">
+      <div class="dp-qa-h">항목별 Q&amp;A <small>3Q26 기준 · 위 지표 버튼을 누르면 해당 항목으로 바뀝니다</small></div>
+      <div class="dp-qa-set" data-qm="rev">
+        <div class="dp-qa-t">매출액</div>
+        <dl>
+          <dt>Q. 3분기 매출은?</dt>
+          <dd>1,824억으로 1년 전보다 21.0%, 2Q26보다 17.2% 늘었다. 2분기에 미뤄졌던 백신 공급이 반영된 것으로 보인다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 매출 5,068억으로 1년 전보다 8.5% 많다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="oi">
+        <div class="dp-qa-t">영업이익</div>
+        <dl>
+          <dt>Q. 3분기 영업손실은?</dt>
+          <dd>-112억으로 1Q26(-445억), 2Q26(-157억)에 이어 세 분기 연속 줄었다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 영업손실 -715억으로 1년 전(-719억)과 비슷하다. 연구센터 이전과 백신 임상으로 연구개발비가 큰 구간이다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="pretax">
+        <div class="dp-qa-t">세전이익</div>
+        <dl>
+          <dt>Q. 세전이익이 왜 흑자인가?</dt>
+          <dd>3분기 영업외 이익이 173억으로 영업손실보다 커서 세전이익이 61억이 됐다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 세전이익은 -582억으로 적자다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="ni">
+        <div class="dp-qa-t">순이익</div>
+        <dl>
+          <dt>Q. 3분기 순이익은?</dt>
+          <dd>연결 순이익 120억으로 흑자다. 법인세가 이익으로 잡혀 세전이익보다 많다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 순손실 -382억이다. 1년 전에는 세금 효과로 순손익이 거의 0이었다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="nip">
+        <div class="dp-qa-t">지배주주순이익</div>
+        <dl>
+          <dt>Q. 지배주주 순이익은?</dt>
+          <dd>3분기 105억, 누적 -407억이다.</dd>
+          <dt>Q. EPS는?</dt>
+          <dd>누적 EPS -520원이다. 영업손실이 계속 줄어드는지가 관건이다.</dd>
+        </dl>
+      </div>
+    </div>
+    <script>(function(){var b=document.getElementById('dpQtrQA'),n=document.getElementById('dpQtrMetricNav');if(!b)return;b.classList.add('js');function s(){var a=n&&n.querySelector('button.active'),k=a?a.dataset.qm:'rev';b.querySelectorAll('.dp-qa-set').forEach(function(e){e.classList.toggle('on',e.dataset.qm===k)});}if(n)n.addEventListener('click',function(){setTimeout(s,0)});s();})();</script>
+<!-- q3qa:end -->
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1H26 연결 매출액</span><span class="v up">3,243.2억 (▲2.5%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v" style="color:var(--dp-down);">-602.7억 (적자 확대, 전년 동기 -525.2억)</span></div>
-          <div class="dp-row2"><span class="l">1H26 지배주주 순이익</span><span class="v" style="color:var(--dp-down);">-512.2억 (전년 동기 -239.4억)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 매출액</span><span class="v up">5,068억 (전년동기比 ▲8.5%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 영업이익</span><span class="v dn">-715억 (전년동기比 적자축소)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 지배주주 순이익</span><span class="v dn">-407억 (전년동기比 적자전환)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 단독 영업이익</span><span class="v dn">-112억 (3Q25 대비 적자축소, 2Q26 대비 적자축소)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 기본EPS</span><span class="v" style="color:var(--dp-down);">-654원 (전년 동기 -306원)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 부채비율</span><span class="v">48.6% (2025년 말 45.1%)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 현금성자산</span><span class="v">1,302억 (장기차입금 약 5,396억)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 기본EPS</span><span class="v dn">-520원 (연환산 -693원)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 부채비율</span><span class="v">50.3%</span></div>
+          <div class="dp-row2"><span class="l">9월 말 지배지분</span><span class="v">1조 6,988억 (작년 말 대비 ▼5.0%)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 현금성자산</span><span class="v">741억</span></div>
         </div>
       </div>
       <!-- fundq-insight:start -->
       <div class="dp-insight" style="margin-bottom:10px;">
         <div class="dp-insight-t">분기 실적 — 2개년 흐름</div>
-        <div class="dp-insight-b">최근 8개 분기(3Q24~2Q26) 영업이익은 -396억→-157억. 2Q26 영업이익은 전년 동기(2Q25) -374억 대비 적자축소, 직전 분기(1Q26) 대비 적자축소. 이 기간 분기 최고는 1Q25(-151억).</div>
+        <div class="dp-insight-b">최근 8개 분기(4Q24~3Q26) 영업이익은 -508억→-112억. 3Q26 영업이익은 전년 동기(3Q25) -194억 대비 적자축소, 직전 분기(2Q26) 대비 적자축소. 이 기간 분기 최고는 3Q26(-112억).</div>
       </div>
 <!-- fundq-insight:end -->
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심</div>
-        <div class="dp-insight-b">1분기 영업손실은 445억으로 전년 동기(151억)의 약 3배였다. 본사·연구소의 송도 글로벌 R&amp;PD 센터 이전과 폐렴구균 백신 임상 본격화로 연구개발비가 늘었기 때문이다. 2분기에는 IDT 생산량 증가와 원가 절감으로 영업손실이 157억으로 줄었다(전년 동기 374억). 2분기 매출 1,557억은 일부 백신 공급이 3분기로 미뤄져 3.8% 줄었다. 5월 국민성장펀드에서 10년 만기 초저리 차입 3,000억 지원이 확정됐다.</div>
+        <div class="dp-insight-t">3분기보고서 핵심 — 전년동기(3Q25 누적) 대비</div>
+        <div class="dp-insight-b">3Q26 매출은 1,824억으로 1년 전보다 21.0%, 2Q26보다 17.2% 늘었다. 2분기에 미뤄졌던 백신 공급이 3분기에 반영된 것으로 보인다. 영업손실은 -112억으로 1Q26(-445억) → 2Q26(-157억)에 이어 세 분기 연속 줄었다. 영업외 이익 173억이 더해져 세전이익 61억, 지배주주 순이익 105억으로 흑자가 됐다. 누적으로는 매출 5,068억(▲8.5%), 영업손실 -715억으로 1년 전(-719억)과 비슷하고, 지배주주 순손실은 -407억이다. 1년 전에는 영업외 이익과 세금 효과로 순손익이 0에 가까웠다. 누적 EPS는 -520원이다. 송도 연구센터 이전과 폐렴구균 백신 임상으로 연구개발비가 많이 드는 구간이라, 영업손실이 계속 줄어드는지가 관건이다. 9월 말 지배지분은 작년 말보다 5.0% 줄었고 부채비율은 50.3%다.</div>
       </div>
     </div>
   </div>
@@ -480,7 +533,7 @@ body{background:var(--dp-bg);}
     <!-- dp-vscore:end -->
     <div class="dp-share4">
       <div class="dp-share"><div class="dp-share-l">2025 EPS</div><div class="dp-share-v">-733원</div><div class="dp-share-s">적자 지속(전년 -698원)</div></div>
-      <div class="dp-share"><div class="dp-share-l">1H26 EPS</div><div class="dp-share-v">-654원</div><div class="dp-share-s">적자 확대(전년 동기 -306원)</div></div>
+      <div class="dp-share"><div class="dp-share-l">3Q26 누적 EPS</div><div class="dp-share-v">-520원</div><div class="dp-share-s">연환산 -693원</div></div>
       <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">22,375원</div><div class="dp-share-s">지배지분 기준(6월 말)</div></div>
       <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">0원</div><div class="dp-share-s">무배당</div></div>
     </div>
@@ -757,6 +810,12 @@ body{background:var(--dp-bg);}
         <div class="dp-tl-title">흥국증권 매수 · 5.2만원 유지 · 3만6천원대</div>
         <div class="dp-tl-body">흥국증권은 PCV21 3상 결과(2027년 예정)를 기업가치 재평가의 분기점으로 봤다. 10/16 36,300원에 마감해 52주 고점보다 39.6% 낮다.</div>
       </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.11.12 (3분기보고서)</div>
+        <div class="dp-tl-title">3Q26 분기보고서 — 영업손실 -112억으로 축소, 순이익 흑자</div>
+        <div class="dp-tl-body">3분기 매출 1,824억(▲21.0%), 영업손실 -112억으로 세 분기 연속 축소, 영업외 이익으로 지배주주 순이익 105억. 누적 순손실 -407억.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -776,7 +835,7 @@ body{background:var(--dp-bg);}
       <div>
         <div class="dp-thesis-t bear">리스크 요인</div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>52주 고점 대비 -39.6%, 1년간 하루 ±5% 이상 변동 11회</span></div>
-        <div class="dp-thesis-item bear"><span class="dot">●</span><span>2024~2025년 연속 영업손실 1,200억~1,400억, 1Q26 영업손실 445억으로 적자 확대</span></div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>2024~2025년 연속 영업손실 1,200억~1,400억, 영업손실 1Q26 445억 → 3Q26 112억으로 축소</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>송도 R&amp;PD 센터·PCV21 임상 등 연구개발비 부담이 커 흑자 전환 시점이 멀다</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>현금성자산 3,127억(2024년 말) → 1,302억(6월 말), 장기차입금 약 5,400억으로 부채비율 49%</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>주가가 PCV21 임상 결과 하나에 크게 좌우되는 구조</span></div>
@@ -1141,7 +1200,7 @@ function svgEl(tag,attrs){
 }
 
 // -- fund-report:start (valuation/fund_render.py)
-const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[929000929909.0,456725871196.0,369505555858.0,267545049154.0,651368342533.0],"oi":[474219856324.0,115013617843.0,-11987764772.0,-138431298006.0,-123501682766.0],"nip":[355139276839.0,122451949931.0,22317719237.0,-53881198908.0,-57424481989.0],"qLabels":["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26"],"q":{"rev":[61647711594.0,156849225374.0,154557715977.0,161859526907.0,150764791550.0,184186308099.0,168610527502.0,155705084515.0],"oi":[-39613612390.0,-50775983116.0,-15125961270.0,-37395041197.0,-19370985552.0,-51609694747.0,-44535066048.0,-15737656292.0],"pretax":[-30657168773.0,-21742965314.0,-13802376095.0,-35162601143.0,-15579107426.0,-21316032213.0,-47846139760.0,-16436947662.0],"ni":[-22317186094.0,-2672994302.0,-4071361796.0,-16779005362.0,21082628643.0,-56405471677.0,-36164201743.0,-14086496007.0],"nip":[-22317186094.0,-6437122746.0,-7465651372.0,-16475609282.0,24478665647.0,-57961886982.0,-33327327258.0,-17887989177.0]}};
+const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[929000929909.0,456725871196.0,369505555858.0,267545049154.0,651368342533.0],"oi":[474219856324.0,115013617843.0,-11987764772.0,-138431298006.0,-123501682766.0],"nip":[355139276839.0,122451949931.0,22317719237.0,-53881198908.0,-57424481989.0],"qLabels":["4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26","3Q26"],"q":{"rev":[156849225374.0,154557715977.0,161859526907.0,150764791550.0,184186308099.0,168610527502.0,155705084515.0,182443810289.0],"oi":[-50775983116.0,-15125961270.0,-37395041197.0,-19370985552.0,-51609694747.0,-44535066048.0,-15737656292.0,-11217656732.0],"pretax":[-21742965314.0,-13802376095.0,-35162601143.0,-15579107426.0,-21316032213.0,-47846139760.0,-16436947662.0,6103127115.0],"ni":[-2672994302.0,-4071361796.0,-16779005362.0,21082628643.0,-56405471677.0,-36164201743.0,-14086496007.0,12008049409.0],"nip":[-6437122746.0,-7465651372.0,-16475609282.0,24478665647.0,-57961886982.0,-33327327258.0,-17887989177.0,10533802723.0]}};
 const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
 const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
 let _qtrCurrentMetric=(document.querySelector('#dpQtrMetricNav button')||{dataset:{qm:'oi'}}).dataset.qm;

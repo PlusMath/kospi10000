@@ -363,7 +363,7 @@ body{background:var(--dp-bg);}
   <div class="dp-acc-body">
     <div class="dp-tab-row">
       <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
-      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">반기보고서 · 1H26</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">3분기보고서 · 3Q26</button>
     </div>
 
     <div id="dpFundAnnual">
@@ -420,7 +420,7 @@ body{background:var(--dp-bg);}
 
     <div id="dpFundQuarter" style="display:none;">
 <!-- fundq:start -->
-      <div class="dp-secl">분기별 실적 (8개 분기, 3Q24~2Q26)</div>
+      <div class="dp-secl">분기별 실적 (8개 분기, 4Q24~3Q26)</div>
       <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
         <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
         <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
@@ -432,27 +432,80 @@ body{background:var(--dp-bg);}
       <svg id="fundQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
       <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 분기·반기·사업보고서의 3개월 단독 실적. 4분기는 사업보고서 연간 실적에서 3분기 누적을 뺀 값. 분기 이름 아래 ▲▼는 전년 동기 대비 증감.</div>
 <!-- fundq:end -->
+<!-- q3qa:start -->
+    <div class="dp-qa" id="dpQtrQA">
+      <div class="dp-qa-h">항목별 Q&amp;A <small>3Q26 기준 · 위 지표 버튼을 누르면 해당 항목으로 바뀝니다</small></div>
+      <div class="dp-qa-set" data-qm="rev">
+        <div class="dp-qa-t">매출액</div>
+        <dl>
+          <dt>Q. 3분기 매출은?</dt>
+          <dd>1조 9,215억으로 1년 전보다 16.9% 많지만 2Q26보다 15.3% 줄었다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 매출 5조 9,696억으로 1년 전보다 12.1% 많다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="oi">
+        <div class="dp-qa-t">영업이익</div>
+        <dl>
+          <dt>Q. 3분기 영업손익은?</dt>
+          <dd>-208억으로 적자 전환했다. 6월 말부터 원재료 가격이 내려가며 투입 시차 손실(역래깅)이 났다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>2분기 영업이익(3,390억)이 워낙 커서 누적 영업이익은 3,776억(▲39.7%)으로 2025년 연간(2,718억)을 넘었다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="pretax">
+        <div class="dp-qa-t">세전이익</div>
+        <dl>
+          <dt>Q. 영업 밖에서는?</dt>
+          <dd>3분기 영업외 손익 -230억으로 세전이익은 -438억이다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 영업외 이익은 844억으로 1년 전(829억)과 비슷하다. 누적 세전이익은 4,620억(▲30.8%)이다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="ni">
+        <div class="dp-qa-t">순이익</div>
+        <dl>
+          <dt>Q. 3분기 순이익은?</dt>
+          <dd>-220억 순손실이다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 순이익 3,747억(▲29.4%)으로 2025년 연간(2,909억)을 넘었다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="nip">
+        <div class="dp-qa-t">지배주주순이익</div>
+        <dl>
+          <dt>Q. 지배주주 순이익과 EPS는?</dt>
+          <dd>비지배지분이 거의 없어 순이익과 같다. 누적 EPS 14,699원, 연환산 19,599원이다.</dd>
+          <dt>Q. 연환산 EPS를 믿어도 되나?</dt>
+          <dd>2분기의 일시적 판가 급등 효과가 크다. 4분기 판가와 원재료 가격이 안정되는지를 봐야 한다.</dd>
+        </dl>
+      </div>
+    </div>
+    <script>(function(){var b=document.getElementById('dpQtrQA'),n=document.getElementById('dpQtrMetricNav');if(!b)return;b.classList.add('js');function s(){var a=n&&n.querySelector('button.active'),k=a?a.dataset.qm:'rev';b.querySelectorAll('.dp-qa-set').forEach(function(e){e.classList.toggle('on',e.dataset.qm===k)});}if(n)n.addEventListener('click',function(){setTimeout(s,0)});s();})();</script>
+<!-- q3qa:end -->
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1H26 연결 매출액</span><span class="v up">40,481.1억 (▲10.0%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v up">3,984.0억 (▲114.4%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 지배주주 순이익</span><span class="v up">3,966.2억 (▲117.2%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 매출액</span><span class="v up">5조 9,696억 (전년동기比 ▲12.1%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 영업이익</span><span class="v up">3,776억 (전년동기比 ▲39.7%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 지배주주 순이익</span><span class="v up">3,746억 (전년동기比 ▲29.4%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 단독 영업이익</span><span class="v dn">-208억 (3Q25 대비 적자전환, 2Q26 대비 적자전환)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 기본EPS</span><span class="v up">15,530원 (전년 동기 7,046원)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 부채비율</span><span class="v">34.4% (2025년 말 35.7%)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 현금성자산</span><span class="v">6,526.0억</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 기본EPS</span><span class="v up">14,699원 (연환산 19,599원)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 부채비율</span><span class="v">32.1%</span></div>
+          <div class="dp-row2"><span class="l">9월 말 지배지분</span><span class="v">6조 6,691억 (작년 말 대비 ▲6.8%)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 현금성자산</span><span class="v">7,210억</span></div>
         </div>
       </div>
       <!-- fundq-insight:start -->
       <div class="dp-insight" style="margin-bottom:10px;">
         <div class="dp-insight-t">분기 실적 — 2개년 흐름</div>
-        <div class="dp-insight-b">최근 8개 분기(3Q24~2Q26) 영업이익은 651억→3,390억. 2Q26 영업이익은 전년 동기(2Q25) 652억 대비 ▲419.7%, 직전 분기(1Q26) 대비 ▲470.7%. 이 기간 분기 최고는 2Q26(3,390억).</div>
+        <div class="dp-insight-b">최근 8개 분기(4Q24~3Q26) 영업이익은 100억→-208억. 3Q26 영업이익은 전년 동기(3Q25) 844억 대비 적자전환, 직전 분기(2Q26) 대비 적자전환. 이 기간 분기 최고는 2Q26(3,390억).</div>
       </div>
 <!-- fundq-insight:end -->
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심</div>
-        <div class="dp-insight-b">1분기 영업이익은 원재료 급등분을 판가에 바로 옮기지 못해 594억(-50.7%)으로 컨센서스를 밑돌았다. 2분기에는 미-이란 전쟁으로 역내 합성고무·NB라텍스 공급이 막히며 판가가 뛰어 영업이익 3,390억을 냈고, 컨센서스(1,470억)를 131% 웃돌았다. 지배순이익도 3,004억으로 1분기(962억)의 3배가 넘었다. 증권사들은 6월 말부터 원재료 가격이 내려 3분기에는 반대로 투입 시차 손실(역래깅)이 날 것으로 본다.</div>
+        <div class="dp-insight-t">3분기보고서 핵심 — 전년동기(3Q25 누적) 대비</div>
+        <div class="dp-insight-b">3Q26 영업손익이 -208억으로 적자 전환했다. 2Q26에는 합성고무·NB라텍스 공급 차질로 판가가 뛰어 영업이익 3,390억을 냈는데, 6월 말부터 원재료 가격이 내려가며 3분기에는 증권사들이 예상한 대로 투입 시차 손실(역래깅)이 났다. 매출은 1조 9,215억으로 1년 전보다 16.9% 많지만 2분기보다 15.3% 줄었다. 영업외 손실(-230억)까지 더해 지배주주 순손실은 -220억이다. 그래도 2분기 이익이 워낙 커서 누적으로는 매출 5조 9,696억(▲12.1%), 영업이익 3,776억(▲39.7%), 지배주주 순이익 3,746억(▲29.4%)으로 모두 이미 2025년 연간을 넘었다. 누적 EPS 14,699원의 연환산(19,599원)은 2025년 EPS(11,300원)보다 73% 높지만 2분기 일시적 판가 급등 효과가 크다. 4분기 판가와 원재료 가격이 안정되는지가 관건이다. 9월 말 부채비율은 32.1%다.</div>
       </div>
     </div>
   </div>
@@ -481,7 +534,7 @@ body{background:var(--dp-bg);}
     <!-- dp-vscore:end -->
     <div class="dp-share4">
       <div class="dp-share"><div class="dp-share-l">2025 EPS</div><div class="dp-share-v">11,300원</div><div class="dp-share-s">▼15.2%</div></div>
-      <div class="dp-share"><div class="dp-share-l">1H26 EPS</div><div class="dp-share-v">15,530원</div><div class="dp-share-s">▲120.4%</div></div>
+      <div class="dp-share"><div class="dp-share-l">3Q26 누적 EPS</div><div class="dp-share-v">14,699원</div><div class="dp-share-s">연환산 19,599원</div></div>
       <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">265,467원</div><div class="dp-share-s">지배지분 기준(6월 말)</div></div>
       <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">1,700원</div><div class="dp-share-s">-22.7%</div></div>
     </div>
@@ -876,6 +929,12 @@ body{background:var(--dp-bg);}
         <div class="dp-tl-title">역래깅 우려 속 11만원대</div>
         <div class="dp-tl-body">9월 말 115,300원, 10/16 113,500원으로 2분기 실적 발표 직후(8/7 129,600원)보다 12% 낮다. 신한투자증권은 3분기 영업이익이 원재료 가격 하락과 구매 관망으로 전분기보다 71% 줄 것으로 봤다.</div>
       </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.11.16 (3분기보고서)</div>
+        <div class="dp-tl-title">3Q26 분기보고서 — 영업손익 -208억, 역래깅으로 적자 전환</div>
+        <div class="dp-tl-body">2분기 영업이익 3,390억 뒤 원재료 가격 하락에 따른 역래깅으로 3분기 영업손익 -208억, 지배주주 순손실 -220억. 누적 영업이익 3,776억(▲39.7%).</div>
+      </div>
     </div>
   </div>
 </div>
@@ -1265,7 +1324,7 @@ function svgEl(tag,attrs){
 }
 
 // -- fund-report:start (valuation/fund_render.py)
-const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[8461841500290.0,7975625981021.0,6322528187782.0,7155003786012.0,6915145099921.0],"oi":[2406835526956.0,1147745512728.0,358961881960.0,272804307588.0,271828509546.0],"nip":[1965465321929.0,1025448311762.0,446820153023.0,348621508633.0,290936738220.0],"qLabels":["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26"],"q":{"rev":[1827889500711.0,1807132008371.0,1908229062934.0,1773366505911.0,1643813977906.0,1589735553170.0,1779957662893.0,2268152062130.0],"oi":[65077247210.0,9971758868.0,120608366574.0,65229500384.0,84433916233.0,1556726355.0,59403454696.0,338998286912.0],"pretax":[61618610373.0,69879081360.0,157273599865.0,67546841474.0,128380635925.0,-4352238230.0,117816888403.0,387982233327.0],"ni":[53134317767.0,61335308719.0,124833104482.0,57732406426.0,106926826809.0,1442442932.0,96292490134.0,300416958496.0],"nip":[53125197966.0,61432766781.0,124954395782.0,57671013331.0,106888760941.0,1422568166.0,96265976763.0,300357833239.0]}};
+const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[8461841500290.0,7975625981021.0,6322528187782.0,7155003786012.0,6915145099921.0],"oi":[2406835526956.0,1147745512728.0,358961881960.0,272804307588.0,271828509546.0],"nip":[1965465321929.0,1025448311762.0,446820153023.0,348621508633.0,290936738220.0],"qLabels":["4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26","3Q26"],"q":{"rev":[1807132008371.0,1908229062934.0,1773366505911.0,1643813977906.0,1589735553170.0,1779957662893.0,2268152062130.0,1921452147129.0],"oi":[9971758868.0,120608366574.0,65229500384.0,84433916233.0,1556726355.0,59403454696.0,338998286912.0,-20827382699.0],"pretax":[69879081360.0,157273599865.0,67546841474.0,128380635925.0,-4352238230.0,117816888403.0,387982233327.0,-43801322835.0],"ni":[61335308719.0,124833104482.0,57732406426.0,106926826809.0,1442442932.0,96292490134.0,300416958496.0,-22000060866.0],"nip":[61432766781.0,124954395782.0,57671013331.0,106888760941.0,1422568166.0,96265976763.0,300357833239.0,-22047879526.0]}};
 const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
 const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
 let _qtrCurrentMetric=(document.querySelector('#dpQtrMetricNav button')||{dataset:{qm:'oi'}}).dataset.qm;
