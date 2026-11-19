@@ -360,7 +360,7 @@ body{background:var(--dp-bg);}
   <div class="dp-acc-body">
     <div class="dp-tab-row">
       <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
-      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">반기보고서 · 1H26</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">3분기보고서 · 3Q26</button>
     </div>
 
     <div id="dpFundAnnual">
@@ -417,7 +417,7 @@ body{background:var(--dp-bg);}
 
     <div id="dpFundQuarter" style="display:none;">
 <!-- fundq:start -->
-      <div class="dp-secl">분기별 실적 (8개 분기, 3Q24~2Q26)</div>
+      <div class="dp-secl">분기별 실적 (8개 분기, 4Q24~3Q26)</div>
       <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
         <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
         <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
@@ -429,27 +429,80 @@ body{background:var(--dp-bg);}
       <svg id="fundQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
       <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 분기·반기·사업보고서의 3개월 단독 실적. 4분기는 사업보고서 연간 실적에서 3분기 누적을 뺀 값. 분기 이름 아래 ▲▼는 전년 동기 대비 증감.</div>
 <!-- fundq:end -->
+<!-- q3qa:start -->
+    <div class="dp-qa" id="dpQtrQA">
+      <div class="dp-qa-h">항목별 Q&amp;A <small>3Q26 기준 · 위 지표 버튼을 누르면 해당 항목으로 바뀝니다</small></div>
+      <div class="dp-qa-set" data-qm="rev">
+        <div class="dp-qa-t">매출액</div>
+        <dl>
+          <dt>Q. 3분기 매출은?</dt>
+          <dd>3,629억으로 1년 전보다 5.9% 늘었다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 매출 1조 844억으로 1년 전보다 7.1% 많다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="oi">
+        <div class="dp-qa-t">영업이익</div>
+        <dl>
+          <dt>Q. 3분기 영업이익은?</dt>
+          <dd>192억으로 1년 전보다 51.3%, 2Q26(591억)보다 67.6% 줄었다. 영업이익률은 5.3%다.</dd>
+          <dt>Q. 왜 줄었나?</dt>
+          <dd>2분기에는 자회사 한미약품의 일라이 릴리 계약금이 들어왔고, 3분기로 예상됐던 제넨텍 계약금이 4분기로 밀렸다. 누적 영업이익은 1,119억(▲10.8%)이다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="pretax">
+        <div class="dp-qa-t">세전이익</div>
+        <dl>
+          <dt>Q. 영업 밖에서는?</dt>
+          <dd>3분기 영업외 손실 -58억으로 세전이익은 134억이다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 세전이익 1,154억으로 1년 전보다 20.4% 많다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="ni">
+        <div class="dp-qa-t">순이익</div>
+        <dl>
+          <dt>Q. 3분기 순이익은?</dt>
+          <dd>156억으로 1년 전보다 51.1% 줄었다. 법인세가 이익으로 잡혀 세전이익보다 많다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 순이익 1,015억으로 1년 전보다 19.9% 많다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="nip">
+        <div class="dp-qa-t">지배주주순이익</div>
+        <dl>
+          <dt>Q. 지배주주 순이익은?</dt>
+          <dd>3분기 156억(▼51.8%), 누적 1,019억(▲18.4%)이다.</dd>
+          <dt>Q. EPS는?</dt>
+          <dd>누적 EPS 1,505원, 연환산 2,007원으로 2025년(1,748원)보다 15% 높다. 4분기 제넨텍 계약금 반영 여부가 연간 실적을 좌우한다.</dd>
+        </dl>
+      </div>
+    </div>
+    <script>(function(){var b=document.getElementById('dpQtrQA'),n=document.getElementById('dpQtrMetricNav');if(!b)return;b.classList.add('js');function s(){var a=n&&n.querySelector('button.active'),k=a?a.dataset.qm:'rev';b.querySelectorAll('.dp-qa-set').forEach(function(e){e.classList.toggle('on',e.dataset.qm===k)});}if(n)n.addEventListener('click',function(){setTimeout(s,0)});s();})();</script>
+<!-- q3qa:end -->
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업수익</span><span class="v up">7,215.6억 (▲7.6%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v up">927.0억 (▲50.3%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 당기순이익</span><span class="v up">863.7억 (▲63.7%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 매출액</span><span class="v up">1조 844억 (전년동기比 ▲7.1%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 영업이익</span><span class="v up">1,119억 (전년동기比 ▲10.8%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 지배주주 순이익</span><span class="v up">1,019억 (전년동기比 ▲18.4%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 단독 영업이익</span><span class="v dn">192억 (3Q25 대비 ▼51.3%, 2Q26 대비 ▼67.6%)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 기본EPS</span><span class="v up">1,275원 (전년 동기 795원)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 부채비율</span><span class="v">44.4% (2025년 말 55.2%)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 현금성자산</span><span class="v">982.8억 (단기차입금 1,690억)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 기본EPS</span><span class="v up">1,505원 (연환산 2,007원)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 부채비율</span><span class="v">44.9%</span></div>
+          <div class="dp-row2"><span class="l">9월 말 지배지분</span><span class="v">1조 592억 (작년 말 대비 ▲10.1%)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 현금성자산</span><span class="v">993억</span></div>
         </div>
       </div>
       <!-- fundq-insight:start -->
       <div class="dp-insight" style="margin-bottom:10px;">
         <div class="dp-insight-t">분기 실적 — 2개년 흐름</div>
-        <div class="dp-insight-b">최근 8개 분기(3Q24~2Q26) 영업이익은 224억→591억. 2Q26 영업이익은 전년 동기(2Q25) 346억 대비 ▲70.9%, 직전 분기(1Q26) 대비 ▲76.2%. 이 기간 분기 최고는 2Q26(591억).</div>
+        <div class="dp-insight-b">최근 8개 분기(4Q24~3Q26) 영업이익은 126억→192억. 3Q26 영업이익은 전년 동기(3Q25) 393억 대비 ▼51.3%, 직전 분기(2Q26) 대비 ▼67.6%. 이 기간 분기 최고는 2Q26(591억).</div>
       </div>
 <!-- fundq-insight:end -->
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심</div>
-        <div class="dp-insight-b">1분기 영업이익은 335.6억, 2분기는 591.4억으로 전년 동기(346.1억)보다 70.9% 늘었다. 2분기 연결 영업수익은 3,678.6억이다. 2분기 증가분에는 한미약품이 6월 일라이 릴리에 기술이전하며 받은 계약금 7,500만달러가 반영됐다. 상반기 EPS는 1,275원으로 이미 2025년 연간(1,748원)의 73%다. 6월 말 부채비율은 44.4%로 낮아졌다.</div>
+        <div class="dp-insight-t">3분기보고서 핵심 — 전년동기(3Q25 누적) 대비</div>
+        <div class="dp-insight-b">3Q26 영업이익은 192억으로 1년 전보다 51.3%, 2Q26(591억)보다 67.6% 줄었다. 매출은 3,629억으로 1년 전보다 5.9% 많지만 영업이익률이 5.3%로 2분기(16.1%)의 3분의 1이다. 2분기에는 자회사 한미약품의 일라이 릴리 기술이전 계약금이 들어왔고, 3분기에는 제넨텍 계약금이 4분기로 밀린 영향이 그대로 나타났다. 지배주주 순이익은 156억(▼51.8%)이다. 누적으로는 매출 1조 844억(▲7.1%), 영업이익 1,119억(▲10.8%), 지배주주 순이익 1,019억(▲18.4%)으로 1년 전보다 많다. 누적 EPS 1,505원의 연환산(2,007원)은 2025년 EPS(1,748원)보다 15% 높다. 지주회사 실적이 한미약품의 기술료 유입 시점에 따라 크게 흔들리는 구조라, 4분기 제넨텍 계약금 반영 여부가 연간 실적을 좌우한다. 9월 말 부채비율은 44.9%다.</div>
       </div>
     </div>
   </div>
@@ -478,7 +531,7 @@ body{background:var(--dp-bg);}
     <!-- dp-vscore:end -->
     <div class="dp-share4">
       <div class="dp-share"><div class="dp-share-l">2025 EPS</div><div class="dp-share-v">1,748원</div><div class="dp-share-s">▲99.1%</div></div>
-      <div class="dp-share"><div class="dp-share-l">1H26 EPS</div><div class="dp-share-v">1,275원</div><div class="dp-share-s">▲60.4%</div></div>
+      <div class="dp-share"><div class="dp-share-l">3Q26 누적 EPS</div><div class="dp-share-v">1,505원</div><div class="dp-share-s">연환산 2,007원</div></div>
       <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">15,661원</div><div class="dp-share-s">지배지분 기준(6월 말)</div></div>
       <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">300원</div><div class="dp-share-s">전년과 같음</div></div>
     </div>
@@ -794,6 +847,12 @@ body{background:var(--dp-bg);}
         <div class="dp-tl-title">하루 -12.1% · 공개매수 규정 위반 논란</div>
         <div class="dp-tl-body">뚜렷한 공시 없이 한미약품(-11%)과 함께 하루 12.1% 내려 44,150원이 됐다. 10/15~16에는 신 회장이 2월·7월·10월 세 차례 장외 계약으로 13.74%를 사들이면서 공개매수 의무를 어겼을 수 있다는 보도가 나왔다. 위반이 인정되면 해당 주식의 의결권이 제한되거나 처분 명령이 내려질 수 있다. 10/16 종가는 47,700원(+4.95%)이다.</div>
       </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.11.13 (3분기보고서)</div>
+        <div class="dp-tl-title">3Q26 분기보고서 — 영업이익 192억, 기술료 공백으로 감소</div>
+        <div class="dp-tl-body">3분기 영업이익 192억(전년동기 대비 ▼51.3%), 지배주주 순이익 156억(▼51.8%). 한미약품 기술료 공백 영향. 누적 순이익 1,019억(▲18.4%).</div>
+      </div>
     </div>
   </div>
 </div>
@@ -805,7 +864,7 @@ body{background:var(--dp-bg);}
       <div>
         <div class="dp-thesis-t bull">긍정 요인</div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>핵심 자회사 한미약품의 기술이전(릴리 최대 12.6억달러, 제넨텍 최대 23억달러)과 비만약 에페 국내 허가</span></div>
-        <div class="dp-thesis-item bull"><span class="dot">●</span><span>1H26 연결 영업이익 927억(+50.3%), 상반기 EPS가 이미 2025년 연간의 73%</span></div>
+        <div class="dp-thesis-item bull"><span class="dot">●</span><span>3Q26 누적 영업이익 1,119억(+10.8%), 누적 EPS가 2025년 연간의 86%</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>신 회장의 경영권 지분 장외 매입 가격(주당 47,920~48,469원)이 현 주가와 비슷한 수준</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>6월 말 부채비율 44.4%로 재무 부담이 작음</span></div>
         <div class="dp-thesis-item bull"><span class="dot">●</span><span>배당 2023년 200원 → 2024~2025년 300원으로 증가</span></div>
@@ -1178,7 +1237,7 @@ function svgEl(tag,attrs){
 }
 
 // -- fund-report:start (valuation/fund_render.py)
-const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[950164817343.0,1046054210838.0,1247906379068.0,1283432295647.0,1356957532846.0],"oi":[58852290702.0,67626014492.0,124468680998.0,98867912225.0,138727168534.0],"nip":[42939923264.0,69209578706.0,115121512760.0,59421641043.0,118369957151.0],"qLabels":["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26"],"q":{"rev":[322474261036.0,331709849606.0,332150251048.0,338268934102.0,342511980369.0,344026367327.0,353702972178.0,367856377182.0],"oi":[22434807077.0,12641249905.0,27066600134.0,34612153908.0,39301846394.0,37746568098.0,33561995850.0,59138229385.0],"pretax":[19456752676.0,-13406638009.0,26667914993.0,31548275897.0,37621223367.0,37165802009.0,45333417810.0,56642749875.0],"ni":[17253322871.0,-12001059347.0,24449889577.0,28324627476.0,31876259454.0,33058428987.0,42287152823.0,43666529867.0],"nip":[17785684736.0,-10969010436.0,25064018484.0,28764564075.0,32282017752.0,32259356840.0,42708345999.0,43665583675.0]}};
+const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[950164817343.0,1046054210838.0,1247906379068.0,1283432295647.0,1356957532846.0],"oi":[58852290702.0,67626014492.0,124468680998.0,98867912225.0,138727168534.0],"nip":[42939923264.0,69209578706.0,115121512760.0,59421641043.0,118369957151.0],"qLabels":["4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26","3Q26"],"q":{"rev":[331709849606.0,332150251048.0,338268934102.0,342511980369.0,344026367327.0,353702972178.0,367856377182.0,362877665408.0],"oi":[12641249905.0,27066600134.0,34612153908.0,39301846394.0,37746568098.0,33561995850.0,59138229385.0,19150475700.0],"pretax":[-13406638009.0,26667914993.0,31548275897.0,37621223367.0,37165802009.0,45333417810.0,56642749875.0,13397471994.0],"ni":[-12001059347.0,24449889577.0,28324627476.0,31876259454.0,33058428987.0,42287152823.0,43666529867.0,15575586337.0],"nip":[-10969010436.0,25064018484.0,28764564075.0,32282017752.0,32259356840.0,42708345999.0,43665583675.0,15574206264.0]}};
 const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
 const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
 let _qtrCurrentMetric=(document.querySelector('#dpQtrMetricNav button')||{dataset:{qm:'oi'}}).dataset.qm;
