@@ -363,7 +363,7 @@ body{background:var(--dp-bg);}
   <div class="dp-acc-body">
     <div class="dp-tab-row">
       <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
-      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">반기보고서 · 1H26</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">3분기보고서 · 3Q26</button>
     </div>
 
     <div id="dpFundAnnual">
@@ -420,7 +420,7 @@ body{background:var(--dp-bg);}
 
     <div id="dpFundQuarter" style="display:none;">
 <!-- fundq:start -->
-      <div class="dp-secl">분기별 실적 (8개 분기, 3Q24~2Q26)</div>
+      <div class="dp-secl">분기별 실적 (8개 분기, 4Q24~3Q26)</div>
       <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
         <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
         <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
@@ -432,27 +432,80 @@ body{background:var(--dp-bg);}
       <svg id="fundQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
       <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 분기·반기·사업보고서의 3개월 단독 실적. 4분기는 사업보고서 연간 실적에서 3분기 누적을 뺀 값. 분기 이름 아래 ▲▼는 전년 동기 대비 증감.</div>
 <!-- fundq:end -->
+<!-- q3qa:start -->
+    <div class="dp-qa" id="dpQtrQA">
+      <div class="dp-qa-h">항목별 Q&amp;A <small>3Q26 기준 · 위 지표 버튼을 누르면 해당 항목으로 바뀝니다</small></div>
+      <div class="dp-qa-set" data-qm="rev">
+        <div class="dp-qa-t">매출액</div>
+        <dl>
+          <dt>Q. 3분기 매출은?</dt>
+          <dd>3조 3,581억으로 1년 전보다 9.5% 늘었고 2Q26과 비슷하다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 매출 9조 9,527억으로 1년 전보다 9.3% 많다. 택배 물동량이 늘었다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="oi">
+        <div class="dp-qa-t">영업이익</div>
+        <dl>
+          <dt>Q. 3분기 영업이익은?</dt>
+          <dd>1,105억으로 1년 전보다 25.3% 줄었고 2Q26보다 8.8% 늘었다. 영업이익률은 3.3%다.</dd>
+          <dt>Q. 왜 줄었나?</dt>
+          <dd>허브터미널 운영비 등 원가 부담이 이익을 누르고 있다. 누적 영업이익은 3,042억(▼12.7%)이다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="pretax">
+        <div class="dp-qa-t">세전이익</div>
+        <dl>
+          <dt>Q. 영업 밖에서는?</dt>
+          <dd>3분기 영업외 손실 -459억, 누적 -1,377억으로 1년 전(-1,159억)보다 크다.</dd>
+          <dt>Q. 3분기 세전이익은?</dt>
+          <dd>646억으로 1년 전보다 39.6% 줄었다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="ni">
+        <div class="dp-qa-t">순이익</div>
+        <dl>
+          <dt>Q. 3분기 순이익은?</dt>
+          <dd>연결 순이익 547억으로 1년 전보다 25.5% 줄었다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 순이익 1,294억으로 1년 전보다 25.0% 적다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="nip">
+        <div class="dp-qa-t">지배주주순이익</div>
+        <dl>
+          <dt>Q. 지배주주 순이익은?</dt>
+          <dd>3분기 538억(▼24.3%), 누적 1,230억(▼22.8%)이다.</dd>
+          <dt>Q. EPS와 4분기는?</dt>
+          <dd>누적 EPS 5,584원, 연환산 7,445원으로 2025년(11,347원)보다 낮다. 4분기가 성수기(4Q25 영업이익 1,596억)라 연간은 연환산보다 나을 수 있다.</dd>
+        </dl>
+      </div>
+    </div>
+    <script>(function(){var b=document.getElementById('dpQtrQA'),n=document.getElementById('dpQtrMetricNav');if(!b)return;b.classList.add('js');function s(){var a=n&&n.querySelector('button.active'),k=a?a.dataset.qm:'rev';b.querySelectorAll('.dp-qa-set').forEach(function(e){e.classList.toggle('on',e.dataset.qm===k)});}if(n)n.addEventListener('click',function(){setTimeout(s,0)});s();})();</script>
+<!-- q3qa:end -->
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1H26 연결 매출액</span><span class="v up">6조 5,945억 (▲9.2%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v" style="color:var(--dp-down);">1,937억 (▼3.5%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 지배주주 순이익</span><span class="v" style="color:var(--dp-down);">693억 (▼21.6%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 매출액</span><span class="v up">9조 9,527억 (전년동기比 ▲9.3%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 영업이익</span><span class="v dn">3,042억 (전년동기比 ▼12.7%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 지배주주 순이익</span><span class="v dn">1,230억 (전년동기比 ▼22.8%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 단독 영업이익</span><span class="v up">1,105억 (3Q25 대비 ▼25.3%, 2Q26 대비 ▲8.8%)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 기본EPS</span><span class="v" style="color:var(--dp-down);">3,083원 (전년 동기 4,037원)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 부채비율</span><span class="v">142.2% (2025년 말 132.9%)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 현금성자산</span><span class="v">2,567억</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 기본EPS</span><span class="v up">5,584원 (연환산 7,445원)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 부채비율</span><span class="v">144.9%</span></div>
+          <div class="dp-row2"><span class="l">9월 말 지배지분</span><span class="v">4조 1,073억 (작년 말 대비 ▼0.9%)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 현금성자산</span><span class="v">3,775억</span></div>
         </div>
       </div>
       <!-- fundq-insight:start -->
       <div class="dp-insight" style="margin-bottom:10px;">
         <div class="dp-insight-t">분기 실적 — 2개년 흐름</div>
-        <div class="dp-insight-b">최근 8개 분기(3Q24~2Q26) 영업이익은 1,416억→1,016억. 2Q26 영업이익은 전년 동기(2Q25) 1,152억 대비 ▼11.9%, 직전 분기(1Q26) 대비 ▲10.3%. 이 기간 분기 최고는 4Q25(1,596억).</div>
+        <div class="dp-insight-b">최근 8개 분기(4Q24~3Q26) 영업이익은 1,543억→1,105억. 3Q26 영업이익은 전년 동기(3Q25) 1,479억 대비 ▼25.3%, 직전 분기(2Q26) 대비 ▲8.8%. 이 기간 분기 최고는 4Q25(1,596억).</div>
       </div>
 <!-- fundq-insight:end -->
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심</div>
-        <div class="dp-insight-b">1분기는 매출 3조 2,145억(+7.4%), 영업이익 921억(전년 동기 854억)이었고, 증권사들은 택배 물동량이 14% 늘었지만 허브 투자에 따른 원가 부담으로 컨센서스를 밑돌았다고 평가했다. 2분기는 매출 3조 3,800억(+10.9%), 영업이익 1,016억(-11.8%)으로 모든 사업부의 외형은 커졌지만 허브터미널 운영비와 지정학 리스크에 따른 원가 상승으로 이익이 줄었다. 상반기 지배주주 순이익은 693억으로 22% 감소했다.</div>
+        <div class="dp-insight-t">3분기보고서 핵심 — 전년동기(3Q25 누적) 대비</div>
+        <div class="dp-insight-b">3Q26 매출 3조 3,581억은 1년 전보다 9.5% 늘었지만, 영업이익은 1,105억으로 1년 전보다 25.3% 적다. 2Q26(1,016억)보다는 8.8% 늘어 1분기부터 조금씩 회복하고 있다. 영업이익률은 3.3%다. 택배 물동량은 늘고 있지만 허브터미널 운영비 등 원가 부담이 이익을 누르는 흐름이 이어졌다. 영업외 손실(-459억)로 지배주주 순이익은 538억(▼24.3%)이다. 누적으로는 매출 9조 9,527억(▲9.3%), 영업이익 3,042억(▼12.7%), 지배주주 순이익 1,230억(▼22.8%)이다. 누적 EPS 5,584원의 연환산(7,445원)은 2025년 EPS(11,347원)보다 34% 낮다. 택배는 4분기가 성수기(4Q25 영업이익 1,596억)라 연간은 연환산보다 나을 수 있지만, 2026년 연간 이익은 2025년보다 낮을 가능성이 크다. 9월 말 부채비율은 144.9%다.</div>
       </div>
     </div>
   </div>
@@ -481,7 +534,7 @@ body{background:var(--dp-bg);}
     <!-- dp-vscore:end -->
     <div class="dp-share4">
       <div class="dp-share"><div class="dp-share-l">2025 EPS</div><div class="dp-share-v">11,347원</div><div class="dp-share-s">▼6.1%</div></div>
-      <div class="dp-share"><div class="dp-share-l">1H26 EPS</div><div class="dp-share-v">3,083원</div><div class="dp-share-s">▼23.6%</div></div>
+      <div class="dp-share"><div class="dp-share-l">3Q26 누적 EPS</div><div class="dp-share-v">5,584원</div><div class="dp-share-s">연환산 7,445원</div></div>
       <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">209,877원</div><div class="dp-share-s">지배지분 기준(6월 말)</div></div>
       <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">800원</div><div class="dp-share-s">전년과 같음</div></div>
     </div>
@@ -870,6 +923,12 @@ body{background:var(--dp-bg);}
         <div class="dp-tl-title">52주 최저 · 3분기 실적 프리뷰</div>
         <div class="dp-tl-body">10/13 장중 67,700원으로 최근 1년 최저가를 기록했다. 10/20 하나증권(영업이익 1,128억, -24% 전망)과 미래에셋증권(1,109억)이 추석 연휴에 따른 영업일수 감소와 비용 부담으로 3분기 실적이 기대에 못 미칠 것으로 내다봤다. 10/20 종가 68,500원은 최근 1년 최저 종가다.</div>
       </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.11.13 (3분기보고서)</div>
+        <div class="dp-tl-title">3Q26 분기보고서 — 영업이익 1,105억, 전년동기 대비 25.3% 감소</div>
+        <div class="dp-tl-body">3분기 매출 3조 3,581억(▲9.5%)이나 영업이익 1,105억(▼25.3%), 지배주주 순이익 538억(▼24.3%). 누적 순이익 1,230억(▼22.8%).</div>
+      </div>
     </div>
   </div>
 </div>
@@ -891,7 +950,7 @@ body{background:var(--dp-bg);}
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>52주 고점 대비 -53.0% · 실적 회복 시점 불확실</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>택배 단가 10개 분기 연속 하락 · 쿠팡 등과의 경쟁 심화</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>허브터미널 운영비·주말 배송 비용 증가로 택배 이익률 하락</span></div>
-        <div class="dp-thesis-item bear"><span class="dot">●</span><span>1H26 지배주주 순이익 -22% · 2026년 컨센서스 EPS도 전년보다 낮음</span></div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>3Q26 누적 지배주주 순이익 -22.8% · 2026년 컨센서스 EPS도 전년보다 낮음</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>배당성향 6.6%로 낮은 주주환원</span></div>
       </div>
     </div>
@@ -1258,7 +1317,7 @@ function svgEl(tag,attrs){
 }
 
 // -- fund-report:start (valuation/fund_render.py)
-const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[11343651787492.0,12130712862374.0,11767893663269.0,12116761147160.0,12284652471280.0],"oi":[343880765667.0,411786887242.0,480234863157.0,530663067133.0,508080820628.0],"nip":[54742329035.0,181552551813.0,224803078902.0,248485572988.0,242080917610.0],"qLabels":["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26"],"q":{"rev":[2975813507770.0,3160339664857.0,2992585545195.0,3048408107265.0,3066608005887.0,3177050812933.0,3214545850775.0,3379978742005.0],"oi":[141611194932.0,154325983739.0,85366748157.0,115243326538.0,147907354731.0,159563391203.0,92105347826.0,101566441444.0],"pretax":[83845022196.0,134331791825.0,52780966618.0,72824508264.0,107057210999.0,97021569219.0,55441823029.0,46463468234.0],"ni":[59965743742.0,91613294097.0,40977283248.0,58185410405.0,73426555369.0,86153710801.0,37943224687.0,36766682558.0],"nip":[54824203279.0,92013009057.0,35854635110.0,52546442360.0,71062116780.0,82617723360.0,34632507119.0,34627769213.0]}};
+const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[11343651787492.0,12130712862374.0,11767893663269.0,12116761147160.0,12284652471280.0],"oi":[343880765667.0,411786887242.0,480234863157.0,530663067133.0,508080820628.0],"nip":[54742329035.0,181552551813.0,224803078902.0,248485572988.0,242080917610.0],"qLabels":["4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26","3Q26"],"q":{"rev":[3160339664857.0,2992585545195.0,3048408107265.0,3066608005887.0,3177050812933.0,3214545850775.0,3379978742005.0,3358142208878.0],"oi":[154325983739.0,85366748157.0,115243326538.0,147907354731.0,159563391203.0,92105347826.0,101566441444.0,110549139303.0],"pretax":[134331791825.0,52780966618.0,72824508264.0,107057210999.0,97021569219.0,55441823029.0,46463468234.0,64622837467.0],"ni":[91613294097.0,40977283248.0,58185410405.0,73426555369.0,86153710801.0,37943224687.0,36766682558.0,54672597039.0],"nip":[92013009057.0,35854635110.0,52546442360.0,71062116780.0,82617723360.0,34632507119.0,34627769213.0,53778840142.0]}};
 const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
 const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
 let _qtrCurrentMetric=(document.querySelector('#dpQtrMetricNav button')||{dataset:{qm:'oi'}}).dataset.qm;

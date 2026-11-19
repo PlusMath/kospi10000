@@ -359,7 +359,7 @@ body{background:var(--dp-bg);}
   <div class="dp-acc-body">
     <div class="dp-tab-row">
       <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
-      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">반기보고서 · 1H26</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">3분기보고서 · 3Q26</button>
     </div>
 
     <div id="dpFundAnnual">
@@ -416,7 +416,7 @@ body{background:var(--dp-bg);}
 
     <div id="dpFundQuarter" style="display:none;">
 <!-- fundq:start -->
-      <div class="dp-secl">분기별 실적 (8개 분기, 3Q24~2Q26)</div>
+      <div class="dp-secl">분기별 실적 (8개 분기, 4Q24~3Q26)</div>
       <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
         <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
         <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
@@ -428,27 +428,80 @@ body{background:var(--dp-bg);}
       <svg id="fundQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
       <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 분기·반기·사업보고서의 3개월 단독 실적. 4분기는 사업보고서 연간 실적에서 3분기 누적을 뺀 값. 분기 이름 아래 ▲▼는 전년 동기 대비 증감.</div>
 <!-- fundq:end -->
+<!-- q3qa:start -->
+    <div class="dp-qa" id="dpQtrQA">
+      <div class="dp-qa-h">항목별 Q&amp;A <small>3Q26 기준 · 위 지표 버튼을 누르면 해당 항목으로 바뀝니다</small></div>
+      <div class="dp-qa-set" data-qm="rev">
+        <div class="dp-qa-t">매출액</div>
+        <dl>
+          <dt>Q. 3분기 매출은?</dt>
+          <dd>1조 8,189억으로 1년 전보다 8.2% 늘었다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 매출 5조 3,435억으로 1년 전보다 5.3% 적다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="oi">
+        <div class="dp-qa-t">영업이익</div>
+        <dl>
+          <dt>Q. 3분기 영업손실은?</dt>
+          <dd>-1,824억으로 2Q26(-3,563억)보다 줄었지만 적자가 이어졌다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 영업손실 -5,910억으로 1년 전(-1,492억)보다 크다. 고유가·고환율과 통합 준비 비용이 원인으로 꼽힌다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="pretax">
+        <div class="dp-qa-t">세전이익</div>
+        <dl>
+          <dt>Q. 세전이익이 왜 흑자인가?</dt>
+          <dd>3분기 영업외 이익이 5,119억이다. 대한항공과 마찬가지로 환율 하락에 따른 외화환산이익으로 보인다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 세전이익은 -5,324억으로 적자다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="ni">
+        <div class="dp-qa-t">순이익</div>
+        <dl>
+          <dt>Q. 3분기 순이익은?</dt>
+          <dd>연결 순이익 2,660억으로 흑자다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 순손실 -3,929억이다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="nip">
+        <div class="dp-qa-t">지배주주순이익</div>
+        <dl>
+          <dt>Q. 지배주주 순이익은?</dt>
+          <dd>3분기 2,352억, 누적 -3,804억이다.</dd>
+          <dt>Q. 자본과 주가는?</dt>
+          <dd>9월 말 지배지분이 작년 말보다 51.9% 줄어 부채비율이 2,427%다. 대한항공과의 합병(비율 0.2736)이 확정돼 주가는 대한항공을 따라간다.</dd>
+        </dl>
+      </div>
+    </div>
+    <script>(function(){var b=document.getElementById('dpQtrQA'),n=document.getElementById('dpQtrMetricNav');if(!b)return;b.classList.add('js');function s(){var a=n&&n.querySelector('button.active'),k=a?a.dataset.qm:'rev';b.querySelectorAll('.dp-qa-set').forEach(function(e){e.classList.toggle('on',e.dataset.qm===k)});}if(n)n.addEventListener('click',function(){setTimeout(s,0)});s();})();</script>
+<!-- q3qa:end -->
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1H26 연결 매출액</span><span class="v" style="color:var(--dp-down);">3조 5,246억 (▼11.0%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v" style="color:var(--dp-down);">-4,086.4억 (적자 전환, 전년 동기 484.8억)</span></div>
-          <div class="dp-row2"><span class="l">1H26 지배주주 순이익</span><span class="v" style="color:var(--dp-down);">-6,156.0억 (전년 동기 2,866.9억)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 매출액</span><span class="v dn">5조 3,435억 (전년동기比 ▼5.3%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 영업이익</span><span class="v dn">-5,910억 (전년동기比 적자지속)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 지배주주 순이익</span><span class="v dn">-3,804억 (전년동기比 적자지속)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 단독 영업이익</span><span class="v dn">-1,824억 (3Q25 대비 적자축소, 2Q26 대비 적자축소)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 기본EPS</span><span class="v" style="color:var(--dp-down);">-3,045원 (전년 동기 1,356원)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 자본총계</span><span class="v" style="color:var(--dp-down);">2,135.6억 (2025년 말 8,289.8억, 부채비율 5,496%)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 차입금·사채</span><span class="v">약 1조 7,591억 (현금성자산 3,611억)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 기본EPS</span><span class="v dn">-1,938원 (연환산 -2,584원)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 부채비율</span><span class="v">2427.4%</span></div>
+          <div class="dp-row2"><span class="l">9월 말 지배지분</span><span class="v">3,585억 (작년 말 대비 ▼51.9%)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 현금성자산</span><span class="v">4,354억</span></div>
         </div>
       </div>
       <!-- fundq-insight:start -->
       <div class="dp-insight" style="margin-bottom:10px;">
         <div class="dp-insight-t">분기 실적 — 2개년 흐름</div>
-        <div class="dp-insight-b">최근 8개 분기(3Q24~2Q26) 영업이익은 1,768억→-3,563억. 2Q26 영업이익은 전년 동기(2Q25) -69억 대비 적자지속, 직전 분기(1Q26) 대비 적자지속. 이 기간 분기 최고는 3Q24(1,768억).</div>
+        <div class="dp-insight-b">최근 8개 분기(4Q24~3Q26) 영업이익은 186억→-1,824억. 3Q26 영업이익은 전년 동기(3Q25) -1,977억 대비 적자축소, 직전 분기(2Q26) 대비 적자축소. 이 기간 분기 최고는 1Q25(554억).</div>
       </div>
 <!-- fundq-insight:end -->
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심</div>
-        <div class="dp-insight-b">1분기는 매출 1조 6,804억, 영업손실 524억이었다. 여객 공급 감소와 통합 준비 비용(인천공항 2터미널 이전, 마일리지 통합 등)이 영업손실 원인으로 꼽혔고, 원·달러 환율이 1,500원을 넘으면서 외화환산손실이 커져 순손실이 늘었다(보도). 2분기에는 매출 1조 8,441억에 영업손실이 3,563억으로 커졌는데, 고유가와 고환율이 원인으로 꼽혔다(별도 기준 영업손실 2,951억, 보도). 상반기 지배주주 순손실 6,156억이 자본을 깎아 6월 말 자본총계는 2,136억, 부채비율은 5,496%가 됐다.</div>
+        <div class="dp-insight-t">3분기보고서 핵심 — 전년동기(3Q25 누적) 대비</div>
+        <div class="dp-insight-b">3Q26 영업손실은 -1,824억으로 2Q26(-3,563억)보다 줄었지만 적자가 이어졌다. 매출은 1조 8,189억으로 1년 전보다 8.2% 많다. 그런데 영업외 이익이 5,119억으로 세전이익 3,295억, 지배주주 순이익 2,352억을 냈다. 대한항공과 마찬가지로 3분기 환율 하락에 따른 외화환산이익으로 보인다. 그래도 누적으로는 영업손실 -5,910억(1년 전 -1,492억), 지배주주 순손실 -3,804억으로 적자가 크다. 고유가·고환율과 통합 준비 비용이 영업손실의 원인으로 꼽힌다. 누적 EPS는 -1,938원이다. 상반기 순손실로 자본이 줄어 9월 말 지배지분은 작년 말보다 51.9% 적은 3,585억이고, 부채비율은 2,427%에 이른다. 대한항공과의 합병(합병비율 0.2736)이 확정돼 주가는 자체 이익보다 대한항공 주가에 따라 움직인다.</div>
       </div>
     </div>
   </div>
@@ -477,7 +530,7 @@ body{background:var(--dp-bg);}
     <!-- dp-vscore:end -->
     <div class="dp-share4">
       <div class="dp-share"><div class="dp-share-l">2025 EPS</div><div class="dp-share-v">-1,446원</div><div class="dp-share-s">적자 지속(전년 -6,052원)</div></div>
-      <div class="dp-share"><div class="dp-share-l">1H26 EPS</div><div class="dp-share-v">-3,045원</div><div class="dp-share-s">적자 전환(전년 동기 1,356원)</div></div>
+      <div class="dp-share"><div class="dp-share-l">3Q26 누적 EPS</div><div class="dp-share-v">-1,938원</div><div class="dp-share-s">연환산 -2,584원</div></div>
       <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">644원</div><div class="dp-share-s">6월 말 지배지분 ÷ 유통주식</div></div>
       <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">0원</div><div class="dp-share-s">무배당</div></div>
     </div>
@@ -504,7 +557,7 @@ body{background:var(--dp-bg);}
       </div>
       <div class="dp-insight" style="margin-top:12px;">
                 <div class="dp-insight-t">해석</div>
-                <div class="dp-insight-b">2024~2025년 연속 순손실이었고 1H26 지배주주 순손실도 6,156억이다. 대한항공과의 합병이 확정돼 주가는 아시아나 자체 이익보다 대한항공 주가(합병비율 0.2736)에 맞춰 움직인다.</div>
+                <div class="dp-insight-b">2024~2025년 연속 순손실이었고 3Q26 누적 지배주주 순손실도 3,804억이다(3분기는 환율 이익으로 흑자). 대한항공과의 합병이 확정돼 주가는 아시아나 자체 이익보다 대한항공 주가(합병비율 0.2736)에 맞춰 움직인다.</div>
               </div>
     </div>
         <div class="dp-gauge dp-metric-detail" data-metric="fpe">
@@ -754,6 +807,12 @@ body{background:var(--dp-bg);}
         <div class="dp-tl-title">대한항공 급락에 -9.3%</div>
         <div class="dp-tl-body">10/16 대한항공이 -10.5% 떨어지자 아시아나도 -9.3%(7,120원) 하락했다. 원인은 확인되지 않았다. 10/20 종가 7,050원은 합병비율로 환산한 대한항공 주가(7,183원)보다 약 1.9% 낮다.</div>
       </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.11.12 (3분기보고서)</div>
+        <div class="dp-tl-title">3Q26 분기보고서 — 영업손실 -1,824억, 환율 이익으로 순이익 2,352억</div>
+        <div class="dp-tl-body">3분기 영업손실 -1,824억이나 외화환산이익 추정 영업외 이익 5,119억으로 지배주주 순이익 2,352억. 누적 순손실 -3,804억.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -771,7 +830,7 @@ body{background:var(--dp-bg);}
       </div>
       <div>
         <div class="dp-thesis-t bear">리스크 요인</div>
-        <div class="dp-thesis-item bear"><span class="dot">●</span><span>2Q26 연결 영업손실 3,563억, 1H26 지배주주 순손실 6,156억으로 적자 확대</span></div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>3Q26 누적 영업손실 5,910억, 지배주주 순손실 3,804억으로 적자 지속</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>6월 말 자본총계 2,136억(2025년 말 8,290억), 부채비율 5,496%</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>고유가·고환율(원·달러 1,500원대)에 따른 연료비 부담과 외화환산손실</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>주가가 대한항공에 연동돼 대한항공의 변동성을 그대로 따름(10/16 -9.3%, 1년간 하루 ±5% 이상 변동 11회)</span></div>
@@ -1137,7 +1196,7 @@ function svgEl(tag,attrs){
 }
 
 // -- fund-report:start (valuation/fund_render.py)
-const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[4339706411421.0,6206669334674.0,7623348347364.0,8318567228711.0,7266849939986.0],"oi":[93203600406.0,598763774896.0,619928673329.0,275690391993.0,-345190261173.0],"nip":[-362476384455.0,110446533188.0,113908049995.0,-419231418105.0,-283040150607.0],"qLabels":["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26"],"q":{"rev":[2177274236412.0,2117079383224.0,2074369008854.0,1887049130097.0,1681231694732.0,1624200106303.0,1680446843752.0,1844111928503.0],"oi":[176803426958.0,18554611294.0,55422125504.0,-6938292714.0,-197658640963.0,-196015453000.0,-52359584762.0,-356276433491.0],"pretax":[265197527394.0,-459041137086.0,183465890286.0,235741731399.0,-436576534236.0,-403428997298.0,-329570257188.0,-532312973834.0],"ni":[208893255419.0,-346946007595.0,144178929117.0,179239780093.0,-336370302908.0,-279548956273.0,-251665702930.0,-407179826673.0],"nip":[176905627057.0,-313364392302.0,125530702448.0,161156638496.0,-307592688218.0,-262134803333.0,-243457705653.0,-372144079561.0]}};
+const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[4339706411421.0,6206669334674.0,7623348347364.0,8318567228711.0,7266849939986.0],"oi":[93203600406.0,598763774896.0,619928673329.0,275690391993.0,-345190261173.0],"nip":[-362476384455.0,110446533188.0,113908049995.0,-419231418105.0,-283040150607.0],"qLabels":["4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26","3Q26"],"q":{"rev":[2117079383224.0,2074369008854.0,1887049130097.0,1681231694732.0,1624200106303.0,1680446843752.0,1844111928503.0,1818913122635.0],"oi":[18554611294.0,55422125504.0,-6938292714.0,-197658640963.0,-196015453000.0,-52359584762.0,-356276433491.0,-182355849392.0],"pretax":[-459041137086.0,183465890286.0,235741731399.0,-436576534236.0,-403428997298.0,-329570257188.0,-532312973834.0,329506315979.0],"ni":[-346946007595.0,144178929117.0,179239780093.0,-336370302908.0,-279548956273.0,-251665702930.0,-407179826673.0,265956090070.0],"nip":[-313364392302.0,125530702448.0,161156638496.0,-307592688218.0,-262134803333.0,-243457705653.0,-372144079561.0,235220924769.0]}};
 const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
 const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
 let _qtrCurrentMetric=(document.querySelector('#dpQtrMetricNav button')||{dataset:{qm:'oi'}}).dataset.qm;

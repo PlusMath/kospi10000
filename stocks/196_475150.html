@@ -291,7 +291,7 @@ body{background:var(--dp-bg);}
   <div class="dp-acc-body">
     <div class="dp-tab-row">
       <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
-      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">반기보고서 · 1H26</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">3분기보고서 · 3Q26</button>
     </div>
 
     <div id="dpFundAnnual">
@@ -342,7 +342,7 @@ body{background:var(--dp-bg);}
 
     <div id="dpFundQuarter" style="display:none;">
 <!-- fundq:start -->
-      <div class="dp-secl">분기별 실적 (8개 분기, 3Q24~2Q26)</div>
+      <div class="dp-secl">분기별 실적 (8개 분기, 4Q24~3Q26)</div>
       <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
         <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
         <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
@@ -354,27 +354,80 @@ body{background:var(--dp-bg);}
       <svg id="fundQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
       <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 분기·반기·사업보고서의 3개월 단독 실적. 4분기는 사업보고서 연간 실적에서 3분기 누적을 뺀 값. 분기 이름 아래 ▲▼는 전년 동기 대비 증감.</div>
 <!-- fundq:end -->
+<!-- q3qa:start -->
+    <div class="dp-qa" id="dpQtrQA">
+      <div class="dp-qa-h">항목별 Q&amp;A <small>3Q26 기준 · 위 지표 버튼을 누르면 해당 항목으로 바뀝니다</small></div>
+      <div class="dp-qa-set" data-qm="rev">
+        <div class="dp-qa-t">매출액</div>
+        <dl>
+          <dt>Q. 3분기 매출은?</dt>
+          <dd>2,280억으로 1년 전의 4.9배다. 태양광·연료전지 프로젝트 인도가 반영됐다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 매출 4,964억(▲260.5%)으로 2025년 연간(3,856억)을 넘었다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="oi">
+        <div class="dp-qa-t">영업이익</div>
+        <dl>
+          <dt>Q. 3분기 영업손익은?</dt>
+          <dd>-37억으로 적자다. 매출은 늘었지만 이익률이 낮다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 영업이익 59억으로 1년 전(118억)의 절반이다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="pretax">
+        <div class="dp-qa-t">세전이익</div>
+        <dl>
+          <dt>Q. 영업 밖에서는?</dt>
+          <dd>3분기 영업외 손실 -83억, 누적 -286억이다. 늘어난 차입의 이자비용이다.</dd>
+          <dt>Q. 세전이익은?</dt>
+          <dd>3분기 -120억, 누적 -227억이다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="ni">
+        <div class="dp-qa-t">순이익</div>
+        <dl>
+          <dt>Q. 3분기 순이익은?</dt>
+          <dd>-123억 순손실이다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 순손실 -203억으로 1년 전(102억 흑자)과 반대다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="nip">
+        <div class="dp-qa-t">지배주주순이익</div>
+        <dl>
+          <dt>Q. 지배주주 순이익과 EPS는?</dt>
+          <dd>비지배지분이 없어 순이익과 같다. 누적 EPS -598원이다.</dd>
+          <dt>Q. 4분기에 볼 것은?</dt>
+          <dd>2025년에는 4분기에 매출 2,480억, 영업이익 412억이 몰렸다. 4분기 프로젝트 인도로 연간 흑자를 회복할 수 있는지가 관건이다.</dd>
+        </dl>
+      </div>
+    </div>
+    <script>(function(){var b=document.getElementById('dpQtrQA'),n=document.getElementById('dpQtrMetricNav');if(!b)return;b.classList.add('js');function s(){var a=n&&n.querySelector('button.active'),k=a?a.dataset.qm:'rev';b.querySelectorAll('.dp-qa-set').forEach(function(e){e.classList.toggle('on',e.dataset.qm===k)});}if(n)n.addEventListener('click',function(){setTimeout(s,0)});s();})();</script>
+<!-- q3qa:end -->
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1H26 연결 매출액</span><span class="v up">2,684.1억 (▲194.1%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v" style="color:var(--dp-down);">95.9억 (▼10.0%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 지배주주 순이익</span><span class="v" style="color:var(--dp-down);">-80.1억 (적자전환)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 매출액</span><span class="v up">4,964억 (전년동기比 ▲260.5%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 영업이익</span><span class="v dn">59억 (전년동기比 ▼50.0%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 지배주주 순이익</span><span class="v dn">-203억 (전년동기比 적자전환)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 단독 영업이익</span><span class="v dn">-37억 (3Q25 대비 적자전환, 2Q26 대비 적자전환)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 기본EPS</span><span class="v" style="color:var(--dp-down);">-236원 (전년 동기 453원)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 부채비율</span><span class="v">363.3% (2025년 말 382.4%)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 현금성자산</span><span class="v">671.3억</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 기본EPS</span><span class="v dn">-598원 (연환산 -797원)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 부채비율</span><span class="v">396.4%</span></div>
+          <div class="dp-row2"><span class="l">9월 말 지배지분</span><span class="v">2,575억 (작년 말 대비 ▼5.7%)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 현금성자산</span><span class="v">2,466억</span></div>
         </div>
       </div>
       <!-- fundq-insight:start -->
       <div class="dp-insight" style="margin-bottom:10px;">
         <div class="dp-insight-t">분기 실적 — 2개년 흐름</div>
-        <div class="dp-insight-b">최근 8개 분기(3Q24~2Q26) 영업이익은 144억→47억. 2Q26 영업이익은 전년 동기(2Q25) 96억 대비 ▼51.2%, 직전 분기(1Q26) 대비 ▼4.6%. 이 기간 분기 최고는 4Q25(412억).</div>
+        <div class="dp-insight-b">최근 8개 분기(4Q24~3Q26) 영업이익은 251억→-37억. 3Q26 영업이익은 전년 동기(3Q25) 12억 대비 적자전환, 직전 분기(2Q26) 대비 적자전환. 이 기간 분기 최고는 4Q25(412억).</div>
       </div>
 <!-- fundq-insight:end -->
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심</div>
-        <div class="dp-insight-b">2분기에 태양광 프로젝트 인도로 매출이 2,409억까지 늘었지만 영업이익은 47억에 그쳤고, 이자비용 등 금융비용 탓에 세전손실 48억, 순손실 29억을 냈다. 1분기(순손실 51억)를 더해 상반기는 순손실 80억으로 적자로 돌아섰다. 하나증권은 2분기가 시장 기대치를 밑돈 원인으로 태양광 구조화 실적 이연과 ESS 부문 적자전환을 꼽았고, 3분기부터 연료전지·풍력 프로젝트 인도와 솔라닉스 5호 잔여 실적 인식으로 실적이 나아질 것으로 봤다. 6월 말 차입금(사채 포함)은 5,792억으로 연초(4,508억)보다 늘었다.</div>
+        <div class="dp-insight-t">3분기보고서 핵심 — 전년동기(3Q25 누적) 대비</div>
+        <div class="dp-insight-b">3Q26 매출은 2,280억으로 1년 전의 4.9배다. 태양광·연료전지 프로젝트 인도가 반영됐다. 그러나 영업손익은 -37억으로 적자가 됐고, 이자 등 영업외 손실(-83억)까지 더해 순손실은 -123억이다. 하나증권이 기대한 3분기 실적 개선은 매출에서만 나타났다. 누적으로는 매출 4,964억(▲260.5%)으로 이미 2025년 연간(3,856억)을 넘었지만, 영업이익은 59억(▼50.0%), 순손실 -203억으로 1년 전(102억 흑자)보다 나빠졌다. 누적 EPS는 -598원이다. 매출 규모에 비해 이익률이 1% 안팎으로 낮고 차입 이자가 이익을 넘는 구조다. 2025년에는 4분기에 매출 2,480억, 영업이익 412억이 몰렸던 만큼, 4분기 프로젝트 인도로 연간 흑자를 회복할 수 있는지가 관건이다. 9월 말 부채비율은 396.4%다.</div>
       </div>
     </div>
   </div>
@@ -403,7 +456,7 @@ body{background:var(--dp-bg);}
     <!-- dp-vscore:end -->
     <div class="dp-share4">
       <div class="dp-share"><div class="dp-share-l">2025 EPS</div><div class="dp-share-v">911원</div><div class="dp-share-s">▲34.6% (2024년은 10개월분)</div></div>
-      <div class="dp-share"><div class="dp-share-l">1H26 EPS</div><div class="dp-share-v">-236원</div><div class="dp-share-s">적자전환 (전년 동기 453원)</div></div>
+      <div class="dp-share"><div class="dp-share-l">3Q26 누적 EPS</div><div class="dp-share-v">-598원</div><div class="dp-share-s">연환산 -797원</div></div>
       <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">7,888원</div><div class="dp-share-s">지배지분 기준(6월 말)</div></div>
       <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">0원</div><div class="dp-share-s">무배당</div></div>
     </div>
@@ -432,7 +485,7 @@ body{background:var(--dp-bg);}
       </div>
       <div class="dp-insight" style="margin-top:12px;">
                 <div class="dp-insight-t">해석</div>
-                <div class="dp-insight-b">2025년 실적 기준으로 44배다. 1H26이 순손실이라 최근 4분기 EPS(220원, 네이버)로 보면 약 184배로 훨씬 높다. 프로젝트 인도 시점에 따라 이익이 크게 출렁이는 사업이라 한 해 이익 기준 PER의 의미가 제한적이다. 같은 업종 비교 대상은 2.1~475.8배로 폭이 넓다.</div>
+                <div class="dp-insight-b">2025년 실적 기준으로 44배다. 3Q26 누적이 순손실이라 최근 4분기 EPS(약 10원)로 보면 PER이 의미 없을 만큼 높다. 프로젝트 인도 시점에 따라 이익이 크게 출렁이는 사업이라 한 해 이익 기준 PER의 의미가 제한적이다. 같은 업종 비교 대상은 2.1~475.8배로 폭이 넓다.</div>
               </div>
     </div>
         <div class="dp-gauge dp-metric-detail" data-metric="fpe">
@@ -759,6 +812,12 @@ body{background:var(--dp-bg);}
         <div class="dp-tl-title">4만원대 초반으로 하락</div>
         <div class="dp-tl-body">10/8 -6.3%, 10/16 -4.2%, 10/20 -5.6%로 40,400원까지 내려왔다. 원인은 확인되지 않았다.</div>
       </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.11.13 (3분기보고서)</div>
+        <div class="dp-tl-title">3Q26 분기보고서 — 매출 2,280억, 영업손실 -37억</div>
+        <div class="dp-tl-body">3분기 매출 2,280억(전년동기의 4.9배)이나 영업손실 -37억·순손실 -123억. 누적 순손실 -203억, 4분기 프로젝트 인도가 관건.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -778,7 +837,7 @@ body{background:var(--dp-bg);}
       <div>
         <div class="dp-thesis-t bear">리스크 요인</div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>52주 고점 대비 -50.1%, 1년간 하루 ±5% 이상 변동 73회 · 상한가 4회로 테마성 변동성이 매우 큼</span></div>
-        <div class="dp-thesis-item bear"><span class="dot">●</span><span>1H26 순손실 80억으로 적자전환, 프로젝트 인도 시점에 따라 분기 실적 편차가 큼</span></div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>3Q26 누적 순손실 203억으로 적자전환, 프로젝트 인도 시점에 따라 분기 실적 편차가 큼</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>6월 말 부채비율 363%·차입금 5,792억으로 금리·금융비용 부담</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>PBR 5배·최근 4분기 PER 180배대로 이익 대비 높은 주가, 목표주가를 낸 증권사 1곳</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>무배당이고 재무 이력이 2년뿐이라 내재가치 평가 불가</span></div>
@@ -996,7 +1055,7 @@ function svgEl(tag,attrs){
 }
 
 // -- fund-report:start (valuation/fund_render.py)
-const FUND={"cats":["2024년","2025년"],"rev":[332151737229.0,385640769900.0],"oi":[37637399717.0,52998214327.0],"nip":[22380995585.0,30721781368.0],"qLabels":["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26"],"q":{"rev":[160291505416.0,153049033336.0,25933149305.0,65324077464.0,46427564049.0,247955979082.0,27523079701.0,240891560118.0],"oi":[14429005152.0,25147515160.0,1062016290.0,9593792372.0,1170297105.0,41172108560.0,4909470482.0,4682586131.0],"pretax":[5169183346.0,25684615893.0,212248770.0,16796997896.0,-7177081386.0,28220509525.0,-5912131167.0,-4842532662.0],"ni":[6755191011.0,19773470158.0,979357128.0,14298600862.0,-5052122117.0,20495945495.0,-5112268969.0,-2892906060.0],"nip":[6755191011.0,19773470158.0,979357128.0,14298600862.0,-5052122117.0,20495945495.0,-5112268969.0,-2892906060.0]}};
+const FUND={"cats":["2024년","2025년"],"rev":[332151737229.0,385640769900.0],"oi":[37637399717.0,52998214327.0],"nip":[22380995585.0,30721781368.0],"qLabels":["4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26","3Q26"],"q":{"rev":[153049033336.0,25933149305.0,65324077464.0,46427564049.0,247955979082.0,27523079701.0,240891560118.0,227985114079.0],"oi":[25147515160.0,1062016290.0,9593792372.0,1170297105.0,41172108560.0,4909470482.0,4682586131.0,-3680162422.0],"pretax":[25684615893.0,212248770.0,16796997896.0,-7177081386.0,28220509525.0,-5912131167.0,-4842532662.0,-11956483342.0],"ni":[19773470158.0,979357128.0,14298600862.0,-5052122117.0,20495945495.0,-5112268969.0,-2892906060.0,-12305298567.0],"nip":[19773470158.0,979357128.0,14298600862.0,-5052122117.0,20495945495.0,-5112268969.0,-2892906060.0,-12305298567.0]}};
 const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
 const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
 let _qtrCurrentMetric=(document.querySelector('#dpQtrMetricNav button')||{dataset:{qm:'oi'}}).dataset.qm;
