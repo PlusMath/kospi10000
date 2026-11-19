@@ -363,7 +363,7 @@ body{background:var(--dp-bg);}
   <div class="dp-acc-body">
     <div class="dp-tab-row">
       <button class="dp-tab active" id="dpFundAnnualBtn" onclick="dpSetFundTab('annual')">사업보고서 · 2025년</button>
-      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">반기보고서 · 1H26</button>
+      <button class="dp-tab" id="dpFundQuarterBtn" onclick="dpSetFundTab('quarter')">3분기보고서 · 3Q26</button>
     </div>
 
     <div id="dpFundAnnual">
@@ -420,7 +420,7 @@ body{background:var(--dp-bg);}
 
     <div id="dpFundQuarter" style="display:none;">
 <!-- fundq:start -->
-      <div class="dp-secl">분기별 실적 (8개 분기, 3Q24~2Q26)</div>
+      <div class="dp-secl">분기별 실적 (8개 분기, 4Q24~3Q26)</div>
       <nav class="dp-sidenav dp-metric-nav" id="dpQtrMetricNav">
         <button type="button" data-qm="rev" class="active" onclick="dpShowQtrMetric('rev',this)">매출액</button>
         <button type="button" data-qm="oi" onclick="dpShowQtrMetric('oi',this)">영업이익</button>
@@ -432,27 +432,80 @@ body{background:var(--dp-bg);}
       <svg id="fundQtrChart" viewBox="0 0 680 190" width="100%" style="display:block;margin-bottom:6px;"></svg>
       <div style="font-size:10.5px;color:var(--dp-text4);margin-bottom:16px;">* DART 분기·반기·사업보고서의 3개월 단독 실적. 4분기는 사업보고서 연간 실적에서 3분기 누적을 뺀 값. 분기 이름 아래 ▲▼는 전년 동기 대비 증감.</div>
 <!-- fundq:end -->
+<!-- q3qa:start -->
+    <div class="dp-qa" id="dpQtrQA">
+      <div class="dp-qa-h">항목별 Q&amp;A <small>3Q26 기준 · 위 지표 버튼을 누르면 해당 항목으로 바뀝니다</small></div>
+      <div class="dp-qa-set" data-qm="rev">
+        <div class="dp-qa-t">매출액</div>
+        <dl>
+          <dt>Q. 3분기 매출은?</dt>
+          <dd>3,268억으로 1년 전보다 15.0% 줄었다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 매출 1조 448억으로 1년 전보다 6.5% 적다. 매출 대부분은 배터리 사업이다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="oi">
+        <div class="dp-qa-t">영업이익</div>
+        <dl>
+          <dt>Q. 3분기 영업이익은?</dt>
+          <dd>665억으로 1년 전보다 51.5% 줄었다. 영업이익률은 20.3%다.</dd>
+          <dt>Q. 왜 줄었나?</dt>
+          <dd>지주회사라 한국타이어앤테크놀로지 지분법이익이 영업이익에 포함된다. 한국타이어의 3분기 순이익이 크게 줄어든 영향이 반영된 것으로 보인다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="pretax">
+        <div class="dp-qa-t">세전이익</div>
+        <dl>
+          <dt>Q. 영업 밖에서는?</dt>
+          <dd>3분기 영업외 손실 -287억으로 세전이익은 378억(▼73.5%)이다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 세전이익 2,783억으로 1년 전보다 15.9% 적다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="ni">
+        <div class="dp-qa-t">순이익</div>
+        <dl>
+          <dt>Q. 3분기 순이익은?</dt>
+          <dd>465억으로 1년 전보다 64.1% 줄었다. 법인세가 이익으로 잡혀 세전이익보다 많다.</dd>
+          <dt>Q. 누적으로는?</dt>
+          <dd>누적 순이익 2,669억으로 1년 전보다 11.5% 적다.</dd>
+        </dl>
+      </div>
+      <div class="dp-qa-set" data-qm="nip">
+        <div class="dp-qa-t">지배주주순이익</div>
+        <dl>
+          <dt>Q. 지배주주 순이익과 EPS는?</dt>
+          <dd>비지배지분이 없어 순이익과 같다. 누적 EPS 2,818원, 연환산 3,757원으로 2025년(3,666원)과 비슷하다.</dd>
+          <dt>Q. 재무는?</dt>
+          <dd>9월 말 부채비율 9.8%로 매우 낮다.</dd>
+        </dl>
+      </div>
+    </div>
+    <script>(function(){var b=document.getElementById('dpQtrQA'),n=document.getElementById('dpQtrMetricNav');if(!b)return;b.classList.add('js');function s(){var a=n&&n.querySelector('button.active'),k=a?a.dataset.qm:'rev';b.querySelectorAll('.dp-qa-set').forEach(function(e){e.classList.toggle('on',e.dataset.qm===k)});}if(n)n.addEventListener('click',function(){setTimeout(s,0)});s();})();</script>
+<!-- q3qa:end -->
       <div class="dp-g2">
         <div>
-          <div class="dp-row2"><span class="l">1H26 연결 매출액</span><span class="v" style="color:var(--dp-down);">7,179.5억 (▼2.0%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 연결 영업이익</span><span class="v up">2,218.3억 (▲10.5%)</span></div>
-          <div class="dp-row2"><span class="l">1H26 지배주주 순이익</span><span class="v up">2,203.8억 (▲28.2%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 매출액</span><span class="v dn">1조 448억 (전년동기比 ▼6.5%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 영업이익</span><span class="v dn">2,883억 (전년동기比 ▼14.7%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 지배주주 순이익</span><span class="v dn">2,669억 (전년동기比 ▼11.5%)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 단독 영업이익</span><span class="v dn">665억 (3Q25 대비 ▼51.5%, 2Q26 대비 ▼33.6%)</span></div>
         </div>
         <div>
-          <div class="dp-row2"><span class="l">1H26 EPS(계산값)</span><span class="v up">약 2,327원 (전년 동기 약 1,816원)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 부채비율</span><span class="v">9.7% (2025년 말 10.0%)</span></div>
-          <div class="dp-row2"><span class="l">6월 말 현금성자산</span><span class="v">877.5억 (단기차입금 888.5억)</span></div>
+          <div class="dp-row2"><span class="l">3Q26 누적 기본EPS</span><span class="v up">2,818원 (연환산 3,757원)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 부채비율</span><span class="v">9.8%</span></div>
+          <div class="dp-row2"><span class="l">9월 말 지배지분</span><span class="v">4조 8,148억 (작년 말 대비 ▲0.7%)</span></div>
+          <div class="dp-row2"><span class="l">9월 말 현금성자산</span><span class="v">816억</span></div>
         </div>
       </div>
       <!-- fundq-insight:start -->
       <div class="dp-insight" style="margin-bottom:10px;">
         <div class="dp-insight-t">분기 실적 — 2개년 흐름</div>
-        <div class="dp-insight-b">최근 8개 분기(3Q24~2Q26) 영업이익은 1,373억→1,001억. 2Q26 영업이익은 전년 동기(2Q25) 739억 대비 ▲35.6%, 직전 분기(1Q26) 대비 ▼17.7%. 이 기간 분기 최고는 3Q24(1,373억).</div>
+        <div class="dp-insight-b">최근 8개 분기(4Q24~3Q26) 영업이익은 307억→665억. 3Q26 영업이익은 전년 동기(3Q25) 1,371억 대비 ▼51.5%, 직전 분기(2Q26) 대비 ▼33.6%. 이 기간 분기 최고는 3Q25(1,371억).</div>
       </div>
 <!-- fundq-insight:end -->
       <div class="dp-insight">
-        <div class="dp-insight-t">반기보고서 핵심</div>
-        <div class="dp-insight-b">1분기는 매출 3,784억(-2.7%), 영업이익 1,217억(-4.1%)으로 줄었다. 회사는 원자재·물류비 상승으로 배터리 사업 수익성이 나빠졌다고 설명했다. 2분기는 매출이 3,396억(-1.2%)으로 줄었지만 영업이익 1,002억(+35.6%), 순이익 957억(+69.3%)으로 크게 늘었다. 전년 2분기 영업이익(739억)이 지분법손익 감소로 낮았던 기저 효과가 있다. 6월 말 자본총계는 5.19조, 부채비율은 9.7%다.</div>
+        <div class="dp-insight-t">3분기보고서 핵심 — 전년동기(3Q25 누적) 대비</div>
+        <div class="dp-insight-b">3Q26 매출 3,268억, 영업이익 665억으로 1년 전보다 15.0%, 51.5% 줄었다. 영업이익률은 20.3%로 2분기(29.5%)보다 낮아졌다. 한국앤컴퍼니는 지주회사로 한국타이어앤테크놀로지 지분법이익이 영업이익에 포함되는데, 한국타이어의 3분기 순이익이 한온시스템 관련 영업외 손실로 크게 줄어든 영향이 반영된 것으로 보인다. 영업외 손실(-287억)도 더해져 세전이익은 378억(▼73.5%)이고, 법인세가 이익으로 잡혀 순이익은 465억(▼64.1%)이다. 누적으로는 매출 1조 448억(▼6.5%), 영업이익 2,883억(▼14.7%), 순이익 2,669억(▼11.5%)이다. 매출의 대부분인 배터리(아트라스BX) 사업은 원자재·물류비 부담이 이어지고 있다. 누적 EPS 2,818원의 연환산(3,757원)은 2025년 EPS(3,666원)와 비슷하다. 9월 말 부채비율은 9.8%로 낮다.</div>
       </div>
     </div>
   </div>
@@ -481,7 +534,7 @@ body{background:var(--dp-bg);}
     <!-- dp-vscore:end -->
     <div class="dp-share4">
       <div class="dp-share"><div class="dp-share-l">2025 EPS</div><div class="dp-share-v">3,666원</div><div class="dp-share-s">▼1.0%</div></div>
-      <div class="dp-share"><div class="dp-share-l">1H26 EPS</div><div class="dp-share-v">2,327원</div><div class="dp-share-s">▲28.2% (계산값)</div></div>
+      <div class="dp-share"><div class="dp-share-l">3Q26 누적 EPS</div><div class="dp-share-v">2,818원</div><div class="dp-share-s">연환산 3,757원</div></div>
       <div class="dp-share"><div class="dp-share-l">BPS</div><div class="dp-share-v">54,762원</div><div class="dp-share-s">지배지분 기준(6월 말)</div></div>
       <div class="dp-share"><div class="dp-share-l">DPS</div><div class="dp-share-v">1,100원</div><div class="dp-share-s">+10.0%</div></div>
     </div>
@@ -803,6 +856,12 @@ body{background:var(--dp-bg);}
         <div class="dp-tl-title">26,000원대 회복</div>
         <div class="dp-tl-body">9월 말 25,100원에서 10/14 27,400원까지 올랐고, 10/19 26,350원(+0.2%)으로 마감했다. 52주 고점보다 24% 낮다.</div>
       </div>
+      <div class="dp-tl-item">
+        <div class="dp-tl-dot"></div>
+        <div class="dp-tl-date">2026.11.13 (3분기보고서)</div>
+        <div class="dp-tl-title">3Q26 분기보고서 — 영업이익 665억, 전년동기 대비 51.5% 감소</div>
+        <div class="dp-tl-body">3분기 매출 3,268억(▼15.0%)·영업이익 665억(▼51.5%), 순이익 465억(▼64.1%). 한국타이어 지분법이익 감소 영향. 누적 순이익 2,669억(▼11.5%).</div>
+      </div>
     </div>
   </div>
 </div>
@@ -823,7 +882,7 @@ body{background:var(--dp-bg);}
         <div class="dp-thesis-t bear">리스크 요인</div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>52주 고점 대비 -24.0%, 1년간 하루 ±5% 이상 변동 22회로 변동성이 큼</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>최대주주 조현범 회장의 횡령·배임 징역 2년 확정 — 경영·지배구조 리스크</span></div>
-        <div class="dp-thesis-item bear"><span class="dot">●</span><span>매출의 75% 이상인 배터리 사업 수익성이 원자재·물류비에 민감(1Q26 영업이익 -4.1%)</span></div>
+        <div class="dp-thesis-item bear"><span class="dot">●</span><span>매출의 75% 이상인 배터리 사업 수익성이 원자재·물류비에 민감, 3Q26 영업이익 -51.5%</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>이익의 상당 부분이 한국타이어앤테크놀로지 지분법이익이라 자회사 실적에 좌우</span></div>
         <div class="dp-thesis-item bear"><span class="dot">●</span><span>최근 6개월 증권사 리포트가 없어 목표주가·이익 추정치가 없음</span></div>
       </div>
@@ -1187,7 +1246,7 @@ function svgEl(tag,attrs){
 }
 
 // -- fund-report:start (valuation/fund_render.py)
-const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[963300354498.0,1095895770449.0,1089668057103.0,1390995724547.0,1457551700261.0],"oi":[228305200484.0,245248895826.0,256563452628.0,418268299588.0,411626236474.0],"nip":[197973228042.0,163859841867.0,187234321156.0,350713050064.0,347229288109.0],"qLabels":["3Q24","4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26"],"q":{"rev":[381396799734.0,297402162342.0,388686095278.0,343752270221.0,384716322238.0,340397012524.0,378380332522.0,339568170584.0],"oi":[137275967046.0,30689867767.0,126892891875.0,73867315730.0,137074794956.0,73791233913.0,121684476110.0,100149796830.0],"pretax":[131000789284.0,12802326609.0,125101782731.0,63254117310.0,142725063161.0,56157265679.0,137559436582.0,102991966317.0],"ni":[120683062367.0,7491603030.0,115438869508.0,56528925341.0,129733995486.0,45527497774.0,124688108722.0,95691702418.0],"nip":[120683062367.0,7491603030.0,115438869508.0,56528925341.0,129733995486.0,45527497774.0,124688108722.0,95691702418.0]}};
+const FUND={"cats":["2021년","2022년","2023년","2024년","2025년"],"rev":[963300354498.0,1095895770449.0,1089668057103.0,1390995724547.0,1457551700261.0],"oi":[228305200484.0,245248895826.0,256563452628.0,418268299588.0,411626236474.0],"nip":[197973228042.0,163859841867.0,187234321156.0,350713050064.0,347229288109.0],"qLabels":["4Q24","1Q25","2Q25","3Q25","4Q25","1Q26","2Q26","3Q26"],"q":{"rev":[297402162342.0,388686095278.0,343752270221.0,384716322238.0,340397012524.0,378380332522.0,339568170584.0,326845971193.0],"oi":[30689867767.0,126892891875.0,73867315730.0,137074794956.0,73791233913.0,121684476110.0,100149796830.0,66501074513.0],"pretax":[12802326609.0,125101782731.0,63254117310.0,142725063161.0,56157265679.0,137559436582.0,102991966317.0,37767973642.0],"ni":[7491603030.0,115438869508.0,56528925341.0,129733995486.0,45527497774.0,124688108722.0,95691702418.0,46529480349.0],"nip":[7491603030.0,115438869508.0,56528925341.0,129733995486.0,45527497774.0,124688108722.0,95691702418.0,46529480349.0]}};
 const qtrMetricLabel={rev:'매출액',oi:'영업이익',pretax:'세전이익',ni:'순이익(연결)',nip:'지배주주순이익'};
 const qtrMetricColor={rev:'#8B93A0',oi:null,pretax:'#7C5CBF',ni:'#1D9E75',nip:'#C9622A'};
 let _qtrCurrentMetric=(document.querySelector('#dpQtrMetricNav button')||{dataset:{qm:'oi'}}).dataset.qm;
