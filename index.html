@@ -1433,7 +1433,7 @@
     }
   </style>
 <link rel="stylesheet" href="css/theme.css">
-<link rel="stylesheet" href="css/home.css?v=20261118a">
+<link rel="stylesheet" href="css/home.css?v=20261120a">
 </head>
 
 <body>
@@ -4244,6 +4244,9 @@
         .sort((a, b) => (direction === 'up' ? b.live.change - a.live.change : a.live.change - b.live.change));
     }
 
+    // 홈 '실적 리뷰' 버튼이 가리키는 최신 분기 — valuation/earnings_review.py가 갱신
+    const EARNINGS_LATEST = {"label": "3Q26", "href": "earnings/2026q3.html"};
+
     function renderStatCards() {
       const upCount = getMovers('up').length;
       const downCount = getMovers('down').length;
@@ -4264,6 +4267,10 @@
           <div class="stat-label">5% 이상 하락</div>
           <div class="stat-value dn">${downCount}<span class="stat-unit"> 개</span></div>
         </div>
+        <a class="stat-card stat-btn" href="${EARNINGS_LATEST.href}">
+          <div class="stat-label">분기보고서 분석</div>
+          <div class="stat-btn-pill">${EARNINGS_LATEST.label} 실적 리뷰 →</div>
+        </a>
       `;
       document.getElementById('statUpCard').addEventListener('click', () => openMoverModal('up'));
       document.getElementById('statDownCard').addEventListener('click', () => openMoverModal('down'));
