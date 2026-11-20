@@ -43,7 +43,11 @@ def load_stocks(period):
             continue
         F = json.loads(m.group(1))
         L, q = F.get('qLabels') or [], F.get('q') or {}
-        if not L or L[-1] != period or len(L) < 5:
+        # 지난 분기 리뷰도 만들 수 있게 period 위치를 찾는다(전년 동기 비교에 4분기 앞 데이터 필요)
+        if period not in L:
+            continue
+        i = L.index(period)
+        if i < 4:
             continue
         nm = re.search(r'<h1[^>]*>([^<]+)', t)
         name = html.unescape(nm.group(1).strip()) if nm else '?'
@@ -52,14 +56,14 @@ def load_stocks(period):
         b = os.path.basename(p)
         code = b.split('_', 1)[1][:-5]
 
-        def g(k, i):
+        def g(k, j):
             a = q.get(k) or []
-            return a[i] if len(a) >= abs(i) else None
+            return a[j] if 0 <= j < len(a) else None
         out.append(dict(code=code, name=name, href='../stocks/' + b, L=L,
-                        oi=g('oi', -1), oi_y=g('oi', -5), oi_q=g('oi', -2),
-                        rev=g('rev', -1), rev_y=g('rev', -5),
-                        pt=g('pretax', -1), nip=g('nip', -1), nip_y=g('nip', -5),
-                        ois=[x for x in (q.get('oi') or []) if x is not None]))
+                        oi=g('oi', i), oi_y=g('oi', i - 4), oi_q=g('oi', i - 1),
+                        rev=g('rev', i), rev_y=g('rev', i - 4),
+                        pt=g('pretax', i), nip=g('nip', i), nip_y=g('nip', i - 4),
+                        ois=[x for x in (q.get('oi') or [])[max(0, i - 7):i + 1] if x is not None]))
     return out
 
 
@@ -104,10 +108,11 @@ def classify(s):
 def badges(s):
     b = []
     o = s['ois']
-    if len(o) >= 8 and s['oi'] == max(o) and s['oi'] > 0:
-        b.append(('hi', '8분기 최대'))
-    if len(o) >= 8 and s['oi'] == min(o):
-        b.append(('lo', '8분기 최저'))
+    # 해당 분기까지 최근 최대 8개 분기 안에서의 최대·최저(지난 분기 리뷰는 데이터가 6~7개 분기)
+    if len(o) >= 6 and s['oi'] == max(o) and s['oi'] > 0:
+        b.append(('hi', f'{len(o)}분기 최대'))
+    if len(o) >= 6 and s['oi'] == min(o):
+        b.append(('lo', f'{len(o)}분기 최저'))
     if s['nip'] is not None and s['nip_y'] is not None:
         if s['nip_y'] > 0 > s['nip']:
             b.append(('lo', '순이익 적자 전환'))
