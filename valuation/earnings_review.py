@@ -74,6 +74,10 @@ CATS = [
 ]
 
 
+TONE = {'surge': 'good', 'turn_loss': 'bad', 'nonop_loss': 'bad', 'nonop_gain': 'good',
+        'drop': 'bad', 'turn_profit': 'good', 'loss': 'bad'}
+
+
 def classify(s):
     oi, oy, pt = s['oi'], s['oi_y'], s['pt']
     if oi is None or oy is None:
@@ -112,30 +116,39 @@ def badges(s):
     return b
 
 
-def chg_html(cur, base):
+def yoy_pill(cur, base):
+    """영업이익 옆 전년 대비 꼬리표: 배수·증감률, 부호가 바뀌면 전환으로 표시."""
+    if cur is None or base is None:
+        return ''
+    if base < 0 < cur:
+        return '<span class="er-chg up">흑자 전환</span>'
+    if cur < 0 < base:
+        return '<span class="er-chg dn">적자 전환</span>'
+    if cur < 0 and base < 0:
+        return f'<span class="er-chg {"up" if cur > base else "dn"}">적자 {"축소" if cur > base else "확대"}</span>'
     r = pct(cur, base)
     if r is None:
         return ''
     if r >= 1:
-        return f'<span class="up">{cur / base:.1f}배</span>'
-    return f'<span class="{"up" if r >= 0 else "dn"}">{"▲" if r >= 0 else "▼"}{abs(r) * 100:.1f}%</span>'
+        return f'<span class="er-chg up">{cur / base:.1f}배</span>'
+    return f'<span class="er-chg {"up" if r >= 0 else "dn"}">{"▲" if r >= 0 else "▼"} {abs(r) * 100:.1f}%</span>'
 
 
-def row_html(s, note):
+def row_html(s, note, period):
     e = html.escape
     bd = ''.join(f'<span class="er-bd {k}">{e(t)}</span>' for k, t in badges(s))
-    yoy = chg_html(s['oi'], s['oi_y'])
     nonop = s.get('nonop') or 0
     nonop_cls = 'up' if nonop > 0 else 'dn'
     note_html = f'<p class="er-note">{e(note)}</p>' if note else ''
     oi_cls = 'dn' if (s['oi'] or 0) < 0 else ''
+    nip_cls = 'dn' if (s['nip'] or 0) < 0 else ''
     return f'''<li class="er-row">
-  <div class="er-row-h"><a href="{e(s['href'])}">{e(s['name'])}</a>{bd}</div>
+  <div class="er-row-h"><a href="{e(s['href'])}">{e(s['name'])}</a></div>{f'<div class="er-bds">{bd}</div>' if bd else ''}
+  <div class="er-hero"><span class="er-hero-l">{e(period)} 영업이익</span><span class="er-hero-v {oi_cls}">{won(s['oi'])}</span>{yoy_pill(s['oi'], s['oi_y'])}</div>
   <dl class="er-m">
-    <div><dt>영업이익</dt><dd class="{oi_cls}">{won(s['oi'])}</dd></div>
-    <div><dt>전년 동기 {yoy}</dt><dd>{won(s['oi_y'])}</dd></div>
+    <div><dt>전년 동기 영업이익</dt><dd>{won(s['oi_y'])}</dd></div>
     <div><dt>영업외 손익</dt><dd class="{nonop_cls}">{"+" if nonop > 0 else ""}{won(nonop)}</dd></div>
-    <div><dt>지배주주 순이익</dt><dd class="{"dn" if (s['nip'] or 0) < 0 else ""}">{won(s['nip'])}</dd></div>
+    <div><dt>지배주주 순이익</dt><dd class="{nip_cls}">{won(s['nip'])}</dd></div>
   </dl>{note_html}
 </li>'''
 
@@ -158,29 +171,40 @@ a{color:inherit}
 .er-kpi dt{font-size:12px;color:var(--t-mute)}
 .er-kpi dd{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;margin-top:2px}
 .er-kpi small{display:block;font-size:11.5px;color:var(--t-mute);font-weight:500}
-.er h2{font-size:18px;font-weight:800;letter-spacing:-.02em;margin:34px 0 10px}
+.er h2{font-size:19px;font-weight:800;letter-spacing:-.02em;margin:40px 0 12px;scroll-margin-top:64px}
 .er-h2-sub{font-size:12.5px;color:var(--t-mute);font-weight:500;margin-left:8px}
+.er-sec{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;margin:44px 0 14px;padding-left:12px;border-left:4px solid var(--t-edge);scroll-margin-top:64px}
+.er-sec.good{border-left-color:var(--t-up)}.er-sec.bad{border-left-color:var(--t-down)}
+.er-sec h2{margin:0}
+.er-sec .n{font-size:13px;font-weight:800;color:var(--t-fg2);font-variant-numeric:tabular-nums}
+.er-sec p{flex-basis:100%;font-size:13px;color:var(--t-mute)}
 .er-themes{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .er-theme{background:var(--t-card);border:1px solid var(--t-line);border-radius:12px;padding:14px 16px}
 .er-theme b{display:block;font-size:14.5px;margin-bottom:4px}
 .er-theme p{font-size:13.5px;color:var(--t-fg2)}
-.er-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.er-nav{position:sticky;top:0;z-index:5;background:var(--t-bg);padding:10px 0;border-bottom:1px solid var(--t-line)}
+.er-chips{display:flex;flex-wrap:wrap;gap:6px}
 .er-chips a{font-size:13px;text-decoration:none;padding:6px 12px;border:1px solid var(--t-edge);border-radius:999px;color:var(--t-fg2)}
 .er-chips a:hover{border-color:var(--t-accent);color:var(--t-fg)}
 .er-chips span{color:var(--t-mute);margin-left:4px;font-variant-numeric:tabular-nums}
-.er-list{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-.er-row{background:var(--t-card);border:1px solid var(--t-line);border-radius:12px;padding:12px 14px;min-width:0}
+.er-list{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.er-row{display:flex;flex-direction:column;background:var(--t-card);border:1px solid var(--t-line);border-radius:14px;padding:14px 16px;min-width:0}
 .er-row:hover{border-color:var(--t-edge)}
-.er-row-h{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px}
-.er-row-h a{font-size:15px;font-weight:800;text-decoration:none;margin-right:2px}
+.er-row-h a{font-size:16px;font-weight:800;letter-spacing:-.02em;text-decoration:none;line-height:1.35}
 .er-row-h a:hover{color:var(--t-accent)}
-.er-bd{font-size:10.5px;font-weight:700;padding:0 7px;border-radius:999px;border:1px solid;white-space:nowrap}
+.er-bds{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.er-bd{font-size:10.5px;font-weight:700;padding:0 7px;border-radius:999px;border:1px solid;white-space:nowrap;line-height:1.6}
 .er-bd.hi{color:var(--t-up);border-color:currentColor}
 .er-bd.lo{color:var(--t-down);border-color:currentColor}
-.er-m{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 10px;margin-top:8px}
-.er-m dt{font-size:11px;color:var(--t-mute);white-space:nowrap}
-.er-m dd{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
-.er-note{font-size:12.5px;color:var(--t-fg2);margin-top:8px;padding-top:8px;border-top:1px solid var(--t-line);line-height:1.55}
+.er-hero{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;margin-top:10px}
+.er-hero-l{flex-basis:100%;font-size:11.5px;color:var(--t-mute)}
+.er-hero-v{font-size:21px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.25}
+.er-chg{font-size:12px;font-weight:800;padding:1px 8px;border-radius:6px;background:var(--t-card2);white-space:nowrap}
+.er-m{margin-top:10px;padding-top:8px;border-top:1px solid var(--t-line);display:grid;gap:3px}
+.er-m div{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.er-m dt{font-size:12px;color:var(--t-mute);white-space:nowrap}
+.er-m dd{font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.er-note{font-size:13px;color:var(--t-fg2);margin-top:10px;padding:9px 11px;background:var(--t-bg);border-radius:8px;line-height:1.6}
 .up{color:var(--t-up)}.dn{color:var(--t-down)}
 .er-foot{font-size:12px;color:var(--t-mute);margin-top:36px;line-height:1.7}
 .er-hub{list-style:none;display:grid;gap:10px;margin-top:18px}
@@ -194,6 +218,10 @@ a{color:inherit}
   .er h1{font-size:22px}
   .er-kpis{grid-template-columns:repeat(2,1fr)}
   .er-themes{grid-template-columns:1fr}
+  .er-kpi dd{font-size:17px}
+  .er-chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  .er-chips::-webkit-scrollbar{display:none}
+  .er-chips a{flex:0 0 auto;white-space:nowrap}
 }
 @media (max-width:520px){.er-list{grid-template-columns:1fr}}
 '''
@@ -255,8 +283,9 @@ def build(slug):
     for k, n, d in CATS:
         if not groups[k]:
             continue
-        rows = '\n'.join(row_html(s, notes.get(s['code'])) for s in groups[k])
-        secs += f'<h2 id="{k}">{e(n)}<span class="er-h2-sub">{e(d)} · {len(groups[k])}개</span></h2>\n' + list_html(rows, period)
+        rows = '\n'.join(row_html(s, notes.get(s['code']), period) for s in groups[k])
+        secs += (f'<div class="er-sec {TONE[k]}" id="{k}"><h2>{e(n)}</h2><span class="n">{len(groups[k])}개</span><p>{e(d)}</p></div>\n'
+                 + list_html(rows, period))
     ex_txt = ' '.join(f'{e(c)}: {e(v)}.' for c, v in excl.items())
     body = f'''<a class="er-back" href="index.html">← 분기 실적 리뷰 목록</a>
 <div class="er-eyebrow">{e(cfg.get('report', ''))} · {e(cfg.get('range', ''))}</div>
@@ -266,7 +295,7 @@ def build(slug):
 <h2>이번 분기 큰 흐름</h2>
 <div class="er-themes">{themes}</div>
 <h2>유형별 특이 종목</h2>
-<div class="er-chips">{chips}</div>
+<nav class="er-nav" aria-label="유형 바로가기"><div class="er-chips">{chips}</div></nav>
 {secs}
 <p class="er-foot">영업이익·영업외 손익·지배주주 순이익은 {e(period)} 3개월(분기 단독) 값이고, 전년 동기는 1년 전 같은 분기다. 영업외 손익은 세전이익에서 영업이익을 뺀 값이다. 우선주는 보통주와 실적이 같아 뺐다. 종목은 유형당 하나로만 분류했고(위 순서가 우선), 유형 안에서는 영업이익 규모 순이다. 해설의 "~로 보인다"는 공시 주석으로 확인하지 않은 추정이다. 제외: {ex_txt} 투자 권고가 아니다.</p>'''
     os.makedirs('earnings', exist_ok=True)
