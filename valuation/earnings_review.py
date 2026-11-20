@@ -28,18 +28,6 @@ def won(v):
     return f'{s}{a / 1e8:,.0f}억'
 
 
-def wonr(v, sign=False):
-    """표 칸용: 긴 표기(데스크톱)와 짧은 표기(모바일, 1조 이상은 소수 1자리 조)를 함께 넣는다."""
-    if v is None:
-        return '-'
-    p = '+' if sign and v > 0 else ''
-    full = p + won(v)
-    if abs(v) < 1e12:
-        return full
-    short = f'{p}{v / 1e12:.1f}조'
-    return f'<b class="f">{full}</b><b class="s">{short}</b>'
-
-
 def pct(cur, base):
     if cur is None or base is None or base <= 0 or cur <= 0:
         return None
@@ -141,25 +129,26 @@ def row_html(s, note):
     nonop_cls = 'up' if nonop > 0 else 'dn'
     note_html = f'<p class="er-note">{e(note)}</p>' if note else ''
     oi_cls = 'dn' if (s['oi'] or 0) < 0 else ''
-    return (f'<li class="er-row"><div class="er-nm"><a href="{e(s["href"])}">{e(s["name"])}</a>{bd}</div>'
-            f'<span class="er-v {oi_cls}" data-l="영업이익">{wonr(s["oi"])}</span>'
-            f'<span class="er-v" data-l="전년 동기">{wonr(s["oi_y"])}<small>{yoy}</small></span>'
-            f'<span class="er-v {nonop_cls}" data-l="영업외 손익">{wonr(nonop, True)}</span>'
-            f'<span class="er-v {"dn" if (s["nip"] or 0) < 0 else ""}" data-l="지배주주 순이익">{wonr(s["nip"])}</span>'
-            f'{note_html}</li>')
+    return f'''<li class="er-row">
+  <div class="er-row-h"><a href="{e(s['href'])}">{e(s['name'])}</a>{bd}</div>
+  <dl class="er-m">
+    <div><dt>영업이익</dt><dd class="{oi_cls}">{won(s['oi'])}</dd></div>
+    <div><dt>전년 동기 {yoy}</dt><dd>{won(s['oi_y'])}</dd></div>
+    <div><dt>영업외 손익</dt><dd class="{nonop_cls}">{"+" if nonop > 0 else ""}{won(nonop)}</dd></div>
+    <div><dt>지배주주 순이익</dt><dd class="{"dn" if (s['nip'] or 0) < 0 else ""}">{won(s['nip'])}</dd></div>
+  </dl>{note_html}
+</li>'''
 
 
 def list_html(rows, period):
-    return ('<div class="er-tbl"><div class="er-hd"><span>종목</span>'
-            f'<span>{html.escape(period)} 영업이익</span><span>전년 동기</span><span>영업외 손익</span><span>지배주주 순이익</span></div>\n'
-            f'<ul class="er-list">\n{rows}\n</ul></div>\n')
+    return f'<ul class="er-list">\n{rows}\n</ul>\n'
 
 
 STYLE = '''
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--t-bg,#14131c);color:var(--t-fg,#eee);font-family:var(--t-font,'Noto Sans KR',sans-serif);line-height:1.6}
 a{color:inherit}
-.er{max-width:880px;margin:0 auto;padding:20px 16px 60px}
+.er{max-width:1280px;margin:0 auto;padding:20px 16px 60px}
 .er-back{display:inline-block;font-size:13px;font-weight:700;color:var(--t-accent);text-decoration:none;margin-bottom:18px}
 .er-eyebrow{font-size:12px;color:var(--t-accent);font-weight:700;letter-spacing:.04em}
 .er h1{font-size:26px;font-weight:900;letter-spacing:-.03em;line-height:1.25;margin:4px 0 6px}
@@ -179,23 +168,19 @@ a{color:inherit}
 .er-chips a{font-size:13px;text-decoration:none;padding:6px 12px;border:1px solid var(--t-edge);border-radius:999px;color:var(--t-fg2)}
 .er-chips a:hover{border-color:var(--t-accent);color:var(--t-fg)}
 .er-chips span{color:var(--t-mute);margin-left:4px;font-variant-numeric:tabular-nums}
-.er-tbl{background:var(--t-card);border:1px solid var(--t-line);border-radius:12px;overflow:hidden}
-.er-hd,.er-row{display:grid;grid-template-columns:minmax(0,1.7fr) repeat(4,minmax(0,1fr));column-gap:12px;align-items:baseline;padding:6px 14px}
-.er-hd{font-size:11px;color:var(--t-mute);background:var(--t-card2);padding-top:7px;padding-bottom:7px}
-.er-hd span:not(:first-child),.er-v{text-align:right}
-.er-list{list-style:none}
-.er-row{border-top:1px solid var(--t-line);line-height:1.45}
-.er-row:hover{background:var(--t-card2)}
-.er-nm{display:flex;flex-wrap:wrap;align-items:center;gap:3px 5px;min-width:0}
-.er-nm a{font-size:13.5px;font-weight:800;text-decoration:none;margin-right:2px}
-.er-nm a:hover{color:var(--t-accent)}
-.er-bd{font-size:10px;font-weight:700;padding:0 6px;border-radius:999px;border:1px solid;line-height:1.5;white-space:nowrap}
+.er-list{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.er-row{background:var(--t-card);border:1px solid var(--t-line);border-radius:12px;padding:12px 14px;min-width:0}
+.er-row:hover{border-color:var(--t-edge)}
+.er-row-h{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px}
+.er-row-h a{font-size:15px;font-weight:800;text-decoration:none;margin-right:2px}
+.er-row-h a:hover{color:var(--t-accent)}
+.er-bd{font-size:10.5px;font-weight:700;padding:0 7px;border-radius:999px;border:1px solid;white-space:nowrap}
 .er-bd.hi{color:var(--t-up);border-color:currentColor}
 .er-bd.lo{color:var(--t-down);border-color:currentColor}
-.er-v{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
-.er-v small{font-size:11px;font-weight:600;margin-left:4px}
-.er-v b{font-weight:inherit}.er-v .s{display:none}
-.er-note{grid-column:1/-1;font-size:12px;color:var(--t-mute);line-height:1.5;margin-top:1px}
+.er-m{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 10px;margin-top:8px}
+.er-m dt{font-size:11px;color:var(--t-mute);white-space:nowrap}
+.er-m dd{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.er-note{font-size:12.5px;color:var(--t-fg2);margin-top:8px;padding-top:8px;border-top:1px solid var(--t-line);line-height:1.55}
 .up{color:var(--t-up)}.dn{color:var(--t-down)}
 .er-foot{font-size:12px;color:var(--t-mute);margin-top:36px;line-height:1.7}
 .er-hub{list-style:none;display:grid;gap:10px;margin-top:18px}
@@ -203,18 +188,14 @@ a{color:inherit}
 .er-hub a:hover{border-color:var(--t-accent)}
 .er-hub b{font-size:16px}
 .er-hub span{display:block;font-size:13px;color:var(--t-mute);margin-top:2px}
+@media (max-width:1180px){.er-list{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:880px){.er-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:640px){
   .er h1{font-size:22px}
   .er-kpis{grid-template-columns:repeat(2,1fr)}
   .er-themes{grid-template-columns:1fr}
-  .er-hd{display:none}
-  .er-row{grid-template-columns:repeat(4,minmax(0,1fr));column-gap:8px;row-gap:1px;padding:7px 12px}
-  .er-nm{grid-column:1/-1}
-  .er-v{text-align:left;font-size:12px}
-  .er-v::before{content:attr(data-l);display:block;font-size:10px;font-weight:500;color:var(--t-mute)}
-  .er-v small{display:block;margin-left:0;font-size:10.5px}
-  .er-v .f{display:none}.er-v .s{display:inline}
 }
+@media (max-width:520px){.er-list{grid-template-columns:1fr}}
 '''
 
 
