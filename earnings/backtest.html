@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>분기보고서 저평가 종목 백테스트 — 가치를말하다</title>
+<meta name="description" content="분기보고서 마감일 기준 저평가 종목을 지금까지 보유했을 때의 수익률">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4973537494905596" crossorigin="anonymous"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--t-bg,#14131c);color:var(--t-fg,#eee);font-family:var(--t-font,'Noto Sans KR',sans-serif);line-height:1.6}
+a{color:inherit}
+.er{max-width:1280px;margin:0 auto;padding:20px 16px 60px}
+.er-back{display:inline-block;font-size:13px;font-weight:700;color:var(--t-accent);text-decoration:none;margin-bottom:18px}
+.er-eyebrow{font-size:12px;color:var(--t-accent);font-weight:700;letter-spacing:.04em}
+.er h1{font-size:26px;font-weight:900;letter-spacing:-.03em;line-height:1.25;margin:4px 0 6px}
+.er-sub{font-size:13px;color:var(--t-mute)}
+.er-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0}
+.er-kpi{background:var(--t-card);border:1px solid var(--t-line);border-radius:12px;padding:12px 14px}
+.er-kpi dt{font-size:12px;color:var(--t-mute)}
+.er-kpi dd{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;margin-top:2px}
+.er-kpi small{display:block;font-size:11.5px;color:var(--t-mute);font-weight:500}
+.er h2{font-size:19px;font-weight:800;letter-spacing:-.02em;margin:40px 0 12px;scroll-margin-top:64px}
+.er-h2-sub{font-size:12.5px;color:var(--t-mute);font-weight:500;margin-left:8px}
+.er-sec{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;margin:44px 0 14px;padding-left:12px;border-left:4px solid var(--t-edge);scroll-margin-top:64px}
+.er-sec.good{border-left-color:var(--t-up)}.er-sec.bad{border-left-color:var(--t-down)}
+.er-sec h2{margin:0}
+.er-sec .n{font-size:13px;font-weight:800;color:var(--t-fg2);font-variant-numeric:tabular-nums}
+.er-sec p{flex-basis:100%;font-size:13px;color:var(--t-mute)}
+.er-themes{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.er-theme{background:var(--t-card);border:1px solid var(--t-line);border-radius:12px;padding:14px 16px}
+.er-theme b{display:block;font-size:14.5px;margin-bottom:4px}
+.er-theme p{font-size:13.5px;color:var(--t-fg2)}
+.er-nav{position:sticky;top:0;z-index:5;background:var(--t-bg);padding:10px 0;border-bottom:1px solid var(--t-line)}
+.er-chips{display:flex;flex-wrap:wrap;gap:6px}
+.er-chips a{font-size:13px;text-decoration:none;padding:6px 12px;border:1px solid var(--t-edge);border-radius:999px;color:var(--t-fg2)}
+.er-chips a:hover{border-color:var(--t-accent);color:var(--t-fg)}
+.er-chips span{color:var(--t-mute);margin-left:4px;font-variant-numeric:tabular-nums}
+.er-list{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.er-row{display:flex;flex-direction:column;background:var(--t-card);border:1px solid var(--t-line);border-radius:14px;padding:14px 16px;min-width:0}
+.er-row:hover{border-color:var(--t-edge)}
+.er-row-h a{font-size:16px;font-weight:800;letter-spacing:-.02em;text-decoration:none;line-height:1.35}
+.er-row-h a:hover{color:var(--t-accent)}
+.er-bds{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.er-bd{font-size:10.5px;font-weight:700;padding:0 7px;border-radius:999px;border:1px solid;white-space:nowrap;line-height:1.6}
+.er-bd.hi{color:var(--t-up);border-color:currentColor}
+.er-bd.lo{color:var(--t-down);border-color:currentColor}
+.er-hero{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;margin-top:10px}
+.er-hero-l{flex-basis:100%;font-size:11.5px;color:var(--t-mute)}
+.er-hero-v{font-size:21px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.25}
+.er-chg{font-size:12px;font-weight:800;padding:1px 8px;border-radius:6px;background:var(--t-card2);white-space:nowrap}
+.er-m{margin-top:10px;padding-top:8px;border-top:1px solid var(--t-line);display:grid;gap:3px}
+.er-m div{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.er-m dt{font-size:12px;color:var(--t-mute);white-space:nowrap}
+.er-m dd{font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.er-note{font-size:13px;color:var(--t-fg2);margin-top:10px;padding:9px 11px;background:var(--t-bg);border-radius:8px;line-height:1.6}
+.up{color:var(--t-up)}.dn{color:var(--t-down)}
+.er-foot{font-size:12px;color:var(--t-mute);margin-top:36px;line-height:1.7}
+.er-hub{list-style:none;display:grid;gap:10px;margin-top:18px}
+.er-hub a{display:block;background:var(--t-card);border:1px solid var(--t-line);border-radius:12px;padding:16px 18px;text-decoration:none}
+.er-hub a:hover{border-color:var(--t-accent)}
+.er-hub b{font-size:16px}
+.er-hub a.er-hub-bt{border-color:var(--t-accent);background:linear-gradient(90deg,oklch(0.76 0.13 290 / .12),var(--t-card))}
+.er-bt-link{display:inline-block;margin-top:12px;font-size:13.5px;font-weight:700;color:var(--t-accent);text-decoration:none;padding:7px 14px;border:1px solid var(--t-accent);border-radius:999px}
+.er-bt-link:hover{background:oklch(0.76 0.13 290 / .12)}
+.er-hub span{display:block;font-size:13px;color:var(--t-mute);margin-top:2px}
+@media (max-width:1180px){.er-list{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:880px){.er-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){
+  .er h1{font-size:22px}
+  .er-kpis{grid-template-columns:repeat(2,1fr)}
+  .er-themes{grid-template-columns:1fr}
+  .er-kpi dd{font-size:17px}
+  .er-chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  .er-chips::-webkit-scrollbar{display:none}
+  .er-chips a{flex:0 0 auto;white-space:nowrap}
+}
+@media (max-width:520px){.er-list{grid-template-columns:1fr}}
+
+.bt-tbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:14px}
+.bt-wrap{overflow-x:auto;background:var(--t-card);border:1px solid var(--t-line);border-radius:12px}
+.bt-tbl th,.bt-tbl td{padding:10px 12px;text-align:right;border-bottom:1px solid var(--t-line);white-space:nowrap}
+.bt-tbl th:first-child,.bt-tbl td:first-child{text-align:left}
+.bt-tbl thead th{font-size:12px;color:var(--t-mute);font-weight:600;background:var(--t-card2)}
+.bt-tbl tbody tr:last-child td{border-bottom:0}
+.bt-tbl td.hl{font-weight:800}
+.bt-tbl small{display:block;font-size:11px;color:var(--t-mute);font-weight:500}
+.bt-q{background:var(--t-card);border:1px solid var(--t-line);border-radius:14px;padding:16px 18px;margin-top:14px;scroll-margin-top:16px}
+.bt-q-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.bt-q-h h3{font-size:17px;font-weight:800}
+.bt-q-h span{font-size:12.5px;color:var(--t-mute)}
+.bt-q-h a{font-size:12.5px;color:var(--t-accent);text-decoration:none;margin-left:auto}
+.bt-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}
+.bt-stat{background:var(--t-bg);border-radius:10px;padding:10px 12px}
+.bt-stat dt{font-size:11.5px;color:var(--t-mute)}
+.bt-stat dd{font-size:19px;font-weight:800;font-variant-numeric:tabular-nums}
+.bt-stat small{display:block;font-size:11px;color:var(--t-mute)}
+.bt-legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--t-fg2);margin-top:6px}
+.bt-legend i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:5px;vertical-align:middle}
+.bt-chart{display:grid;grid-template-columns:44px 1fr;grid-template-rows:200px 22px;margin-top:10px}
+.bt-y{position:relative}
+.bt-y span,.bt-x span{position:absolute;font-size:11px;color:var(--t-mute);font-variant-numeric:tabular-nums;white-space:nowrap}
+.bt-y span{right:8px;transform:translateY(-50%)}
+.bt-plot svg{width:100%;height:100%;display:block;overflow:visible}
+.bt-x{position:relative;grid-column:2}
+.bt-x span{top:5px}.bt-x .m{transform:translateX(-50%)}.bt-x .e{transform:translateX(-100%)}
+.bt-grid{stroke:var(--t-line);stroke-width:1;vector-effect:non-scaling-stroke}
+.bt-zero{stroke:var(--t-edge);stroke-width:1.2;stroke-dasharray:4 3;vector-effect:non-scaling-stroke}
+.bt-l{fill:none;stroke-width:2.2;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.bt-l.under,.bt-legend .under{stroke:var(--t-accent);background:var(--t-accent)}
+.bt-l.over,.bt-legend .over{stroke:var(--t-down);background:var(--t-down)}
+.bt-l.kospi,.bt-legend .kospi{stroke:var(--t-mute);background:var(--t-mute);stroke-dasharray:5 4}
+.bt-list{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px 18px;margin-top:12px;padding-top:12px;border-top:1px solid var(--t-line)}
+.bt-list li{display:flex;justify-content:space-between;gap:8px;font-size:13px;padding:3px 0;font-variant-numeric:tabular-nums;min-width:0}
+.bt-list a{text-decoration:none;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bt-list a:hover{color:var(--t-accent)}
+.bt-list em{font-style:normal;color:var(--t-mute);font-size:11.5px;margin-left:4px}
+.bt-list b{white-space:nowrap}
+.bt-short{font-size:12.5px;color:var(--t-mute);margin-top:8px}
+.bt-notes{margin-top:10px;padding-left:18px;font-size:13px;color:var(--t-fg2);line-height:1.7}
+@media (max-width:900px){.bt-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.bt-stats{grid-template-columns:repeat(2,1fr)}.bt-list{grid-template-columns:1fr}}
+</style>
+<link rel="stylesheet" href="../css/theme.css">
+</head>
+<body>
+<main class="er">
+<a class="er-back" href="index.html">← 분기 실적 리뷰 목록</a>
+<div class="er-eyebrow">백테스트 · 2026.11.20 종가 기준 자동 갱신</div>
+<h1>분기보고서 저평가 종목 백테스트</h1>
+<p class="er-sub">분기보고서 제출 마감일에 사이트 기준 '저평가' 종목을 사서 지금까지 들고 있었다면?</p>
+<div class="er-sec good" id="summary"><h2>분기별 결과</h2><p>매수일 종가 → 2026.11.20 종가, 동일 가중 평균 수익률. 작은 글씨는 종목 수와 KOSPI보다 나은 종목 비율.</p></div>
+<div class="bt-wrap"><table class="bt-tbl"><thead><tr><th>분기 (매수일)</th><th>KOSPI</th><th>전체 평균</th><th>저평가<small>하단 미만</small></th><th>범위 안<small>하단~상단</small></th><th>고평가<small>상단 초과</small></th></tr></thead><tbody><tr><td><a href="#2026q1">1Q26</a><small>1분기보고서 · 매수 2026.05.15</small></td><td><span class="dn">-35.0%</span></td><td><span class="dn">-26.9%</span><small>192개</small></td><td class="hl"><span class="dn">-12.4%</span><small>21개 · KOSPI 초과 81%</small></td><td class=""><span class="dn">-17.5%</span><small>38개 · KOSPI 초과 79%</small></td><td class=""><span class="dn">-31.9%</span><small>133개 · KOSPI 초과 45%</small></td></tr><tr><td><a href="#2026q2">2Q26</a><small>반기보고서 · 매수 2026.08.14</small></td><td><span class="dn">-30.2%</span></td><td><span class="dn">-20.9%</span><small>192개</small></td><td class="hl"><span class="dn">-16.9%</span><small>30개 · KOSPI 초과 77%</small></td><td class=""><span class="dn">-21.9%</span><small>41개 · KOSPI 초과 71%</small></td><td class=""><span class="dn">-21.6%</span><small>121개 · KOSPI 초과 59%</small></td></tr><tr><td><a href="#2026q3">3Q26</a><small>3분기보고서 · 매수 2026.11.16</small></td><td><span class="dn">-4.5%</span></td><td><span class="dn">-4.2%</span><small>192개</small></td><td class="hl"><span class="dn">-2.7%</span><small>44개 · KOSPI 초과 59%</small></td><td class=""><span class="dn">-5.1%</span><small>57개 · KOSPI 초과 44%</small></td><td class=""><span class="dn">-4.3%</span><small>91개 · KOSPI 초과 46%</small></td></tr></tbody></table></div>
+<div class="er-sec" id="detail"><h2>분기별 상세</h2><p>저평가 종목 목록의 '하단 −20%'는 매수일 종가가 내재가치 하단보다 20% 낮았다는 뜻.</p></div>
+<section class="bt-q" id="2026q3">
+<div class="bt-q-h"><h3>3Q26 · 3분기보고서</h3><span>마감일 2026.11.14 → 매수 2026.11.16 종가 · 4거래일 보유</span><a href="2026q3.html">실적 리뷰 →</a></div>
+<dl class="bt-stats">
+  <div class="bt-stat"><dt>저평가 평균</dt><dd><span class="dn">-2.7%</span></dd><small>중앙값 -2.9% · 44개</small></div>
+  <div class="bt-stat"><dt>KOSPI 대비</dt><dd><span class="up">+1.8%</span></dd><small>KOSPI -4.5%</small></div>
+  <div class="bt-stat"><dt>오른 종목 비율</dt><dd>25%</dd><small>KOSPI보다 나은 비율 59%</small></div>
+  <div class="bt-stat"><dt>고평가 평균</dt><dd><span class="dn">-4.3%</span></dd><small>91개 · 범위 안 -5.1%</small></div>
+</dl><p class="bt-short">보유 기간이 4거래일뿐이라 아직 판단하기 이릅니다.</p><div class="bt-legend"><span><i class="under"></i>저평가 (동일 가중)</span><span><i class="over"></i>고평가 (동일 가중)</span><span><i class="kospi"></i>KOSPI</span></div><div class="bt-chart"><div class="bt-y"><span style="top:20.85%">+0%</span></div><div class="bt-plot"><svg viewBox="0 0 1000 200" preserveAspectRatio="none" role="img" aria-label="매수일 대비 누적 수익률"><line x1="0" x2="1000" y1="41.7" y2="41.7" class="bt-zero"/><polyline class="bt-l kospi" points="0.0,41.7 250.0,124.5 500.0,62.4 750.0,18.3 1000.0,186.2"/><polyline class="bt-l over" points="0.0,41.7 250.0,104.9 500.0,34.8 750.0,13.8 1000.0,177.6"/><polyline class="bt-l under" points="0.0,41.7 250.0,111.0 500.0,47.4 750.0,36.2 1000.0,128.9"/></svg></div><div class="bt-x"><span style="left:0.00%" class="s">11.16</span><span style="left:50.00%" class="m">11.18</span><span style="left:100.00%" class="e">11.20</span></div></div>
+<ul class="bt-list"><li><a href="../stocks/111_004170.html">신세계</a><span><em>하단 -9%</em> <b><span class="up">+15.5%</span></b></span></li><li><a href="../stocks/152_007340.html">DN오토모티브</a><span><em>하단 -14%</em> <b><span class="up">+7.5%</span></b></span></li><li><a href="../stocks/178_462870.html">시프트업</a><span><em>하단 -20%</em> <b><span class="up">+7.2%</span></b></span></li><li><a href="../stocks/188_439260.html">대한조선</a><span><em>하단 -55%</em> <b><span class="up">+4.8%</span></b></span></li><li><a href="../stocks/052_138040.html">메리츠금융지주</a><span><em>하단 -10%</em> <b><span class="up">+3.8%</span></b></span></li><li><a href="../stocks/141_383220.html">F&amp;F</a><span><em>하단 -40%</em> <b><span class="up">+3.4%</span></b></span></li><li><a href="../stocks/170_001720.html">신영증권</a><span><em>하단 -27%</em> <b><span class="up">+3.3%</span></b></span></li><li><a href="../stocks/130_111770.html">영원무역</a><span><em>하단 -22%</em> <b><span class="up">+2.3%</span></b></span></li><li><a href="../stocks/187_000120.html">CJ대한통운</a><span><em>하단 -21%</em> <b><span class="up">+2.2%</span></b></span></li><li><a href="../stocks/134_035250.html">강원랜드</a><span><em>하단 -1%</em> <b><span class="up">+1.3%</span></b></span></li><li><a href="../stocks/062_259960.html">크래프톤</a><span><em>하단 -8%</em> <b><span class="up">+1.2%</span></b></span></li><li><a href="../stocks/171_139480.html">이마트</a><span><em>하단 -48%</em> <b><span class="dn">-0.2%</span></b></span></li><li><a href="../stocks/055_024110.html">기업은행</a><span><em>하단 -35%</em> <b><span class="dn">-0.5%</span></b></span></li><li><a href="../stocks/084_029780.html">삼성카드</a><span><em>하단 -23%</em> <b><span class="dn">-0.5%</span></b></span></li><li><a href="../stocks/194_120110.html">코오롱인더</a><span><em>하단 -15%</em> <b><span class="dn">-0.7%</span></b></span></li><li><a href="../stocks/197_294870.html">IPARK현대산업개발</a><span><em>하단 -3%</em> <b><span class="dn">-0.8%</span></b></span></li><li><a href="../stocks/099_036570.html">NC</a><span><em>하단 -25%</em> <b><span class="dn">-1.1%</span></b></span></li><li><a href="../stocks/162_030000.html">제일기획</a><span><em>하단 -3%</em> <b><span class="dn">-1.2%</span></b></span></li><li><a href="../stocks/144_139130.html">iM금융지주</a><span><em>하단 -18%</em> <b><span class="dn">-1.6%</span></b></span></li><li><a href="../stocks/169_004800.html">효성</a><span><em>하단 -29%</em> <b><span class="dn">-2.2%</span></b></span></li><li><a href="../stocks/190_023590.html">다우기술</a><span><em>하단 -32%</em> <b><span class="dn">-2.4%</span></b></span></li><li><a href="../stocks/060_071050.html">한국금융지주</a><span><em>하단 -50%</em> <b><span class="dn">-2.7%</span></b></span></li><li><a href="../stocks/088_161390.html">한국타이어앤테크놀로지</a><span><em>하단 -3%</em> <b><span class="dn">-3.2%</span></b></span></li><li><a href="../stocks/039_316140.html">우리금융지주</a><span><em>하단 -11%</em> <b><span class="dn">-3.8%</span></b></span></li><li><a href="../stocks/005_005380.html">현대차</a><span><em>하단 -10%</em> <b><span class="dn">-4.2%</span></b></span></li><li><a href="../stocks/121_004020.html">현대제철</a><span><em>하단 -30%</em> <b><span class="dn">-4.4%</span></b></span></li><li><a href="../stocks/096_241560.html">두산밥캣</a><span><em>하단 -11%</em> <b><span class="dn">-4.6%</span></b></span></li><li><a href="../stocks/071_005830.html">DB손해보험</a><span><em>하단 -42%</em> <b><span class="dn">-5.0%</span></b></span></li><li><a href="../stocks/147_003690.html">코리안리</a><span><em>하단 -18%</em> <b><span class="dn">-5.0%</span></b></span></li><li><a href="../stocks/108_073240.html">금호타이어</a><span><em>하단 -47%</em> <b><span class="dn">-5.4%</span></b></span></li><li><a href="../stocks/139_011780.html">금호석유화학</a><span><em>하단 -49%</em> <b><span class="dn">-5.8%</span></b></span></li><li><a href="../stocks/070_039490.html">키움증권</a><span><em>하단 -46%</em> <b><span class="dn">-5.8%</span></b></span></li><li><a href="../stocks/069_016360.html">삼성증권</a><span><em>하단 -23%</em> <b><span class="dn">-5.9%</span></b></span></li><li><a href="../stocks/087_138930.html">BNK금융지주</a><span><em>하단 -30%</em> <b><span class="dn">-6.3%</span></b></span></li><li><a href="../stocks/014_032830.html">삼성생명</a><span><em>하단 -10%</em> <b><span class="dn">-6.5%</span></b></span></li><li><a href="../stocks/042_000810.html">삼성화재</a><span><em>하단 -22%</em> <b><span class="dn">-6.6%</span></b></span></li><li><a href="../stocks/116_088350.html">한화생명</a><span><em>하단 -48%</em> <b><span class="dn">-7.3%</span></b></span></li><li><a href="../stocks/090_175330.html">JB금융지주</a><span><em>하단 -15%</em> <b><span class="dn">-7.4%</span></b></span></li><li><a href="../stocks/010_000270.html">기아</a><span><em>하단 -41%</em> <b><span class="dn">-7.9%</span></b></span></li><li><a href="../stocks/015_012330.html">현대모비스</a><span><em>하단 -1%</em> <b><span class="dn">-9.2%</span></b></span></li><li><a href="../stocks/180_103140.html">풍산</a><span><em>하단 -4%</em> <b><span class="dn">-9.6%</span></b></span></li><li><a href="../stocks/157_375500.html">DL이앤씨</a><span><em>하단 -22%</em> <b><span class="dn">-9.6%</span></b></span></li><li><a href="../stocks/125_001450.html">현대해상</a><span><em>하단 -59%</em> <b><span class="dn">-12.3%</span></b></span></li><li><a href="../stocks/161_005850.html">에스엘</a><span><em>하단 -12%</em> <b><span class="dn">-23.3%</span></b></span></li></ul>
+</section>
+<section class="bt-q" id="2026q2">
+<div class="bt-q-h"><h3>2Q26 · 반기보고서</h3><span>마감일 2026.08.14 → 매수 2026.08.14 종가 · 65거래일 보유</span><a href="2026q2.html">실적 리뷰 →</a></div>
+<dl class="bt-stats">
+  <div class="bt-stat"><dt>저평가 평균</dt><dd><span class="dn">-16.9%</span></dd><small>중앙값 -14.8% · 30개</small></div>
+  <div class="bt-stat"><dt>KOSPI 대비</dt><dd><span class="up">+13.3%</span></dd><small>KOSPI -30.2%</small></div>
+  <div class="bt-stat"><dt>오른 종목 비율</dt><dd>7%</dd><small>KOSPI보다 나은 비율 77%</small></div>
+  <div class="bt-stat"><dt>고평가 평균</dt><dd><span class="dn">-21.6%</span></dd><small>121개 · 범위 안 -21.9%</small></div>
+</dl><div class="bt-legend"><span><i class="under"></i>저평가 (동일 가중)</span><span><i class="over"></i>고평가 (동일 가중)</span><span><i class="kospi"></i>KOSPI</span></div><div class="bt-chart"><div class="bt-y"><span style="top:92.54%">-30%</span><span style="top:79.19%">-25%</span><span style="top:65.84%">-20%</span><span style="top:52.49%">-15%</span><span style="top:39.14%">-10%</span><span style="top:25.79%">-5%</span><span style="top:12.44%">+0%</span></div><div class="bt-plot"><svg viewBox="0 0 1000 200" preserveAspectRatio="none" role="img" aria-label="매수일 대비 누적 수익률"><line x1="0" x2="1000" y1="185.1" y2="185.1" class="bt-grid"/><line x1="0" x2="1000" y1="158.4" y2="158.4" class="bt-grid"/><line x1="0" x2="1000" y1="131.7" y2="131.7" class="bt-grid"/><line x1="0" x2="1000" y1="105.0" y2="105.0" class="bt-grid"/><line x1="0" x2="1000" y1="78.3" y2="78.3" class="bt-grid"/><line x1="0" x2="1000" y1="51.6" y2="51.6" class="bt-grid"/><line x1="0" x2="1000" y1="24.9" y2="24.9" class="bt-zero"/><polyline class="bt-l kospi" points="0.0,24.9 15.4,33.2 30.8,63.7 46.2,34.5 61.5,29.9 76.9,46.4 92.3,42.9 107.7,37.9 123.1,29.9 138.5,39.4 153.8,37.0 169.2,35.8 184.6,56.7 200.0,55.4 215.4,47.1 230.8,23.6 246.2,26.7 261.5,19.2 276.9,20.6 292.3,30.1 307.7,47.4 323.1,51.7 338.5,44.8 353.8,45.0 369.2,31.3 384.6,22.6 400.0,21.8 415.4,17.0 430.8,31.6 446.2,33.1 461.5,35.6 476.9,25.4 492.3,22.9 507.7,27.7 523.1,38.2 538.5,51.8 553.8,70.3 569.2,97.0 584.6,99.1 600.0,133.8 615.4,125.1 630.8,117.5 646.2,134.0 661.5,120.0 676.9,135.4 692.3,134.1 707.7,140.3 723.1,127.4 738.5,98.8 753.8,104.5 769.2,120.3 784.6,110.5 800.0,126.6 815.4,123.9 830.8,146.9 846.2,171.7 861.5,174.8 876.9,158.0 892.3,147.5 907.7,150.0 923.1,154.0 938.5,168.6 953.8,178.7 969.2,171.1 984.6,165.7 1000.0,186.2"/><polyline class="bt-l over" points="0.0,24.9 15.4,39.6 30.8,48.1 46.2,41.8 61.5,57.2 76.9,45.1 92.3,37.5 107.7,27.9 123.1,22.6 138.5,20.6 153.8,23.4 169.2,29.6 184.6,48.3 200.0,47.3 215.4,40.7 230.8,30.7 246.2,35.9 261.5,26.6 276.9,30.0 292.3,33.4 307.7,43.5 323.1,40.9 338.5,44.5 353.8,37.0 369.2,35.7 384.6,36.1 400.0,33.9 415.4,35.5 430.8,35.5 446.2,36.0 461.5,36.1 476.9,30.9 492.3,24.1 507.7,14.4 523.1,25.6 538.5,36.8 553.8,56.9 569.2,61.9 584.6,60.8 600.0,93.7 615.4,79.0 630.8,65.6 646.2,91.6 661.5,83.1 676.9,96.4 692.3,106.7 707.7,117.0 723.1,109.0 738.5,98.2 753.8,109.9 769.2,124.8 784.6,105.6 800.0,113.9 815.4,102.0 830.8,114.0 846.2,127.9 861.5,138.6 876.9,120.2 892.3,108.0 907.7,117.0 923.1,114.4 938.5,122.6 953.8,130.0 969.2,121.4 984.6,119.8 1000.0,140.1"/><polyline class="bt-l under" points="0.0,24.9 15.4,31.5 30.8,44.5 46.2,46.5 61.5,46.9 76.9,47.6 92.3,39.2 107.7,31.6 123.1,31.5 138.5,20.5 153.8,26.9 169.2,18.1 184.6,25.7 200.0,13.8 215.4,22.9 230.8,17.8 246.2,21.5 261.5,23.8 276.9,22.2 292.3,15.8 307.7,16.4 323.1,18.9 338.5,21.1 353.8,17.4 369.2,21.1 384.6,18.8 400.0,21.7 415.4,26.1 430.8,22.7 446.2,24.0 461.5,33.0 476.9,31.2 492.3,27.7 507.7,27.4 523.1,33.5 538.5,41.4 553.8,45.0 569.2,47.9 584.6,55.6 600.0,68.7 615.4,57.8 630.8,53.9 646.2,65.7 661.5,68.1 676.9,73.8 692.3,81.7 707.7,92.1 723.1,85.1 738.5,79.2 753.8,72.1 769.2,82.2 784.6,76.1 800.0,79.5 815.4,74.1 830.8,76.8 846.2,94.1 861.5,99.7 876.9,96.5 892.3,99.1 907.7,106.3 923.1,103.9 938.5,102.3 953.8,110.6 969.2,104.8 984.6,103.4 1000.0,115.0"/></svg></div><div class="bt-x"><span style="left:0.00%" class="s">08.14</span><span style="left:50.77%" class="m">10.06</span><span style="left:100.00%" class="e">11.20</span></div></div>
+<ul class="bt-list"><li><a href="../stocks/197_294870.html">IPARK현대산업개발</a><span><em>하단 -9%</em> <b><span class="up">+9.7%</span></b></span></li><li><a href="../stocks/052_138040.html">메리츠금융지주</a><span><em>하단 -14%</em> <b><span class="up">+7.9%</span></b></span></li><li><a href="../stocks/107_192650.html">드림텍</a><span><em>하단 -5%</em> <b><span class="dn">-0.6%</span></b></span></li><li><a href="../stocks/162_030000.html">제일기획</a><span><em>하단 -6%</em> <b><span class="dn">-0.7%</span></b></span></li><li><a href="../stocks/039_316140.html">우리금융지주</a><span><em>하단 -9%</em> <b><span class="dn">-5.5%</span></b></span></li><li><a href="../stocks/055_024110.html">기업은행</a><span><em>하단 -35%</em> <b><span class="dn">-6.3%</span></b></span></li><li><a href="../stocks/071_005830.html">DB손해보험</a><span><em>하단 -44%</em> <b><span class="dn">-7.0%</span></b></span></li><li><a href="../stocks/121_004020.html">현대제철</a><span><em>하단 -30%</em> <b><span class="dn">-8.2%</span></b></span></li><li><a href="../stocks/090_175330.html">JB금융지주</a><span><em>하단 -14%</em> <b><span class="dn">-8.2%</span></b></span></li><li><a href="../stocks/141_383220.html">F&amp;F</a><span><em>하단 -32%</em> <b><span class="dn">-9.4%</span></b></span></li><li><a href="../stocks/187_000120.html">CJ대한통운</a><span><em>하단 -10%</em> <b><span class="dn">-9.6%</span></b></span></li><li><a href="../stocks/144_139130.html">iM금융지주</a><span><em>하단 -10%</em> <b><span class="dn">-10.4%</span></b></span></li><li><a href="../stocks/182_001120.html">LX인터내셔널</a><span><em>하단 -9%</em> <b><span class="dn">-13.5%</span></b></span></li><li><a href="../stocks/178_462870.html">시프트업</a><span><em>하단 -3%</em> <b><span class="dn">-13.6%</span></b></span></li><li><a href="../stocks/087_138930.html">BNK금융지주</a><span><em>하단 -22%</em> <b><span class="dn">-14.7%</span></b></span></li><li><a href="../stocks/084_029780.html">삼성카드</a><span><em>하단 -9%</em> <b><span class="dn">-14.8%</span></b></span></li><li><a href="../stocks/130_111770.html">영원무역</a><span><em>하단 -4%</em> <b><span class="dn">-17.1%</span></b></span></li><li><a href="../stocks/042_000810.html">삼성화재</a><span><em>하단 -22%</em> <b><span class="dn">-17.6%</span></b></span></li><li><a href="../stocks/171_139480.html">이마트</a><span><em>하단 -44%</em> <b><span class="dn">-19.5%</span></b></span></li><li><a href="../stocks/147_003690.html">코리안리</a><span><em>하단 -8%</em> <b><span class="dn">-19.8%</span></b></span></li><li><a href="../stocks/014_032830.html">삼성생명</a><span><em>하단 -10%</em> <b><span class="dn">-21.1%</span></b></span></li><li><a href="../stocks/125_001450.html">현대해상</a><span><em>하단 -53%</em> <b><span class="dn">-27.1%</span></b></span></li><li><a href="../stocks/190_023590.html">다우기술</a><span><em>하단 -26%</em> <b><span class="dn">-28.3%</span></b></span></li><li><a href="../stocks/139_011780.html">금호석유화학</a><span><em>하단 -32%</em> <b><span class="dn">-30.2%</span></b></span></li><li><a href="../stocks/169_004800.html">효성</a><span><em>하단 -35%</em> <b><span class="dn">-32.2%</span></b></span></li><li><a href="../stocks/188_439260.html">대한조선</a><span><em>하단 -27%</em> <b><span class="dn">-34.0%</span></b></span></li><li><a href="../stocks/070_039490.html">키움증권</a><span><em>하단 -12%</em> <b><span class="dn">-37.4%</span></b></span></li><li><a href="../stocks/116_088350.html">한화생명</a><span><em>하단 -31%</em> <b><span class="dn">-38.0%</span></b></span></li><li><a href="../stocks/010_000270.html">기아</a><span><em>하단 -13%</em> <b><span class="dn">-38.3%</span></b></span></li><li><a href="../stocks/060_071050.html">한국금융지주</a><span><em>하단 -19%</em> <b><span class="dn">-40.7%</span></b></span></li></ul>
+</section>
+<section class="bt-q" id="2026q1">
+<div class="bt-q-h"><h3>1Q26 · 1분기보고서</h3><span>마감일 2026.05.15 → 매수 2026.05.15 종가 · 127거래일 보유</span><a href="2026q1.html">실적 리뷰 →</a></div>
+<dl class="bt-stats">
+  <div class="bt-stat"><dt>저평가 평균</dt><dd><span class="dn">-12.4%</span></dd><small>중앙값 -6.5% · 21개</small></div>
+  <div class="bt-stat"><dt>KOSPI 대비</dt><dd><span class="up">+22.6%</span></dd><small>KOSPI -35.0%</small></div>
+  <div class="bt-stat"><dt>오른 종목 비율</dt><dd>24%</dd><small>KOSPI보다 나은 비율 81%</small></div>
+  <div class="bt-stat"><dt>고평가 평균</dt><dd><span class="dn">-31.9%</span></dd><small>133개 · 범위 안 -17.5%</small></div>
+</dl><div class="bt-legend"><span><i class="under"></i>저평가 (동일 가중)</span><span><i class="over"></i>고평가 (동일 가중)</span><span><i class="kospi"></i>KOSPI</span></div><div class="bt-chart"><div class="bt-y"><span style="top:85.48%">-30%</span><span style="top:70.26%">-20%</span><span style="top:55.04%">-10%</span><span style="top:39.83%">+0%</span><span style="top:24.61%">+10%</span><span style="top:9.39%">+20%</span></div><div class="bt-plot"><svg viewBox="0 0 1000 200" preserveAspectRatio="none" role="img" aria-label="매수일 대비 누적 수익률"><line x1="0" x2="1000" y1="171.0" y2="171.0" class="bt-grid"/><line x1="0" x2="1000" y1="140.5" y2="140.5" class="bt-grid"/><line x1="0" x2="1000" y1="110.1" y2="110.1" class="bt-grid"/><line x1="0" x2="1000" y1="79.7" y2="79.7" class="bt-zero"/><line x1="0" x2="1000" y1="49.2" y2="49.2" class="bt-grid"/><line x1="0" x2="1000" y1="18.8" y2="18.8" class="bt-grid"/><polyline class="bt-l kospi" points="0.0,79.7 7.9,78.7 15.7,88.7 23.6,91.2 31.5,66.6 39.4,65.3 47.2,57.1 55.1,49.8 63.0,51.5 70.9,39.7 78.7,27.0 86.6,26.5 94.5,33.1 102.4,52.5 110.2,80.0 118.1,55.1 126.0,70.0 133.9,68.7 141.7,54.0 149.6,36.9 157.5,29.6 165.4,24.0 173.2,15.9 181.1,16.3 189.0,13.8 196.9,50.8 204.7,39.9 212.6,21.3 220.5,42.4 228.3,43.0 236.2,39.7 244.1,46.7 252.0,73.4 259.8,55.5 267.7,57.0 275.6,73.0 283.5,89.7 291.3,87.8 299.2,80.4 307.1,107.5 315.0,105.5 322.8,88.1 330.7,107.0 338.6,119.3 346.5,109.9 354.3,107.9 362.2,95.7 370.1,112.3 378.0,109.6 385.8,139.3 393.7,154.0 401.6,156.8 409.4,116.1 417.3,129.8 425.2,125.7 433.1,116.0 440.9,128.3 448.8,129.8 456.7,128.1 464.6,126.3 472.4,116.8 480.3,107.3 488.2,100.6 496.1,105.0 503.9,121.2 511.8,105.7 519.7,103.2 527.6,112.0 535.4,110.1 543.3,107.5 551.2,103.2 559.1,108.3 566.9,107.0 574.8,106.4 582.7,117.4 590.6,116.8 598.4,112.4 606.3,99.9 614.2,101.5 622.0,97.6 629.9,98.3 637.8,103.3 645.7,112.5 653.5,114.8 661.4,111.1 669.3,111.2 677.2,104.0 685.0,99.4 692.9,99.0 700.8,96.4 708.7,104.2 716.5,104.9 724.4,106.3 732.3,100.8 740.2,99.5 748.0,102.1 755.9,107.7 763.8,114.9 771.7,124.7 779.5,138.9 787.4,139.9 795.3,158.4 803.1,153.8 811.0,149.7 818.9,158.5 826.8,151.0 834.6,159.2 842.5,158.6 850.4,161.9 858.3,155.0 866.1,139.8 874.0,142.8 881.9,151.2 889.8,146.0 897.6,154.6 905.5,153.1 913.4,165.3 921.3,178.5 929.1,180.2 937.0,171.2 944.9,165.7 952.8,167.0 960.6,169.1 968.5,176.8 976.4,182.2 984.3,178.2 992.1,175.3 1000.0,186.2"/><polyline class="bt-l over" points="0.0,79.7 7.9,86.0 15.7,94.5 23.6,101.9 31.5,83.5 39.4,75.8 47.2,72.3 55.1,78.0 63.0,82.7 70.9,75.9 78.7,71.2 86.6,79.9 94.5,81.1 102.4,89.8 110.2,111.8 118.1,100.0 126.0,103.0 133.9,97.9 141.7,88.6 149.6,77.9 157.5,73.0 165.4,74.6 173.2,83.5 181.1,89.2 189.0,97.6 196.9,116.9 204.7,114.6 212.6,114.0 220.5,125.2 228.3,110.8 236.2,112.3 244.1,105.6 252.0,112.5 259.8,111.2 267.7,113.9 275.6,118.3 283.5,131.0 291.3,135.2 299.2,125.2 307.1,133.2 315.0,140.6 322.8,130.5 330.7,134.6 338.6,146.9 346.5,143.7 354.3,141.1 362.2,128.1 370.1,136.1 378.0,137.0 385.8,155.0 393.7,166.7 401.6,166.5 409.4,151.2 417.3,152.3 425.2,143.5 433.1,135.4 440.9,134.9 448.8,133.6 456.7,128.2 464.6,129.5 472.4,126.2 480.3,122.6 488.2,118.5 496.1,125.5 503.9,130.2 511.8,126.6 519.7,133.2 527.6,127.9 535.4,124.6 543.3,121.4 551.2,119.1 559.1,117.5 566.9,118.5 574.8,121.2 582.7,130.1 590.6,129.1 598.4,126.1 606.3,121.7 614.2,124.9 622.0,121.0 629.9,122.3 637.8,124.0 645.7,128.7 653.5,128.3 661.4,129.9 669.3,126.6 677.2,126.3 685.0,126.1 692.9,125.2 700.8,125.9 708.7,126.2 716.5,126.7 724.4,127.1 732.3,124.6 740.2,121.9 748.0,117.6 755.9,122.8 763.8,129.0 771.7,138.3 779.5,141.4 787.4,141.4 795.3,156.5 803.1,149.1 811.0,143.1 818.9,155.2 826.8,151.0 834.6,157.3 842.5,161.9 850.4,166.4 858.3,162.5 866.1,157.0 874.0,161.8 881.9,169.1 889.8,159.8 897.6,163.5 905.5,158.0 913.4,163.3 921.3,170.3 929.1,175.3 937.0,166.4 944.9,161.0 952.8,165.6 960.6,164.6 968.5,168.1 976.4,171.7 984.3,167.5 992.1,167.2 1000.0,176.8"/><polyline class="bt-l under" points="0.0,79.7 7.9,79.7 15.7,82.1 23.6,91.3 31.5,84.1 39.4,79.7 47.2,83.9 55.1,92.0 63.0,96.4 70.9,98.4 78.7,98.9 86.6,96.1 94.5,91.9 102.4,94.3 110.2,105.8 118.1,92.4 126.0,94.6 133.9,93.0 141.7,82.0 149.6,73.7 157.5,69.7 165.4,75.6 173.2,83.4 181.1,86.6 189.0,98.1 196.9,104.3 204.7,106.1 212.6,107.8 220.5,113.0 228.3,100.3 236.2,104.2 244.1,101.5 252.0,97.2 259.8,91.4 267.7,85.9 275.6,81.4 283.5,87.6 291.3,93.5 299.2,81.2 307.1,82.7 315.0,89.6 322.8,85.2 330.7,85.3 338.6,92.2 346.5,90.9 354.3,89.8 362.2,82.1 370.1,81.0 378.0,78.8 385.8,92.1 393.7,100.3 401.6,92.2 409.4,85.1 417.3,92.9 425.2,88.9 433.1,85.8 440.9,77.1 448.8,74.6 456.7,77.3 464.6,75.7 472.4,79.9 480.3,74.4 488.2,68.2 496.1,70.2 503.9,75.4 511.8,79.9 519.7,80.4 527.6,79.3 535.4,76.7 543.3,72.4 551.2,75.0 559.1,66.7 566.9,69.8 574.8,64.2 582.7,67.9 590.6,60.4 598.4,67.5 606.3,65.4 614.2,67.9 622.0,71.3 629.9,67.4 637.8,64.5 645.7,63.4 653.5,67.3 661.4,70.1 669.3,68.4 677.2,71.4 685.0,72.2 692.9,76.0 700.8,77.5 708.7,71.3 716.5,71.6 724.4,78.6 732.3,80.3 740.2,78.8 748.0,79.8 755.9,80.0 763.8,83.9 771.7,83.5 779.5,84.8 787.4,89.8 795.3,94.3 803.1,89.8 811.0,88.8 818.9,94.6 826.8,96.9 834.6,100.1 842.5,103.9 850.4,111.1 858.3,110.1 866.1,107.8 874.0,102.2 881.9,104.6 889.8,103.2 897.6,103.9 905.5,100.9 913.4,95.6 921.3,104.1 929.1,106.9 937.0,105.8 944.9,109.4 952.8,113.7 960.6,112.6 968.5,110.1 976.4,115.6 984.3,113.4 992.1,112.8 1000.0,117.4"/></svg></div><div class="bt-x"><span style="left:0.00%" class="s">05.15</span><span style="left:50.39%" class="m">08.19</span><span style="left:100.00%" class="e">11.20</span></div></div>
+<ul class="bt-list"><li><a href="../stocks/052_138040.html">메리츠금융지주</a><span><em>하단 -16%</em> <b><span class="up">+19.0%</span></b></span></li><li><a href="../stocks/197_294870.html">IPARK현대산업개발</a><span><em>하단 -4%</em> <b><span class="up">+5.9%</span></b></span></li><li><a href="../stocks/028_086790.html">하나금융지주</a><span><em>하단 -1%</em> <b><span class="up">+4.4%</span></b></span></li><li><a href="../stocks/090_175330.html">JB금융지주</a><span><em>하단 -21%</em> <b><span class="up">+3.0%</span></b></span></li><li><a href="../stocks/039_316140.html">우리금융지주</a><span><em>하단 -11%</em> <b><span class="up">+1.9%</span></b></span></li><li><a href="../stocks/071_005830.html">DB손해보험</a><span><em>하단 -36%</em> <b><span class="">+0.0%</span></b></span></li><li><a href="../stocks/108_073240.html">금호타이어</a><span><em>하단 -37%</em> <b><span class="">+0.0%</span></b></span></li><li><a href="../stocks/125_001450.html">현대해상</a><span><em>하단 -60%</em> <b><span class="dn">-0.9%</span></b></span></li><li><a href="../stocks/088_161390.html">한국타이어앤테크놀로지</a><span><em>하단 -17%</em> <b><span class="dn">-1.4%</span></b></span></li><li><a href="../stocks/162_030000.html">제일기획</a><span><em>하단 -2%</em> <b><span class="dn">-3.8%</span></b></span></li><li><a href="../stocks/147_003690.html">코리안리</a><span><em>하단 -19%</em> <b><span class="dn">-6.5%</span></b></span></li><li><a href="../stocks/055_024110.html">기업은행</a><span><em>하단 -27%</em> <b><span class="dn">-8.6%</span></b></span></li><li><a href="../stocks/178_462870.html">시프트업</a><span><em>하단 -3%</em> <b><span class="dn">-9.3%</span></b></span></li><li><a href="../stocks/084_029780.html">삼성카드</a><span><em>하단 -3%</em> <b><span class="dn">-18.6%</span></b></span></li><li><a href="../stocks/087_138930.html">BNK금융지주</a><span><em>하단 -10%</em> <b><span class="dn">-25.5%</span></b></span></li><li><a href="../stocks/141_383220.html">F&amp;F</a><span><em>하단 -13%</em> <b><span class="dn">-27.9%</span></b></span></li><li><a href="../stocks/190_023590.html">다우기술</a><span><em>하단 -25%</em> <b><span class="dn">-33.8%</span></b></span></li><li><a href="../stocks/116_088350.html">한화생명</a><span><em>하단 -32%</em> <b><span class="dn">-35.3%</span></b></span></li><li><a href="../stocks/139_011780.html">금호석유화학</a><span><em>하단 -20%</em> <b><span class="dn">-37.0%</span></b></span></li><li><a href="../stocks/171_139480.html">이마트</a><span><em>하단 -24%</em> <b><span class="dn">-38.0%</span></b></span></li><li><a href="../stocks/188_439260.html">대한조선</a><span><em>하단 -3%</em> <b><span class="dn">-48.0%</span></b></span></li></ul>
+</section>
+
+<div class="er-sec" id="method"><h2>계산 방식과 한계</h2></div>
+<ul class="bt-notes">
+<li>매수일: 분기·반기보고서는 분기 말 + 45일, 사업보고서는 결산 후 90일인 법정 제출 마감일. 휴장일이면 다음 거래일 종가.</li>
+<li>저평가: 매수일 종가가 그 분기 말 재무제표로 계산한 내재가치 하단보다 낮은 종목(종목 페이지 '내재가치 평가'의 저평가 배지와 같은 기준). 고평가는 상단 초과.</li>
+<li>수익률은 동일 가중 단순 보유 수익률이며 배당·거래비용·세금은 넣지 않았다. 시세는 네이버 일별 종가.</li>
+<li>대상은 현재 KOSPI 시가총액 상위 종목 페이지(우선주 제외)라, 그 사이 순위에서 밀려난 종목은 빠져 있다(생존 편향).</li>
+<li>분기별 내재가치는 그 분기 재무제표로 계산하지만 계산 방식은 현재 기준이라, 당시 사이트에 표시됐던 값과 다를 수 있다.</li>
+<li>과거 성과가 미래 수익을 보장하지 않으며 투자 권고가 아니다.</li>
+</ul>
+</main>
+</body>
+</html>

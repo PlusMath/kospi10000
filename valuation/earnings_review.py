@@ -216,6 +216,9 @@ a{color:inherit}
 .er-hub a{display:block;background:var(--t-card);border:1px solid var(--t-line);border-radius:12px;padding:16px 18px;text-decoration:none}
 .er-hub a:hover{border-color:var(--t-accent)}
 .er-hub b{font-size:16px}
+.er-hub a.er-hub-bt{border-color:var(--t-accent);background:linear-gradient(90deg,oklch(0.76 0.13 290 / .12),var(--t-card))}
+.er-bt-link{display:inline-block;margin-top:12px;font-size:13.5px;font-weight:700;color:var(--t-accent);text-decoration:none;padding:7px 14px;border:1px solid var(--t-accent);border-radius:999px}
+.er-bt-link:hover{background:oklch(0.76 0.13 290 / .12)}
 .er-hub span{display:block;font-size:13px;color:var(--t-mute);margin-top:2px}
 @media (max-width:1180px){.er-list{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:880px){.er-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -296,6 +299,7 @@ def build(slug):
 <div class="er-eyebrow">{e(cfg.get('report', ''))} · {e(cfg.get('range', ''))}</div>
 <h1>{e(cfg['title'])}</h1>
 <p class="er-sub">KOSPI 시가총액 상위 종목 · DART 연결 재무제표 3개월 실적 기준 · {e(cfg.get('published', ''))} 작성</p>
+<a class="er-bt-link" href="backtest.html#{e(slug)}">이 분기 마감일에 저평가 종목을 샀다면? 백테스트 보기 →</a>
 {kpis}
 <h2>이번 분기 큰 흐름</h2>
 <div class="er-themes">{themes}</div>
@@ -322,7 +326,7 @@ def build_hub():
     body = f'''<a class="er-back" href="../index.html">← 홈으로</a>
 <h1>분기 실적 리뷰</h1>
 <p class="er-sub">분기·반기·사업보고서가 나올 때마다 KOSPI 상위 종목의 실적 특이사항을 정리합니다.</p>
-<ul class="er-hub">{lis}</ul>'''
+<ul class="er-hub"><li><a class="er-hub-bt" href="backtest.html"><b>분기보고서 저평가 종목 백테스트</b><span>제출 마감일에 사이트 기준 저평가 종목을 사서 지금까지 들고 있었다면? · 매일 갱신</span></a></li>{lis}</ul>'''
     open('earnings/index.html', 'w', encoding='utf-8', newline='\n').write(page('분기 실적 리뷰', '분기보고서마다 정리하는 KOSPI 상위 종목 실적 특이사항', body))
     return items
 
