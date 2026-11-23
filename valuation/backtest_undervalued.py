@@ -229,7 +229,7 @@ def main():
             f'<td class="{"hl" if k == "under" else ""}">{fmt_pct(s[k]["mean"])}<small>{s[k]["n"]}개 · KOSPI 초과 {s[k]["beat"] * 100:.0f}%</small></td>'
             if s[k]['n'] else '<td>-</td>' for k, _, _ in GROUPS)
         trs += (f'<tr><td><a href="#{q["slug"]}">{e(q["period"])}</a><small>{e(q["report"])} · 매수 {fd(q["entry"])}</small></td>'
-                f'<td>{fmt_pct(q["kospi"])}</td><td>{fmt_pct(q["all_mean"])}<small>{q["n_all"]}개</small></td>{cells}</tr>')
+                f'<td>{fmt_pct(q["kospi"])}<small>{fwon(q["k0"])} → {fwon(q["k1"])}</small></td><td>{fmt_pct(q["all_mean"])}<small>{q["n_all"]}개</small></td>{cells}</tr>')
     table = ('<div class="bt-wrap"><table class="bt-tbl"><thead><tr><th>분기 (매수일)</th><th>KOSPI</th><th>전체 평균</th>'
              + ''.join(f'<th>{n}<small>{d}</small></th>' for _, n, d in GROUPS) + f'</tr></thead><tbody>{trs}</tbody></table></div>')
     # 분기별 상세
@@ -265,7 +265,7 @@ def main():
 <div class="er-eyebrow">백테스트 · {fd(last)} 종가 기준 자동 갱신</div>
 <h1>분기보고서 저평가 종목 백테스트</h1>
 <p class="er-sub">분기보고서 제출 마감일에 사이트 기준 '저평가' 종목을 사서 지금까지 들고 있었다면?</p>
-<div class="er-sec good" id="summary"><h2>분기별 결과</h2><p>매수일 종가 → {fd(last)} 종가, 동일 가중 평균 수익률. 작은 글씨는 종목 수와 KOSPI보다 나은 종목 비율.</p></div>
+<div class="er-sec good" id="summary"><h2>분기별 결과</h2><p>매수일 종가 → {fd(last)} 종가, 동일 가중 평균 수익률. KOSPI 아래 작은 글씨는 매수일 → 현재 지수, 그룹 아래는 종목 수와 KOSPI보다 나은 종목 비율.</p></div>
 {table}
 <div class="er-sec" id="detail"><h2>분기별 상세</h2><p>저평가 종목 표의 매수가는 매수일 종가, 현재가는 최근 종가. '하단 대비 −20%'는 매수가가 내재가치 하단보다 20% 낮았다는 뜻.</p></div>
 {secs}
