@@ -34,6 +34,18 @@ def pct(cur, base):
     return cur / base - 1
 
 
+def cache_quarters(code, n=20):
+    """DART 캐시에서 최근 n개 분기 3개월 단독 실적 → (라벨 목록, {rev, oi, pretax, ni, nip: [값]})."""
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from fund_report import quarters
+        Q = quarters(code, n=n)
+    except Exception as e:  # noqa: BLE001
+        print(f'WARNING {code} 캐시 분기 실적 읽기 실패: {e}', file=sys.stderr)
+        return [], {}
+    return [lab for lab, _ in Q], {k: [r.get(k) for _, r in Q] for k in ('rev', 'oi', 'pretax', 'ni', 'nip')}
+
+
 def load_stocks(period):
     out = []
     for p in sorted(glob.glob('stocks/[0-9]*_*.html')):
@@ -43,18 +55,21 @@ def load_stocks(period):
             continue
         F = json.loads(m.group(1))
         L, q = F.get('qLabels') or [], F.get('q') or {}
-        # 지난 분기 리뷰도 만들 수 있게 period 위치를 찾는다(전년 동기 비교에 4분기 앞 데이터 필요)
-        if period not in L:
-            continue
-        i = L.index(period)
-        if i < 4:
-            continue
         nm = re.search(r'<h1[^>]*>([^<]+)', t)
         name = html.unescape(nm.group(1).strip()) if nm else '?'
         if re.search(r'\d?우B?$', name):  # 우선주는 보통주와 실적이 같아 뺀다
             continue
         b = os.path.basename(p)
         code = b.split('_', 1)[1][:-5]
+        # 지난 분기 리뷰도 만들 수 있게 period 위치를 찾는다(전년 동기 비교에 4분기 앞 데이터 필요).
+        # 종목 페이지(최근 8개 분기)에 없으면 DART 원본 캐시(valuation/.cache/fs)에서 3개월 단독 실적을 읽는다.
+        if period not in L or L.index(period) < 4:
+            if not re.match(r'^\d+Q\d\d$', L[-1] if L else ''):
+                continue  # 3월 결산 등 분기 라벨이 다른 회사
+            L, q = cache_quarters(code)
+            if period not in L or L.index(period) < 4:
+                continue
+        i = L.index(period)
 
         def g(k, j):
             a = q.get(k) or []
