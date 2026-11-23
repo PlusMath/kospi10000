@@ -7,6 +7,8 @@
 - 수익률: 매수일 종가 → 최근 종가, 동일 가중, 배당 제외. 비교 지수는 KOSPI.
 - 시세: 네이버 일별 종가(api.stock.naver.com chart). 우선주는 보통주와 겹쳐 뺀다.
 
+부수 효과: 분기별 마감일 매수가·현재가를 data/earnings_prices.json에 쓰고 earnings/<분기>.html을 다시 만든다.
+
 사용: python valuation/backtest_undervalued.py
 """
 import datetime as dt, glob, html, json, os, re, statistics as st, sys, time, urllib.request
@@ -183,6 +185,11 @@ def main():
     px = {}
     for u in uni:
         px[u['code']] = daily(f'item/{u["code"]}', start, end)
+    # 실적 리뷰 카드(매수가·현재가)용: 내재가치 밴드가 없는 종목 페이지도 시세를 받는다
+    for b in sorted(glob.glob('stocks/[0-9]*_*.html')):
+        code = os.path.basename(b).split('_', 1)[1][:-5]
+        if code not in px:
+            px[code] = daily(f'item/{code}', start, end)
 
     quarters = []
     for c in cfgs:
@@ -217,6 +224,15 @@ def main():
         quarters.append(dict(c, entry=entry, dates=dates, g=g, stats=stats, kospi=kr,
                              all_mean=st.mean(allr) if allr else None, n_all=len(allr), series=series,
                              days=len(dates) - 1, k0=kospi[entry], k1=kospi[last]))
+
+    # 분기 실적 리뷰 카드에 넣을 마감일 매수가·현재가 → data/earnings_prices.json, 리뷰 페이지 재생성
+    ep = {}
+    for q in quarters:
+        ep[q['slug']] = dict(entry=q['entry'], last=last,
+                             px={c: [p[q['entry']], p[last]] for c, p in px.items() if q['entry'] in p and last in p})
+    json.dump(ep, open('data/earnings_prices.json', 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
+    for q in quarters:
+        ER.build(q['slug'])
 
     e = html.escape
     fwon = lambda v: f'{v:,.0f}'

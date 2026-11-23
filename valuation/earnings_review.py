@@ -154,7 +154,7 @@ def yoy_pill(cur, base):
     return f'<span class="er-chg {"up" if r >= 0 else "dn"}">{"▲" if r >= 0 else "▼"} {abs(r) * 100:.1f}%</span>'
 
 
-def row_html(s, note, period):
+def row_html(s, note, period, px=None):
     e = html.escape
     bd = ''.join(f'<span class="er-bd {k}">{e(t)}</span>' for k, t in badges(s))
     nonop = s.get('nonop') or 0
@@ -169,8 +169,20 @@ def row_html(s, note, period):
     <div><dt>전년 동기 영업이익</dt><dd>{won(s['oi_y'])}</dd></div>
     <div><dt>영업외 손익</dt><dd class="{nonop_cls}">{"+" if nonop > 0 else ""}{won(nonop)}</dd></div>
     <div><dt>지배주주 순이익</dt><dd class="{nip_cls}">{won(s['nip'])}</dd></div>
-  </dl>{note_html}
+  </dl>{note_html}{px_html(px)}
 </li>'''
+
+
+def px_html(px):
+    """카드 하단: 보고서 마감일 매수가 → 현재가, 수익률(backtest_undervalued.py가 만든 data/earnings_prices.json)."""
+    if not px:
+        return ''
+    p0, p1 = px
+    r = p1 / p0 - 1
+    cls = 'up' if r > 0 else 'dn' if r < 0 else ''
+    return (f'\n  <dl class="er-px"><div><dt>매수가</dt><dd>{p0:,.0f}</dd></div>'
+            f'<div><dt>현재가</dt><dd>{p1:,.0f}</dd></div>'
+            f'<div><dt>수익률</dt><dd class="{cls}">{r * 100:+.1f}%</dd></div></dl>')
 
 
 def list_html(rows, period):
@@ -225,6 +237,10 @@ a{color:inherit}
 .er-m dt{font-size:12px;color:var(--t-mute);white-space:nowrap}
 .er-m dd{font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
 .er-note{font-size:13px;color:var(--t-fg2);margin-top:10px;padding:9px 11px;background:var(--t-bg);border-radius:8px;line-height:1.6}
+.er-px{margin-top:auto;padding-top:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.er-px div{background:var(--t-card2);border-radius:8px;padding:6px 8px;min-width:0}
+.er-px dt{font-size:11px;color:var(--t-mute);white-space:nowrap}
+.er-px dd{font-size:13.5px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
 .up{color:var(--t-up)}.dn{color:var(--t-down)}
 .er-foot{font-size:12px;color:var(--t-mute);margin-top:36px;line-height:1.7}
 .er-hub{list-style:none;display:grid;gap:10px;margin-top:18px}
@@ -277,6 +293,11 @@ def build(slug):
     period = cfg['period']
     excl = cfg.get('exclude', {})
     notes = cfg.get('notes', {})
+    try:
+        eprice = json.load(open('data/earnings_prices.json', encoding='utf-8')).get(slug)
+    except (OSError, ValueError):
+        eprice = None
+    pxmap = (eprice or {}).get('px', {})
     stocks = [s for s in load_stocks(period) if s['code'] not in excl]
     groups = {k: [] for k, _, _ in CATS}
     for s in stocks:
@@ -306,9 +327,12 @@ def build(slug):
     for k, n, d in CATS:
         if not groups[k]:
             continue
-        rows = '\n'.join(row_html(s, notes.get(s['code']), period) for s in groups[k])
+        rows = '\n'.join(row_html(s, notes.get(s['code']), period, pxmap.get(s['code'])) for s in groups[k])
         secs += (f'<div class="er-sec {TONE[k]}" id="{k}"><h2>{e(n)}</h2><span class="n">{len(groups[k])}개</span><p>{e(d)}</p></div>\n'
                  + list_html(rows, period))
+    fdt = lambda d: f'{d[:4]}.{d[4:6]}.{d[6:]}'
+    px_txt = (f'매수가는 보고서 제출 마감일({fdt(eprice["entry"])}, 휴장이면 다음 거래일) 종가, 현재가는 {fdt(eprice["last"])} 종가이며 매일 갱신된다(배당 제외). '
+              if eprice else '')
     ex_txt = ' '.join(f'{e(c)}: {e(v)}.' for c, v in excl.items())
     body = f'''<a class="er-back" href="index.html">← 분기 실적 리뷰 목록</a>
 <div class="er-eyebrow">{e(cfg.get('report', ''))} · {e(cfg.get('range', ''))}</div>
@@ -321,7 +345,7 @@ def build(slug):
 <h2>유형별 특이 종목</h2>
 <nav class="er-nav" aria-label="유형 바로가기"><div class="er-chips">{chips}</div></nav>
 {secs}
-<p class="er-foot">영업이익·영업외 손익·지배주주 순이익은 {e(period)} 3개월(분기 단독) 값이고, 전년 동기는 1년 전 같은 분기다. 영업외 손익은 세전이익에서 영업이익을 뺀 값이다. 우선주는 보통주와 실적이 같아 뺐다. 종목은 유형당 하나로만 분류했고(위 순서가 우선), 유형 안에서는 영업이익 규모 순이다. 해설의 "~로 보인다"는 공시 주석으로 확인하지 않은 추정이다. 제외: {ex_txt} 투자 권고가 아니다.</p>'''
+<p class="er-foot">영업이익·영업외 손익·지배주주 순이익은 {e(period)} 3개월(분기 단독) 값이고, 전년 동기는 1년 전 같은 분기다. 영업외 손익은 세전이익에서 영업이익을 뺀 값이다. 우선주는 보통주와 실적이 같아 뺐다. {px_txt}종목은 유형당 하나로만 분류했고(위 순서가 우선), 유형 안에서는 영업이익 규모 순이다. 해설의 "~로 보인다"는 공시 주석으로 확인하지 않은 추정이다. 제외: {ex_txt} 투자 권고가 아니다.</p>'''
     os.makedirs('earnings', exist_ok=True)
     desc = f'{cfg["title"]}: 이익 급증·적자 전환·영업외 손익 등 특이 종목 {n_flag}개'
     open(f'earnings/{slug}.html', 'w', encoding='utf-8', newline='\n').write(page(cfg['title'], desc, body))
