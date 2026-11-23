@@ -142,16 +142,22 @@ STYLE_BT = '''
 .bt-l.under,.bt-legend .under{stroke:var(--t-accent);background:var(--t-accent)}
 .bt-l.over,.bt-legend .over{stroke:var(--t-down);background:var(--t-down)}
 .bt-l.kospi,.bt-legend .kospi{stroke:var(--t-mute);background:var(--t-mute);stroke-dasharray:5 4}
-.bt-list{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px 18px;margin-top:12px;padding-top:12px;border-top:1px solid var(--t-line)}
-.bt-list li{display:flex;justify-content:space-between;gap:8px;font-size:13px;padding:3px 0;font-variant-numeric:tabular-nums;min-width:0}
-.bt-list a{text-decoration:none;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.bt-list a:hover{color:var(--t-accent)}
-.bt-list em{font-style:normal;color:var(--t-mute);font-size:11.5px;margin-left:4px}
-.bt-list b{white-space:nowrap}
+.bt-plist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 22px;margin-top:12px;padding-top:6px;border-top:1px solid var(--t-line)}
+.bt-ptbl{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums;align-self:start}
+.bt-ptbl th{font-size:11px;color:var(--t-mute);font-weight:600;text-align:right;padding:7px 6px;border-bottom:1px solid var(--t-line);white-space:nowrap}
+.bt-ptbl td{text-align:right;padding:5px 6px;border-bottom:1px solid var(--t-line);white-space:nowrap;color:var(--t-fg2)}
+.bt-ptbl th:first-child,.bt-ptbl td:first-child{text-align:left;padding-left:0}
+.bt-ptbl th:last-child,.bt-ptbl td:last-child{padding-right:0}
+.bt-ptbl tbody tr:last-child td{border-bottom:0}
+.bt-ptbl td:first-child{max-width:130px;overflow:hidden;text-overflow:ellipsis}
+.bt-ptbl a{text-decoration:none;font-weight:700;color:var(--t-fg)}
+.bt-ptbl a:hover{color:var(--t-accent)}
+.bt-ptbl td.r{font-weight:800}
+.bt-ptbl td.m{color:var(--t-mute);font-size:12px}
 .bt-short{font-size:12.5px;color:var(--t-mute);margin-top:8px}
 .bt-notes{margin-top:10px;padding-left:18px;font-size:13px;color:var(--t-fg2);line-height:1.7}
-@media (max-width:900px){.bt-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:640px){.bt-stats{grid-template-columns:repeat(2,1fr)}.bt-list{grid-template-columns:1fr}}
+@media (max-width:900px){.bt-plist{grid-template-columns:1fr}}
+@media (max-width:640px){.bt-stats{grid-template-columns:repeat(2,1fr)}}
 '''
 
 
@@ -210,9 +216,10 @@ def main():
                 series.append((k, k, [st.mean(x['path'][i] for x in g[k]) for i in range(len(dates))]))
         quarters.append(dict(c, entry=entry, dates=dates, g=g, stats=stats, kospi=kr,
                              all_mean=st.mean(allr) if allr else None, n_all=len(allr), series=series,
-                             days=len(dates) - 1))
+                             days=len(dates) - 1, k0=kospi[entry], k1=kospi[last]))
 
     e = html.escape
+    fwon = lambda v: f'{v:,.0f}'
     fd = lambda d: f'{d[:4]}.{d[4:6]}.{d[6:]}'
     # 요약 표
     trs = ''
@@ -232,21 +239,26 @@ def main():
         diff = (u['mean'] - q['kospi']) if u['mean'] is not None else None
         stats = f'''<dl class="bt-stats">
   <div class="bt-stat"><dt>저평가 평균</dt><dd>{fmt_pct(u["mean"])}</dd><small>중앙값 {fmt_pct(u["med"], False)} · {u["n"]}개</small></div>
-  <div class="bt-stat"><dt>KOSPI 대비</dt><dd>{fmt_pct(diff)}</dd><small>KOSPI {fmt_pct(q["kospi"], False)}</small></div>
+  <div class="bt-stat"><dt>KOSPI 대비</dt><dd>{fmt_pct(diff)}</dd><small>KOSPI {fmt_pct(q["kospi"], False)} ({fwon(q["k0"])} → {fwon(q["k1"])})</small></div>
   <div class="bt-stat"><dt>오른 종목 비율</dt><dd>{(u["win"] or 0) * 100:.0f}%</dd><small>KOSPI보다 나은 비율 {(u["beat"] or 0) * 100:.0f}%</small></div>
   <div class="bt-stat"><dt>고평가 평균</dt><dd>{fmt_pct(s["over"]["mean"])}</dd><small>{s["over"]["n"]}개 · 범위 안 {fmt_pct(s["in"]["mean"], False)}</small></div>
 </dl>'''
         legend = ('<div class="bt-legend"><span><i class="under"></i>저평가 (동일 가중)</span>'
                   '<span><i class="over"></i>고평가 (동일 가중)</span><span><i class="kospi"></i>KOSPI</span></div>')
         chart = chart_svg(q['series'], q['dates']) if len(q['dates']) > 1 else ''
-        items = ''.join(
-            f'<li><a href="{e(x["href"])}">{e(x["name"])}</a><span><em>하단 {x["disc"] * 100:+.0f}%</em> <b>{fmt_pct(x["ret"])}</b></span></li>'
-            for x in sorted(q['g']['under'], key=lambda x: -x['ret']))
+        rows = [f'<tr><td><a href="{e(x["href"])}">{e(x["name"])}</a></td><td>{fwon(x["p0"])}</td><td>{fwon(x["p1"])}</td>'
+                f'<td class="r">{fmt_pct(x["ret"])}</td><td class="m">{x["disc"] * 100:+.0f}%</td></tr>'
+                for x in sorted(q['g']['under'], key=lambda x: -x['ret'])]
+        half = (len(rows) + 1) // 2
+        thead = ('<thead><tr><th>종목</th><th>매수가</th><th>현재가</th><th>수익률</th>'
+                 '<th title="매수가가 내재가치 하단보다 낮았던 정도">하단 대비</th></tr></thead>')
+        items = ''.join(f'<table class="bt-ptbl">{thead}<tbody>{"".join(part)}</tbody></table>'
+                        for part in (rows[:half], rows[half:]) if part)
         short = f'<p class="bt-short">보유 기간이 {q["days"]}거래일뿐이라 아직 판단하기 이릅니다.</p>' if q['days'] < 20 else ''
         secs += f'''<section class="bt-q" id="{q["slug"]}">
 <div class="bt-q-h"><h3>{e(q["period"])} · {e(q["report"])}</h3><span>마감일 {q["deadline"]:%Y.%m.%d} → 매수 {fd(q["entry"])} 종가 · {q["days"]}거래일 보유</span><a href="{e(q["slug"])}.html">실적 리뷰 →</a></div>
 {stats}{short}{legend}{chart}
-<ul class="bt-list">{items}</ul>
+<div class="bt-plist">{items}</div>
 </section>
 '''
     body = f'''<a class="er-back" href="index.html">← 분기 실적 리뷰 목록</a>
@@ -255,7 +267,7 @@ def main():
 <p class="er-sub">분기보고서 제출 마감일에 사이트 기준 '저평가' 종목을 사서 지금까지 들고 있었다면?</p>
 <div class="er-sec good" id="summary"><h2>분기별 결과</h2><p>매수일 종가 → {fd(last)} 종가, 동일 가중 평균 수익률. 작은 글씨는 종목 수와 KOSPI보다 나은 종목 비율.</p></div>
 {table}
-<div class="er-sec" id="detail"><h2>분기별 상세</h2><p>저평가 종목 목록의 '하단 −20%'는 매수일 종가가 내재가치 하단보다 20% 낮았다는 뜻.</p></div>
+<div class="er-sec" id="detail"><h2>분기별 상세</h2><p>저평가 종목 표의 매수가는 매수일 종가, 현재가는 최근 종가. '하단 대비 −20%'는 매수가가 내재가치 하단보다 20% 낮았다는 뜻.</p></div>
 {secs}
 <div class="er-sec" id="method"><h2>계산 방식과 한계</h2></div>
 <ul class="bt-notes">
